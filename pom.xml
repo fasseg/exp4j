@@ -9,7 +9,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<scm>
-		<developerConnection>scm:svn:https://congrace.de/subversion/exp4j/trunk</developerConnection>
+		<developerConnection>scm:git:https://smeg4brains@github.com/smeg4brains/exp4j.git</developerConnection>
 	</scm>
 	<url>https://exp4j.congrace.de</url>
 	<issueManagement>
