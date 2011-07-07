@@ -1,4 +1,4 @@
-exp4j - ${project-version}
+exp4j
 ---------------------------------------------------------------------------------------
 
 exp4j math expression evaluator for the Java programming language, capable of evaluating simple mathematical 
