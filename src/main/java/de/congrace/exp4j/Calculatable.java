@@ -1,0 +1,33 @@
+package de.congrace.exp4j;
+
+/**
+ * This is the basic result class of the exp4j {@link ExpressionBuilder}
+ * 
+ * @author ruckus
+ * 
+ */
+public interface Calculatable {
+	/**
+	 * calculate the result of the expression
+	 * 
+	 * @return the result of the calculation
+	 */
+	public double calculate();
+
+	/**
+	 * set a variable value for the calculation
+	 * 
+	 * @param name
+	 *            the variable name
+	 * @param value
+	 *            the value of the variable
+	 */
+	public void setVariable(String name, double value);
+
+	/**
+	 * return the expression in reverse polish postfix notation
+	 * 
+	 * @return the expression used to construct this {@link Calculatable}
+	 */
+	public String getExpression();
+}

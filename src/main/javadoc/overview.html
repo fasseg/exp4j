@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+  <HEAD>
+    <TITLE>exp4j</TITLE>
+  </HEAD>
+  <BODY>
+  	<h2>Using the ExpressionBuilder and the Calculatable interface</h2>
+  	<b>Evaluate an expression</b>
+  	<pre>
+  		Calculatable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)").withVariable("x", varX).withVariable("y", varY).build()
+  		double result1=calc.calculate();
+  	</pre>
+  	you can also change variables values after building by invoking <code>Calculatable.setVariable(String varName,double value)</code>, 
+  	but one has to make sure that the variablenames are passed into the ExpressionBuilder using at 
+  	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
+  	an UnparseableErpessionExcetion will be thrown.
+  	<pre>
+  		Calculatable calc = new ExpressionBuilder("x * y - 2").withVariableNames("x","y").build();
+  		calc.setVariable("x",1);
+  		calc.setVariable("x",2);
+  		assertTrue(calc.calculate()==0);
+  	</pre>
+  	
+  	<h2>Using Postfixexpression</h2>
+	<b>Evaluate a simple Expression:</b>
+	
+ 	<pre>
+ 		PostfixExpression p=PostfixExpression.fromInfix("2*2 - ((13-2)*1.44)");
+ 	</pre>
+ 	
+	 this creates a new instance and processes the input using {@link InfixTranslator}'s implementation
+	 of Dijkstra's Shunting Yard Algorithm, by translating the expression into postfix notation (RPN).
+	 with n being input length time complexity is O(n) for creating an instance.
+	 Evaluation takes place when calling the calculate() method:
+	
+	 <pre>
+	 double result=p.calculate();
+	 </pre>
+	
+	 this is another sweep over the input with O(n) time complexity<br/><br/>
+	 
+	 <pre>
+	 PostfixExpression p=PostfixExpression.fromInfix("log(2.33) - sin(2.5) ^ cbrt((exp(6.7) - 2) * ceil(4.5))");
+	 double calculate=p.calculate(); 
+	 </pre><br/><br/>
+	 
+	 <b>Evaluation of n-variable functions:</b><br/><br/>
+	 
+	 Variables must start with a letter [a-z,A-Z] or an underscore '_' and must only contain alphanumeric characters and the underscore 
+	 
+	 <pre>
+	 PostfixExpression p=PostfixExpression.fromInfix("f(x,var2)=(x-1)^var2 - log(x)");
+	 </pre>
+	 
+	 in order to calculate a function value it is neccessary to pass the the variable values in the same order to the <code>calculate(double...values)</code> method as the appear in the infix expression
+	 therefore in the example if x=2 and var2=7 calculation is done by calling the varargs method <code>calculate(double...values)</code>.
+	 
+	 <pre>
+	 double x=2;
+	 double var2=7;
+	 double result=p.calculate(x,var2);
+	 </pre>
+	 
+	 By splitting the instantiation and the calculation up into two parts, evaluation of a function with distinct input values cuts back on the
+	 runtime since the expression has to be translated into postfix only once.<br/><br/>
+
+	 <b>Operators and functions</b><br/><br/>
+	 
+	 the following operators are supported:
+	 
+	 <ul>
+	 <li>Addition: '2 + 2'</li>
+	 <li>Subtraction: '2 - 2'</li>
+	 <li>Multiplication: '2 * 2'</li>
+	 <li>Division: '2 / 2'</li>
+	 <li>Exponentation: '2 ^ 2'</li>
+	 <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
+	 <li>Modulo: '2 % 2'</li>
+	 </ul>
+	 
+	 the following functions are supported:
+	 
+	 <ul>
+	 <li>abs: absolute value</li>
+	 <li>acos: arc cosine</li>
+	 <li>asin: arc sine</li>
+	 <li>atan: arc tangent</li>
+	 <li>cbrt: cubic root</li>
+	 <li>ceil: nearest upper integer</li>
+	 <li>cos: cosine</li>
+	 <li>cosh: hyperbolic cosine</li>
+	 <li>exp: euler's number raised to the power (e^x)</li>
+	 <li>floor: nearest lower integer</li>
+	 <li>log: logarithmus naturalis (base e)</li>
+	 <li>sin: sine</li>
+	 <li>sinh: hyperbolic sine</li>
+	 <li>sqrt: square root</li>
+	 <li>tan: tangent</li>
+	 <li>tanh: hyperbolic tangent</li>
+	 </ul><br/><br/>
+  </BODY>
+</HTML>

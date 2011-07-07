@@ -1,0 +1,16 @@
+ ------
+Download exp4j
+ ------
+Frank Asseg
+ ------
+2011-05-01
+ ------
+
+About
+
+  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 22kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
+
+
+User Guide
+
+  Please check the {{{http://projects.congrace.de/exp4j/apidocs/index.html}Api Doc}} for a small user guide.

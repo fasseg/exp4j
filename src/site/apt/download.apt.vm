@@ -1,0 +1,43 @@
+ ------
+Download exp4j
+ ------
+Frank Asseg
+ ------
+2011-05-01
+ ------
+
+Download exp4j ${project.version}
+
+  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}.jar}Binary Jar}}\
+  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-javadoc.jar}Javadoc}}\
+  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-sources.jar}Sources}}
+
+Older Versions
+
+  Older version  can be downloaded from the nexus server {{http://nexus.congrace.de/nexus/index.html}}
+
+Using Apache Maven
+
+  you can include the artifact
+
++--
+<dependency>
+	<groupId>de.congrace</groupId>
+	<artifactId>exp4j</artifactId>
+	<version>${project.version}</version>
+</dependency>
++--
+
+  by adding the following repository to a pom.xml:
+
++--
+<repository>
+	<id>congrace.de</id>
+	<name>releases</name>
+	<url>http://nexus.congrace.de/nexus/content/repositories/releases/</url>
+	<layout>default</layout>
+</repository>
++--
+
+  
+
