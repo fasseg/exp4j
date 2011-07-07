@@ -1,0 +1,10 @@
+exp4j - ${project-version}
+---------------------------------------------------------------------------------------
+
+exp4j math expression evaluator for the Java programming language, capable of evaluating simple mathematical 
+expression, only 24kb in size, without any external libraries and simple to use:
+
+Calculatable calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").withVariable("x", varX).withVariable("y", varY).build();
+double result = calc.calculate();
+
+exp4j requires at least Java 5
