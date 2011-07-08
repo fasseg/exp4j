@@ -42,5 +42,5 @@ public abstract class Token {
         return value;
     }
 
-    public abstract void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output);
+    abstract void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output);
 }

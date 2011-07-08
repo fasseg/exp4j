@@ -3,11 +3,6 @@ package de.congrace.exp4j;
 import java.util.Map;
 import java.util.Stack;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
 /**
  * this classed is used to create custom functions for exp4j<br/><br/>
  * <b>Example</b><br/>

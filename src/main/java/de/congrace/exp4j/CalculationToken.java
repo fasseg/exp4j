@@ -25,6 +25,6 @@ public abstract class CalculationToken extends Token {
         super(value);
     }
 
-    public abstract void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues);
+    abstract void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues);
 
 }

@@ -11,26 +11,24 @@ About
 
   exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 26kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
 
-
 User Guide
 
-* Using the ExpressionBuilder and the Calculatable interface to evaluate an expression:
+* Using the ExpressionBuilder and the Calculable interface to evaluate an expression:
   	
 +--
-Calculatable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
 	.withVariable("x", varX)
 	.withVariable("y", varY)
 	.build()
 double result1=calc.calculate();
 +--  	
 
-	you can also change variables values after building by invoking Calculatable.setVariable(String varName,double value), 
-	but one has to make sure that the variablenames are passed into the ExpressionBuilder using at 
+	but one has to make sure that the variable names are passed into the ExpressionBuilder using at
 	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
 	an UnparseableErpessionExcetion will be thrown.
   
 +--
-Calculatable calc = new ExpressionBuilder("x * y - 2")
+Calculable calc = new ExpressionBuilder("x * y - 2")
 	.withVariableNames("x","y")
 	.build();
 calc.setVariable("x",1);
@@ -50,7 +48,7 @@ CustomFunction fooFunc = new CustomFunction("foo") {
 	}
 };
 double varX=12d;
-Calculatable calc = new ExpressionBuilder("foo(x)")
+Calculable calc = new ExpressionBuilder("foo(x)")
 	.withCustomFunction(fooFunc)
 	.withVariable("x",varX)
 	.build();

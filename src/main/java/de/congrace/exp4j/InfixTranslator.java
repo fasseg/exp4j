@@ -21,12 +21,6 @@ import com.sun.istack.internal.Nullable;
 import java.util.Set;
 import java.util.Stack;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
-
 /**
  * Translate a mathematical expression in human readable infix notation to a
  * Reverse Polish Notation (postfix) expression for easier parsing. by

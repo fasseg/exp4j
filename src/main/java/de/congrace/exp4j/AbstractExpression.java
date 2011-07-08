@@ -19,12 +19,6 @@ package de.congrace.exp4j;
 import java.text.NumberFormat;
 import java.util.List;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
-
 /**
  * Abstract base class for mathematical expressions
  * @author fas@congrace.de
