@@ -9,49 +9,7 @@ import java.util.Set;
 
 /**
  * This is Builder implementation for the exp4j API used to create a
- * Calculatable instance for the user.<br/>
- * <br/>
- * 
- * <b>evaluate a simple expression:</b><br/>
- * <code>
- * {@code
- * 		Calculatable calc = new ExpressionBuilder("7*3*").build();
- * 		double result=calc.calculate();
- * }
- * </code><br>
- * <b>evaluate a simple expression with two variables x and y:</b><br/>
- * <code>
- * {@code
- * 		Calculatable calc = new ExpressionBuilder("x*y")
- * 									.withVariable("x",2.33d)
- * 									.withVariable("y",3.22d)
- * 									.build();
- * 		double result=calc.calculate();
- * }
- * </code><br/>
- * <br/>
- * <b>evaluate a simple expression with a sine function of a variable:</b><br/>
- * <code>
- * {@code
- * 		Calculatable calc = new ExpressionBuilder("sin(x)")
- * 									.withVariable("x",1)
- * 									.build();
- * 		double result=calc.calculate();
- * }
- * </code><br/>
- * <br/>
- * <b>Calculatable also has setter methods for variables so that you can change
- * values after building the expression:</b><br/>
- * <code>
- * {@code
- * 		Calculatable calc = new ExpressionBuilder("sin(x)")
- * 									.withVariable("x",1)
- * 									.build();
- * 		double result_1=calc.calculate();
- * 		calc.setVariable("x",Math.PI);
- * 		double result_2=calc.calculate();
- * }
- * </code>
+ * Calculatable instance for the user
  * 
  * @author ruckus
  * 

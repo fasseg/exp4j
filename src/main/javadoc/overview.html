@@ -21,6 +21,20 @@
   		assertTrue(calc.calculate()==0);
   	</pre>
   	
+  	<b>Using custom functions</b><br/>
+  	you can extend the abstract class CustomFunction in order to use custom functions in expressions. you only have to implement the 
+  	applyFunction(double value) method.
+  	<pre>
+		CustomFunction fooFunc = new CustomFunction("foo") {
+			public double applyFunction(double value) {
+				return value*Math.E;
+			}
+		};
+		double varX=12d;
+  		Calculatable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
+  		assertTrue(calc.calculate() == Math.E * varX);
+  	</pre> 
+  	
   	<h2>Using Postfixexpression</h2>
 	<b>Evaluate a simple Expression:</b>
 	
