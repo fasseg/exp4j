@@ -16,8 +16,6 @@
  */
 package de.congrace.exp4j;
 
-import com.sun.istack.internal.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -27,94 +25,116 @@ import java.util.Stack;
  * Class for calculating values from a RPN postfix expression.<br/>
  * The default way to create a new instance of {@link PostfixExpression} is by
  * using the static factory method fromInfix()
+ * 
  * @author fas@congrace.de
  */
 public final class PostfixExpression extends AbstractExpression implements Calculable {
-    private final Map<String, Double> variableValues = new HashMap<String, Double>();
+	/**
+	 * Factory method for creating {@link PostfixExpression}s from human
+	 * readable infix expressions
+	 * 
+	 * @param expression
+	 *            the infix expression to be used
+	 * @return an equivalent {@link PostfixExpression}
+	 * @throws UnparsableExpressionException
+	 *             if the expression was invalid
+	 * @throws UnknownFunctionException
+	 *             if an unknown function has been used
+	 */
+	public static PostfixExpression fromInfix(String expression) throws UnparsableExpressionException, UnknownFunctionException {
+		return fromInfix(expression, null);
+	}
 
-    /**
-     * Construct a new simple {@link PostfixExpression}
-     * @param expression the postfix expression to be calculated
-     * @param variableNames  the variable names in the expression
-     * @param customFunctions the CustomFunction implementations used
-     * @throws UnparsableExpressionException when expression is invalid
-     * @throws UnknownFunctionException when an unknown function has been used
-     */
-    private PostfixExpression(String expression, String[] variableNames,Set<CustomFunction> customFunctions) throws UnparsableExpressionException, UnknownFunctionException {
-        super(expression, new Tokenizer(variableNames,customFunctions).tokenize(expression), variableNames);
-    }
+	/**
+	 * Factory method for creating {@link PostfixExpression}s from human
+	 * readable infix expressions
+	 * 
+	 * @param expression
+	 *            the infix expression to be used
+	 * @param customFunctions
+	 *            the CustomFunction implementations used
+	 * @return an equivalent {@link PostfixExpression}
+	 * @throws UnparsableExpressionException
+	 *             if the expression was invalid
+	 * @throws UnknownFunctionException
+	 *             if an unknown function has been used
+	 */
+	public static PostfixExpression fromInfix(String expression, Set<CustomFunction> customFunctions) throws UnparsableExpressionException,
+			UnknownFunctionException {
+		String[] variables = null;
+		int posStart, posEnd;
+		if ((posStart = expression.indexOf('=')) > 0) {
+			String functionDef = expression.substring(0, posStart);
+			expression = expression.substring(posStart + 1);
+			if ((posStart = functionDef.indexOf('(')) > 0 && (posEnd = functionDef.indexOf(')')) > 0) {
+				variables = functionDef.substring(posStart + 1, posEnd).split(",");
+			}
+		}
+		return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables, customFunctions), variables, customFunctions);
+	}
 
-    /**
-     * delegate the calculation of a simple expression without variables
-     * @return the result
-     */
-    public double calculate() {
-        return calculate(null);
-    }
+	private final Map<String, Double> variableValues = new HashMap<String, Double>();
 
-    /**
-     * calculate the result of the expression and substitute the variables by
-     * their values beforehand
-     * @param values the variable values to be substituted
-     * @return the result of the calculation
-     * @throws IllegalArgumentException if the variables are invalid
-     */
-    public double calculate(@Nullable double... values) throws IllegalArgumentException {
-        if (getVariableNames() == null && values != null) {
-            throw new IllegalArgumentException("there are no variables to set values");
-        } else if (getVariableNames() != null && values == null && variableValues.isEmpty()) {
-            throw new IllegalAccessError("variable values have to be set");
-        } else if (values != null && values.length != getVariableNames().length) {
-            throw new IllegalArgumentException("The are an unequal number of variables and arguments");
-        }
-        int i = 0;
-        if (getVariableNames() != null && values!=null) {
-            for (double val : values) {
-                variableValues.put(getVariableNames()[i++], val);
-            }
-        }
-        final Stack<Double> stack = new Stack<Double>();
-        for (final Token t : getTokens()) {
-            ((CalculationToken) t).mutateStackForCalculation(stack, variableValues);
-        }
-        return stack.pop();
-    }
+	/**
+	 * Construct a new simple {@link PostfixExpression}
+	 * 
+	 * @param expression
+	 *            the postfix expression to be calculated
+	 * @param variableNames
+	 *            the variable names in the expression
+	 * @param customFunctions
+	 *            the CustomFunction implementations used
+	 * @throws UnparsableExpressionException
+	 *             when expression is invalid
+	 * @throws UnknownFunctionException
+	 *             when an unknown function has been used
+	 */
+	private PostfixExpression(String expression, String[] variableNames, Set<CustomFunction> customFunctions) throws UnparsableExpressionException,
+			UnknownFunctionException {
+		super(expression, new Tokenizer(variableNames, customFunctions).tokenize(expression), variableNames);
+	}
 
-    /**
-     * Factory method for creating {@link PostfixExpression}s from human
-     * readable infix expressions
-     * @param expression the infix expression to be used
-     * @return an equivalent {@link PostfixExpression}
-     * @throws UnparsableExpressionException if the expression was invalid
-     * @throws UnknownFunctionException if an unknown function has been used
-     */
-    public static PostfixExpression fromInfix(String expression) throws UnparsableExpressionException, UnknownFunctionException {
-    	return fromInfix(expression, null);
-    }
+	/**
+	 * delegate the calculation of a simple expression without variables
+	 * 
+	 * @return the result
+	 */
+	public double calculate() {
+		return calculate(null);
+	}
 
-    /**
-     * Factory method for creating {@link PostfixExpression}s from human
-     * readable infix expressions
-     * @param expression the infix expression to be used
-     * @param customFunctions the CustomFunction implementations used
-     * @return an equivalent {@link PostfixExpression}
-     * @throws UnparsableExpressionException if the expression was invalid
-     * @throws UnknownFunctionException if an unknown function has been used
-     */
-    public static PostfixExpression fromInfix(String expression,@Nullable Set<CustomFunction> customFunctions) throws UnparsableExpressionException, UnknownFunctionException {
-        String[] variables = null;
-        int posStart, posEnd;
-        if ((posStart = expression.indexOf('=')) > 0) {
-            String functionDef = expression.substring(0, posStart);
-            expression = expression.substring(posStart + 1);
-            if ((posStart = functionDef.indexOf('(')) > 0 && (posEnd = functionDef.indexOf(')')) > 0) {
-                variables = functionDef.substring(posStart + 1, posEnd).split(",");
-            }
-        }
-        return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables,customFunctions), variables,customFunctions);
-    }
+	/**
+	 * calculate the result of the expression and substitute the variables by
+	 * their values beforehand
+	 * 
+	 * @param values
+	 *            the variable values to be substituted
+	 * @return the result of the calculation
+	 * @throws IllegalArgumentException
+	 *             if the variables are invalid
+	 */
+	public double calculate(double... values) throws IllegalArgumentException {
+		if (getVariableNames() == null && values != null) {
+			throw new IllegalArgumentException("there are no variables to set values");
+		} else if (getVariableNames() != null && values == null && variableValues.isEmpty()) {
+			throw new IllegalAccessError("variable values have to be set");
+		} else if (values != null && values.length != getVariableNames().length) {
+			throw new IllegalArgumentException("The are an unequal number of variables and arguments");
+		}
+		int i = 0;
+		if (getVariableNames() != null && values != null) {
+			for (double val : values) {
+				variableValues.put(getVariableNames()[i++], val);
+			}
+		}
+		final Stack<Double> stack = new Stack<Double>();
+		for (final Token t : getTokens()) {
+			((CalculationToken) t).mutateStackForCalculation(stack, variableValues);
+		}
+		return stack.pop();
+	}
 
-    public void setVariable(String name, double value) {
-        variableValues.put(name, value);
-    }
+	public void setVariable(String name, double value) {
+		variableValues.put(name, value);
+	}
 }

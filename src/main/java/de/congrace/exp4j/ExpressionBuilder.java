@@ -7,10 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
 /**
- * This is Builder implementation for the exp4j API used to create a
- * Calculable instance for the user
+ * This is Builder implementation for the exp4j API used to create a Calculable
+ * instance for the user
  * 
  * @author ruckus
  * 
@@ -29,65 +28,6 @@ public class ExpressionBuilder {
 	 */
 	public ExpressionBuilder(String expression) {
 		this.expression = expression;
-	}
-
-	/**
-	 * set the variables names used in the expression without setting their
-	 * values
-	 * 
-	 * @param variableNames
-	 *            vararg {@link String} of the variable's names used in the
-	 *            expression
-	 * @return the ExpressionBuilder instance
-	 */
-	public ExpressionBuilder withVariableNames(String... variableNames) {
-		for (String variable : variableNames) {
-			variables.put(variable, null);
-		}
-		return this;
-	}
-
-	/**
-	 * set the value for a variable
-	 * 
-	 * @param variableName  the variable name e.g. "x"
-	 * @param value the value e.g. 2.32d
-	 * @return the {@link ExpressionBuilder} instance
-	 */
-	public ExpressionBuilder withVariable(String variableName, double value) {
-		variables.put(variableName, value);
-		return this;
-	}
-
-	/**
-	 * set the values for variables
-	 * 
-	 * @param variableMap
-	 *            a map of variable names to variable values
-	 * @return the {@link ExpressionBuilder} instance
-	 */
-	public ExpressionBuilder withVariables(Map<String, Double> variableMap) {
-		for (Entry<String, Double> v : variableMap.entrySet()) {
-			variables.put(v.getKey(), v.getValue());
-		}
-		return this;
-	}
-
-	/**
-	 * add a custom function instance for the evaluator to recognize
-	 * 
-	 * @param function
-	 *            the {@link CustomFunction} to add
-	 * @return the {@link ExpressionBuilder} instance
-	 */
-	public ExpressionBuilder withCustomFunction(CustomFunction function) {
-		customFunctions.add(function);
-		return this;
-	}
-	
-	public ExpressionBuilder withCustomFunctions(Collection<CustomFunction> functions){
-		customFunctions.addAll(functions);
-		return this;
 	}
 
 	/**
@@ -121,5 +61,66 @@ public class ExpressionBuilder {
 			}
 		}
 		return delegate;
+	}
+
+	/**
+	 * add a custom function instance for the evaluator to recognize
+	 * 
+	 * @param function
+	 *            the {@link CustomFunction} to add
+	 * @return the {@link ExpressionBuilder} instance
+	 */
+	public ExpressionBuilder withCustomFunction(CustomFunction function) {
+		customFunctions.add(function);
+		return this;
+	}
+
+	public ExpressionBuilder withCustomFunctions(Collection<CustomFunction> functions) {
+		customFunctions.addAll(functions);
+		return this;
+	}
+
+	/**
+	 * set the value for a variable
+	 * 
+	 * @param variableName
+	 *            the variable name e.g. "x"
+	 * @param value
+	 *            the value e.g. 2.32d
+	 * @return the {@link ExpressionBuilder} instance
+	 */
+	public ExpressionBuilder withVariable(String variableName, double value) {
+		variables.put(variableName, value);
+		return this;
+	}
+
+	/**
+	 * set the variables names used in the expression without setting their
+	 * values
+	 * 
+	 * @param variableNames
+	 *            vararg {@link String} of the variable's names used in the
+	 *            expression
+	 * @return the ExpressionBuilder instance
+	 */
+	public ExpressionBuilder withVariableNames(String... variableNames) {
+		for (String variable : variableNames) {
+			variables.put(variable, null);
+		}
+		return this;
+	}
+
+	/**
+	 * set the values for variables
+	 * 
+	 * @param variableMap
+	 *            a map of variable names to variable values
+	 * @return the {@link ExpressionBuilder} instance
+	 */
+	public ExpressionBuilder withVariables(Map<String, Double> variableMap) {
+		for (Entry<String, Double> v : variableMap.entrySet()) {
+			variables.put(v.getKey(), v.getValue());
+		}
+		return this;
 	}
 }

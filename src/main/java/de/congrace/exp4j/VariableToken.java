@@ -21,25 +21,28 @@ import java.util.Stack;
 
 /**
  * A {@link Token} for representing variables
+ * 
  * @author fas
  */
-public class VariableToken extends CalculationToken {
-    /**
-     * construct a new {@link VariableToken}
-     * @param value the value of the token
-     */
-	public VariableToken(String value) {
-        super(value);
-    }
+class VariableToken extends CalculationToken {
+	/**
+	 * construct a new {@link VariableToken}
+	 * 
+	 * @param value
+	 *            the value of the token
+	 */
+	VariableToken(String value) {
+		super(value);
+	}
 
-    @Override
-    public void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
-        output.append(this.getValue()).append(" ");
-    }
+	@Override
+	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
+		double value = variableValues.get(this.getValue());
+		stack.push(value);
+	}
 
-    @Override
-    public void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-        double value = variableValues.get(this.getValue());
-        stack.push(value);
-    }
+	@Override
+	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
+		output.append(this.getValue()).append(" ");
+	}
 }

@@ -15,6 +15,13 @@ public interface Calculable {
 	public double calculate();
 
 	/**
+	 * return the expression in reverse polish postfix notation
+	 * 
+	 * @return the expression used to construct this {@link Calculable}
+	 */
+	public String getExpression();
+
+	/**
 	 * set a variable value for the calculation
 	 * 
 	 * @param name
@@ -23,11 +30,4 @@ public interface Calculable {
 	 *            the value of the variable
 	 */
 	public void setVariable(String name, double value);
-
-	/**
-	 * return the expression in reverse polish postfix notation
-	 * 
-	 * @return the expression used to construct this {@link Calculable}
-	 */
-	public String getExpression();
 }

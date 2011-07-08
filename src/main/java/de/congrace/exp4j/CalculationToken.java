@@ -19,12 +19,12 @@ package de.congrace.exp4j;
 import java.util.Map;
 import java.util.Stack;
 
-public abstract class CalculationToken extends Token {
+abstract class CalculationToken extends Token {
 
-    CalculationToken(String value) {
-        super(value);
-    }
+	CalculationToken(String value) {
+		super(value);
+	}
 
-    abstract void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues);
+	abstract void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues);
 
 }

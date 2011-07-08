@@ -9,7 +9,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<scm>
-		<developerConnection>scm:git:https://smeg4brains@github.com/smeg4brains/exp4j.git</developerConnection>
+		<connection>scm:git:http://github.com/smeg4brains/exp4j.git</connection>
+		<developerConnection>scm:git:https://github.com/smeg4brains/exp4j.git</developerConnection>
 	</scm>
 	<url>https://exp4j.congrace.de</url>
 	<issueManagement>
@@ -135,6 +136,11 @@
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-javadoc-plugin</artifactId>
 							<version>2.7</version>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-changes-plugin</artifactId>
+							<version>2.6</version>
 						</plugin>
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>

@@ -25,14 +25,14 @@ import java.util.Stack;
  * @author fas@congrace.de
  * 
  */
-public class FunctionToken extends CalculationToken {
+class FunctionToken extends CalculationToken {
 	/**
 	 * the functionNames that can be used in an expression
 	 * 
 	 * @author ruckus
 	 * 
 	 */
-	public enum Function {
+	enum Function {
 		ABS, ACOS, ASIN, ATAN, CBRT, CEIL, COS, COSH, EXP, EXPM1, FLOOR, LOG, SIN, SINH, SQRT, TAN, TANH
 	}
 
@@ -43,9 +43,10 @@ public class FunctionToken extends CalculationToken {
 	 * 
 	 * @param value
 	 *            the name of the function
-	 * @throws UnknownFunctionException if an unknown function name is encountered
+	 * @throws UnknownFunctionException
+	 *             if an unknown function name is encountered
 	 */
-	public FunctionToken(String value) throws UnknownFunctionException {
+	FunctionToken(String value) throws UnknownFunctionException {
 		super(value);
 		try {
 			function = Function.valueOf(value.toUpperCase());
@@ -58,22 +59,13 @@ public class FunctionToken extends CalculationToken {
 	}
 
 	/**
-	 * get the {@link Function}
-	 * 
-	 * @return the crrespoding {@link Function}
-	 */
-	public Function getFunction() {
-		return function;
-	}
-
-	/**
 	 * apply a function to a value x
 	 * 
 	 * @param x
 	 *            the value the function should be applied to
 	 * @return the result of the function
 	 */
-    double applyFunction(double x) {
+	double applyFunction(double x) {
 		switch (function) {
 		case ABS:
 			return Math.abs(x);
@@ -110,17 +102,26 @@ public class FunctionToken extends CalculationToken {
 		case TANH:
 			return Math.tanh(x);
 		default:
-			return Double.NaN; // should not happen ;) 
+			return Double.NaN; // should not happen ;)
 		}
 	}
 
-	@Override
-	public void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
-		operatorStack.push(this);
+	/**
+	 * get the {@link Function}
+	 * 
+	 * @return the crrespoding {@link Function}
+	 */
+	Function getFunction() {
+		return function;
 	}
 
 	@Override
-	public void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
+	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
 		stack.push(this.applyFunction(stack.pop()));
+	}
+
+	@Override
+	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
+		operatorStack.push(this);
 	}
 }

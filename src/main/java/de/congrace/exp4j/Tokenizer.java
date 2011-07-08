@@ -56,7 +56,7 @@ class Tokenizer {
 
 	Tokenizer() {
 		super();
-		customFunctions=null;
+		customFunctions = null;
 	}
 
 	/**
@@ -64,9 +64,11 @@ class Tokenizer {
 	 * 
 	 * @param variableNames
 	 *            the variable names in the expression
-	 * @throws IllegalArgumentException  if a variable has the name as a function
-     * @param customFunctions the CustomFunction implementations used
-	 *             if the variableNames are not valid
+	 * @throws IllegalArgumentException
+	 *             if a variable has the name as a function
+	 * @param customFunctions
+	 *            the CustomFunction implementations used if the variableNames
+	 *            are not valid
 	 */
 	Tokenizer(String[] variableNames, Set<CustomFunction> customFunctions) throws IllegalArgumentException {
 		super();
@@ -79,6 +81,66 @@ class Tokenizer {
 			}
 		}
 		this.customFunctions = customFunctions;
+	}
+
+	private Token getCustomFunctionToken(String name) throws UnknownFunctionException {
+		for (CustomFunction func : customFunctions) {
+			if (func.getValue().equals(name)) {
+				return func;
+			}
+		}
+		throw new UnknownFunctionException(name);
+	}
+
+	private boolean isCustomFunction(String name) {
+		if (customFunctions == null) {
+			return false;
+		}
+		for (CustomFunction func : customFunctions) {
+			if (func.getValue().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * check if a char is part of a number
+	 * 
+	 * @param c
+	 *            the char to be checked
+	 * @return true if the char is part of a number
+	 */
+	private boolean isDigit(char c) {
+		return Character.isDigit(c) || c == '.';
+	}
+
+	private boolean isFunction(String name) {
+		for (Function fn : Function.values()) {
+			if (fn.name().equals(name.toUpperCase())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * check if a String is a variable name
+	 * 
+	 * @param name
+	 *            the variable name which is checked to be valid the char to be
+	 *            checked
+	 * @return true if the char is a variable name (e.g. x)
+	 */
+	private boolean isVariable(String name) {
+		if (variableNames != null) {
+			for (String var : variableNames) {
+				if (name.equals(var)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -150,65 +212,5 @@ class Tokenizer {
 			tokens.add(lastToken);
 		}
 		return tokens.toArray(new Token[tokens.size()]);
-	}
-
-	private Token getCustomFunctionToken(String name) throws UnknownFunctionException {
-		for (CustomFunction func : customFunctions) {
-			if (func.getValue().equals(name)) {
-				return func;
-			}
-		}
-		throw new UnknownFunctionException(name);
-	}
-
-	private boolean isFunction(String name) {
-		for (Function fn : Function.values()) {
-			if (fn.name().equals(name.toUpperCase())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isCustomFunction(String name) {
-		if (customFunctions==null){
-			return false;
-		}
-		for (CustomFunction func : customFunctions) {
-			if (func.getValue().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * check if a char is part of a number
-	 * 
-	 * @param c
-	 *            the char to be checked
-	 * @return true if the char is part of a number
-	 */
-	private boolean isDigit(char c) {
-		return Character.isDigit(c) || c == '.';
-	}
-
-	/**
-	 * check if a String is a variable name
-	 * 
-	 * @param name
-	 *            the variable name which is checked to be valid the char to be
-	 *            checked
-	 * @return true if the char is a variable name (e.g. x)
-	 */
-	private boolean isVariable(String name) {
-		if (variableNames != null) {
-			for (String var : variableNames) {
-				if (name.equals(var)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 }
