@@ -226,7 +226,7 @@ public class ExpressionBuilderTest {
 		}
 		time = System.currentTimeMillis() - time;
 		System.out.println("Java Math\t\t~" + time + " ms");
-		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time));
+		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time) + "\n");
 	}
 
 }
