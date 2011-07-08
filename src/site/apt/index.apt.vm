@@ -1,16 +1,113 @@
- ------
-Download exp4j
- ------
-Frank Asseg
- ------
-2011-05-01
- ------
+	------
+	Download exp4j
+	------
+	Frank Asseg
+	------
+	2011
+	------
+
 
 About
 
-  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 22kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
+  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 26kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
 
 
 User Guide
 
-  Please check the {{{http://projects.congrace.de/exp4j/apidocs/index.html}Api Doc}} for a small user guide.
+* Using the ExpressionBuilder and the Calculatable interface to evaluate an expression:
+  	
++--
+Calculatable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+	.withVariable("x", varX)
+	.withVariable("y", varY)
+	.build()
+double result1=calc.calculate();
++--  	
+
+	you can also change variables values after building by invoking Calculatable.setVariable(String varName,double value), 
+	but one has to make sure that the variablenames are passed into the ExpressionBuilder using at 
+	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
+	an UnparseableErpessionExcetion will be thrown.
+  
++--
+Calculatable calc = new ExpressionBuilder("x * y - 2")
+	.withVariableNames("x","y")
+	.build();
+calc.setVariable("x",1);
+calc.setVariable("x",2);
+assertTrue(calc.calculate()==0);
++--
+
+** Custom functions
+
+  	you can extend the abstract class CustomFunction in order to use custom functions in expressions. you only have to implement the 
+  	applyFunction(double value) method.
+  	
++--
+CustomFunction fooFunc = new CustomFunction("foo") {
+    public double applyFunction(double value) {
+		return value*Math.E;
+	}
+};
+double varX=12d;
+Calculatable calc = new ExpressionBuilder("foo(x)")
+	.withCustomFunction(fooFunc)
+	.withVariable("x",varX)
+	.build();
+assertTrue(calc.calculate() == Math.E * varX);
++--  	
+
+
+* Operators
+	 
+	 
+ * Addition: '2 + 2'
+ 
+ * Subtraction: '2 - 2'
+ 
+ * Multiplication: '2 * 2'
+ 
+ * Division: '2 / 2'
+ 
+ * Exponentation: '2 ^ 2'
+ 
+ * Unary Minus,Plus (Sign Operators): '+2 - (-2)'
+ 
+ * Modulo: '2 % 2'
+ 
+	 
+	 
+* Built-in functions
+	 
+	 
+ * abs: absolute value
+ 
+ * acos: arc cosine
+ 
+ * asin: arc sine
+ 
+ * atan: arc tangent
+ 
+ * cbrt: cubic root
+ 
+ * ceil: nearest upper integer
+ 
+ * cos: cosine
+ 
+ * cosh: hyperbolic cosine
+ 
+ * exp: euler's number raised to the power (e^x)
+ 
+ * floor: nearest lower integer
+ 
+ * log: logarithmus naturalis (base e)
+ 
+ * sin: sine
+ 
+ * sinh: hyperbolic sine
+ 
+ * sqrt: square root
+ 
+ * tan: tangent
+ 
+ * tanh: hyperbolic tangent
