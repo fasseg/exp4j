@@ -1,8 +1,11 @@
 package de.congrace.exp4j;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * This is Builder implementation for the exp4j API used to create a
@@ -55,6 +58,7 @@ import java.util.Map.Entry;
  */
 public class ExpressionBuilder {
 	private final Map<String, Double> variables = new LinkedHashMap<String, Double>();
+	private final Set<CustomFunction> customFunctions = new HashSet<CustomFunction>();
 
 	private String expression;
 
@@ -69,7 +73,8 @@ public class ExpressionBuilder {
 	}
 
 	/**
-	 * set the variable's names used in the expression without setting their values
+	 * set the variable's names used in the expression without setting their
+	 * values
 	 * 
 	 * @param variableNames
 	 *            vararg {@link String} of the variable's names used in the
@@ -77,7 +82,7 @@ public class ExpressionBuilder {
 	 * @return
 	 */
 	public ExpressionBuilder withVariableNames(String... variableNames) {
-		for (String variable:variableNames){
+		for (String variable : variableNames) {
 			variables.put(variable, null);
 		}
 		return this;
@@ -110,6 +115,23 @@ public class ExpressionBuilder {
 	}
 
 	/**
+	 * add a custom function instance for the evaluator to recognize
+	 * 
+	 * @param function
+	 *            the {@link CustomFunction} to add
+	 * @return the {@link ExpressionBuilder} instance
+	 */
+	public ExpressionBuilder withCustomFunction(CustomFunction function) {
+		customFunctions.add(function);
+		return this;
+	}
+	
+	public ExpressionBuilder withCustomFunctions(Collection<CustomFunction> functions){
+		customFunctions.addAll(functions);
+		return this;
+	}
+
+	/**
 	 * build a new {@link Calculatable} from the expression using the supplied
 	 * variables
 	 * 
@@ -133,9 +155,9 @@ public class ExpressionBuilder {
 			expression = function.deleteCharAt(function.length() - 1).toString() + ")=" + expression;
 		}
 		// create the PostfixExpression and return it as a Calculatable
-		PostfixExpression delegate = PostfixExpression.fromInfix(expression);
+		PostfixExpression delegate = PostfixExpression.fromInfix(expression, customFunctions);
 		for (String var : variables.keySet()) {
-			if (variables.get(var)!=null){
+			if (variables.get(var) != null) {
 				delegate.setVariable(var, variables.get(var));
 			}
 		}

@@ -18,6 +18,7 @@ package de.congrace.exp4j;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import de.congrace.exp4j.tokens.CalculationToken;
@@ -40,8 +41,8 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
      * @throws UnparseableExpressionException when expression is invalid
      * @throws UnknownFunctionException when an unknown function has been used
      */
-    private PostfixExpression(String expression, String[] variableNames) throws UnparseableExpressionException, UnknownFunctionException {
-        super(expression, new Tokenizer(variableNames).tokenize(expression), variableNames);
+    private PostfixExpression(String expression, String[] variableNames,Set<CustomFunction> customFunctions) throws UnparseableExpressionException, UnknownFunctionException {
+        super(expression, new Tokenizer(variableNames,customFunctions).tokenize(expression), variableNames);
     }
 
     /**
@@ -89,6 +90,18 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
      * @throws UnknownFunctionException if an unknown function has been used
      */
     public static PostfixExpression fromInfix(String expression) throws UnparseableExpressionException, UnknownFunctionException {
+    	return fromInfix(expression, null);
+    }
+
+    /**
+     * Factory method for creating {@link PostfixExpression}s from human
+     * readable infix expressions
+     * @param expression the infix expression to be used
+     * @return an equivalent {@link PostfixExpression}
+     * @throws UnparseableExpressionException if the expression was invalid
+     * @throws UnknownFunctionException if an unknown function has been used
+     */
+    public static PostfixExpression fromInfix(String expression,Set<CustomFunction> customFunctions) throws UnparseableExpressionException, UnknownFunctionException {
         String[] variables = null;
         int posStart, posEnd;
         if ((posStart = expression.indexOf('=')) > 0) {
@@ -98,7 +111,7 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
                 variables = functionDef.substring(posStart + 1, posEnd).split(",");
             }
         }
-        return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables), variables);
+        return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables,customFunctions), variables,customFunctions);
     }
 
     public void setVariable(String name, double value) {

@@ -16,6 +16,7 @@
  */
 package de.congrace.exp4j;
 
+import java.util.Set;
 import java.util.Stack;
 
 import de.congrace.exp4j.tokens.OperatorToken;
@@ -31,7 +32,7 @@ import de.congrace.exp4j.tokens.Token;
 class InfixTranslator {
 
     /**
-     * Delegation method for simple expression without variables
+     * Delegation method for simple expression without variables or scustom functions
      * @param infixExpression the infix expression to be translated
      * @return translated RNP postfix expression
      * @throws UnparseableExpressionException when the expression is invalid
@@ -39,7 +40,7 @@ class InfixTranslator {
      *             in the input.
      */
     static String toPostfixExpression(String infixExpression) throws UnparseableExpressionException, UnknownFunctionException {
-        return toPostfixExpression(infixExpression, null);
+        return toPostfixExpression(infixExpression, null,null);
     }
 
     /**
@@ -50,9 +51,9 @@ class InfixTranslator {
      * @throws UnparseableExpressionException if the expression could not be translated to RPN
      * @throws UnknownFunctionException if an unknown function was encountered
      */
-     static String toPostfixExpression(String infixExpression, String[] variableNames) throws UnparseableExpressionException, UnknownFunctionException {
+     static String toPostfixExpression(String infixExpression, String[] variableNames,Set<CustomFunction> customFunctions) throws UnparseableExpressionException, UnknownFunctionException {
         infixExpression = substituteUnaryOperators(infixExpression);
-        final Token[] tokens = new Tokenizer(variableNames).tokenize(infixExpression);
+        final Token[] tokens = new Tokenizer(variableNames,customFunctions).tokenize(infixExpression);
         final StringBuilder output = new StringBuilder(tokens.length);
         final Stack<Token> operatorStack = new Stack<Token>();
         for (final Token token : tokens) {

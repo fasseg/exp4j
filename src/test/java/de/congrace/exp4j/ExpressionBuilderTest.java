@@ -2,6 +2,8 @@ package de.congrace.exp4j;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 public class ExpressionBuilderTest {
@@ -51,20 +53,28 @@ public class ExpressionBuilderTest {
 		double result = calc.calculate();
 		assertTrue(result == 3 * varY);
 	}
-	
+
 	@Test
 	public void testExpressionBuilder6() throws Exception {
 		double varX = 1.3d;
 		double varY = 4.22d;
 		double varZ = 4.22d;
-		Calculatable calc = new ExpressionBuilder("x * y * z").withVariableNames("x","y","z").build();
+		Calculatable calc = new ExpressionBuilder("x * y * z").withVariableNames("x", "y", "z").build();
 		calc.setVariable("x", varX);
 		calc.setVariable("y", varY);
 		calc.setVariable("z", varZ);
 		double result = calc.calculate();
 		assertTrue(result == varX * varY * varZ);
 	}
-	
+
+	@Test
+	public void testExpressionBuilder7() throws Exception {
+		double varX = 1.3d;
+		Calculatable calc = new ExpressionBuilder("log(sin(x))").withVariable("x", varX).build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(Math.sin(varX)));
+	}
+
 	@Test(expected = UnparseableExpressionException.class)
 	public void testMissingVar() throws Exception {
 		double varY = 4.22d;
@@ -77,5 +87,115 @@ public class ExpressionBuilderTest {
 		double varY = 4.22d;
 		Calculatable calc = new ExpressionBuilder("3*invalid_function(y)").withVariable("y", varY).build();
 		calc.calculate();
+	}
+
+	@Test
+	public void testCustomFunction1() throws Exception {
+		CustomFunction custom = new CustomFunction("timespi") {
+			@Override
+			public double applyFunction(double value) {
+				return value * Math.PI;
+			}
+		};
+		Calculatable calc = new ExpressionBuilder("timespi(x)").withVariable("x", 1).withCustomFunction(custom).build();
+		double result = calc.calculate();
+		assertTrue(result == Math.PI);
+	}
+
+	@Test
+	public void testCustomFunction2() throws Exception {
+		CustomFunction custom = new CustomFunction("loglog") {
+			@Override
+			public double applyFunction(double value) {
+				return Math.log(Math.log(value));
+			}
+		};
+		Calculatable calc = new ExpressionBuilder("loglog(x)").withVariable("x", 1).withCustomFunction(custom).build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(Math.log(1)));
+	}
+
+	@Test
+	public void testCustomFunction3() throws Exception {
+		CustomFunction custom1 = new CustomFunction("foo") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.E;
+			}
+		};
+		CustomFunction custom2 = new CustomFunction("bar") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.PI;
+			}
+		};
+		Calculatable calc = new ExpressionBuilder("foo(bar(x))")
+			.withVariable("x", 1)
+			.withCustomFunction(custom1)
+			.withCustomFunction(custom2)
+			.build();
+		double result = calc.calculate();
+		assertTrue(result == 1 * Math.E * Math.PI);
+	}
+	@Test
+	public void testCustomFunction4() throws Exception {
+		CustomFunction custom1 = new CustomFunction("foo") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.E;
+			}
+		};
+		double varX=32.24979131d;
+		Calculatable calc = new ExpressionBuilder("foo(log(x))")
+			.withVariable("x", varX)
+			.withCustomFunction(custom1)
+			.build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(varX) * Math.E);
+	}
+	@Test
+	public void testCustomFunction5() throws Exception {
+		CustomFunction custom1 = new CustomFunction("foo") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.E;
+			}
+		};
+		CustomFunction custom2 = new CustomFunction("bar") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.PI;
+			}
+		};
+		double varX=32.24979131d;
+		Calculatable calc = new ExpressionBuilder("bar(foo(log(x)))")
+			.withVariable("x", varX)
+			.withCustomFunction(custom1)
+			.withCustomFunction(custom2)
+			.build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(varX) * Math.E * Math.PI);
+	}
+	@Test
+	public void testCustomFunction6() throws Exception {
+		CustomFunction custom1 = new CustomFunction("foo") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.E;
+			}
+		};
+		CustomFunction custom2 = new CustomFunction("bar") {
+			@Override
+			public double applyFunction(double value) {
+				return value*Math.PI;
+			}
+		};
+		double varX=32.24979131d;
+		Calculatable calc = new ExpressionBuilder("bar(foo(log(x)))")
+			.withVariable("x", varX)
+			.withCustomFunctions(Arrays.asList(custom1,custom2))
+			.build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(varX) * Math.E * Math.PI);
 	}
 }

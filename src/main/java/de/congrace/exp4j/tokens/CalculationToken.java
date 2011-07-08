@@ -21,7 +21,7 @@ import java.util.Stack;
 
 public abstract class CalculationToken extends Token {
 
-    CalculationToken(String value) {
+    public CalculationToken(String value) {
         super(value);
     }
 

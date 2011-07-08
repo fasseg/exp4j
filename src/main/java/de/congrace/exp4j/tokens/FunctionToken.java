@@ -16,7 +16,6 @@ limitations under the License.
  */
 package de.congrace.exp4j.tokens;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Stack;
 
@@ -77,10 +76,6 @@ public class FunctionToken extends CalculationToken {
 	 * @return the result of the function
 	 */
     double applyFunction(double x) {
-		// final Class<java.lang.Math> math=java.lang.Math.class;
-		// final Method f=math.getMethod(function.toString().toLowerCase(),
-		// double.class);
-		// return (Double) f.invoke(math, x);
 		switch (function) {
 		case ABS:
 			return Math.abs(x);

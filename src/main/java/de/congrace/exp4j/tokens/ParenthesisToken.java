@@ -18,6 +18,8 @@ package de.congrace.exp4j.tokens;
 
 import java.util.Stack;
 
+import de.congrace.exp4j.CustomFunction;
+
 
 /**
  * Token for parenthesis
@@ -58,7 +60,7 @@ public class ParenthesisToken extends Token {
             operatorStack.push(this);
         } else {
             Token next;
-            while ((next = operatorStack.peek()) instanceof OperatorToken || next instanceof FunctionToken || (next instanceof ParenthesisToken && !((ParenthesisToken) next).isOpen())) {
+            while ((next = operatorStack.peek()) instanceof OperatorToken || next instanceof FunctionToken || next instanceof CustomFunction|| (next instanceof ParenthesisToken && !((ParenthesisToken) next).isOpen())) {
                 output.append(operatorStack.pop().getValue()).append(" ");
             }
             operatorStack.pop();

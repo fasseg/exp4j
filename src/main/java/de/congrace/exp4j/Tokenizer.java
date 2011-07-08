@@ -36,53 +36,54 @@ import de.congrace.exp4j.tokens.FunctionToken.Function;
  * @author fas@congrace.de
  */
 class Tokenizer {
-    private String[] variableNames;
-    private final Set<String> keywords=new HashSet<String>();
-    
-    {
-      keywords.add("abs");
-      keywords.add("acos");
-      keywords.add("asin");
-      keywords.add("atan");
-      keywords.add("cbrt");
-      keywords.add("ceil");
-      keywords.add("cos");
-      keywords.add("cosh");
-      keywords.add("exp");
-      keywords.add("expm1");
-      keywords.add("floor");
-      keywords.add("log");
-      keywords.add("sin");
-      keywords.add("sinh");
-      keywords.add("sqrt");
-      keywords.add("tan");
-      keywords.add("tanh");
-    }
+	private String[] variableNames;
+	private final Set<String> functionNames = new HashSet<String>();
+	private final Set<CustomFunction> customFunctions;
+
+	{
+		functionNames.add("abs");
+		functionNames.add("acos");
+		functionNames.add("asin");
+		functionNames.add("atan");
+		functionNames.add("cbrt");
+		functionNames.add("ceil");
+		functionNames.add("cos");
+		functionNames.add("cosh");
+		functionNames.add("exp");
+		functionNames.add("expm1");
+		functionNames.add("floor");
+		functionNames.add("log");
+		functionNames.add("sin");
+		functionNames.add("sinh");
+		functionNames.add("sqrt");
+		functionNames.add("tan");
+		functionNames.add("tanh");
+	}
+
+	Tokenizer() {
+		super();
+		customFunctions=null;
+	}
 
 	/**
 	 * construct a new Tokenizer that recognizes variable names
 	 * 
 	 * @param variableNames
 	 *            the variable names in the expression
-     * @throws IllegalArgumentException if the variablenames are not valid
+	 * @throws IllegalArgumentException
+	 *             if the variablenames are not valid
 	 */
-	Tokenizer(String[] variableNames) throws IllegalArgumentException{
+	Tokenizer(String[] variableNames, Set<CustomFunction> customFunctions) throws IllegalArgumentException {
 		super();
 		this.variableNames = variableNames;
-		if (variableNames != null){
-		    for (String varName:variableNames){
-		        if (keywords.contains(varName.toLowerCase())){
-		            throw new IllegalArgumentException("Variable '" + varName + "' can not have the same name as a function");
-		        }
-		    }
+		if (variableNames != null) {
+			for (String varName : variableNames) {
+				if (functionNames.contains(varName.toLowerCase())) {
+					throw new IllegalArgumentException("Variable '" + varName + "' can not have the same name as a function");
+				}
+			}
 		}
-	}
-
-	/**
-	 * construct a simple tokenizer without variable names
-	 */
-	Tokenizer() {
-		super();
+		this.customFunctions = customFunctions;
 	}
 
 	/**
@@ -98,69 +99,95 @@ class Tokenizer {
 	 * @throws UnknownFunctionException
 	 *             when an unknown function name has been used.
 	 */
-	Token[] tokenize(String infix) throws UnparseableExpressionException,UnknownFunctionException {
+	Token[] tokenize(String infix) throws UnparseableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = infix.toCharArray();
-        // iterate over the chars and fork on different types of input
-        Token lastToken;
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
-            if (c == ' ') continue;
-            if (isDigit(c)) {
-            	final StringBuilder valueBuilder = new StringBuilder(1);
-                // handle the numbers of the expression
-                valueBuilder.append(c);
-                int numberLen = 1;
-                while (chars.length > i + numberLen && isDigit(chars[i + numberLen])) {
-                    valueBuilder.append(chars[i + numberLen]);
-                    numberLen++;
-                }
-                i += numberLen - 1;
-                lastToken=new NumberToken(valueBuilder.toString());
-            }else if (Character.isLetter(c) || c == '_'){
-                // can be a variable or function
-            	final StringBuilder nameBuilder=new StringBuilder();
-                nameBuilder.append(c);
-                int offset=1;
-                while ( chars.length > i+offset && (Character.isLetter(chars[i + offset]) || Character.isDigit(chars[i + offset]) || chars[i+offset] == '_')){
-                    nameBuilder.append(chars[i + offset++]);
-                }
-                String name=nameBuilder.toString();
-                if (this.isVariable(name)){
-                    // a variable
-                    i += offset - 1;
-                    lastToken=new VariableToken(name);
-                }else if (this.isFunction(name)){
-                    // might be a function
-                    i += offset - 1;
-                    lastToken=new FunctionToken(name);
-                }else {
-                 // an unknown symbol was encountered
-                    throw new UnparseableExpressionException(c, i);
-                }
-            }else if (OperatorToken.isOperator(c)) {
-            	lastToken=new OperatorToken(String.valueOf(c),OperatorToken.getOperation(c));
-            }else if (c == '(' || c == ')' || c == '[' || c== ']' || c == '{' || c == '}'){
-            	lastToken=new ParenthesisToken(String.valueOf(c));
-            }else {
-                // an unknown symbol was encountered
-                throw new UnparseableExpressionException(c, i);
-            }
-            tokens.add(lastToken);
-        }
-        return tokens.toArray(new Token[tokens.size()]);
-    }
-
-	private boolean isFunction(String name) {
-	    for (Function fn:Function.values()){
-	        if (fn.name().equals(name.toUpperCase())){
-	            return true;
-	        }
-	    }
-	    return false;
+		// iterate over the chars and fork on different types of input
+		Token lastToken;
+		for (int i = 0; i < chars.length; i++) {
+			char c = chars[i];
+			if (c == ' ')
+				continue;
+			if (isDigit(c)) {
+				final StringBuilder valueBuilder = new StringBuilder(1);
+				// handle the numbers of the expression
+				valueBuilder.append(c);
+				int numberLen = 1;
+				while (chars.length > i + numberLen && isDigit(chars[i + numberLen])) {
+					valueBuilder.append(chars[i + numberLen]);
+					numberLen++;
+				}
+				i += numberLen - 1;
+				lastToken = new NumberToken(valueBuilder.toString());
+			} else if (Character.isLetter(c) || c == '_') {
+				// can be a variable or function
+				final StringBuilder nameBuilder = new StringBuilder();
+				nameBuilder.append(c);
+				int offset = 1;
+				while (chars.length > i + offset && (Character.isLetter(chars[i + offset]) || Character.isDigit(chars[i + offset]) || chars[i + offset] == '_')) {
+					nameBuilder.append(chars[i + offset++]);
+				}
+				String name = nameBuilder.toString();
+				if (this.isVariable(name)) {
+					// a variable
+					i += offset - 1;
+					lastToken = new VariableToken(name);
+				} else if (this.isFunction(name)) {
+					// might be a function
+					i += offset - 1;
+					lastToken = new FunctionToken(name);
+				} else if (this.isCustomFunction(name)) {
+					// a custom function
+					i += offset - 1;
+					lastToken = getCustomFunctionToken(name);
+				} else {
+					// an unknown symbol was encountered
+					throw new UnparseableExpressionException(c, i);
+				}
+			} else if (OperatorToken.isOperator(c)) {
+				lastToken = new OperatorToken(String.valueOf(c), OperatorToken.getOperation(c));
+			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			} else {
+				// an unknown symbol was encountered
+				throw new UnparseableExpressionException(c, i);
+			}
+			tokens.add(lastToken);
+		}
+		return tokens.toArray(new Token[tokens.size()]);
 	}
 
-    /**
+	private Token getCustomFunctionToken(String name) throws UnknownFunctionException {
+		for (CustomFunction func : customFunctions) {
+			if (func.getValue().equals(name)) {
+				return func;
+			}
+		}
+		throw new UnknownFunctionException(name);
+	}
+
+	private boolean isFunction(String name) {
+		for (Function fn : Function.values()) {
+			if (fn.name().equals(name.toUpperCase())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isCustomFunction(String name) {
+		if (customFunctions==null){
+			return false;
+		}
+		for (CustomFunction func : customFunctions) {
+			if (func.getValue().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * check if a char is part of a number
 	 * 
 	 * @param c
@@ -168,14 +195,15 @@ class Tokenizer {
 	 * @return true if the char is part of a number
 	 */
 	private boolean isDigit(char c) {
-        return Character.isDigit(c) || c == '.';
-    }
+		return Character.isDigit(c) || c == '.';
+	}
 
 	/**
 	 * check if a String is a variable name
 	 * 
-	 * @param name the variable name which is checked to be valid
-	 *            the char to be checked
+	 * @param name
+	 *            the variable name which is checked to be valid the char to be
+	 *            checked
 	 * @return true if the char is a variable name (e.g. x)
 	 */
 	private boolean isVariable(String name) {
