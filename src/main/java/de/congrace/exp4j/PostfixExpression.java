@@ -23,6 +23,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
 
 /**
  * Class for calculating values from a RPN postfix expression.<br/>

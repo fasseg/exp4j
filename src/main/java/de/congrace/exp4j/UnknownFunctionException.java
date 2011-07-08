@@ -16,6 +16,11 @@
  */
 package de.congrace.exp4j;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
 
 /**
  * Exception for handling unknown Functions.

@@ -3,6 +3,11 @@ package de.congrace.exp4j;
 import java.util.Map;
 import java.util.Stack;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
 /**
  * this classed is used to create custom functions for exp4j<br/><br/>
  * <b>Example</b><br/>
@@ -39,12 +44,12 @@ public abstract class CustomFunction extends CalculationToken {
 
 	
 	@Override
-	public void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
+	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
 		operatorStack.push(this);
 	}
 
 	@Override
-	public void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
+	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
 		stack.push(this.applyFunction(stack.pop()));
 	}
 }

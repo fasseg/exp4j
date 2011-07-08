@@ -24,6 +24,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+<<<<<<< HEAD
+=======
+import de.congrace.exp4j.UnknownFunctionException;
+import de.congrace.exp4j.UnparseableExpressionException;
+>>>>>>> cf8c7683248e1c8357c539ba094ccbc95e0b1baf
 import de.congrace.exp4j.FunctionToken.Function;
 
 
