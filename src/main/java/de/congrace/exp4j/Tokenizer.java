@@ -21,13 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.congrace.exp4j.tokens.FunctionToken;
-import de.congrace.exp4j.tokens.NumberToken;
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.ParenthesisToken;
-import de.congrace.exp4j.tokens.Token;
-import de.congrace.exp4j.tokens.VariableToken;
-import de.congrace.exp4j.tokens.FunctionToken.Function;
+import de.congrace.exp4j.FunctionToken.Function;
 
 /**
  * Class for tokenizing mathematical expressions by breaking an expression up

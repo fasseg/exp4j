@@ -19,8 +19,7 @@ package de.congrace.exp4j;
 import java.util.Set;
 import java.util.Stack;
 
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.Token;
+
 
 
 /**
