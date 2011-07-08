@@ -11,5 +11,8 @@
 			<action dev="fas" due-to="feature request" type="add">added Calculable Interface</action>
 			<action dev="fas" due-to="feature request" type="fix">refactored for better visibility</action>
 		</release>
+		<release version="0.2.2" description="fixed bug">
+			<action dev="fas" due-to="issue" type="fix">exp4j now checks if the variable names clash with a custom function name</action>
+		</release>
 	</body>
 </document>

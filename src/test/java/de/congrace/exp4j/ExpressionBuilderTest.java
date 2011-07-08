@@ -183,6 +183,20 @@ public class ExpressionBuilderTest {
 		assertTrue(result == Math.log(Math.sin(varX)));
 	}
 
+	@Test(expected=UnparsableExpressionException.class)
+	public void testSameName() throws Exception {
+		CustomFunction custom = new CustomFunction("bar") {
+			@Override
+			public double applyFunction(double value) {
+				return value / 2;
+			}
+		};
+		double varBar = 1.3d;
+		Calculable calc = new ExpressionBuilder("f(bar)=bar(bar)").withVariable("bar", varBar).withCustomFunction(custom).build();
+		double result = calc.calculate();
+		assertTrue(result == varBar/2);
+	}
+
 	@Test(expected = UnparsableExpressionException.class)
 	public void testInvalidFunction() throws Exception {
 		double varY = 4.22d;

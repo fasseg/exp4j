@@ -59,6 +59,11 @@ public class ExpressionBuilder {
 			if (variables.get(var) != null) {
 				delegate.setVariable(var, variables.get(var));
 			}
+			for (CustomFunction custom:customFunctions){
+				if (custom.getValue().equals(var)){
+					throw new UnparsableExpressionException("variable '" + var + "' cannot have the same name as a custom function " + custom.getValue());
+				}
+			}
 		}
 		return delegate;
 	}
