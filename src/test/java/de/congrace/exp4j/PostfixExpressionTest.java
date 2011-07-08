@@ -41,8 +41,9 @@ public class PostfixExpressionTest {
 		}
 		time = System.currentTimeMillis() - time;
 		factor = (double) time;
-		System.out.print("simple benchmark for:\t" + expr);
-		System.out.println(", " + xMax * yMax + " calculations");
+		System.out.println("\n:: [PostfixExpression] simple benchmark");
+		System.out.println("expression\t\t" + expr);
+		System.out.println("num calculations\t" + xMax*yMax);
 		System.out.println("exp4j\t\t\t~" + time + " ms");
 		time = System.currentTimeMillis();
 		@SuppressWarnings("unused")
@@ -54,7 +55,7 @@ public class PostfixExpressionTest {
 		}
 		time = System.currentTimeMillis() - time;
 		System.out.println("Java Math\t\t~" + time + " ms");
-		System.out.println("factor: " + DecimalFormat.getInstance().format(factor / (double) time));
+		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time));
 	}
 
 	@Test

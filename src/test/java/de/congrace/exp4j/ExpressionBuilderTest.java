@@ -2,6 +2,7 @@ package de.congrace.exp4j;
 
 import static org.junit.Assert.assertTrue;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -174,6 +175,14 @@ public class ExpressionBuilderTest {
 		assertTrue(result == Math.log(Math.sin(varX)));
 	}
 
+	@Test
+	public void testExpressionBuilder8() throws Exception {
+		double varX = 1.3d;
+		Calculable calc = new ExpressionBuilder("f(x)=log(sin(x))").withVariable("x", varX).build();
+		double result = calc.calculate();
+		assertTrue(result == Math.log(Math.sin(varX)));
+	}
+
 	@Test(expected = UnparsableExpressionException.class)
 	public void testInvalidFunction() throws Exception {
 		double varY = 4.22d;
@@ -187,4 +196,37 @@ public class ExpressionBuilderTest {
 		Calculable calc = new ExpressionBuilder("3*y*z").withVariable("y", varY).build();
 		calc.calculate();
 	}
+	@Test
+	public void testBench1() throws Exception {
+		double factor;
+		String expr = "foo(x,y)=log(x) - y * (cbrt(x^cos(y)))";
+		int xMax = 100, yMax = 1000;
+		Calculable calc=new ExpressionBuilder(expr).build();
+		long time = System.currentTimeMillis();
+		for (int x = 0; x < xMax; x++) {
+			for (int y = 0; y < yMax; y++) {
+				calc.setVariable("x", x);
+				calc.setVariable("y", y);
+				calc.calculate();
+			}
+		}
+		time = System.currentTimeMillis() - time;
+		factor = (double) time;
+		System.out.println("\n:: [ExpressionBuilder] simple benchmark");
+		System.out.println("expression\t\t" + expr);
+		System.out.println("num calculations\t" + xMax*yMax);
+		System.out.println("exp4j\t\t\t~" + time + " ms");
+		time = System.currentTimeMillis();
+		@SuppressWarnings("unused")
+		double val;
+		for (int x = 0; x < xMax; x++) {
+			for (int y = 0; y < yMax; y++) {
+				val = Math.log(x) - y * (Math.cbrt(Math.pow(x, Math.cos(y))));
+			}
+		}
+		time = System.currentTimeMillis() - time;
+		System.out.println("Java Math\t\t~" + time + " ms");
+		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time));
+	}
+
 }
