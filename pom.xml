@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.congrace</groupId>
 	<artifactId>exp4j</artifactId>
-	<version>0.2.2-SNAPSHOT</version>
+	<version>0.2.3-SNAPSHOT</version>
 	<name>exp4j</name>
 	<description>A simple mathematical expression evaluator for java.</description>
 	<properties>
@@ -11,6 +11,7 @@
 	<scm>
 		<connection>scm:git:http://github.com/smeg4brains/exp4j.git</connection>
 		<developerConnection>scm:git:https://github.com/smeg4brains/exp4j.git</developerConnection>
+		<url>https://github.com/smeg4brains/exp4j</url>
 	</scm>
 	<url>https://exp4j.congrace.de</url>
 	<issueManagement>
