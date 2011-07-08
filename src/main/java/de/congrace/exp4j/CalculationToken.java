@@ -14,14 +14,14 @@
    limitations under the License.
 
  */
-package de.congrace.exp4j.tokens;
+package de.congrace.exp4j;
 
 import java.util.Map;
 import java.util.Stack;
 
 public abstract class CalculationToken extends Token {
 
-    public CalculationToken(String value) {
+    CalculationToken(String value) {
         super(value);
     }
 

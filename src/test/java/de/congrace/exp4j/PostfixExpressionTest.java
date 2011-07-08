@@ -553,7 +553,7 @@ public class PostfixExpressionTest {
 		assertTrue(expected == pe.calculate());
 	}
 
-	@Test(expected = UnparseableExpressionException.class)
+	@Test(expected = UnparsableExpressionException.class)
 	public void testFailUnknownFunction1() throws Exception {
 		String expr;
 		expr = "lig(1)";
@@ -561,7 +561,7 @@ public class PostfixExpressionTest {
 		PostfixExpression.fromInfix(expr).calculate();
 	}
 
-	@Test(expected = UnparseableExpressionException.class)
+	@Test(expected = UnparsableExpressionException.class)
 	public void testFailUnknownFunction2() throws Exception {
 		String expr;
 		expr = "galength(1)";

@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * This is Builder implementation for the exp4j API used to create a
- * Calculatable instance for the user
+ * Calculable instance for the user
  * 
  * @author ruckus
  * 
@@ -31,13 +31,13 @@ public class ExpressionBuilder {
 	}
 
 	/**
-	 * set the variable's names used in the expression without setting their
+	 * set the variables names used in the expression without setting their
 	 * values
 	 * 
 	 * @param variableNames
 	 *            vararg {@link String} of the variable's names used in the
 	 *            expression
-	 * @return
+	 * @return the ExpressionBuilder instance
 	 */
 	public ExpressionBuilder withVariableNames(String... variableNames) {
 		for (String variable : variableNames) {
@@ -49,8 +49,8 @@ public class ExpressionBuilder {
 	/**
 	 * set the value for a variable
 	 * 
-	 * @param variableName
-	 * @param value
+	 * @param variableName  the variable name e.g. "x"
+	 * @param value the value e.g. 2.32d
 	 * @return the {@link ExpressionBuilder} instance
 	 */
 	public ExpressionBuilder withVariable(String variableName, double value) {
@@ -90,17 +90,17 @@ public class ExpressionBuilder {
 	}
 
 	/**
-	 * build a new {@link Calculatable} from the expression using the supplied
+	 * build a new {@link Calculable} from the expression using the supplied
 	 * variables
 	 * 
-	 * @return the {@link Calculatable} which can be used to evaluate the
+	 * @return the {@link Calculable} which can be used to evaluate the
 	 *         expression
 	 * @throws UnknownFunctionException
 	 *             when an unrecognized function name is used in the expression
-	 * @throws UnparseableExpressionException
+	 * @throws UnparsableExpressionException
 	 *             if the expression could not be parsed
 	 */
-	public Calculatable build() throws UnknownFunctionException, UnparseableExpressionException {
+	public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
 		if (expression.indexOf('=') == -1 && !variables.isEmpty()) {
 
 			// User supplied an expression without leading "f(...)="
@@ -108,11 +108,11 @@ public class ExpressionBuilder {
 			// for PostfixExpression.fromInfix()
 			StringBuilder function = new StringBuilder("f(");
 			for (String var : variables.keySet()) {
-				function.append(var + ",");
+				function.append(var).append(',');
 			}
 			expression = function.deleteCharAt(function.length() - 1).toString() + ")=" + expression;
 		}
-		// create the PostfixExpression and return it as a Calculatable
+		// create the PostfixExpression and return it as a Calculable
 		PostfixExpression delegate = PostfixExpression.fromInfix(expression, customFunctions);
 		for (String var : variables.keySet()) {
 			if (variables.get(var) != null) {

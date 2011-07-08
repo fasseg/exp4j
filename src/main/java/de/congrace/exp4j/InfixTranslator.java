@@ -16,11 +16,10 @@
  */
 package de.congrace.exp4j;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.Set;
 import java.util.Stack;
-
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.Token;
 
 
 /**
@@ -35,11 +34,11 @@ class InfixTranslator {
      * Delegation method for simple expression without variables or scustom functions
      * @param infixExpression the infix expression to be translated
      * @return translated RNP postfix expression
-     * @throws UnparseableExpressionException when the expression is invalid
+     * @throws UnparsableExpressionException when the expression is invalid
      * @throws UnknownFunctionException when an unknonw function has been used
      *             in the input.
      */
-    static String toPostfixExpression(String infixExpression) throws UnparseableExpressionException, UnknownFunctionException {
+    static String toPostfixExpression(String infixExpression) throws UnparsableExpressionException, UnknownFunctionException {
         return toPostfixExpression(infixExpression, null,null);
     }
 
@@ -47,11 +46,12 @@ class InfixTranslator {
      * implement the shunting yard algorithm
      * @param infixExpression the human readable expression which should be translated to RPN
      * @param variableNames  the variable names used in the expression
+     * @param customFunctions the CustomFunction implementations used
      * @return the expression in postfix format
-     * @throws UnparseableExpressionException if the expression could not be translated to RPN
+     * @throws UnparsableExpressionException if the expression could not be translated to RPN
      * @throws UnknownFunctionException if an unknown function was encountered
      */
-     static String toPostfixExpression(String infixExpression, String[] variableNames,Set<CustomFunction> customFunctions) throws UnparseableExpressionException, UnknownFunctionException {
+     static String toPostfixExpression(String infixExpression, @Nullable String[] variableNames,@Nullable Set<CustomFunction> customFunctions) throws UnparsableExpressionException, UnknownFunctionException {
         infixExpression = substituteUnaryOperators(infixExpression);
         final Token[] tokens = new Tokenizer(variableNames,customFunctions).tokenize(infixExpression);
         final StringBuilder output = new StringBuilder(tokens.length);

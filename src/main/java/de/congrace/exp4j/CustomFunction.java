@@ -3,9 +3,6 @@ package de.congrace.exp4j;
 import java.util.Map;
 import java.util.Stack;
 
-import de.congrace.exp4j.tokens.CalculationToken;
-import de.congrace.exp4j.tokens.Token;
-
 /**
  * this classed is used to create custom functions for exp4j<br/><br/>
  * <b>Example</b><br/>
@@ -16,7 +13,7 @@ import de.congrace.exp4j.tokens.Token;
  * 		}
  * };
  * double varX=12d;
- * Calculatable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
+ * Calculable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
  * assertTrue(calc.calculate() == Math.E * varX);
  * }</code>
  * 
@@ -29,7 +26,7 @@ public abstract class CustomFunction extends CalculationToken {
 	 * create a new Customfunction with a set name
 	 * @param value the name of the function (e.g. foo)
 	 */
-	public CustomFunction(String value) {
+	protected CustomFunction(String value) {
 		super(value);
 	}
 

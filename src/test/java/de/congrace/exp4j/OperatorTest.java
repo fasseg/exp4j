@@ -19,8 +19,7 @@ package de.congrace.exp4j;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.OperatorToken.Operation;
+import de.congrace.exp4j.OperatorToken.Operation;
 
 public class OperatorTest {
     @Test

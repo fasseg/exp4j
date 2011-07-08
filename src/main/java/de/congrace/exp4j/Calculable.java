@@ -6,7 +6,7 @@ package de.congrace.exp4j;
  * @author ruckus
  * 
  */
-public interface Calculatable {
+public interface Calculable {
 	/**
 	 * calculate the result of the expression
 	 * 
@@ -27,7 +27,7 @@ public interface Calculatable {
 	/**
 	 * return the expression in reverse polish postfix notation
 	 * 
-	 * @return the expression used to construct this {@link Calculatable}
+	 * @return the expression used to construct this {@link Calculable}
 	 */
 	public String getExpression();
 }

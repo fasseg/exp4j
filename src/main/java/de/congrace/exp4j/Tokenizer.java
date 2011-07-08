@@ -21,13 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.congrace.exp4j.tokens.FunctionToken;
-import de.congrace.exp4j.tokens.NumberToken;
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.ParenthesisToken;
-import de.congrace.exp4j.tokens.Token;
-import de.congrace.exp4j.tokens.VariableToken;
-import de.congrace.exp4j.tokens.FunctionToken.Function;
+import de.congrace.exp4j.FunctionToken.Function;
 
 /**
  * Class for tokenizing mathematical expressions by breaking an expression up
@@ -70,8 +64,9 @@ class Tokenizer {
 	 * 
 	 * @param variableNames
 	 *            the variable names in the expression
-	 * @throws IllegalArgumentException
-	 *             if the variablenames are not valid
+	 * @throws IllegalArgumentException  if a variable has the name as a function
+     * @param customFunctions the CustomFunction implementations used
+	 *             if the variableNames are not valid
 	 */
 	Tokenizer(String[] variableNames, Set<CustomFunction> customFunctions) throws IllegalArgumentException {
 		super();
@@ -89,17 +84,17 @@ class Tokenizer {
 	/**
 	 * tokenize an infix expression by breaking it up into different
 	 * {@link Token} that can represent operations,functions,numbers,
-	 * paranthesis or variables
+	 * parenthesis or variables
 	 * 
 	 * @param infix
-	 *            the infix espression to be tokenized
+	 *            the infix expression to be tokenized
 	 * @return the {@link Token}s representing the expression
-	 * @throws UnparseableExpressionException
+	 * @throws UnparsableExpressionException
 	 *             when the expression is invalid
 	 * @throws UnknownFunctionException
 	 *             when an unknown function name has been used.
 	 */
-	Token[] tokenize(String infix) throws UnparseableExpressionException, UnknownFunctionException {
+	Token[] tokenize(String infix) throws UnparsableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = infix.toCharArray();
 		// iterate over the chars and fork on different types of input
@@ -142,7 +137,7 @@ class Tokenizer {
 					lastToken = getCustomFunctionToken(name);
 				} else {
 					// an unknown symbol was encountered
-					throw new UnparseableExpressionException(c, i);
+					throw new UnparsableExpressionException(c, i);
 				}
 			} else if (OperatorToken.isOperator(c)) {
 				lastToken = new OperatorToken(String.valueOf(c), OperatorToken.getOperation(c));
@@ -150,7 +145,7 @@ class Tokenizer {
 				lastToken = new ParenthesisToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
-				throw new UnparseableExpressionException(c, i);
+				throw new UnparsableExpressionException(c, i);
 			}
 			tokens.add(lastToken);
 		}

@@ -15,19 +15,32 @@
 
  */
 package de.congrace.exp4j;
+
+import java.util.Stack;
+
 /**
- * Exception for invalid expressions
+ * Superclass for tokenized Strings
  * @author fas@congrace.de
  */
-public class UnparseableExpressionException extends Exception {
-    private static final long serialVersionUID = 1L;
+public abstract class Token {
+    private final String value;
 
     /**
-     * construct a new {@link UnparseableExpressionException}
-     * @param c the character which could not be parsed
-     * @param pos the position of the character in the expression
+     * construct a new {@link Token}
+     * @param value the value of the {@link Token}
      */
-    public UnparseableExpressionException(char c,int pos) {
-        super("Unable to parse character at position " + pos + ": '" + String.valueOf(c) + "'");
+    Token(String value) {
+        super();
+        this.value = value;
     }
+
+    /**
+     * get the value (String representation) of the token
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    public abstract void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output);
 }

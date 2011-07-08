@@ -16,26 +16,21 @@
  */
 package de.congrace.exp4j;
 
-import static de.congrace.exp4j.tokens.OperatorToken.Operation.ADDITION;
-import static de.congrace.exp4j.tokens.OperatorToken.Operation.DIVISION;
-import static de.congrace.exp4j.tokens.OperatorToken.Operation.MULTIPLICATION;
-import static de.congrace.exp4j.tokens.OperatorToken.Operation.SUBTRACTION;
+import static de.congrace.exp4j.OperatorToken.Operation.ADDITION;
+import static de.congrace.exp4j.OperatorToken.Operation.DIVISION;
+import static de.congrace.exp4j.OperatorToken.Operation.MULTIPLICATION;
+import static de.congrace.exp4j.OperatorToken.Operation.SUBTRACTION;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.congrace.exp4j.tokens.FunctionToken;
-import de.congrace.exp4j.tokens.FunctionToken.Function;
-import de.congrace.exp4j.tokens.NumberToken;
-import de.congrace.exp4j.tokens.OperatorToken;
-import de.congrace.exp4j.tokens.ParenthesisToken;
-import de.congrace.exp4j.tokens.Token;
+import de.congrace.exp4j.FunctionToken.Function;
 
 
 public class TokenizerTest {
     private final Tokenizer tokenizer = new Tokenizer();
 
-    @Test(expected = UnparseableExpressionException.class)
+    @Test(expected = UnparsableExpressionException.class)
     public void testInfixTokenizeError() throws Exception {
         String expr = "2+45~-12";
         tokenizer.tokenize(expr);

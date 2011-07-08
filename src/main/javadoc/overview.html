@@ -4,18 +4,18 @@
     <TITLE>exp4j</TITLE>
   </HEAD>
   <BODY>
-  	<h2>Using the ExpressionBuilder and the Calculatable interface</h2>
+  	<h2>Using the ExpressionBuilder and the Calculable interface</h2>
   	<b>Evaluate an expression</b>
   	<pre>
-  		Calculatable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)").withVariable("x", varX).withVariable("y", varY).build()
+  		Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)").withVariable("x", varX).withVariable("y", varY).build()
   		double result1=calc.calculate();
   	</pre>
-  	you can also change variables values after building by invoking <code>Calculatable.setVariable(String varName,double value)</code>, 
-  	but one has to make sure that the variablenames are passed into the ExpressionBuilder using at 
+  	you can also change variables values after building by invoking <code>Calculable.setVariable(String varName,double value)</code>,
+  	but one has to make sure that the variable names are passed into the ExpressionBuilder using at
   	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
-  	an UnparseableErpessionExcetion will be thrown.
+  	an UnparseableExpressionException will be thrown.
   	<pre>
-  		Calculatable calc = new ExpressionBuilder("x * y - 2").withVariableNames("x","y").build();
+  		Calculable calc = new ExpressionBuilder("x * y - 2").withVariableNames("x","y").build();
   		calc.setVariable("x",1);
   		calc.setVariable("x",2);
   		assertTrue(calc.calculate()==0);
@@ -31,11 +31,11 @@
 			}
 		};
 		double varX=12d;
-  		Calculatable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
+  		Calculable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
   		assertTrue(calc.calculate() == Math.E * varX);
   	</pre> 
   	
-  	<h2>Using Postfixexpression</h2>
+  	<h2>Using PostfixExpression</h2>
 	<b>Evaluate a simple Expression:</b>
 	
  	<pre>
@@ -66,7 +66,7 @@
 	 PostfixExpression p=PostfixExpression.fromInfix("f(x,var2)=(x-1)^var2 - log(x)");
 	 </pre>
 	 
-	 in order to calculate a function value it is neccessary to pass the the variable values in the same order to the <code>calculate(double...values)</code> method as the appear in the infix expression
+	 in order to calculate a function value it is necessary to pass the the variable values in the same order to the <code>calculate(double...values)</code> method as the appear in the infix expression
 	 therefore in the example if x=2 and var2=7 calculation is done by calling the varargs method <code>calculate(double...values)</code>.
 	 
 	 <pre>
@@ -87,7 +87,7 @@
 	 <li>Subtraction: '2 - 2'</li>
 	 <li>Multiplication: '2 * 2'</li>
 	 <li>Division: '2 / 2'</li>
-	 <li>Exponentation: '2 ^ 2'</li>
+	 <li>Exponential: '2 ^ 2'</li>
 	 <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
 	 <li>Modulo: '2 % 2'</li>
 	 </ul>

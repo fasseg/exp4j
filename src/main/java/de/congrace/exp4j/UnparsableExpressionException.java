@@ -14,33 +14,20 @@
    limitations under the License.
 
  */
-package de.congrace.exp4j.tokens;
-
-import java.util.Stack;
-
+package de.congrace.exp4j;
 /**
- * Superclass for tokenized Strings
+ * Exception for invalid expressions
  * @author fas@congrace.de
  */
-public abstract class Token {
-    private final String value;
+public class UnparsableExpressionException extends Exception {
+    private static final long serialVersionUID = 1L;
 
     /**
-     * construct a new {@link Token}
-     * @param value the value of the {@link Token}
+     * construct a new {@link UnparsableExpressionException}
+     * @param c the character which could not be parsed
+     * @param pos the position of the character in the expression
      */
-    Token(String value) {
-        super();
-        this.value = value;
+    public UnparsableExpressionException(char c, int pos) {
+        super("Unable to parse character at position " + pos + ": '" + String.valueOf(c) + "'");
     }
-
-    /**
-     * get the value (String representation) of the token
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    public abstract void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output);
 }

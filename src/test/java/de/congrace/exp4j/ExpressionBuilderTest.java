@@ -9,14 +9,14 @@ import org.junit.Test;
 public class ExpressionBuilderTest {
 	@Test
 	public void testExpressionBuilder1() throws Exception {
-		Calculatable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
+		Calculable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
 		double result = calc.calculate();
 		assertTrue(result == 13d);
 	}
 
 	@Test
 	public void testExpressionBuilder2() throws Exception {
-		Calculatable calc = new ExpressionBuilder("7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
+		Calculable calc = new ExpressionBuilder("7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
 		double result = calc.calculate();
 		assertTrue(result == 13d);
 	}
@@ -25,7 +25,7 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder3() throws Exception {
 		double varX = 1.3d;
 		double varY = 4.22d;
-		Calculatable calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").withVariable("x", varX).withVariable("y", varY).build();
+		Calculable calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").withVariable("x", varX).withVariable("y", varY).build();
 		double result = calc.calculate();
 		assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
 	}
@@ -34,7 +34,7 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder4() throws Exception {
 		double varX = 1.3d;
 		double varY = 4.22d;
-		Calculatable calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").withVariable("x", varX).withVariable("y", varY).build();
+		Calculable calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").withVariable("x", varX).withVariable("y", varY).build();
 		double result = calc.calculate();
 		assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
 		varX = 1.79854d;
@@ -49,7 +49,7 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder5() throws Exception {
 		double varX = 1.3d;
 		double varY = 4.22d;
-		Calculatable calc = new ExpressionBuilder("3*y").withVariable("x", varX).withVariable("y", varY).build();
+		Calculable calc = new ExpressionBuilder("3*y").withVariable("x", varX).withVariable("y", varY).build();
 		double result = calc.calculate();
 		assertTrue(result == 3 * varY);
 	}
@@ -59,7 +59,7 @@ public class ExpressionBuilderTest {
 		double varX = 1.3d;
 		double varY = 4.22d;
 		double varZ = 4.22d;
-		Calculatable calc = new ExpressionBuilder("x * y * z").withVariableNames("x", "y", "z").build();
+		Calculable calc = new ExpressionBuilder("x * y * z").withVariableNames("x", "y", "z").build();
 		calc.setVariable("x", varX);
 		calc.setVariable("y", varY);
 		calc.setVariable("z", varZ);
@@ -70,22 +70,22 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpressionBuilder7() throws Exception {
 		double varX = 1.3d;
-		Calculatable calc = new ExpressionBuilder("log(sin(x))").withVariable("x", varX).build();
+		Calculable calc = new ExpressionBuilder("log(sin(x))").withVariable("x", varX).build();
 		double result = calc.calculate();
 		assertTrue(result == Math.log(Math.sin(varX)));
 	}
 
-	@Test(expected = UnparseableExpressionException.class)
+	@Test(expected = UnparsableExpressionException.class)
 	public void testMissingVar() throws Exception {
 		double varY = 4.22d;
-		Calculatable calc = new ExpressionBuilder("3*y*z").withVariable("y", varY).build();
+		Calculable calc = new ExpressionBuilder("3*y*z").withVariable("y", varY).build();
 		calc.calculate();
 	}
 
-	@Test(expected = UnparseableExpressionException.class)
+	@Test(expected = UnparsableExpressionException.class)
 	public void testInvalidFunction() throws Exception {
 		double varY = 4.22d;
-		Calculatable calc = new ExpressionBuilder("3*invalid_function(y)").withVariable("y", varY).build();
+		Calculable calc = new ExpressionBuilder("3*invalid_function(y)").withVariable("y", varY).build();
 		calc.calculate();
 	}
 
@@ -97,7 +97,7 @@ public class ExpressionBuilderTest {
 				return value * Math.PI;
 			}
 		};
-		Calculatable calc = new ExpressionBuilder("timespi(x)").withVariable("x", 1).withCustomFunction(custom).build();
+		Calculable calc = new ExpressionBuilder("timespi(x)").withVariable("x", 1).withCustomFunction(custom).build();
 		double result = calc.calculate();
 		assertTrue(result == Math.PI);
 	}
@@ -110,7 +110,7 @@ public class ExpressionBuilderTest {
 				return Math.log(Math.log(value));
 			}
 		};
-		Calculatable calc = new ExpressionBuilder("loglog(x)").withVariable("x", 1).withCustomFunction(custom).build();
+		Calculable calc = new ExpressionBuilder("loglog(x)").withVariable("x", 1).withCustomFunction(custom).build();
 		double result = calc.calculate();
 		assertTrue(result == Math.log(Math.log(1)));
 	}
@@ -129,7 +129,7 @@ public class ExpressionBuilderTest {
 				return value*Math.PI;
 			}
 		};
-		Calculatable calc = new ExpressionBuilder("foo(bar(x))")
+		Calculable calc = new ExpressionBuilder("foo(bar(x))")
 			.withVariable("x", 1)
 			.withCustomFunction(custom1)
 			.withCustomFunction(custom2)
@@ -146,7 +146,7 @@ public class ExpressionBuilderTest {
 			}
 		};
 		double varX=32.24979131d;
-		Calculatable calc = new ExpressionBuilder("foo(log(x))")
+		Calculable calc = new ExpressionBuilder("foo(log(x))")
 			.withVariable("x", varX)
 			.withCustomFunction(custom1)
 			.build();
@@ -168,7 +168,7 @@ public class ExpressionBuilderTest {
 			}
 		};
 		double varX=32.24979131d;
-		Calculatable calc = new ExpressionBuilder("bar(foo(log(x)))")
+		Calculable calc = new ExpressionBuilder("bar(foo(log(x)))")
 			.withVariable("x", varX)
 			.withCustomFunction(custom1)
 			.withCustomFunction(custom2)
@@ -191,7 +191,7 @@ public class ExpressionBuilderTest {
 			}
 		};
 		double varX=32.24979131d;
-		Calculatable calc = new ExpressionBuilder("bar(foo(log(x)))")
+		Calculable calc = new ExpressionBuilder("bar(foo(log(x)))")
 			.withVariable("x", varX)
 			.withCustomFunctions(Arrays.asList(custom1,custom2))
 			.build();

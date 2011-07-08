@@ -14,12 +14,10 @@
    limitations under the License.
 
  */
-package de.congrace.exp4j.tokens;
+package de.congrace.exp4j;
 
 import java.util.Map;
 import java.util.Stack;
-
-import de.congrace.exp4j.CustomFunction;
 
 /**
  * {@link Token} for Operations like +,-,*,/,% and ^
@@ -164,7 +162,7 @@ public class OperatorToken extends CalculationToken {
     @Override
     public void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
         Token before;
-        while (!operatorStack.isEmpty() && (before=operatorStack.peek()) != null && (before instanceof OperatorToken || before instanceof CustomFunction || before instanceof FunctionToken)){
+        while (!operatorStack.isEmpty() && (before=operatorStack.peek()) != null && (before instanceof OperatorToken || before instanceof FunctionToken)){
             if (before instanceof FunctionToken){
                 operatorStack.pop();
                 output.append(before.getValue()).append(" ");

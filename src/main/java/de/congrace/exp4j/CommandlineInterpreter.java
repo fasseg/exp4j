@@ -42,7 +42,7 @@ public class CommandlineInterpreter {
         try {
             final PostfixExpression pe = PostfixExpression.fromInfix(string);
             System.out.println(pe.calculate());
-        } catch (UnparseableExpressionException e) {
+        } catch (UnparsableExpressionException e) {
             e.printStackTrace();
         } catch (UnknownFunctionException e) {
             e.printStackTrace();

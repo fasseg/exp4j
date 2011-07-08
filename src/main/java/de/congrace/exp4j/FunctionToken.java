@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
  */
-package de.congrace.exp4j.tokens;
+package de.congrace.exp4j;
 
 import java.util.Map;
 import java.util.Stack;
-
-import de.congrace.exp4j.UnknownFunctionException;
 
 /**
  * A {@link Token} for functions
