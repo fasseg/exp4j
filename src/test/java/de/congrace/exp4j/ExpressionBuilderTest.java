@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 import org.junit.Test;
 
 public class ExpressionBuilderTest {
@@ -212,8 +215,12 @@ public class ExpressionBuilderTest {
 	}
 	@Test
 	public void testBench1() throws Exception {
+		if (System.getProperty("skipBenchmark")!=null && System.getProperty("skipBenchmark").equals("true")){
+			System.out.println(":: skipping naive benchmarks...");
+			return;
+		}
 		double factor;
-		String expr = "foo(x,y)=log(x) - y * (cbrt(x^cos(y)))";
+		String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
 		int xMax = 100, yMax = 1000;
 		Calculable calc=new ExpressionBuilder(expr).build();
 		long time = System.currentTimeMillis();
@@ -235,12 +242,21 @@ public class ExpressionBuilderTest {
 		double val;
 		for (int x = 0; x < xMax; x++) {
 			for (int y = 0; y < yMax; y++) {
-				val = Math.log(x) - y * (Math.cbrt(Math.pow(x, Math.cos(y))));
+				val = Math.log(x) - y * (Math.sqrt(Math.pow(x, Math.cos(y))));
 			}
 		}
 		time = System.currentTimeMillis() - time;
 		System.out.println("Java Math\t\t~" + time + " ms");
-		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time) + "\n");
+		time = System.currentTimeMillis();
+		ScriptEngineManager mgr = new ScriptEngineManager();
+	    ScriptEngine engine = mgr.getEngineByName("JavaScript");
+		for (int x = 0; x < xMax; x++) {
+			for (int y = 0; y < yMax; y++) {
+				engine.eval("Math.log(" + x + ") - " +y  + "* (Math.sqrt(" + x + "^Math.cos(" + y + ")))");
+			}
+		}
+		time=System.currentTimeMillis() - time;
+		System.out.println("JSR 223(Javascript)\t~" + time + " ms");
 	}
 
 }

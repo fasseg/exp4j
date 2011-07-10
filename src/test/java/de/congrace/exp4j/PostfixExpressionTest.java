@@ -22,6 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.DecimalFormat;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 import org.junit.Test;
 
 public class PostfixExpressionTest {
@@ -29,33 +32,46 @@ public class PostfixExpressionTest {
 
 	@Test
 	public void testBench1() throws Exception {
+		if (System.getProperty("skipBenchmark") != null && System.getProperty("skipBenchmark").equals("true")) {
+			System.out.println(":: skipping naive benchmarks...");
+			return;
+		}
+		System.out.println(":: running naive benchmarks, set -DskipBenchmark to skip");
 		double factor;
-		String expr = "foo(x,y)=log(x) - y * (cbrt(x^cos(y)))";
+		String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
 		int xMax = 100, yMax = 1000;
 		pe = PostfixExpression.fromInfix(expr);
 		long time = System.currentTimeMillis();
+		double val;
 		for (int x = 0; x < xMax; x++) {
 			for (int y = 0; y < yMax; y++) {
-				pe.calculate(x, y);
+				val = pe.calculate(x, y);
 			}
 		}
 		time = System.currentTimeMillis() - time;
 		factor = (double) time;
 		System.out.println("\n:: [PostfixExpression] simple benchmark");
 		System.out.println("expression\t\t" + expr);
-		System.out.println("num calculations\t" + xMax*yMax);
+		System.out.println("num calculations\t" + xMax * yMax);
 		System.out.println("exp4j\t\t\t~" + time + " ms");
 		time = System.currentTimeMillis();
-		@SuppressWarnings("unused")
-		double val;
 		for (int x = 0; x < xMax; x++) {
 			for (int y = 0; y < yMax; y++) {
-				val = Math.log(x) - y * (Math.cbrt(Math.pow(x, Math.cos(y))));
+				val = Math.log(x) - y * (Math.sqrt(Math.pow(x, Math.cos(y))));
 			}
 		}
 		time = System.currentTimeMillis() - time;
 		System.out.println("Java Math\t\t~" + time + " ms");
-		System.out.println("factor\t\t\t" + DecimalFormat.getInstance().format(factor / (double) time) + "\n");
+		time = System.currentTimeMillis();
+		ScriptEngineManager mgr = new ScriptEngineManager();
+		ScriptEngine engine = mgr.getEngineByName("JavaScript");
+		for (int x = 0; x < xMax; x++) {
+			for (int y = 0; y < yMax; y++) {
+				engine.eval("Math.log(" + x + ") - " + y + "* (Math.sqrt(" + x + "^Math.cos(" + y + ")))");
+			}
+		}
+		time = System.currentTimeMillis() - time;
+		System.out.println("JSR 223(Javascript)\t~" + time + " ms");
 	}
 
 	@Test
