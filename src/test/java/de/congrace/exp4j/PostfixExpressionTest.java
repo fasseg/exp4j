@@ -37,7 +37,6 @@ public class PostfixExpressionTest {
 			return;
 		}
 		System.out.println(":: running naive benchmarks, set -DskipBenchmark to skip");
-		double factor;
 		String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
 		int xMax = 100, yMax = 1000;
 		pe = PostfixExpression.fromInfix(expr);
@@ -49,7 +48,6 @@ public class PostfixExpressionTest {
 			}
 		}
 		time = System.currentTimeMillis() - time;
-		factor = (double) time;
 		System.out.println("\n:: [PostfixExpression] simple benchmark");
 		System.out.println("expression\t\t" + expr);
 		System.out.println("num calculations\t" + xMax * yMax);

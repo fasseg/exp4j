@@ -219,7 +219,6 @@ public class ExpressionBuilderTest {
 			System.out.println(":: skipping naive benchmarks...");
 			return;
 		}
-		double factor;
 		String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
 		int xMax = 100, yMax = 1000;
 		Calculable calc=new ExpressionBuilder(expr).build();
@@ -232,7 +231,6 @@ public class ExpressionBuilderTest {
 			}
 		}
 		time = System.currentTimeMillis() - time;
-		factor = (double) time;
 		System.out.println("\n:: [ExpressionBuilder] simple benchmark");
 		System.out.println("expression\t\t" + expr);
 		System.out.println("num calculations\t" + xMax*yMax);
