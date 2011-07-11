@@ -24,7 +24,7 @@ import java.util.Stack;
 public abstract class CustomFunction extends CalculationToken {
 
 	/**
-	 * create a new Customfunction with a set name
+	 * create a new CustomFunction with a set name
 	 * 
 	 * @param value
 	 *            the name of the function (e.g. foo)

@@ -62,7 +62,7 @@ class InfixTranslator {
 	}
 
 	/**
-	 * Delegation method for simple expression without variables or scustom
+	 * Delegation method for simple expression without variables or custom
 	 * functions
 	 * 
 	 * @param infixExpression
@@ -71,7 +71,7 @@ class InfixTranslator {
 	 * @throws UnparsableExpressionException
 	 *             when the expression is invalid
 	 * @throws UnknownFunctionException
-	 *             when an unknonw function has been used in the input.
+	 *             when an unknown function has been used in the input.
 	 */
 	static String toPostfixExpression(String infixExpression) throws UnparsableExpressionException, UnknownFunctionException {
 		return toPostfixExpression(infixExpression, null, null);

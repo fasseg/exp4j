@@ -104,7 +104,7 @@ public class ExpressionBuilder {
 	 * values
 	 * 
 	 * @param variableNames
-	 *            vararg {@link String} of the variable's names used in the
+	 *            vararg {@link String} of the variable names used in the
 	 *            expression
 	 * @return the ExpressionBuilder instance
 	 */
