@@ -40,7 +40,9 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
 	 *             if the expression was invalid
 	 * @throws UnknownFunctionException
 	 *             if an unknown function has been used
+	 * @deprecated please use {@link ExpressionBuilder} API
 	 */
+    @Deprecated
 	public static PostfixExpression fromInfix(String expression) throws UnparsableExpressionException, UnknownFunctionException {
 		return fromInfix(expression, null);
 	}
@@ -58,7 +60,9 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
 	 *             if the expression was invalid
 	 * @throws UnknownFunctionException
 	 *             if an unknown function has been used
+	 * @deprecated please use {@link ExpressionBuilder}
 	 */
+    @Deprecated
 	public static PostfixExpression fromInfix(String expression, Set<CustomFunction> customFunctions) throws UnparsableExpressionException,
 			UnknownFunctionException {
 		String[] variables = null;
