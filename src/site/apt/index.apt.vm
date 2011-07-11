@@ -32,7 +32,7 @@ Calculable calc = new ExpressionBuilder("x * y - 2")
 	.withVariableNames("x","y")
 	.build();
 calc.setVariable("x",1);
-calc.setVariable("x",2);
+calc.setVariable("y",2);
 assertTrue(calc.calculate()==0);
 +--
 

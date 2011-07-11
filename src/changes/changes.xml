@@ -14,5 +14,9 @@
 		<release version="0.2.2" description="fixed bug">
 			<action dev="fas" due-to="issue" type="fix">exp4j now checks if the variable names clash with a custom function name</action>
 		</release>
+		<release version="0.2.3" description="fixed bug">
+			<action dev="fas" due-to="issue" type="add">marked PostfixExpression.frominfix() as deprecated. ExpresionBuilder is the recommended way to use exp4j</action>
+			<action dev="fas" due-to="issue" type="fix">fixed docu typo</action>
+		</release>
 	</body>
 </document>
