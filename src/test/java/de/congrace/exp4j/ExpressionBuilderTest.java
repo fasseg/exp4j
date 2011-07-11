@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Random;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -235,5 +236,57 @@ public class ExpressionBuilderTest {
         Calculable calc = new ExpressionBuilder("3*y*z")
                 .withVariable("y", varY).build();
         calc.calculate();
+    }
+    @Test
+    public void testBench1() throws Exception {
+        if (System.getProperty("skipBenchmark") != null && System.getProperty("skipBenchmark").equals("true")) {
+            System.out.println(":: skipping naive benchmarks...");
+            return;
+        }
+        System.out.println(":: running naive benchmarks, set -DskipBenchmark to skip");
+        String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
+        Calculable calc=new ExpressionBuilder(expr).build();
+        double val = 0;
+        Random rnd = new Random();
+        long timeout = 2;
+        long time = System.currentTimeMillis() + (1000 * timeout);
+        int count = 0;
+        while (time > System.currentTimeMillis()) {
+            calc.setVariable("x", rnd.nextDouble());
+            calc.setVariable("y", rnd.nextDouble());
+            val = calc.calculate();
+            count++;
+        }
+        System.out.println("\n:: [PostfixExpression] simple benchmark");
+        System.out.println("expression\t\t" + expr);
+        double rate = count / timeout;
+        System.out.println("exp4j\t\t\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k" : rate) + " calc/sec]");
+        time = System.currentTimeMillis() + (1000 * timeout);
+        double x, y;
+        count=0;
+        while (time > System.currentTimeMillis()) {
+            x = rnd.nextDouble();
+            y = rnd.nextDouble();
+            val = Math.log(x) - y * (Math.sqrt(Math.pow(x, Math.cos(y))));
+            count++;
+        }
+        rate = count / timeout;
+        System.out.println("Java Math\t\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k" : rate) + " calc/sec]");
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        if (engine == null) {
+            System.err.println("Unable to instantiate javascript engine. skipping naive JS bench.");
+        } else {
+            time = System.currentTimeMillis() + (1000 * timeout);
+            count=0;
+            while (time > System.currentTimeMillis()) {
+                x = rnd.nextDouble();
+                y = rnd.nextDouble();
+                engine.eval("Math.log(" + x + ") - " + y + "* (Math.sqrt(" + x + "^Math.cos(" + y + ")))");
+                count++;
+            }
+            rate = count / timeout;
+            System.out.println("JSR 223(Javascript)\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k" : rate) +  " calc/sec]");
+        }
     }
 }

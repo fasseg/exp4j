@@ -34,55 +34,6 @@ public class PostfixExpressionTest {
     private PostfixExpression pe;
 
     @Test
-    public void testBench1() throws Exception {
-        if (System.getProperty("skipBenchmark") != null && System.getProperty("skipBenchmark").equals("true")) {
-            System.out.println(":: skipping naive benchmarks...");
-            return;
-        }
-        System.out.println(":: running naive benchmarks, set -DskipBenchmark to skip");
-        String expr = "foo(x,y)=log(x) - y * (sqrt(x^cos(y)))";
-        pe = PostfixExpression.fromInfix(expr);
-        double val = 0;
-        Random rnd = new Random();
-        long timeout = 2;
-        long time = System.currentTimeMillis() + (1000 * timeout);
-        int count = 0;
-        while (time > System.currentTimeMillis()) {
-            val = pe.calculate(rnd.nextDouble(), rnd.nextDouble());
-            count++;
-        }
-        System.out.println("\n:: [PostfixExpression] simple benchmark");
-        System.out.println("expression\t\t" + expr);
-        double rate = count / timeout;
-        System.out.println("exp4j\t\t\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k " : rate) + " calc/sec]");
-        time = System.currentTimeMillis() + (1000 * timeout);
-        double x, y;
-        while (time > System.currentTimeMillis()) {
-            x = rnd.nextDouble();
-            y = rnd.nextDouble();
-            val = Math.log(x) - y * (Math.sqrt(Math.pow(x, Math.cos(y))));
-            count++;
-        }
-        rate = count / timeout;
-        System.out.println("Java Math\t\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k " : rate) + " calc/sec]");
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        if (engine == null) {
-            System.err.println("Unable to instantiate javascript engine. skipping naive JS bench.");
-        } else {
-            time = System.currentTimeMillis() + (1000 * timeout);
-            while (time > System.currentTimeMillis()) {
-                x = rnd.nextDouble();
-                y = rnd.nextDouble();
-                engine.eval("Math.log(" + x + ") - " + y + "* (Math.sqrt(" + x + "^Math.cos(" + y + ")))");
-                count++;
-            }
-            rate = count / timeout;
-            System.out.println("JSR 223(Javascript)\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate/1000) + "k " : rate) +  " calc/sec]");
-        }
-    }
-
-    @Test
     public void testExpression1() throws Exception {
         String expr;
         double expected;
@@ -526,6 +477,142 @@ public class PostfixExpressionTest {
         pe = PostfixExpression.fromInfix(expr);
         for (double x = -10; x < 10; x = x + 0.5d) {
             expected = Math.cos(x) - (1 / Math.cbrt(x));
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction12() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=acos(x) * expm1(asin(x)) - exp(atan(x)) + floor(x) + cosh(x) - sinh(cbrt(x))";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.acos(x) * Math.expm1(Math.asin(x)) - Math.exp(Math.atan(x)) + Math.floor(x) + Math.cosh(x) - Math.sinh(Math.cbrt(x));
+            if (Double.isNaN(expected)) {
+                assertTrue(Double.isNaN(pe.calculate(x)));
+            } else {
+                assertTrue(expected == pe.calculate(x));
+            }
+        }
+    }
+
+    @Test
+    public void testPostfixFunction13() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=acos(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.acos(x);
+            if (Double.isNaN(expected)) {
+                assertTrue(Double.isNaN(pe.calculate(x)));
+            } else {
+                assertTrue(expected == pe.calculate(x));
+            }
+        }
+    }
+
+    @Test
+    public void testPostfixFunction14() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)= expm1(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.expm1(x);
+            if (Double.isNaN(expected)) {
+                assertTrue(Double.isNaN(pe.calculate(x)));
+            } else {
+                assertTrue(expected == pe.calculate(x));
+            }
+        }
+    }
+
+    @Test
+    public void testPostfixFunction15() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=asin(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.asin(x);
+            if (Double.isNaN(expected)) {
+                assertTrue(Double.isNaN(pe.calculate(x)));
+            } else {
+                assertTrue(expected == pe.calculate(x));
+            }
+        }
+    }
+
+    @Test
+    public void testPostfixFunction16() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)= exp(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.exp(x);
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction17() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=floor(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.floor(x);
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction18() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)= cosh(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.cosh(x);
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction19() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=sinh(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.sinh(x);
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction20() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=cbrt(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.cbrt(x);
+            assertTrue(expected == pe.calculate(x));
+        }
+    }
+
+    @Test
+    public void testPostfixFunction21() throws Exception {
+        String expr;
+        double expected;
+        expr = "f(x)=tanh(x)";
+        pe = PostfixExpression.fromInfix(expr);
+        for (double x = -10; x < 10; x = x + 0.5d) {
+            expected = Math.tanh(x);
             assertTrue(expected == pe.calculate(x));
         }
     }
