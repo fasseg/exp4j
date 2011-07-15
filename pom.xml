@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.congrace</groupId>
 	<artifactId>exp4j</artifactId>
-	<version>0.2.4</version>
+	<version>0.2.5-SNAPSHOT</version>
 	<name>exp4j</name>
 	<description>A simple mathematical expression evaluator for java.</description>
 	<properties>
