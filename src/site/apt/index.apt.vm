@@ -23,16 +23,37 @@ Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
 double result1=calc.calculate();
 +--  	
 
-	but one has to make sure that the variable names are passed into the ExpressionBuilder using at
-	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
-	an UnparseableErpessionExcetion will be thrown.
-  
+	One has to make sure that the variable names are passed into the ExpressionBuilder before calling build(). If variables are used in the expression without setting at least their names,
+	an UnparseableErpessionExcetion will be thrown. The following three examples demonstrate the different possibilities to have exp4j recognize variables: 
+	
+  	Using ExpressionBuilder.withVariableNames():
+  	
 +--
 Calculable calc = new ExpressionBuilder("x * y - 2")
 	.withVariableNames("x","y")
 	.build();
 calc.setVariable("x",1);
 calc.setVariable("y",2);
+assertTrue(calc.calculate()==0);
++--
+
+  	Using implicit variable declarations in the expression string using e.g. "f(x,y)":.
+  	
++--
+Calculable calc = new ExpressionBuilder("f(x,y)=x * y - 2")
+	.build();
+calc.setVariable("x",1);
+calc.setVariable("y",2);
+assertTrue(calc.calculate()==0);
++--
+
+  	Using ExpresionBuilder.withVariable():
+  	
++--
+Calculable calc = new ExpressionBuilder("x * y - 2")
+	.withVariable("x",1);
+	.withVariable("y",2);
+	.build();
 assertTrue(calc.calculate()==0);
 +--
 
@@ -109,3 +130,11 @@ assertTrue(calc.calculate() == Math.E * varX);
  * tan: tangent
  
  * tanh: hyperbolic tangent
+ 
+ 
+ 
+* References
+ 
+ * "Nilgiri the Forgotten World" MUD  uses exp4j ({{http://nilgiri.net/twiki/bin/view/Nilgiri/}})
+ 
+ Please let me know if you're project uses exp4j and you want it listed here

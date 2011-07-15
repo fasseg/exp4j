@@ -18,5 +18,8 @@
 			<action dev="fas" due-to="issue" type="add">marked PostfixExpression.frominfix() as deprecated. ExpresionBuilder is now the recommended way to use exp4j</action>
 			<action dev="fas" due-to="issue" type="fix">fixed docu typo</action>
 		</release>
+		<release version="0.2.4" description="added references to site">
+			<action dev="fas" due-to="issue" type="add">added references to site</action>
+		</release>
 	</body>
 </document>
