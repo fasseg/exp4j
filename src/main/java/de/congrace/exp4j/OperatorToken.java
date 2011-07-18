@@ -64,8 +64,6 @@ class OperatorToken extends CalculationToken {
 			return Operation.EXPONENTIATION;
 		case '#':
 			return Operation.UNARY_MINUS;
-		case '§':
-			return Operation.UNARY_PLUS;
 		case '%':
 			return Operation.MODULO;
 		default:

@@ -41,8 +41,6 @@ class InfixTranslator {
 			case '+':
 				if (i > 0 && lastChar != '(' && !(OperatorToken.isOperator(lastChar))) {
 					exprBuilder.append(c);
-				} else {
-					exprBuilder.append('§');
 				}
 				break;
 			case '-':

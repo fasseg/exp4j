@@ -10,8 +10,15 @@
 About
 
   exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 26kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
-
+  
 User Guide
+
+  check these links for some more info on exp4j:
+ 
+ * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro}}
+ 
+ * {{{http://objecthunter.congrace.de/tinybo/blog/articles/94}exp4j update 0.2.x}}
+  
 
 * Using the ExpressionBuilder and the Calculable interface to evaluate an expression:
   	
@@ -65,7 +72,7 @@ assertTrue(calc.calculate()==0);
 +--
 CustomFunction fooFunc = new CustomFunction("foo") {
     public double applyFunction(double[] values) {
-		return value[0]*Math.E;
+		return values[0]*Math.E;
 	}
 };
 double varX=12d;
