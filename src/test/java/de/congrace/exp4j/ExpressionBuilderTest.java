@@ -29,7 +29,7 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction2() throws Exception {
 		CustomFunction custom = new CustomFunction("loglog") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return Math.log(Math.log(values[0]));
 			}
 		};
@@ -42,13 +42,13 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction3() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.PI;
 			}
 		};
@@ -61,7 +61,7 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction4() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.E;
 			}
 		};
@@ -75,13 +75,13 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction5() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.PI;
 			}
 		};
@@ -95,13 +95,13 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction6() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] * Math.PI;
 			}
 		};
@@ -115,7 +115,7 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction7() throws Exception {
 		CustomFunction custom1 = new CustomFunction("half") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0]/2;
 			}
 		};
@@ -127,7 +127,7 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction8() throws Exception {
 		CustomFunction custom1 = new CustomFunction("log") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0]/2;
 			}
 		};
@@ -139,7 +139,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction10() throws Exception {
         CustomFunction custom1 = new CustomFunction("max",2) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return values[0] < values[1] ? values[1] : values[0];
             }
         };
@@ -151,7 +151,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction11() throws Exception {
         CustomFunction custom1 = new CustomFunction("power",2) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return Math.pow(values[0],values[1]);
             }
         };
@@ -163,7 +163,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction12() throws Exception {
         CustomFunction custom1 = new CustomFunction("max",5) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 double max=values[0];
                 for (int i=1;i<this.getArgumentCount();i++) {
                     if (values[i] > max) {
@@ -181,7 +181,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction13() throws Exception {
         CustomFunction custom1 = new CustomFunction("max",3) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 double max=values[0];
                 for (int i=1;i<this.getArgumentCount();i++) {
                     if (values[i] > max) {
@@ -200,7 +200,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction14() throws Exception {
         CustomFunction custom1 = new CustomFunction("multiply",2) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return values[0] * values[1];
             }
         };
@@ -214,7 +214,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction15() throws Exception {
         CustomFunction custom1 = new CustomFunction("timesPi") {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return values[0] * Math.PI;
             }
         };
@@ -228,7 +228,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction16() throws Exception {
         CustomFunction custom1 = new CustomFunction("multiply",3) {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return values[0] * values[1];
             }
         };
@@ -242,7 +242,7 @@ public class ExpressionBuilderTest {
     public void testCustomFunction17() throws Exception {
         CustomFunction custom1 = new CustomFunction("timesPi") {
             @Override
-            public double applyFunction(double ... values) {
+            public double applyFunction(double[] values) {
                 return values[0] * Math.PI;
             }
         };
@@ -332,7 +332,7 @@ public class ExpressionBuilderTest {
 	public void testSameName() throws Exception {
 		CustomFunction custom = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double ... values) {
+			public double applyFunction(double[] values) {
 				return values[0] / 2;
 			}
 		};

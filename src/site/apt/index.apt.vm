@@ -64,8 +64,8 @@ assertTrue(calc.calculate()==0);
   	
 +--
 CustomFunction fooFunc = new CustomFunction("foo") {
-    public double applyFunction(double value) {
-		return value*Math.E;
+    public double applyFunction(double[] values) {
+		return value[0]*Math.E;
 	}
 };
 double varX=12d;
@@ -74,6 +74,29 @@ Calculable calc = new ExpressionBuilder("foo(x)")
 	.withVariable("x",varX)
 	.build();
 assertTrue(calc.calculate() == Math.E * varX);
++--  	
+
+	you can also define multi argument functions like max(a,b,c) via the constructor CustomFunction(String name,int argc), with argc being the argument count.
+	
++--
+CustomFunction custom1 = new CustomFunction("max",3) {
+    @Override
+    public double applyFunction(double[] values) {
+        double max=values[0];
+        for (int i=1;i<this.getArgumentCount();i++) {
+            if (values[i] > max) {
+                max=values[i];
+            }
+        }
+        return max;
+    }
+};
+double varX=Math.E;
+Calculable calc = new ExpressionBuilder("max(log(x),sin(x),x)")
+	.withVariable("x", varX)
+   	.withCustomFunction(custom1)
+   	.build();
+assertTrue(varX == calc.calculate());
 +--  	
 
 

@@ -60,13 +60,13 @@ public abstract class CustomFunction extends CalculationToken {
     /**
 	 * apply the function to a value
 	 * 
-	 * @param value
-	 *            the value the function should be applied to
+	 * @param values
+	 *            the values to which the function should be applied.
 	 * @return the function value
 	 */
-	public abstract double applyFunction(double ... value);
+	public abstract double applyFunction(double[] values);
 
-	@Override
+    @Override
 	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
 	    double[] args=new double[argc];
 	    for (int i=0;i<argc;i++) {
