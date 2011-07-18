@@ -202,9 +202,8 @@ class Tokenizer {
 					throw new UnparsableExpressionException(c, i);
 				}
 			}else if (c == ',') {
-			    // keep pushing numbertokens as function arguments onto
-			    // the stack until a right paranthesis is encountered.
-			    continue;
+			    // a function separator, hopefully
+			    lastToken=new FunctionSeparatorToken();
 			} else if (OperatorToken.isOperator(c)) {
 				lastToken = new OperatorToken(String.valueOf(c), OperatorToken.getOperation(c));
 			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {

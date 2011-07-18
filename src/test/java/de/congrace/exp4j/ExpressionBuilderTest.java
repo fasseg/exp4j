@@ -207,9 +207,6 @@ public class ExpressionBuilderTest {
         double varX=1;
         Calculable calc = new ExpressionBuilder("multiply(sin(x),x+1)").withVariable("x", varX).withCustomFunction(custom1).build();
         double expected=Math.sin(varX) * (varX +1);
-        System.out.println("expected: "+ expected);
-        System.out.println("exp4j: " + calc.calculate());
-        System.out.println(calc.getExpression());
         assertTrue(expected == calc.calculate());
     }
 
@@ -226,9 +223,23 @@ public class ExpressionBuilderTest {
         double expected=varX * Math.PI;
         assertTrue(expected == calc.calculate());
     }
-
+    
     @Test
     public void testCustomFunction16() throws Exception {
+        CustomFunction custom1 = new CustomFunction("multiply",3) {
+            @Override
+            public double applyFunction(double ... values) {
+                return values[0] * values[1];
+            }
+        };
+        double varX=1;
+        Calculable calc = new ExpressionBuilder("multiply(sin(x),x+1^(-2),log(x))").withVariable("x", varX).withCustomFunction(custom1).build();
+        double expected=Math.sin(varX) * Math.pow((varX +1),-2) * Math.log(varX);
+        assertTrue(expected == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction17() throws Exception {
         CustomFunction custom1 = new CustomFunction("timesPi") {
             @Override
             public double applyFunction(double ... values) {
