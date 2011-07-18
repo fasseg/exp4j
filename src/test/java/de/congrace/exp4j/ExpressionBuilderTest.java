@@ -214,6 +214,34 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testCustomFunction15() throws Exception {
+        CustomFunction custom1 = new CustomFunction("timesPi") {
+            @Override
+            public double applyFunction(double ... values) {
+                return values[0] * Math.PI;
+            }
+        };
+        double varX=1;
+        Calculable calc = new ExpressionBuilder("timesPi(x^2)").withVariable("x", varX).withCustomFunction(custom1).build();
+        double expected=varX * Math.PI;
+        assertTrue(expected == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction16() throws Exception {
+        CustomFunction custom1 = new CustomFunction("timesPi") {
+            @Override
+            public double applyFunction(double ... values) {
+                return values[0] * Math.PI;
+            }
+        };
+        double varX=Math.E;
+        Calculable calc = new ExpressionBuilder("timesPi(log(x^(2+1)))").withVariable("x", varX).withCustomFunction(custom1).build();
+        double expected=Math.log(Math.pow(varX,3)) * Math.PI;
+        assertTrue(expected == calc.calculate());
+    }
+
+    @Test
 	public void testExpressionBuilder1() throws Exception {
 		Calculable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
 		double result = calc.calculate();
