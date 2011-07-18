@@ -24,9 +24,10 @@ import de.congrace.exp4j.FunctionToken.Function;
  * 
  */
 public abstract class CustomFunction extends CalculationToken {
+    private int argc=1;
 
 	/**
-	 * create a new CustomFunction with a set name
+	 * create a new single value input CustomFunction with a set name
 	 * 
 	 * @param value
 	 *            the name of the function (e.g. foo)
@@ -40,22 +41,45 @@ public abstract class CustomFunction extends CalculationToken {
 		}
 	}
 
-	/**
+    /**
+     * create a new single value input CustomFunction with a set name
+     * 
+     * @param value
+     *            the name of the function (e.g. foo)
+     */
+    protected CustomFunction(String value,int argumentCount) throws InvalidCustomFunctionException{
+        super(value);
+        this.argc=argumentCount;
+        for (Function f:Function.values()) {
+            if (value.equalsIgnoreCase(f.toString())){
+                throw new InvalidCustomFunctionException(value + " is already reserved as a function name");
+            }
+        }
+    }
+
+    /**
 	 * apply the function to a value
 	 * 
 	 * @param value
 	 *            the value the function should be applied to
 	 * @return the function value
 	 */
-	public abstract double applyFunction(double value);
+	public abstract double applyFunction(double ... value);
 
 	@Override
 	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-		stack.push(this.applyFunction(stack.pop()));
+	    double[] args=new double[argc];
+	    for (int i=0;i<argc;i++) {
+	        args[i]=stack.pop();
+	    }
+		stack.push(this.applyFunction(args));
 	}
 
 	@Override
 	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
 		operatorStack.push(this);
+	}
+	public int getArgumentCount() {
+	    return argc;
 	}
 }

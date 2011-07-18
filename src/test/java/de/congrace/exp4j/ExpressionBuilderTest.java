@@ -16,8 +16,8 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction1() throws Exception {
 		CustomFunction custom = new CustomFunction("timespi") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.PI;
+			public double applyFunction(double ...values) {
+				return values[0] * Math.PI;
 			}
 		};
 		Calculable calc = new ExpressionBuilder("timespi(x)").withVariable("x", 1).withCustomFunction(custom).build();
@@ -29,8 +29,8 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction2() throws Exception {
 		CustomFunction custom = new CustomFunction("loglog") {
 			@Override
-			public double applyFunction(double value) {
-				return Math.log(Math.log(value));
+			public double applyFunction(double ... values) {
+				return Math.log(Math.log(values[0]));
 			}
 		};
 		Calculable calc = new ExpressionBuilder("loglog(x)").withVariable("x", 1).withCustomFunction(custom).build();
@@ -42,14 +42,14 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction3() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.E;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.PI;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.PI;
 			}
 		};
 		Calculable calc = new ExpressionBuilder("foo(bar(x))").withVariable("x", 1).withCustomFunction(custom1).withCustomFunction(custom2).build();
@@ -61,8 +61,8 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction4() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.E;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.E;
 			}
 		};
 		double varX = 32.24979131d;
@@ -75,14 +75,14 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction5() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.E;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.PI;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.PI;
 			}
 		};
 		double varX = 32.24979131d;
@@ -95,14 +95,14 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction6() throws Exception {
 		CustomFunction custom1 = new CustomFunction("foo") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.E;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.E;
 			}
 		};
 		CustomFunction custom2 = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double value) {
-				return value * Math.PI;
+			public double applyFunction(double ... values) {
+				return values[0] * Math.PI;
 			}
 		};
 		double varX = 32.24979131d;
@@ -115,8 +115,8 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction7() throws Exception {
 		CustomFunction custom1 = new CustomFunction("half") {
 			@Override
-			public double applyFunction(double value) {
-				return value/2;
+			public double applyFunction(double ... values) {
+				return values[0]/2;
 			}
 		};
 		Calculable calc = new ExpressionBuilder("half(x)").withVariable("x", 1d).withCustomFunction(custom1).build();
@@ -127,15 +127,93 @@ public class ExpressionBuilderTest {
 	public void testCustomFunction8() throws Exception {
 		CustomFunction custom1 = new CustomFunction("log") {
 			@Override
-			public double applyFunction(double value) {
-				return value/2;
+			public double applyFunction(double ... values) {
+				return values[0]/2;
 			}
 		};
 		Calculable calc = new ExpressionBuilder("half(x)").withVariable("x", 1d).withCustomFunction(custom1).build();
 		assertTrue(0.5d == calc.calculate());
 	}
 
-	@Test
+    @Test
+    public void testCustomFunction10() throws Exception {
+        CustomFunction custom1 = new CustomFunction("max",2) {
+            @Override
+            public double applyFunction(double ... values) {
+                return values[0] < values[1] ? values[1] : values[0];
+            }
+        };
+        Calculable calc = new ExpressionBuilder("max(x,y)").withVariable("x", 1d).withVariable("y", 2).withCustomFunction(custom1).build();
+        assertTrue(2 == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction11() throws Exception {
+        CustomFunction custom1 = new CustomFunction("power",2) {
+            @Override
+            public double applyFunction(double ... values) {
+                return Math.pow(values[0],values[1]);
+            }
+        };
+        Calculable calc = new ExpressionBuilder("power(x,y)").withVariable("x", 2d).withVariable("y", 4d).withCustomFunction(custom1).build();
+        assertTrue(Math.pow(2,4) == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction12() throws Exception {
+        CustomFunction custom1 = new CustomFunction("max",5) {
+            @Override
+            public double applyFunction(double ... values) {
+                double max=values[0];
+                for (int i=1;i<this.getArgumentCount();i++) {
+                    if (values[i] > max) {
+                        max=values[i];
+                    }
+                }
+                return max;
+            }
+        };
+        Calculable calc = new ExpressionBuilder("max(1,2.43311,51.13,43,12)").withCustomFunction(custom1).build();
+        assertTrue(51.13d == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction13() throws Exception {
+        CustomFunction custom1 = new CustomFunction("max",3) {
+            @Override
+            public double applyFunction(double ... values) {
+                double max=values[0];
+                for (int i=1;i<this.getArgumentCount();i++) {
+                    if (values[i] > max) {
+                        max=values[i];
+                    }
+                }
+                return max;
+            }
+        };
+        double varX=Math.E;
+        Calculable calc = new ExpressionBuilder("max(log(x),sin(x),x)").withVariable("x", varX).withCustomFunction(custom1).build();
+        assertTrue(varX == calc.calculate());
+    }
+
+    @Test
+    public void testCustomFunction14() throws Exception {
+        CustomFunction custom1 = new CustomFunction("multiply",2) {
+            @Override
+            public double applyFunction(double ... values) {
+                return values[0] * values[1];
+            }
+        };
+        double varX=1;
+        Calculable calc = new ExpressionBuilder("multiply(sin(x),x+1)").withVariable("x", varX).withCustomFunction(custom1).build();
+        double expected=Math.sin(varX) * (varX +1);
+        System.out.println("expected: "+ expected);
+        System.out.println("exp4j: " + calc.calculate());
+        System.out.println(calc.getExpression());
+        assertTrue(expected == calc.calculate());
+    }
+
+    @Test
 	public void testExpressionBuilder1() throws Exception {
 		Calculable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
 		double result = calc.calculate();
@@ -215,8 +293,8 @@ public class ExpressionBuilderTest {
 	public void testSameName() throws Exception {
 		CustomFunction custom = new CustomFunction("bar") {
 			@Override
-			public double applyFunction(double value) {
-				return value / 2;
+			public double applyFunction(double ... values) {
+				return values[0] / 2;
 			}
 		};
 		double varBar = 1.3d;
@@ -241,7 +319,7 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testBench1() throws Exception {
-		if (System.getProperty("skipBenchmark") != null && System.getProperty("skipBenchmark").equals("true")) {
+		if (System.getProperty("skipBenchmark") != null) {
 			System.out.println(":: skipping naive benchmarks...");
 			return;
 		}
@@ -259,7 +337,7 @@ public class ExpressionBuilderTest {
 			val = calc.calculate();
 			count++;
 		}
-		System.out.println("\n:: [PostfixExpression] simple benchmark");
+		System.out.println("\n:: running simple benchmarks [" + timeout + " seconds]");
 		System.out.println("expression\t\t" + expr);
 		double rate = count / timeout;
 		System.out.println("exp4j\t\t\t" + count + " [" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec]");
