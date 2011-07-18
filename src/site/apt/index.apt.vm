@@ -9,7 +9,7 @@
 
 About
 
-  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library with 26kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
+  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library only ~30kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
   
 User Guide
 
