@@ -113,7 +113,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4.3</version>
 				<configuration>
-					<encoding>UTF-8</encoding>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -183,11 +183,6 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.1</version>
 			</plugin>
 		</plugins>
 	</build>
