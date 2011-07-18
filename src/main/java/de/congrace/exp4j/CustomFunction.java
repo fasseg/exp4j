@@ -3,6 +3,8 @@ package de.congrace.exp4j;
 import java.util.Map;
 import java.util.Stack;
 
+import de.congrace.exp4j.FunctionToken.Function;
+
 /**
  * this classed is used to create custom functions for exp4j<br/>
  * <br/>
@@ -29,8 +31,13 @@ public abstract class CustomFunction extends CalculationToken {
 	 * @param value
 	 *            the name of the function (e.g. foo)
 	 */
-	protected CustomFunction(String value) {
+	protected CustomFunction(String value) throws InvalidCustomFunctionException{
 		super(value);
+		for (Function f:Function.values()) {
+			if (value.equalsIgnoreCase(f.toString())){
+				throw new InvalidCustomFunctionException(value + " is already reserved as a function name");
+			}
+		}
 	}
 
 	/**

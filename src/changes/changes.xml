@@ -18,5 +18,9 @@
 			<action dev="fas" due-to="issue" type="add">marked PostfixExpression.frominfix() as deprecated. ExpresionBuilder is the recommended way to use exp4j</action>
 			<action dev="fas" due-to="issue" type="fix">fixed docu typo</action>
 		</release>
+		<release version="0.2.4" description="fixed bug">
+			<action dev="fas" due-to="issue" type="fix">added check for custom function names</action>
+			<action dev="fas" due-to="issue" type="add">added InvalidCustomFunctionNameException</action>
+		</release>
 	</body>
 </document>
