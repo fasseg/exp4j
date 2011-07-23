@@ -67,8 +67,8 @@ assertTrue(calc.calculate()==0);
 ** Custom functions
 
   	you can extend the abstract class CustomFunction in order to use custom functions in expressions. you only have to implement the 
-  	applyFunction(double value) method.
-  	
+  	applyFunction(double[] values) method. 
+	
 +--
 CustomFunction fooFunc = new CustomFunction("foo") {
     public double applyFunction(double[] values) {
@@ -161,6 +161,16 @@ assertTrue(varX == calc.calculate());
  
  * tanh: hyperbolic tangent
  
+
+* API changes
+  	
+ * Version 0.2.5: the argument type for CustomFunction changed from double to double[] with an array holding the arguments of the function call, in order to allow multi argument functions like max(x,y,z)
+ 
+ * Version 0.2.2: the PostfixExpression API has been marked deprecated.
+ 
+ * Version 0.2.1: the CustomFunction API has been added
+ 
+ * Version 0.2.0: the ExpressionBuilder/Calculable API has been added
  
  
 * References

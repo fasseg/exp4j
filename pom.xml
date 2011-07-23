@@ -113,7 +113,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4.3</version>
 				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -160,7 +160,7 @@
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>cobertura-maven-plugin</artifactId>
-							<version>2.5.1</version>
+							<version>2.4</version>
 							<configuration>
 								<formats>
 									<format>html</format>
@@ -183,6 +183,11 @@
 						</manifest>
 					</archive>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
 			</plugin>
 		</plugins>
 	</build>
