@@ -73,8 +73,8 @@
 		</repository>
 		<downloadUrl>http://projects.congrace.de/exp4j</downloadUrl>
 		<site>
-			<id>congrace.de - projects</id>
-			<name>exp4j - simple math expression parser</name>
+			<id>congrace.exp4j</id>
+			<name>congrace.de - exp4j</name>
 			<url>scpexe://congrace.de/var/www/projects/exp4j</url>
 		</site>
 	</distributionManagement>
