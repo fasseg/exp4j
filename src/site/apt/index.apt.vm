@@ -175,6 +175,15 @@ assertTrue(varX == calc.calculate());
  
 * References
  
- * "Nilgiri the Forgotten World" MUD  uses exp4j ({{http://nilgiri.net/twiki/bin/view/Nilgiri/}})
+ * {{{http://nilgiri.net/twiki/bin/view/Nilgiri/}Nilgiri}} MUD uses exp4j
  
+ * {{{http://jamwiki.org}JamWiki}} uses exp4j
+ 
+ * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
+ 
+ * {{{http://code.google.com/p/jcomplexity/}JComplexity}} uses exp4j
+ 
+ * {{{http://www.javierllamas.es/index.php/en/blog/14-interprete-de-formulas-para-java.html}Javier Llamas}} blogged about exp4j
+ 
+
  Please let me know if you're project uses exp4j and you want it listed here

@@ -26,18 +26,5 @@ Using Apache Maven
 	<artifactId>exp4j</artifactId>
 	<version>${project.version}</version>
 </dependency>
-+--
-
-  by adding the following repository to a pom.xml:
-
-+--
-<repository>
-	<id>congrace.de</id>
-	<name>releases</name>
-	<url>http://nexus.congrace.de/nexus/content/repositories/releases/</url>
-	<layout>default</layout>
-</repository>
-+--
-
-  
++--  
 
