@@ -57,14 +57,14 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<uniqueVersion>false</uniqueVersion>
-			<id>central - snapshots</id>
+			<id>central-snapshots</id>
 			<name>snapshots</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 			<layout>default</layout>
 		</snapshotRepository>
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
-			<id>central - releases</id>
+			<id>central-releases</id>
 			<name>releases</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 			<layout>default</layout>
