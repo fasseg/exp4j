@@ -16,9 +16,12 @@
  */
 package de.congrace.exp4j;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import de.congrace.exp4j.FunctionToken.Function;
@@ -143,6 +146,9 @@ class Tokenizer {
 		return false;
 	}
 
+	Token[] tokenize(String infix) throws UnparsableExpressionException, UnknownFunctionException {
+	    return tokenize(infix, Locale.getDefault());
+	}
 	/**
 	 * tokenize an infix expression by breaking it up into different
 	 * {@link Token} that can represent operations,functions,numbers,
@@ -156,9 +162,12 @@ class Tokenizer {
 	 * @throws UnknownFunctionException
 	 *             when an unknown function name has been used.
 	 */
-	Token[] tokenize(String infix) throws UnparsableExpressionException, UnknownFunctionException {
+	Token[] tokenize(String infix, Locale inLocale) throws UnparsableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = infix.toCharArray();
+		
+		NumberFormat nf = NumberFormat.getNumberInstance(inLocale);
+		
 		// iterate over the chars and fork on different types of input
 		Token lastToken;
 		for (int i = 0; i < chars.length; i++) {
@@ -170,12 +179,16 @@ class Tokenizer {
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				while (chars.length > i + numberLen && isDigit(chars[i + numberLen])) {
+				while (chars.length > i + numberLen && (isDigit(chars[i + numberLen]) || '.' == chars[i + numberLen] || ',' == chars[i + numberLen])) {
 					valueBuilder.append(chars[i + numberLen]);
 					numberLen++;
 				}
 				i += numberLen - 1;
-				lastToken = new NumberToken(valueBuilder.toString());
+				try {
+                    lastToken = new NumberToken(valueBuilder.toString(), nf);
+                } catch (ParseException e) {
+                    throw new UnparsableExpressionException(e.getMessage());
+                }
 			} else if (Character.isLetter(c) || c == '_') {
 				// can be a variable or function
 				final StringBuilder nameBuilder = new StringBuilder();

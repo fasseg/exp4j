@@ -16,6 +16,8 @@
  */
 package de.congrace.exp4j;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Stack;
 
@@ -34,17 +36,33 @@ class NumberToken extends CalculationToken {
 	 * 
 	 * @param value
 	 *            the value of the number as a {@link String}
+	 * @throws ParseException 
 	 */
-	NumberToken(String value) {
+    NumberToken(String value) {
+        super(value);
+        this.doubleValue = Double.parseDouble(value);
+    }
+
+    NumberToken(double value) {
+        super(value+"");
+        this.doubleValue = value;
+    }
+    
+	NumberToken(String value, NumberFormat nf) throws ParseException {
 		super(value);
-		this.doubleValue = Double.parseDouble(value);
+		this.doubleValue = nf.parse(value).doubleValue();
+	}
+	
+	@Override
+	public String toString() {
+	    return "{NumberToken value:" +getValue() +" doubleValue:"+doubleValue+"}";
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof NumberToken) {
 			final NumberToken t = (NumberToken) obj;
-			return t.getValue().equals(this.getValue());
+			return t.doubleValue == this.doubleValue;
 		}
 		return false;
 	}
