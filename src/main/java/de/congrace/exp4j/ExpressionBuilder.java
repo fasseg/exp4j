@@ -3,6 +3,7 @@ package de.congrace.exp4j;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -41,7 +42,11 @@ public class ExpressionBuilder {
 	 * @throws UnparsableExpressionException
 	 *             if the expression could not be parsed
 	 */
-	public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
+    public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
+        return build(null);
+    }
+    
+	public Calculable build(Locale inLocale) throws UnknownFunctionException, UnparsableExpressionException {
 		if (expression.indexOf('=') == -1 && !variables.isEmpty()) {
 
 			// User supplied an expression without leading "f(...)="
@@ -54,7 +59,7 @@ public class ExpressionBuilder {
 			expression = function.deleteCharAt(function.length() - 1).toString() + ")=" + expression;
 		}
 		// create the PostfixExpression and return it as a Calculable
-		PostfixExpression delegate = PostfixExpression.fromInfix(expression, customFunctions);
+		PostfixExpression delegate = PostfixExpression.fromInfix(expression, customFunctions, inLocale);
 		for (String var : variables.keySet()) {
 			if (variables.get(var) != null) {
 				delegate.setVariable(var, variables.get(var));

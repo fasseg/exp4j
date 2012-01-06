@@ -16,6 +16,7 @@
  */
 package de.congrace.exp4j;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -112,10 +113,27 @@ class Tokenizer {
 	 * 
 	 * @param c
 	 *            the char to be checked
+	 * @param nf
+	 *             the Localised DecimalFormat to use
+	 * @param inNumber
+	 *             whether we are parsing in a number or not
 	 * @return true if the char is part of a number
 	 */
-	private boolean isDigit(char c) {
-		return Character.isDigit(c) || c == '.';
+	private boolean isDigit(char c, DecimalFormat nf, boolean inNumber) {
+	    
+	    if (Character.isDigit(c) || c == '.') {
+	        return true;
+	    }
+	    
+	    if (inNumber) {
+    	    if (c == nf.getDecimalFormatSymbols().getDecimalSeparator()) {
+    	        return true;
+    	    }
+    	    
+    		return nf.isGroupingUsed() && nf.getDecimalFormatSymbols().getGroupingSeparator() == c;
+	    }
+	    
+	    return false;
 	}
 
 	private boolean isFunction(String name) {
@@ -166,7 +184,12 @@ class Tokenizer {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = infix.toCharArray();
 		
-		NumberFormat nf = NumberFormat.getNumberInstance(inLocale);
+		if (inLocale == null) {
+		    inLocale = Locale.getDefault();
+		}
+		
+		DecimalFormat nf = (DecimalFormat) NumberFormat.getNumberInstance(inLocale);
+		int inBracket = 0;
 		
 		// iterate over the chars and fork on different types of input
 		Token lastToken;
@@ -174,12 +197,12 @@ class Tokenizer {
 			char c = chars[i];
 			if (c == ' ')
 				continue;
-			if (isDigit(c)) {
+			if (isDigit(c, nf,false)) {
 				final StringBuilder valueBuilder = new StringBuilder(1);
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				while (chars.length > i + numberLen && (isDigit(chars[i + numberLen]) || '.' == chars[i + numberLen] || ',' == chars[i + numberLen])) {
+				while (chars.length > i + numberLen && (isDigit(chars[i + numberLen], nf, inBracket==0))) {
 					valueBuilder.append(chars[i + numberLen]);
 					numberLen++;
 				}
@@ -219,8 +242,12 @@ class Tokenizer {
 			    lastToken=new FunctionSeparatorToken();
 			} else if (OperatorToken.isOperator(c)) {
 				lastToken = new OperatorToken(String.valueOf(c), OperatorToken.getOperation(c));
-			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
+			} else if (c == '(' || c == '[' || c == '{') {
+			    inBracket++;
 				lastToken = new ParenthesisToken(String.valueOf(c));
+            } else if (c == ')' || c == ']' || c == '}') {
+                inBracket--;
+                lastToken = new ParenthesisToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
 				throw new UnparsableExpressionException(c, i);

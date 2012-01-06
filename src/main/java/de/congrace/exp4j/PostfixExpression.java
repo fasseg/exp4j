@@ -17,6 +17,7 @@
 package de.congrace.exp4j;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -63,7 +64,13 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
 	 * @deprecated please use {@link ExpressionBuilder}
 	 */
     @Deprecated
-	public static PostfixExpression fromInfix(String expression, Set<CustomFunction> customFunctions) throws UnparsableExpressionException,
+    public static PostfixExpression fromInfix(String expression, Set<CustomFunction> customFunctions) throws UnparsableExpressionException,
+            UnknownFunctionException {
+        return fromInfix(expression, customFunctions, null);
+    }
+    
+    @Deprecated
+	public static PostfixExpression fromInfix(String expression, Set<CustomFunction> customFunctions, Locale inLocale) throws UnparsableExpressionException,
 			UnknownFunctionException {
 		String[] variables = null;
 		int posStart, posEnd;
@@ -74,7 +81,7 @@ public final class PostfixExpression extends AbstractExpression implements Calcu
 				variables = functionDef.substring(posStart + 1, posEnd).split(",");
 			}
 		}
-		return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables, customFunctions), variables, customFunctions);
+		return new PostfixExpression(InfixTranslator.toPostfixExpression(expression, variables, customFunctions, inLocale), variables, customFunctions);
 	}
 
 	private final Map<String, Double> variableValues = new HashMap<String, Double>();
