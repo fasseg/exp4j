@@ -23,6 +23,8 @@ import static de.congrace.exp4j.OperatorToken.Operation.SUBTRACTION;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.junit.Test;
 
 import de.congrace.exp4j.FunctionToken.Function;
@@ -67,6 +69,36 @@ public class TokenizerTest {
 		actual = tokenizer.tokenize(expr);
 		assertArrayEquals(expected, actual);
 	}
+	
+//	NumberFormat.getInstance(locale);
+
+    @Test
+    public void testDecimalPlaceLocaleInfixTokenise() throws Exception {
+        String expr = "1.2*3000.5";
+        Token[] expected = new Token[] { new NumberToken("1.2"), new OperatorToken("*", MULTIPLICATION), new NumberToken("3000.5")};
+        Token[] actual = tokenizer.tokenize(expr);
+        assertArrayEquals(expected, actual);
+        
+        expr = "1,2*3000,5";
+        expected = new Token[] { new NumberToken("1.2"), new OperatorToken("*", MULTIPLICATION), new NumberToken("3000.5")};
+        actual = tokenizer.tokenize(expr, new Locale("ru"));
+        
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void testGroupingSeparaterLocaleInfixTokenise() throws Exception {
+        String expr = "1,000*3,000";
+        Token[] expected = new Token[] { new NumberToken("1000"), new OperatorToken("*", MULTIPLICATION), new NumberToken("3000")};
+        Token[] actual = tokenizer.tokenize(expr);
+        assertArrayEquals(expected, actual);
+        
+        expr = "1.000*3.000";
+        expected = new Token[] { new NumberToken("1000"), new OperatorToken("*", MULTIPLICATION), new NumberToken("3000")};
+        actual = tokenizer.tokenize(expr, new Locale("es"));
+        
+        assertArrayEquals(expected, actual);
+    }
 
 	@Test(expected = UnparsableExpressionException.class)
 	public void testInfixTokenizeError() throws Exception {
