@@ -1,8 +1,10 @@
 package de.congrace.exp4j;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,6 +22,8 @@ public class ExpressionBuilder {
 
     private final Map<Character, Operation> operators;
 
+    private final List<Character> validOperators;
+
     private String expression;
 
     /**
@@ -32,6 +36,11 @@ public class ExpressionBuilder {
         this.expression = normalizeExpression(expression);
         customFunctions = getBuiltinFunctions();
         operators = getBuiltinOperators();
+        validOperators = getValidOperators();
+    }
+
+    private List<Character> getValidOperators() {
+        return Arrays.asList('+', '-', '^', '/', '*', '!', '#', '§', '$', '%', '&', ';', ':', '~', '<', '>', '|', '\'');
     }
 
     private String normalizeExpression(String expression) {
@@ -243,6 +252,12 @@ public class ExpressionBuilder {
      *             if the expression could not be parsed
      */
     public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
+        for (Operation op : operators.values()) {
+            if (!validOperators.contains(op.symbol)) {
+                throw new UnparsableExpressionException("" + op.symbol
+                        + " is not a valid symbol for an operator please choose from: +,-,^,/,*,!,#,§,$,%,&,;,:,~,<,>,|");
+            }
+        }
         for (String varName : variables.keySet()) {
             if (customFunctions.containsKey(varName)) {
                 throw new UnparsableExpressionException("Variable '" + varName + "' cannot have the same name as a function");
@@ -321,7 +336,7 @@ public class ExpressionBuilder {
 
     public ExpressionBuilder withOperations(Collection<Operation> operations) {
         for (Operation op : operations) {
-            operators.put(op.symbol, op);
+            withOperation(op);
         }
         return this;
     }

@@ -293,9 +293,20 @@ public class ExpressionBuilderTest {
         assertTrue(4d == calc.calculate());
         calc = new ExpressionBuilder("-(3!)^-1").withOperation(factorial).build();
         double actual = calc.calculate();
-        assertEquals( Math.pow(-6d,-1),actual,0d);
+        assertEquals(Math.pow(-6d, -1), actual, 0d);
     }
-    
+
+    @Test(expected = UnparsableExpressionException.class)
+    public void testInvalidOperator1() throws Exception {
+        Operation fail = new Operation('2') {
+            @Override
+            double applyOperation(double[] values) {
+                return 0;
+            }
+        };
+        new ExpressionBuilder("1").withOperation(fail).build();
+    }
+
     @Test
     public void testExpressionBuilder1() throws Exception {
         Calculable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
