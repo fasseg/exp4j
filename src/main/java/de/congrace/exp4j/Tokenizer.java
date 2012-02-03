@@ -6,23 +6,24 @@ import java.util.Map;
 import java.util.Set;
 
 public class Tokenizer {
-    
-    private final Set<String> variableNames;
-    private final Map<String,CustomFunction> functions;
-    private final Map<Character,Operation> operators;
 
-    
-    public Tokenizer(Set<String> variableNames, Map<String,CustomFunction> functions, Map<Character,Operation> operators) {
+    private final Set<String> variableNames;
+
+    private final Map<String, CustomFunction> functions;
+
+    private final Map<Character, Operation> operators;
+
+    public Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<Character, Operation> operators) {
         super();
         this.variableNames = variableNames;
         this.functions = functions;
         this.operators = operators;
     }
-    
+
     private boolean isDigit(char c) {
         return Character.isDigit(c) || c == '.';
     }
-    
+
     private boolean isVariable(String name) {
         if (variableNames != null) {
             for (String var : variableNames) {
@@ -33,16 +34,16 @@ public class Tokenizer {
         }
         return false;
     }
-    
+
     private boolean isFunction(String name) {
         return functions.containsKey(name);
     }
-    
+
     private boolean isOperator(char c) {
         return operators.get(c) != null;
     }
 
-    List<Token> getTokens(final String expression) throws UnparsableExpressionException,UnknownFunctionException{
+    List<Token> getTokens(final String expression) throws UnparsableExpressionException, UnknownFunctionException {
         final List<Token> tokens = new ArrayList<Token>();
         final char[] chars = expression.toCharArray();
         // iterate over the chars and fork on different types of input
@@ -78,14 +79,14 @@ public class Tokenizer {
                 } else if (this.isFunction(name)) {
                     // might be a function
                     i += offset - 1;
-                    lastToken = new FunctionToken(name,functions.get(name));
+                    lastToken = new FunctionToken(name, functions.get(name));
                 } else {
                     // an unknown symbol was encountered
                     throw new UnparsableExpressionException(c, i);
                 }
-            }else if (c == ',') {
+            } else if (c == ',') {
                 // a function separator, hopefully
-                lastToken=new FunctionSeparatorToken();
+                lastToken = new FunctionSeparatorToken();
             } else if (isOperator(c)) {
                 lastToken = getOperation(c);
             } else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
@@ -103,6 +104,5 @@ public class Tokenizer {
     private OperatorToken getOperation(char c) {
         return new OperatorToken(String.valueOf(c), operators.get(c));
     }
-    
-    
+
 }

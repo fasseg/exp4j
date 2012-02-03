@@ -1,10 +1,5 @@
 package de.congrace.exp4j;
 
-import java.util.Map;
-import java.util.Stack;
-
-
-
 /**
  * this classed is used to create custom functions for exp4j<br/>
  * <br/>
@@ -23,20 +18,10 @@ import java.util.Stack;
  * @author ruckus
  * 
  */
-public abstract class CustomFunction{
+public abstract class CustomFunction {
     final int argc;
-    final String name;
 
-	/**
-	 * create a new single value input CustomFunction with a set name
-	 * 
-	 * @param value
-	 *            the name of the function (e.g. foo)
-	 */
-	protected CustomFunction(String name) throws InvalidCustomFunctionException{
-	    this.argc=1;
-	    this.name=name;
-	}
+    final String name;
 
     /**
      * create a new single value input CustomFunction with a set name
@@ -44,10 +29,21 @@ public abstract class CustomFunction{
      * @param value
      *            the name of the function (e.g. foo)
      */
-    protected CustomFunction(String name,int argumentCount) throws InvalidCustomFunctionException{
-        this.argc=argumentCount;
-        this.name=name;
+    protected CustomFunction(String name) throws InvalidCustomFunctionException {
+        this.argc = 1;
+        this.name = name;
     }
-    
-    public abstract double applyFunction(double[] args);
+
+    /**
+     * create a new single value input CustomFunction with a set name
+     * 
+     * @param value
+     *            the name of the function (e.g. foo)
+     */
+    protected CustomFunction(String name, int argumentCount) throws InvalidCustomFunctionException {
+        this.argc = argumentCount;
+        this.name = name;
+    }
+
+    public abstract double applyFunction(double... args);
 }

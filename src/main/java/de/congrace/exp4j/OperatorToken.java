@@ -25,76 +25,76 @@ import java.util.Stack;
  * @author fas@congrace.de
  */
 class OperatorToken extends CalculationToken {
-    
+
     Operation operation;
 
     /**
-	 * construct a new {@link OperatorToken}
-	 * 
-	 * @param value
-	 *            the symbol (e.g.: '+')
-	 * @param operation
-	 *            the {@link Operation} of this {@link Token}
-	 */
-	OperatorToken(String value,Operation operation) {
-		super(value);
-		this.operation=operation;
-	}
+     * construct a new {@link OperatorToken}
+     * 
+     * @param value
+     *            the symbol (e.g.: '+')
+     * @param operation
+     *            the {@link Operation} of this {@link Token}
+     */
+    OperatorToken(String value, Operation operation) {
+        super(value);
+        this.operation = operation;
+    }
 
-	/**
-	 * apply the {@link Operation}
-	 * 
-	 * @param values
-	 *            the doubles to operate on
-	 * @return the result of the {@link Operation}
-	 */
-	double applyOperation(double... values) {
-			return operation.applyOperation(values);
-	}
+    /**
+     * apply the {@link Operation}
+     * 
+     * @param values
+     *            the doubles to operate on
+     * @return the result of the {@link Operation}
+     */
+    double applyOperation(double... values) {
+        return operation.applyOperation(values);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof OperatorToken) {
-			final OperatorToken t = (OperatorToken) obj;
-			return t.getValue().equals(this.getValue());
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof OperatorToken) {
+            final OperatorToken t = (OperatorToken) obj;
+            return t.getValue().equals(this.getValue());
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return getValue().hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return getValue().hashCode();
+    }
 
-	@Override
-	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-	    final double[] operands=new double[operation.operandCount];
-	    for (int i=0;i<operation.operandCount;i++) {
-	        operands[operation.operandCount - i-1]=stack.pop();
-	    }
-	    stack.push(operation.applyOperation(operands));
-	}
+    @Override
+    void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
+        final double[] operands = new double[operation.operandCount];
+        for (int i = 0; i < operation.operandCount; i++) {
+            operands[operation.operandCount - i - 1] = stack.pop();
+        }
+        stack.push(operation.applyOperation(operands));
+    }
 
-	@Override
-	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
-		Token before;
-		while (!operatorStack.isEmpty() && (before = operatorStack.peek()) != null && (before instanceof OperatorToken || before instanceof FunctionToken)) {
-			if (before instanceof FunctionToken) {
-				operatorStack.pop();
-				output.append(before.getValue()).append(" ");
-			} else {
-				final OperatorToken stackOperator = (OperatorToken) before;
-				if (this.isLeftAssociative() && this.getPrecedence() <= stackOperator.getPrecedence()) {
-					output.append(operatorStack.pop().getValue()).append(" ");
-				} else if (!this.isLeftAssociative() && this.getPrecedence() < stackOperator.getPrecedence()) {
-					output.append(operatorStack.pop().getValue()).append(" ");
-				} else {
-					break;
-				}
-			}
-		}
-		operatorStack.push(this);
-	}
+    @Override
+    void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
+        Token before;
+        while (!operatorStack.isEmpty() && (before = operatorStack.peek()) != null && (before instanceof OperatorToken || before instanceof FunctionToken)) {
+            if (before instanceof FunctionToken) {
+                operatorStack.pop();
+                output.append(before.getValue()).append(" ");
+            } else {
+                final OperatorToken stackOperator = (OperatorToken) before;
+                if (this.isLeftAssociative() && this.getPrecedence() <= stackOperator.getPrecedence()) {
+                    output.append(operatorStack.pop().getValue()).append(" ");
+                } else if (!this.isLeftAssociative() && this.getPrecedence() < stackOperator.getPrecedence()) {
+                    output.append(operatorStack.pop().getValue()).append(" ");
+                } else {
+                    break;
+                }
+            }
+        }
+        operatorStack.push(this);
+    }
 
     private boolean isLeftAssociative() {
         return operation.leftAssociative;

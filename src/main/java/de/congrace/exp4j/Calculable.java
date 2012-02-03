@@ -7,27 +7,39 @@ package de.congrace.exp4j;
  * 
  */
 public interface Calculable {
-	/**
-	 * calculate the result of the expression
-	 * 
-	 * @return the result of the calculation
-	 */
-	public double calculate();
+    /**
+     * calculate the result of the expression
+     * 
+     * @return the result of the calculation
+     */
+    public double calculate();
 
-	/**
-	 * return the expression in reverse polish postfix notation
-	 * 
-	 * @return the expression used to construct this {@link Calculable}
-	 */
-	public String getExpression();
+    /**
+     * calculate the result of the expression
+     * 
+     * @param variableValues
+     *            the values of the variable. The values must be in the same
+     *            order as the declaration of variables in the
+     *            {@link ExpressionBuilder} used to construct this
+     *            {@link Calculable} instance
+     * @return the result of the calculation
+     */
+    public double calculate(double... variableValues);
 
-	/**
-	 * set a variable value for the calculation
-	 * 
-	 * @param name
-	 *            the variable name
-	 * @param value
-	 *            the value of the variable
-	 */
-	public void setVariable(String name, double value);
+    /**
+     * return the expression in reverse polish postfix notation
+     * 
+     * @return the expression used to construct this {@link Calculable}
+     */
+    public String getExpression();
+
+    /**
+     * set a variable value for the calculation
+     * 
+     * @param name
+     *            the variable name
+     * @param value
+     *            the value of the variable
+     */
+    public void setVariable(String name, double value);
 }

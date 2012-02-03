@@ -2,21 +2,20 @@ package de.congrace.exp4j;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 class RPNExpression implements Calculable {
     final List<Token> tokens;
 
     final String expression;
-    
-    final Map<String,Double> variables;
 
-    public RPNExpression(List<Token> tokens, String expression,final Map<String,Double> variables) {
+    final Map<String, Double> variables;
+
+    public RPNExpression(List<Token> tokens, String expression, final Map<String, Double> variables) {
         super();
         this.tokens = tokens;
         this.expression = expression;
-        this.variables=variables;
+        this.variables = variables;
     }
 
     /**
@@ -37,7 +36,7 @@ class RPNExpression implements Calculable {
         }
         int i = 0;
         if (variables.size() > 0 && values != null) {
-            for (Map.Entry<String, Double> entry:variables.entrySet()) {
+            for (Map.Entry<String, Double> entry : variables.entrySet()) {
                 entry.setValue(values[i++]);
             }
         }
