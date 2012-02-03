@@ -1,6 +1,6 @@
 package de.congrace.exp4j;
 
-public abstract class Operation {
+public abstract class CustomOperator {
 
     final boolean leftAssociative;
 
@@ -10,7 +10,7 @@ public abstract class Operation {
 
     final int operandCount;
 
-    Operation(final char symbol, final boolean leftAssociative, final int precedence) {
+    CustomOperator(final char symbol, final boolean leftAssociative, final int precedence) {
         super();
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
@@ -18,7 +18,7 @@ public abstract class Operation {
         this.operandCount = 2;
     }
 
-    Operation(final char symbol, final boolean leftAssociative, final int precedence, final int operandCount) {
+    CustomOperator(final char symbol, final boolean leftAssociative, final int precedence, final int operandCount) {
         super();
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
@@ -26,7 +26,7 @@ public abstract class Operation {
         this.operandCount = operandCount;
     }
 
-    Operation(final char symbol) {
+    CustomOperator(final char symbol) {
         super();
         this.leftAssociative = true;
         this.symbol = symbol;
@@ -34,7 +34,7 @@ public abstract class Operation {
         this.operandCount = 2;
     }
 
-    Operation(final char symbol, final int precedence) {
+    CustomOperator(final char symbol, final int precedence) {
         super();
         this.leftAssociative = true;
         this.symbol = symbol;

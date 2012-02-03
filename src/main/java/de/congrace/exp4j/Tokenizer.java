@@ -11,9 +11,9 @@ public class Tokenizer {
 
     private final Map<String, CustomFunction> functions;
 
-    private final Map<Character, Operation> operators;
+    private final Map<Character, CustomOperator> operators;
 
-    public Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<Character, Operation> operators) {
+    public Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<Character, CustomOperator> operators) {
         super();
         this.variableNames = variableNames;
         this.functions = functions;

@@ -26,7 +26,7 @@ import java.util.Stack;
  */
 class OperatorToken extends CalculationToken {
 
-    Operation operation;
+    CustomOperator operation;
 
     /**
      * construct a new {@link OperatorToken}
@@ -34,19 +34,19 @@ class OperatorToken extends CalculationToken {
      * @param value
      *            the symbol (e.g.: '+')
      * @param operation
-     *            the {@link Operation} of this {@link Token}
+     *            the {@link CustomOperator} of this {@link Token}
      */
-    OperatorToken(String value, Operation operation) {
+    OperatorToken(String value, CustomOperator operation) {
         super(value);
         this.operation = operation;
     }
 
     /**
-     * apply the {@link Operation}
+     * apply the {@link CustomOperator}
      * 
      * @param values
      *            the doubles to operate on
-     * @return the result of the {@link Operation}
+     * @return the result of the {@link CustomOperator}
      */
     double applyOperation(double... values) {
         return operation.applyOperation(values);

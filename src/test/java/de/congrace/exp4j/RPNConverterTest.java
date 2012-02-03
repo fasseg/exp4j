@@ -29,7 +29,7 @@ public class RPNConverterTest {
 
     static Map<String, CustomFunction> customFunctions = new HashMap<String, CustomFunction>();
 
-    static Map<Character, Operation> operations = new HashMap<Character, Operation>();
+    static Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
 
     static Map<String, Double> variables = new LinkedHashMap<String, Double>();
 
@@ -50,31 +50,31 @@ public class RPNConverterTest {
         customFunctions.put("log", log);
         customFunctions.put("sin", sine);
 
-        Operation add = new Operation('+') {
+        CustomOperator add = new CustomOperator('+') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        Operation sub = new Operation('-') {
+        CustomOperator sub = new CustomOperator('-') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        Operation div = new Operation('/', 2) {
+        CustomOperator div = new CustomOperator('/', 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        Operation mul = new Operation('*', 2) {
+        CustomOperator mul = new CustomOperator('*', 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        Operation umin = new Operation('\'', false, 4) {
+        CustomOperator umin = new CustomOperator('\'', false, 4) {
             @Override
             double applyOperation(double[] values) {
                 return -values[0];

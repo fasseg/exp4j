@@ -27,31 +27,31 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TokenizerTest {
-    static Map<Character, Operation> operations = new HashMap<Character, Operation>();
+    static Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
 
     static Map<String, CustomFunction> functions = new HashMap<String, CustomFunction>();
 
     @BeforeClass
     public static void setup() throws Exception {
-        Operation add = new Operation('+') {
+        CustomOperator add = new CustomOperator('+') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        Operation sub = new Operation('-') {
+        CustomOperator sub = new CustomOperator('-') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        Operation div = new Operation('/', 1) {
+        CustomOperator div = new CustomOperator('/', 1) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        Operation mul = new Operation('*', 1) {
+        CustomOperator mul = new CustomOperator('*', 1) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];

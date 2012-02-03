@@ -9,18 +9,10 @@
 
 About
 
-  exp4j is capable of evaluating simple expressions and functions. It's a lightweight library only ~30kB in size and without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
-  
-User Guide
+  exp4j is capable of evaluating expressions and functions in the real domain. It's a small (40KB) library without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
+  It comes with a standard set of built-in functions and operators, in addition users are able to create custom operations and functions for use in their mathematical expressions.
 
-  check these links for some more info on exp4j:
- 
- * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro}}
- 
- * {{{http://objecthunter.congrace.de/tinybo/blog/articles/94}exp4j update 0.2.x}}
-  
-
-* Using the ExpressionBuilder and the Calculable interface to evaluate an expression:
+* Evaluate a simple expression:
   	
 +--
 Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
@@ -64,7 +56,7 @@ Calculable calc = new ExpressionBuilder("x * y - 2")
 assertTrue(calc.calculate()==0);
 +--
 
-** Custom functions
+* Custom functions
 
   	you can extend the abstract class CustomFunction in order to use custom functions in expressions. you only have to implement the 
   	applyFunction(double[] values) method. 
@@ -106,8 +98,38 @@ Calculable calc = new ExpressionBuilder("max(log(x),sin(x),x)")
 assertTrue(varX == calc.calculate());
 +--  	
 
+* Custom operators
 
-* Operators
+	you can extend the abstract class CustomOperator in order to declare custom operators for use in expressions, with the symbol being one of 
+	+,-,^,/,*,!,#,§,$,%,&,;,:,~,\<,\>,|. Be aware that adding a CustomOperator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the '+' operator.
+	The Constructor of a CustomOperator takes up to 4 arguments:
+	
+ * the symbol used for this operation (one of +,-,^,/,*,!,#,§,$,%,&,;,:,~,\<,\>,|)
+ 
+ * if the operation is left associative
+ 
+ * the precedence of the operation
+ 
+ * the number of operands the operator has (1 or 2) 
+
++--
+        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
+            @Override
+            double applyOperation(double[] values) {
+                double tmp = 1d;
+                int steps = 1;
+                while (steps < values[0]) {
+                    tmp = tmp * (++steps);
+                }
+                return tmp;
+            }
+        };
+        Calculable calc = new ExpressionBuilder("11!").withOperation(factorial).build();
+        assertTrue(39916800d == calc.calculate());
+
++--
+
+* Built-in operators
 	 
 	 
  * Addition: '2 + 2'
@@ -172,18 +194,28 @@ assertTrue(varX == calc.calculate());
  
  * Version 0.2.0: the ExpressionBuilder/Calculable API has been added
  
+
+* Links
  
+ * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro}}
+ 
+ * {{{http://objecthunter.congrace.de/tinybo/blog/articles/94}exp4j update 0.2.x}}
+ 
+ * {{{http://www.javierllamas.es/index.php/en/blog/14-interprete-de-formulas-para-java.html}Javier Llamas}} blogged about exp4j
+ 
+ * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j 
+
 * References
  
  * {{{http://nilgiri.net/twiki/bin/view/Nilgiri/}Nilgiri}} MUD uses exp4j
  
  * {{{http://jamwiki.org}JamWiki}} uses exp4j
  
- * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
- 
  * {{{http://code.google.com/p/jcomplexity/}JComplexity}} uses exp4j
  
- * {{{http://www.javierllamas.es/index.php/en/blog/14-interprete-de-formulas-para-java.html}Javier Llamas}} blogged about exp4j
+ * {{{http://www.opensourceautomation.net/}free\{dom\}}} building automation framework uses exp4j
+ 
+ 
  
 
- Please let me know if you're project uses exp4j and you want it listed here
+ Please {{{mailto:fas@congrace.de}let me know}} if you're project uses exp4j and you want it listed here

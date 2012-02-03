@@ -20,7 +20,7 @@ public class ExpressionBuilder {
 
     private final Map<String, CustomFunction> customFunctions;
 
-    private final Map<Character, Operation> operators;
+    private final Map<Character, CustomOperator> operators;
 
     private final List<Character> validOperators;
 
@@ -57,50 +57,50 @@ public class ExpressionBuilder {
         return expression;
     }
 
-    private Map<Character, Operation> getBuiltinOperators() {
-        Operation add = new Operation('+') {
+    private Map<Character, CustomOperator> getBuiltinOperators() {
+        CustomOperator add = new CustomOperator('+') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        Operation sub = new Operation('-') {
+        CustomOperator sub = new CustomOperator('-') {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        Operation div = new Operation('/', 2) {
+        CustomOperator div = new CustomOperator('/', 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        Operation mul = new Operation('*', 2) {
+        CustomOperator mul = new CustomOperator('*', 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] * values[1];
             }
         };
-        Operation mod = new Operation('%', false, 2) {
+        CustomOperator mod = new CustomOperator('%', false, 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] % values[1];
             }
         };
-        Operation umin = new Operation('\'', false, 5, 1) {
+        CustomOperator umin = new CustomOperator('\'', false, 5, 1) {
             @Override
             double applyOperation(double[] values) {
                 return -values[0];
             }
         };
-        Operation pow = new Operation('^', false, 3, 2) {
+        CustomOperator pow = new CustomOperator('^', false, 3, 2) {
             @Override
             double applyOperation(double[] values) {
                 return Math.pow(values[0], values[1]);
             }
         };
-        Map<Character, Operation> operations = new HashMap<Character, Operation>();
+        Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
         operations.put('+', add);
         operations.put('-', sub);
         operations.put('*', mul);
@@ -252,7 +252,7 @@ public class ExpressionBuilder {
      *             if the expression could not be parsed
      */
     public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
-        for (Operation op : operators.values()) {
+        for (CustomOperator op : operators.values()) {
             if (!validOperators.contains(op.symbol)) {
                 throw new UnparsableExpressionException("" + op.symbol
                         + " is not a valid symbol for an operator please choose from: +,-,^,/,*,!,#,§,$,%,&,;,:,~,<,>,|");
@@ -329,13 +329,13 @@ public class ExpressionBuilder {
         return this;
     }
 
-    public ExpressionBuilder withOperation(Operation operation) {
+    public ExpressionBuilder withOperation(CustomOperator operation) {
         operators.put(operation.symbol, operation);
         return this;
     }
 
-    public ExpressionBuilder withOperations(Collection<Operation> operations) {
-        for (Operation op : operations) {
+    public ExpressionBuilder withOperations(Collection<CustomOperator> operations) {
+        for (CustomOperator op : operations) {
             withOperation(op);
         }
         return this;

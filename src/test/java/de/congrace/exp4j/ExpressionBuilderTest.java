@@ -249,7 +249,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators1() throws Exception {
-        Operation factorial = new Operation('!', true, 4, 1) {
+        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
@@ -276,7 +276,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators2() throws Exception {
-        Operation factorial = new Operation('!', true, 4, 1) {
+        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
@@ -298,13 +298,32 @@ public class ExpressionBuilderTest {
 
     @Test(expected = UnparsableExpressionException.class)
     public void testInvalidOperator1() throws Exception {
-        Operation fail = new Operation('2') {
+        CustomOperator fail = new CustomOperator('2') {
             @Override
             double applyOperation(double[] values) {
                 return 0;
             }
         };
         new ExpressionBuilder("1").withOperation(fail).build();
+    }
+
+    @Test(expected = InvalidCustomFunctionException.class)
+    public void testInvalidCustomFunction1() throws Exception {
+        CustomFunction func=new CustomFunction("1gd") {
+            @Override
+            public double applyFunction(double... args) {
+                return 0;
+            }
+        };
+    }
+    @Test(expected = InvalidCustomFunctionException.class)
+    public void testInvalidCustomFunction2() throws Exception {
+        CustomFunction func=new CustomFunction("+1gd") {
+            @Override
+            public double applyFunction(double... args) {
+                return 0;
+            }
+        };
     }
 
     @Test
@@ -418,7 +437,7 @@ public class ExpressionBuilderTest {
         ExpressionBuilder builder = new ExpressionBuilder("1");
         Field operatorField = ExpressionBuilder.class.getDeclaredField("operators");
         operatorField.setAccessible(true);
-        Map<Character, Operation> operators = (Map<Character, Operation>) operatorField.get(builder);
+        Map<Character, CustomOperator> operators = (Map<Character, CustomOperator>) operatorField.get(builder);
 
         assertTrue(operators.get('+').leftAssociative);
         assertTrue(operators.get('*').leftAssociative);

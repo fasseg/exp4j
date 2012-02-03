@@ -5,7 +5,7 @@ import java.util.Stack;
 
 abstract class RPNConverter {
 
-    private static String substituteUnaryOperators(String expr, Map<Character, Operation> operators) {
+    private static String substituteUnaryOperators(String expr, Map<Character, CustomOperator> operators) {
         final StringBuilder exprBuilder = new StringBuilder(expr.length());
         final char[] data = expr.toCharArray();
         char lastChar = ' ';
@@ -37,7 +37,7 @@ abstract class RPNConverter {
     }
 
     static RPNExpression toRPNExpression(String infix, Map<String, Double> variables, Map<String, CustomFunction> customFunctions,
-            Map<Character, Operation> operators) throws UnknownFunctionException, UnparsableExpressionException {
+            Map<Character, CustomOperator> operators) throws UnknownFunctionException, UnparsableExpressionException {
         final Tokenizer tokenizer = new Tokenizer(variables.keySet(), customFunctions, operators);
         final StringBuilder output = new StringBuilder(infix.length());
         final Stack<Token> operatorStack = new Stack<Token>();
