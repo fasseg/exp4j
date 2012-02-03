@@ -244,6 +244,31 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testCustomFunction18() throws Exception {
+        Operation faculty=new Operation('!',true,2,1) {
+            @Override
+            double applyOperation(double[] values) {
+                double tmp=1d;
+                int steps=1;
+                while (steps < values[0]) {
+                    tmp = tmp * (++steps);
+                }
+                return tmp;
+            }
+        };
+        Calculable calc = new ExpressionBuilder("1!").withOperation(faculty).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("3!").withOperation(faculty).build();
+        assertTrue(6d == calc.calculate());
+        calc = new ExpressionBuilder("4!").withOperation(faculty).build();
+        assertTrue(24d == calc.calculate());
+        calc = new ExpressionBuilder("5!").withOperation(faculty).build();
+        assertTrue(120d == calc.calculate());
+        calc = new ExpressionBuilder("11!").withOperation(faculty).build();
+        assertTrue(39916800d == calc.calculate());
+    }
+
+    @Test
 	public void testExpressionBuilder1() throws Exception {
 		Calculable calc = new ExpressionBuilder("f(x,y)=7*x + 3*y").withVariable("x", 1).withVariable("y", 2).build();
 		double result = calc.calculate();

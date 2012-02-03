@@ -73,6 +73,12 @@ public class ExpressionBuilder {
                 return values[0] * values[1];
             }
         };
+        Operation mod = new Operation('%',false,2) {
+            @Override
+            double applyOperation(double[] values) {
+                return values[0] % values[1];
+            }
+        };
         Operation umin = new Operation('\'', false, 4,1) {
             @Override
             double applyOperation(double[] values) {
@@ -92,6 +98,7 @@ public class ExpressionBuilder {
         operations.put('/', div);
         operations.put('\'', umin);
         operations.put('^', pow);
+        operations.put('%', mod);
         return operations;
     }
 
