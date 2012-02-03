@@ -123,17 +123,6 @@ public class ExpressionBuilderTest {
 		assertTrue(0.5d == calc.calculate());
 	}
 
-	@Test(expected=InvalidCustomFunctionException.class)
-	public void testCustomFunction8() throws Exception {
-		CustomFunction custom1 = new CustomFunction("log") {
-			@Override
-			public double applyFunction(double[] values) {
-				return values[0]/2;
-			}
-		};
-		Calculable calc = new ExpressionBuilder("half(x)").withVariable("x", 1d).withCustomFunction(custom1).build();
-		assertTrue(0.5d == calc.calculate());
-	}
 
     @Test
     public void testCustomFunction10() throws Exception {
@@ -165,7 +154,7 @@ public class ExpressionBuilderTest {
             @Override
             public double applyFunction(double[] values) {
                 double max=values[0];
-                for (int i=1;i<this.getArgumentCount();i++) {
+                for (int i=1;i<argc;i++) {
                     if (values[i] > max) {
                         max=values[i];
                     }
@@ -183,7 +172,7 @@ public class ExpressionBuilderTest {
             @Override
             public double applyFunction(double[] values) {
                 double max=values[0];
-                for (int i=1;i<this.getArgumentCount();i++) {
+                for (int i=1;i<argc;i++) {
                     if (values[i] > max) {
                         max=values[i];
                     }
@@ -207,7 +196,8 @@ public class ExpressionBuilderTest {
         double varX=1;
         Calculable calc = new ExpressionBuilder("multiply(sin(x),x+1)").withVariable("x", varX).withCustomFunction(custom1).build();
         double expected=Math.sin(varX) * (varX +1);
-        assertTrue(expected == calc.calculate());
+        double actual=calc.calculate();
+        assertTrue(expected == actual);
     }
 
     @Test
@@ -221,7 +211,8 @@ public class ExpressionBuilderTest {
         double varX=1;
         Calculable calc = new ExpressionBuilder("timesPi(x^2)").withVariable("x", varX).withCustomFunction(custom1).build();
         double expected=varX * Math.PI;
-        assertTrue(expected == calc.calculate());
+        double actual=calc.calculate();
+        assertTrue(expected == actual);
     }
     
     @Test

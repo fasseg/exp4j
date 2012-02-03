@@ -18,15 +18,79 @@ package de.congrace.exp4j;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class InfixTranslatorTest {
+public class RPNConverterTest {
 
+    static Map<String, CustomFunction> customFunctions=new HashMap<String, CustomFunction>();
+    static Map<Character,Operation> operations=new HashMap<Character, Operation>();
+    static Map<String,Double> variables=new LinkedHashMap<String, Double>();
+
+    
+    @BeforeClass
+    public static void setup() throws Exception{
+        CustomFunction log=new CustomFunction("log") {
+            @Override
+            public double applyFunction(double[] args) {
+                return Math.log(args[0]);
+            }
+        };
+        CustomFunction sine=new CustomFunction("sin") {
+            @Override
+            public double applyFunction(double[] args) {
+                return Math.sin(args[0]);
+            }
+        };
+        customFunctions.put("log", log);
+        customFunctions.put("sin", sine);
+
+        Operation add=new Operation('+') {
+            @Override
+            double applyOperation(double[] values) {
+                return values[0] + values[1];
+            }
+        };
+        Operation sub=new Operation('-') {
+            @Override
+            double applyOperation(double[] values) {
+                return values[0] - values[1];
+            }
+        };
+        Operation div=new Operation('/',2) {
+            @Override
+            double applyOperation(double[] values) {
+                return values[0] / values[1];
+            }
+        };
+        Operation mul=new Operation('*',2) {
+            @Override
+            double applyOperation(double[] values) {
+                return values[0] / values[1];
+            }
+        };
+        Operation umin=new Operation('\'',false,4) {
+            @Override
+            double applyOperation(double[] values) {
+                return -values[0];
+            }
+        };
+        operations.put('+', add);
+        operations.put('-', sub);
+        operations.put('*', mul);
+        operations.put('/', div);
+        operations.put('\'',umin);
+    }
+    
 	@Test
 	public void testInfixTranslation1() throws Exception {
 		String expr = "2 + 2";
 		String expected = "2 2 +";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -37,8 +101,8 @@ public class InfixTranslatorTest {
 	@Test
 	public void testInfixTranslation10() throws Exception {
 		String expr = "log(1) / -sin(2)";
-		String expected = "1 log 2 sin # /";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String expected = "1 log 2 sin ' /";
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -50,7 +114,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation11() throws Exception {
 		String expr = "24/log(1)-2";
 		String expected = "24 1 log / 2 -";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t\t" + actual);
@@ -62,7 +126,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation2() throws Exception {
 		String expr = "1 + 2 * 4";
 		String expected = "1 2 4 * +";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -74,7 +138,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation3() throws Exception {
 		String expr = "3 - 4 * 5";
 		String expected = "3 4 5 * -";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -86,7 +150,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation4() throws Exception {
 		String expr = "(1+2) * 4";
 		String expected = "1 2 + 4 *";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -98,7 +162,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation5() throws Exception {
 		String expr = "(1+2) * (3-4) * 4";
 		String expected = "1 2 + 3 4 - * 4 *";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -110,7 +174,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation6() throws Exception {
 		String expr = "1.23 + 3.14";
 		String expected = "1.23 3.14 +";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -122,7 +186,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation7() throws Exception {
 		String expr = "1.23 + 3.14 * 7";
 		String expected = "1.23 3.14 7 * +";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -134,7 +198,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation8() throws Exception {
 		String expr = "log(1) + sin(2)";
 		String expected = "1 log 2 sin +";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
@@ -146,7 +210,7 @@ public class InfixTranslatorTest {
 	public void testInfixTranslation9() throws Exception {
 		String expr = "log(1) / sin(2)";
 		String expected = "1 log 2 sin /";
-		String actual = InfixTranslator.toPostfixExpression(expr);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
