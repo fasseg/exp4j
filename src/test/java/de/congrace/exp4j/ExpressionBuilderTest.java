@@ -249,7 +249,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators1() throws Exception {
-        Operation factorial = new Operation('!', false, 4, 1) {
+        Operation factorial = new Operation('!', true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
@@ -276,7 +276,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators2() throws Exception {
-        Operation factorial = new Operation('!', false, 4, 1) {
+        Operation factorial = new Operation('!', true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
