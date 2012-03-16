@@ -22,10 +22,16 @@ Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
 double result1=calc.calculate();
 +--  	
 
+* Variable declaration
+
 	One has to make sure that the variable names are passed into the ExpressionBuilder before calling build(). If variables are used in the expression without setting at least their names,
 	an UnparseableErpessionExcetion will be thrown. The following three examples demonstrate the different possibilities to have exp4j recognize variables: 
+
+** API changed in 0.3.0: Implicit variable declaration no longer possible!
+
+	The feature to use implicit variable declarations as in new ExpressionBuilder("f(x,y)=x*y") has been removed. You will have to use ExpressionBuilder.withVariableNames() or ExpressionBuilder.withVariable() for variable declaration.
 	
-  	Using ExpressionBuilder.withVariableNames():
+** Using ExpressionBuilder.withVariableNames():
   	
 +--
 Calculable calc = new ExpressionBuilder("x * y - 2")
@@ -36,11 +42,8 @@ calc.setVariable("y",2);
 assertTrue(calc.calculate()==0);
 +--
 
-* API CHANGE in 0.3.0 Implicit variable declaration no longer possible!
-
-	The feature to use implicit variable declarations as in new ExpressionBuilder("f(x,y)=x*y") has been removed. You will have to use ExpressionBuilder.withVariableNames() or ExpressionBuilder.withVariable() for variable declaration.
   	
-* Using ExpressionBuilder.withVariable()
+** Using ExpressionBuilder.withVariable()
   	
 +--
 Calculable calc = new ExpressionBuilder("x * y - 2")
@@ -107,7 +110,7 @@ assertTrue(varX == calc.calculate());
  * the number of operands the operator has (1 or 2) 
 
 +--
-        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
+        CustomOperator factorial = new CustomOperator('!', true, 6, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
