@@ -20,7 +20,11 @@ public class ExpressionBuilder {
 
     private final Map<String, CustomFunction> customFunctions;
 
-    private final Map<String, CustomOperator> operators;
+    private final Map<String, CustomOperator> builtInOperators;
+    
+    private Map<String, CustomOperator> customOperators=new HashMap<String, CustomOperator>();
+    
+    
 
     private final List<Character> validOperatorSymbols;
 
@@ -35,12 +39,12 @@ public class ExpressionBuilder {
     public ExpressionBuilder(String expression) {
         this.expression = normalizeExpression(expression);
         customFunctions = getBuiltinFunctions();
-        operators = getBuiltinOperators();
+        builtInOperators = getBuiltinOperators();
         validOperatorSymbols = getValidOperators();
     }
 
     private List<Character> getValidOperators() {
-        return Arrays.asList('+', '-', '^', '/', '*', '!', '#', '§', '$', '%', '&', ';', ':', '~', '<', '>', '|', '\'');
+        return Arrays.asList('!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|');
     }
 
     private String normalizeExpression(String expression) {
@@ -252,11 +256,11 @@ public class ExpressionBuilder {
      *             if the expression could not be parsed
      */
     public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
-        for (CustomOperator op : operators.values()) {
+        for (CustomOperator op : customOperators.values()) {
         	for (int i=0;i<op.symbol.length();i++){
         		if (!validOperatorSymbols.contains(op.symbol.charAt(i))){
         			throw new UnparsableExpressionException("" + op.symbol
-        					+ " is not a valid symbol for an operator please choose from: +,-,^,/,*,!,#,§,$,%,&,;,:,~,<,>,|");
+        					+ " is not a valid symbol for an operator please choose from: !,#,§,$,&,;,:,~,<,>,|");
         		}
         	}
         }
@@ -265,7 +269,8 @@ public class ExpressionBuilder {
                 throw new UnparsableExpressionException("Variable '" + varName + "' cannot have the same name as a function");
             }
         }
-        return RPNConverter.toRPNExpression(expression, variables, customFunctions, operators);
+        builtInOperators.putAll(customOperators);
+        return RPNConverter.toRPNExpression(expression, variables, customFunctions, builtInOperators);
     }
 
     /**
@@ -332,7 +337,7 @@ public class ExpressionBuilder {
     }
 
     public ExpressionBuilder withOperation(CustomOperator operation) {
-        operators.put(operation.symbol, operation);
+        customOperators.put(operation.symbol, operation);
         return this;
     }
 

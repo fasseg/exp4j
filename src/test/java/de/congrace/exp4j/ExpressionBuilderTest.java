@@ -454,7 +454,7 @@ public class ExpressionBuilderTest {
     public void testOperatorPrecedence() throws Exception {
 
         ExpressionBuilder builder = new ExpressionBuilder("1");
-        Field operatorField = ExpressionBuilder.class.getDeclaredField("operators");
+        Field operatorField = ExpressionBuilder.class.getDeclaredField("builtInOperators");
         operatorField.setAccessible(true);
         Map<Character, CustomOperator> operators = (Map<Character, CustomOperator>) operatorField.get(builder);
 
