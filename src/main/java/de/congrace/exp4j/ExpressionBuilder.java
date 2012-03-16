@@ -60,31 +60,31 @@ public class ExpressionBuilder {
                 return values[0] - values[1];
             }
         };
-        CustomOperator div = new CustomOperator("/", 2) {
+        CustomOperator div = new CustomOperator("/", 3) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        CustomOperator mul = new CustomOperator("*", 2) {
+        CustomOperator mul = new CustomOperator("*", 3) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] * values[1];
             }
         };
-        CustomOperator mod = new CustomOperator("%", false, 2) {
+        CustomOperator mod = new CustomOperator("%", false, 3) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] % values[1];
             }
         };
-        CustomOperator umin = new CustomOperator("\'", false, 5, 1) {
+        CustomOperator umin = new CustomOperator("\'", false, 7, 1) {
             @Override
             double applyOperation(double[] values) {
                 return -values[0];
             }
         };
-        CustomOperator pow = new CustomOperator("^", false, 3, 2) {
+        CustomOperator pow = new CustomOperator("^", false, 5, 2) {
             @Override
             double applyOperation(double[] values) {
                 return Math.pow(values[0], values[1]);
@@ -322,11 +322,21 @@ public class ExpressionBuilder {
         return this;
     }
 
+    /**
+     * set a {@link CustomOperator} to be used in the expression
+     * @param operation the {@link CustomOperator} to be used
+     * @return the {@link ExpressionBuilder} instance
+     */
     public ExpressionBuilder withOperation(CustomOperator operation) {
         customOperators.put(operation.symbol, operation);
         return this;
     }
 
+    /**
+     * set a {@link Collection} of {@link CustomOperator} to use in the expression
+     * @param operations the {@link Collection} of {@link CustomOperator} to use
+     * @return the {@link ExpressionBuilder} instance
+     */
     public ExpressionBuilder withOperations(Collection<CustomOperator> operations) {
         for (CustomOperator op : operations) {
             withOperation(op);
@@ -334,6 +344,11 @@ public class ExpressionBuilder {
         return this;
     }
 
+    /**
+     * set the mathematical expression for parsing
+     * @param expression a mathematical expression
+     * @return the {@link ExpressionBuilder} instance
+     */
     public ExpressionBuilder withExpression(String expression) {
         this.expression = expression;
         return this;
