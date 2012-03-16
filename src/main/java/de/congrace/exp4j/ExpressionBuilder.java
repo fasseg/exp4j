@@ -37,28 +37,14 @@ public class ExpressionBuilder {
      *            the expression to evaluate
      */
     public ExpressionBuilder(String expression) {
-        this.expression = normalizeExpression(expression);
+        this.expression = expression;
         customFunctions = getBuiltinFunctions();
         builtInOperators = getBuiltinOperators();
         validOperatorSymbols = getValidOperators();
     }
 
     private List<Character> getValidOperators() {
-        return Arrays.asList('!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|');
-    }
-
-    private String normalizeExpression(String expression) {
-        int posStart, posEnd;
-        if ((posStart = expression.indexOf('=')) > 0) {
-            String functionDef = expression.substring(0, posStart);
-            expression = expression.substring(posStart + 1);
-            if ((posStart = functionDef.indexOf('(')) > 0 && (posEnd = functionDef.indexOf(')')) > 0) {
-                for (String varName : functionDef.substring(posStart + 1, posEnd).split(",")) {
-                    variables.put(varName, Double.NaN);
-                }
-            }
-        }
-        return expression;
+        return Arrays.asList('!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|','=');
     }
 
     private Map<String, CustomOperator> getBuiltinOperators() {
@@ -260,7 +246,7 @@ public class ExpressionBuilder {
         	for (int i=0;i<op.symbol.length();i++){
         		if (!validOperatorSymbols.contains(op.symbol.charAt(i))){
         			throw new UnparsableExpressionException("" + op.symbol
-        					+ " is not a valid symbol for an operator please choose from: !,#,§,$,&,;,:,~,<,>,|");
+        					+ " is not a valid symbol for an operator please choose from: !,#,§,$,&,;,:,~,<,>,|,=");
         		}
         	}
         }
