@@ -23,15 +23,15 @@ package de.congrace.exp4j;
  * @author fas@congrace.de
  */
 public class UnknownFunctionException extends Exception {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * construct a new {@link UnknownFunctionException}
-     * 
-     * @param functionName
-     *            the function name which could not be found
-     */
-    public UnknownFunctionException(String functionName) {
-        super("Unknown function: " + functionName);
-    }
+	/**
+	 * construct a new {@link UnknownFunctionException}
+	 * 
+	 * @param functionName
+	 *            the function name which could not be found
+	 */
+	public UnknownFunctionException(String functionName) {
+		super("Unknown function: " + functionName);
+	}
 }

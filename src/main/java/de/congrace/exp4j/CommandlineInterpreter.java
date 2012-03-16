@@ -17,9 +17,8 @@
 package de.congrace.exp4j;
 
 /**
- * Simple commandline interpreter for mathematical expressions the interpreter
- * takes a mathematical expressions as a {@link String} argument, evaluates it
- * and prints out the result.
+ * Simple commandline interpreter for mathematical expressions the interpreter takes a mathematical expressions as a
+ * {@link String} argument, evaluates it and prints out the result.
  * 
  * 
  * <pre>
@@ -31,28 +30,28 @@ package de.congrace.exp4j;
  * 
  */
 public class CommandlineInterpreter {
-    private static void calculateExpression(String string) {
-        try {
-            System.out.println(new ExpressionBuilder(string).build().calculate());
-        } catch (UnparsableExpressionException e) {
-            e.printStackTrace();
-        } catch (UnknownFunctionException e) {
-            e.printStackTrace();
-        }
-    }
+	private static void calculateExpression(String string) {
+		try {
+			System.out.println(new ExpressionBuilder(string).build().calculate());
+		} catch (UnparsableExpressionException e) {
+			e.printStackTrace();
+		} catch (UnknownFunctionException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            printUsage();
-        } else {
-            calculateExpression(args[0]);
-        }
-    }
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			printUsage();
+		} else {
+			calculateExpression(args[0]);
+		}
+	}
 
-    private static void printUsage() {
-        final StringBuilder usage = new StringBuilder();
-        usage.append("Commandline Expression Parser\n\n").append("Example: ").append("\n").append("java -jar exp4j.jar \"2.12 * log(23) * (12 - 4)\"\n\n")
-                .append("written by fas@congrace.de");
-        System.err.println(usage.toString());
-    }
+	private static void printUsage() {
+		final StringBuilder usage = new StringBuilder();
+		usage.append("Commandline Expression Parser\n\n").append("Example: ").append("\n")
+				.append("java -jar exp4j.jar \"2.12 * log(23) * (12 - 4)\"\n\n").append("written by fas@congrace.de");
+		System.err.println(usage.toString());
+	}
 }

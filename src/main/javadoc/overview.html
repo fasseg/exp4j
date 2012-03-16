@@ -45,8 +45,7 @@
   		<li>the number of operands for the operation</li>
   	</ul>
   	<pre>
-       CustomOperator greaterEq = new CustomOperator(">=", true, 4, 2) {
-            @Override
+       CustomOperator greaterEq = new CustomOperator("&gt;=", true, 4, 2) {
             double applyOperation(double[] values) {
             	if (values[0] >= values[1]){
             		return 1d;

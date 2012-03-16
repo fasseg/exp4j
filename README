@@ -1,5 +1,5 @@
 exp4j
----------------------------------------------------------------------------------------
+-----
 
 exp4j math expression evaluator for the Java programming language, capable of evaluating simple mathematical 
 expression, small in size, without any external libraries and simple to use.

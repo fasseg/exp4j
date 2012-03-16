@@ -25,37 +25,37 @@ import java.util.Stack;
  * @author fas
  */
 class VariableToken extends CalculationToken {
-    /**
-     * construct a new {@link VariableToken}
-     * 
-     * @param value
-     *            the value of the token
-     */
-    VariableToken(String value) {
-        super(value);
-    }
+	/**
+	 * construct a new {@link VariableToken}
+	 * 
+	 * @param value
+	 *            the value of the token
+	 */
+	VariableToken(String value) {
+		super(value);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VariableToken) {
-            return super.getValue().equals(((VariableToken) obj).getValue());
-        }
-        return false;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof VariableToken) {
+			return super.getValue().equals(((VariableToken) obj).getValue());
+		}
+		return false;
+	}
 
-    @Override
-    public int hashCode() {
-        return super.getValue().hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return super.getValue().hashCode();
+	}
 
-    @Override
-    void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-        double value = variableValues.get(this.getValue());
-        stack.push(value);
-    }
+	@Override
+	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
+		double value = variableValues.get(this.getValue());
+		stack.push(value);
+	}
 
-    @Override
-    void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
-        output.append(this.getValue()).append(" ");
-    }
+	@Override
+	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
+		output.append(this.getValue()).append(" ");
+	}
 }

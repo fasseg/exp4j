@@ -15,8 +15,8 @@
 	</scm>
 	<url>https://exp4j.congrace.de</url>
 	<issueManagement>
-		<url>http://mantis.congrace.de</url>
-		<system>Mantis</system>
+		<url>http://jira.congrace.de/jira/</url>
+		<system>Jira</system>
 	</issueManagement>
 	<mailingLists>
 		<mailingList>

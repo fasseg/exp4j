@@ -1,11 +1,5 @@
 package de.congrace.exp4j;
 
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Array;
-
-import org.junit.Test;
-
 /**
  * This class is used to create custom operators for use in expressions<br/>
  * The applyOperation(double[] values) will have to be implemented by users of this class. <br/>
