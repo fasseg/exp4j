@@ -12,8 +12,6 @@ import java.util.Random;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 public class ExpressionBuilderTest {
@@ -249,7 +247,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators1() throws Exception {
-        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
+        CustomOperator factorial = new CustomOperator("!", true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
@@ -276,7 +274,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testCustomOperators2() throws Exception {
-        CustomOperator factorial = new CustomOperator('!', true, 4, 1) {
+        CustomOperator factorial = new CustomOperator("!", true, 4, 1) {
             @Override
             double applyOperation(double[] values) {
                 double tmp = 1d;
@@ -295,10 +293,31 @@ public class ExpressionBuilderTest {
         double actual = calc.calculate();
         assertEquals(Math.pow(-6d, -1), actual, 0d);
     }
+    @Test
+    public void testCustomOperators3() throws Exception {
+        CustomOperator factorial = new CustomOperator(">>", true, 4, 2) {
+            @Override
+            double applyOperation(double[] values) {
+            	if (values[0] >= values[1]){
+            		return 1d;
+            	}else{
+            		return 0d;
+            	}
+            }
+        };
+        Calculable calc = new ExpressionBuilder("1>>2").withOperation(factorial).build();
+        assertTrue(0d == calc.calculate());
+        calc = new ExpressionBuilder("2>>1").withOperation(factorial).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("-2>>1").withOperation(factorial).build();
+        assertTrue(0d == calc.calculate());
+        calc = new ExpressionBuilder("-2>>-1").withOperation(factorial).build();
+        assertTrue(0d == calc.calculate());
+    }
 
     @Test(expected = UnparsableExpressionException.class)
     public void testInvalidOperator1() throws Exception {
-        CustomOperator fail = new CustomOperator('2') {
+        CustomOperator fail = new CustomOperator("2") {
             @Override
             double applyOperation(double[] values) {
                 return 0;
@@ -439,48 +458,48 @@ public class ExpressionBuilderTest {
         operatorField.setAccessible(true);
         Map<Character, CustomOperator> operators = (Map<Character, CustomOperator>) operatorField.get(builder);
 
-        assertTrue(operators.get('+').leftAssociative);
-        assertTrue(operators.get('*').leftAssociative);
-        assertTrue(operators.get('-').leftAssociative);
-        assertTrue(operators.get('/').leftAssociative);
-        assertTrue(!operators.get('^').leftAssociative);
-        assertTrue(!operators.get('\'').leftAssociative);
+        assertTrue(operators.get("+").leftAssociative);
+        assertTrue(operators.get("*").leftAssociative);
+        assertTrue(operators.get("-").leftAssociative);
+        assertTrue(operators.get("/").leftAssociative);
+        assertTrue(!operators.get("^").leftAssociative);
+        assertTrue(!operators.get("\'").leftAssociative);
 
-        assertTrue(operators.get('+').precedence == operators.get('-').precedence);
-        assertTrue(operators.get('+').precedence < operators.get('*').precedence);
-        assertTrue(operators.get('+').precedence < operators.get('/').precedence);
-        assertTrue(operators.get('+').precedence < operators.get('^').precedence);
-        assertTrue(operators.get('+').precedence < operators.get('\'').precedence);
+        assertTrue(operators.get("+").precedence == operators.get("-").precedence);
+        assertTrue(operators.get("+").precedence < operators.get("*").precedence);
+        assertTrue(operators.get("+").precedence < operators.get("/").precedence);
+        assertTrue(operators.get("+").precedence < operators.get("^").precedence);
+        assertTrue(operators.get("+").precedence < operators.get("\'").precedence);
 
-        assertTrue(operators.get('-').precedence == operators.get('+').precedence);
-        assertTrue(operators.get('-').precedence < operators.get('*').precedence);
-        assertTrue(operators.get('-').precedence < operators.get('/').precedence);
-        assertTrue(operators.get('-').precedence < operators.get('^').precedence);
-        assertTrue(operators.get('-').precedence < operators.get('\'').precedence);
+        assertTrue(operators.get("-").precedence == operators.get("+").precedence);
+        assertTrue(operators.get("-").precedence < operators.get("*").precedence);
+        assertTrue(operators.get("-").precedence < operators.get("/").precedence);
+        assertTrue(operators.get("-").precedence < operators.get("^").precedence);
+        assertTrue(operators.get("-").precedence < operators.get("\'").precedence);
 
-        assertTrue(operators.get('*').precedence > operators.get('+').precedence);
-        assertTrue(operators.get('*').precedence > operators.get('-').precedence);
-        assertTrue(operators.get('*').precedence == operators.get('/').precedence);
-        assertTrue(operators.get('*').precedence < operators.get('^').precedence);
-        assertTrue(operators.get('*').precedence < operators.get('\'').precedence);
+        assertTrue(operators.get("*").precedence > operators.get("+").precedence);
+        assertTrue(operators.get("*").precedence > operators.get("-").precedence);
+        assertTrue(operators.get("*").precedence == operators.get("/").precedence);
+        assertTrue(operators.get("*").precedence < operators.get("^").precedence);
+        assertTrue(operators.get("*").precedence < operators.get("\'").precedence);
 
-        assertTrue(operators.get('/').precedence > operators.get('+').precedence);
-        assertTrue(operators.get('/').precedence > operators.get('-').precedence);
-        assertTrue(operators.get('/').precedence == operators.get('*').precedence);
-        assertTrue(operators.get('/').precedence < operators.get('^').precedence);
-        assertTrue(operators.get('/').precedence < operators.get('\'').precedence);
+        assertTrue(operators.get("/").precedence > operators.get("+").precedence);
+        assertTrue(operators.get("/").precedence > operators.get("-").precedence);
+        assertTrue(operators.get("/").precedence == operators.get("*").precedence);
+        assertTrue(operators.get("/").precedence < operators.get("^").precedence);
+        assertTrue(operators.get("/").precedence < operators.get("\'").precedence);
 
-        assertTrue(operators.get('^').precedence > operators.get('+').precedence);
-        assertTrue(operators.get('^').precedence > operators.get('-').precedence);
-        assertTrue(operators.get('^').precedence > operators.get('*').precedence);
-        assertTrue(operators.get('^').precedence > operators.get('/').precedence);
-        assertTrue(operators.get('^').precedence < operators.get('\'').precedence);
+        assertTrue(operators.get("^").precedence > operators.get("+").precedence);
+        assertTrue(operators.get("^").precedence > operators.get("-").precedence);
+        assertTrue(operators.get("^").precedence > operators.get("*").precedence);
+        assertTrue(operators.get("^").precedence > operators.get("/").precedence);
+        assertTrue(operators.get("^").precedence < operators.get("\'").precedence);
 
-        assertTrue(operators.get('\'').precedence > operators.get('+').precedence);
-        assertTrue(operators.get('\'').precedence > operators.get('-').precedence);
-        assertTrue(operators.get('\'').precedence > operators.get('*').precedence);
-        assertTrue(operators.get('\'').precedence > operators.get('/').precedence);
-        assertTrue(operators.get('\'').precedence > operators.get('^').precedence);
+        assertTrue(operators.get("\'").precedence > operators.get("+").precedence);
+        assertTrue(operators.get("\'").precedence > operators.get("-").precedence);
+        assertTrue(operators.get("\'").precedence > operators.get("*").precedence);
+        assertTrue(operators.get("\'").precedence > operators.get("/").precedence);
+        assertTrue(operators.get("\'").precedence > operators.get("^").precedence);
     }
 
     @Test

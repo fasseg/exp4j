@@ -29,7 +29,7 @@ public class RPNConverterTest {
 
     static Map<String, CustomFunction> customFunctions = new HashMap<String, CustomFunction>();
 
-    static Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
+    static Map<String, CustomOperator> operations = new HashMap<String, CustomOperator>();
 
     static Map<String, Double> variables = new LinkedHashMap<String, Double>();
 
@@ -50,41 +50,41 @@ public class RPNConverterTest {
         customFunctions.put("log", log);
         customFunctions.put("sin", sine);
 
-        CustomOperator add = new CustomOperator('+') {
+        CustomOperator add = new CustomOperator("+") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        CustomOperator sub = new CustomOperator('-') {
+        CustomOperator sub = new CustomOperator("-") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        CustomOperator div = new CustomOperator('/', 2) {
+        CustomOperator div = new CustomOperator("/", 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        CustomOperator mul = new CustomOperator('*', 2) {
+        CustomOperator mul = new CustomOperator("*", 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        CustomOperator umin = new CustomOperator('\'', false, 4) {
+        CustomOperator umin = new CustomOperator("\'", false, 4) {
             @Override
             double applyOperation(double[] values) {
                 return -values[0];
             }
         };
-        operations.put('+', add);
-        operations.put('-', sub);
-        operations.put('*', mul);
-        operations.put('/', div);
-        operations.put('\'', umin);
+        operations.put("+", add);
+        operations.put("-", sub);
+        operations.put("*", mul);
+        operations.put("/", div);
+        operations.put("\'", umin);
     }
 
     @Test

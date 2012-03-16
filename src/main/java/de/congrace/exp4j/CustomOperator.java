@@ -4,13 +4,13 @@ public abstract class CustomOperator {
 
     final boolean leftAssociative;
 
-    final char symbol;
+    final String symbol;
 
     final int precedence;
 
     final int operandCount;
 
-    protected CustomOperator(final char symbol, final boolean leftAssociative, final int precedence) {
+    protected CustomOperator(final String symbol, final boolean leftAssociative, final int precedence) {
         super();
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
@@ -18,7 +18,7 @@ public abstract class CustomOperator {
         this.operandCount = 2;
     }
 
-    protected CustomOperator(final char symbol, final boolean leftAssociative, final int precedence, final int operandCount) {
+    protected CustomOperator(final String symbol, final boolean leftAssociative, final int precedence, final int operandCount) {
         super();
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
@@ -26,7 +26,7 @@ public abstract class CustomOperator {
         this.operandCount = operandCount;
     }
 
-    protected CustomOperator(final char symbol) {
+    protected CustomOperator(final String symbol) {
         super();
         this.leftAssociative = true;
         this.symbol = symbol;
@@ -34,7 +34,7 @@ public abstract class CustomOperator {
         this.operandCount = 2;
     }
 
-    protected CustomOperator(final char symbol, final int precedence) {
+    protected CustomOperator(final String symbol, final int precedence) {
         super();
         this.leftAssociative = true;
         this.symbol = symbol;

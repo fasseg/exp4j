@@ -20,9 +20,9 @@ public class ExpressionBuilder {
 
     private final Map<String, CustomFunction> customFunctions;
 
-    private final Map<Character, CustomOperator> operators;
+    private final Map<String, CustomOperator> operators;
 
-    private final List<Character> validOperators;
+    private final List<Character> validOperatorSymbols;
 
     private String expression;
 
@@ -36,7 +36,7 @@ public class ExpressionBuilder {
         this.expression = normalizeExpression(expression);
         customFunctions = getBuiltinFunctions();
         operators = getBuiltinOperators();
-        validOperators = getValidOperators();
+        validOperatorSymbols = getValidOperators();
     }
 
     private List<Character> getValidOperators() {
@@ -57,57 +57,57 @@ public class ExpressionBuilder {
         return expression;
     }
 
-    private Map<Character, CustomOperator> getBuiltinOperators() {
-        CustomOperator add = new CustomOperator('+') {
+    private Map<String, CustomOperator> getBuiltinOperators() {
+        CustomOperator add = new CustomOperator("+") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        CustomOperator sub = new CustomOperator('-') {
+        CustomOperator sub = new CustomOperator("-") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        CustomOperator div = new CustomOperator('/', 2) {
+        CustomOperator div = new CustomOperator("/", 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        CustomOperator mul = new CustomOperator('*', 2) {
+        CustomOperator mul = new CustomOperator("*", 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] * values[1];
             }
         };
-        CustomOperator mod = new CustomOperator('%', false, 2) {
+        CustomOperator mod = new CustomOperator("%", false, 2) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] % values[1];
             }
         };
-        CustomOperator umin = new CustomOperator('\'', false, 5, 1) {
+        CustomOperator umin = new CustomOperator("\'", false, 5, 1) {
             @Override
             double applyOperation(double[] values) {
                 return -values[0];
             }
         };
-        CustomOperator pow = new CustomOperator('^', false, 3, 2) {
+        CustomOperator pow = new CustomOperator("^", false, 3, 2) {
             @Override
             double applyOperation(double[] values) {
                 return Math.pow(values[0], values[1]);
             }
         };
-        Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
-        operations.put('+', add);
-        operations.put('-', sub);
-        operations.put('*', mul);
-        operations.put('/', div);
-        operations.put('\'', umin);
-        operations.put('^', pow);
-        operations.put('%', mod);
+        Map<String, CustomOperator> operations = new HashMap<String, CustomOperator>();
+        operations.put("+", add);
+        operations.put("-", sub);
+        operations.put("*", mul);
+        operations.put("/", div);
+        operations.put("\'", umin);
+        operations.put("^", pow);
+        operations.put("%", mod);
         return operations;
     }
 
@@ -253,10 +253,12 @@ public class ExpressionBuilder {
      */
     public Calculable build() throws UnknownFunctionException, UnparsableExpressionException {
         for (CustomOperator op : operators.values()) {
-            if (!validOperators.contains(op.symbol)) {
-                throw new UnparsableExpressionException("" + op.symbol
-                        + " is not a valid symbol for an operator please choose from: +,-,^,/,*,!,#,§,$,%,&,;,:,~,<,>,|");
-            }
+        	for (int i=0;i<op.symbol.length();i++){
+        		if (!validOperatorSymbols.contains(op.symbol.charAt(i))){
+        			throw new UnparsableExpressionException("" + op.symbol
+        					+ " is not a valid symbol for an operator please choose from: +,-,^,/,*,!,#,§,$,%,&,;,:,~,<,>,|");
+        		}
+        	}
         }
         for (String varName : variables.keySet()) {
             if (customFunctions.containsKey(varName)) {

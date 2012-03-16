@@ -11,9 +11,9 @@ public class Tokenizer {
 
     private final Map<String, CustomFunction> functions;
 
-    private final Map<Character, CustomOperator> operators;
+    private final Map<String, CustomOperator> operators;
 
-    public Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<Character, CustomOperator> operators) {
+    public Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<String, CustomOperator> operators) {
         super();
         this.variableNames = variableNames;
         this.functions = functions;
@@ -39,8 +39,13 @@ public class Tokenizer {
         return functions.containsKey(name);
     }
 
-    private boolean isOperator(char c) {
-        return operators.get(c) != null;
+    private boolean isOperatorCharacter(char c) {
+    	for (String symbol:operators.keySet()){
+    		if (symbol.indexOf(c) != -1){
+    			return true;
+    		}
+    	}
+        return false;
     }
 
     List<Token> getTokens(final String expression) throws UnparsableExpressionException, UnknownFunctionException {
@@ -87,8 +92,22 @@ public class Tokenizer {
             } else if (c == ',') {
                 // a function separator, hopefully
                 lastToken = new FunctionSeparatorToken();
-            } else if (isOperator(c)) {
-                lastToken = getOperation(c);
+            } else if (isOperatorCharacter(c)) {
+            	// might be an operation
+            	StringBuilder symbolBuilder=new StringBuilder();
+            	symbolBuilder.append(c);
+            	int offset=1;
+            	while (chars.length > i+offset && (isOperatorCharacter(chars[i+offset])) && operators.containsKey(symbolBuilder.toString() + chars[i+offset])){
+           			symbolBuilder.append(chars[i+offset]);
+            		offset++;
+            	}
+            	String symbol=symbolBuilder.toString();
+            	if (operators.containsKey(symbol)){
+                    i += offset - 1;
+            		lastToken = new OperatorToken(symbol, operators.get(symbol));
+            	}else{
+            		throw new UnparsableExpressionException(c, i);
+            	}
             } else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
                 lastToken = new ParenthesisToken(String.valueOf(c));
             } else {

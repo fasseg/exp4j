@@ -27,40 +27,40 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TokenizerTest {
-    static Map<Character, CustomOperator> operations = new HashMap<Character, CustomOperator>();
+    static Map<String, CustomOperator> operations = new HashMap<String, CustomOperator>();
 
     static Map<String, CustomFunction> functions = new HashMap<String, CustomFunction>();
 
     @BeforeClass
     public static void setup() throws Exception {
-        CustomOperator add = new CustomOperator('+') {
+        CustomOperator add = new CustomOperator("+") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] + values[1];
             }
         };
-        CustomOperator sub = new CustomOperator('-') {
+        CustomOperator sub = new CustomOperator("-") {
             @Override
             double applyOperation(double[] values) {
                 return values[0] - values[1];
             }
         };
-        CustomOperator div = new CustomOperator('/', 1) {
+        CustomOperator div = new CustomOperator("/", 1) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        CustomOperator mul = new CustomOperator('*', 1) {
+        CustomOperator mul = new CustomOperator("*", 1) {
             @Override
             double applyOperation(double[] values) {
                 return values[0] / values[1];
             }
         };
-        operations.put('+', add);
-        operations.put('-', sub);
-        operations.put('*', mul);
-        operations.put('/', div);
+        operations.put("+", add);
+        operations.put("-", sub);
+        operations.put("*", mul);
+        operations.put("/", div);
 
         CustomFunction abs = new CustomFunction("abs") {
             @Override
