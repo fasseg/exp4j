@@ -97,7 +97,7 @@ public class Tokenizer {
             	StringBuilder symbolBuilder=new StringBuilder();
             	symbolBuilder.append(c);
             	int offset=1;
-            	while (chars.length > i+offset && (isOperatorCharacter(chars[i+offset])) && operators.containsKey(symbolBuilder.toString() + chars[i+offset])){
+            	while (chars.length > i+offset && (isOperatorCharacter(chars[i+offset])) && isOperatorStart(symbolBuilder.toString() + chars[i+offset])){
            			symbolBuilder.append(chars[i+offset]);
             		offset++;
             	}
@@ -120,7 +120,16 @@ public class Tokenizer {
 
     }
 
-    private OperatorToken getOperation(char c) {
+    private boolean isOperatorStart(String op) {
+    	for (String operatorName:operators.keySet()){
+    		if (operatorName.startsWith(op)){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
+	private OperatorToken getOperation(char c) {
         return new OperatorToken(String.valueOf(c), operators.get(c));
     }
 

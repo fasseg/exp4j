@@ -316,6 +316,42 @@ public class ExpressionBuilderTest {
         assertTrue(0d == calc.calculate());
     }
 
+    @Test
+    public void testCustomOperators4() throws Exception {
+        CustomOperator greaterEq = new CustomOperator(">=", true, 4, 2) {
+            @Override
+            double applyOperation(double[] values) {
+            	if (values[0] >= values[1]){
+            		return 1d;
+            	}else{
+            		return 0d;
+            	}
+            }
+        };
+        CustomOperator greater = new CustomOperator(">", true, 4, 2) {
+            @Override
+            double applyOperation(double[] values) {
+            	if (values[0] > values[1]){
+            		return 1d;
+            	}else{
+            		return 0d;
+            	}
+            }
+        };
+        CustomOperator newPlus = new CustomOperator(">=>", true, 4, 2) {
+            @Override
+            double applyOperation(double[] values) {
+            	return values[0] + values[1];
+            }
+        };
+        Calculable calc = new ExpressionBuilder("1>2").withOperation(greater).build();
+        assertTrue(0d == calc.calculate());
+        calc = new ExpressionBuilder("2>=2").withOperation(greaterEq).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("1>=>2").withOperation(newPlus).build();
+        assertTrue(3d == calc.calculate());
+    }
+
     @Test(expected = UnparsableExpressionException.class)
     public void testInvalidOperator1() throws Exception {
         CustomOperator fail = new CustomOperator("2") {
