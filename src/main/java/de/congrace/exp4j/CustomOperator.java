@@ -10,7 +10,7 @@ import org.junit.Test;
  * This class is used to create custom operators for use in expressions<br/>
  * The applyOperation(double[] values) will have to be implemented by users of this class. <br/>
  * <b>Example</b><br/>
- * <code><pre>{@code 
+ * <code><pre>{@code} 
  *      CustomOperator greaterEq = new CustomOperator(">=", true, 4, 2) {
  *            double applyOperation(double[] values) {
  *            	if (values[0] >= values[1]){
@@ -24,8 +24,11 @@ import org.junit.Test;
  *       assertTrue(0d == calc.calculate());
  * </pre></code> When constructing {@link CustomOperator} special attention has to be given to the precedence of the
  * operation. see http://en.wikipedia.org/wiki/Order_of_operations. The precendence values for the builtin operators are
- * as follows: Addition and Subtraction (+,-) have precedence 1 Division, Multiplication, and Modulo (/,*,%) have
- * precedence 3 Exponentiation (^) has precendence 5 Unary minus and plus (+1,-1) have precedence 7
+ * as follows: <br/>
+ * Addition and Subtraction (+,-) have precedence 1<br/>
+ * Division Multiplication, and Modulo (/,*,%) have precedence 3<br/>
+ * Exponentiation (^) has precendence 5 <br/>
+ * Unary minus and plus (+1,-1) have precedence 7
  * 
  * @author frank asseg
  * 
@@ -116,7 +119,7 @@ public abstract class CustomOperator {
 	 * multiplication could look like this:
 	 * 
 	 * <pre>
-	 * <code>{@code
+	 * <code>{@code}
 	 *       double applyOperation(double[] values) {
 	 *           return values[0]*values[1];
 	 *       }

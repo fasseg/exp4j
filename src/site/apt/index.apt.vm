@@ -36,17 +36,11 @@ calc.setVariable("y",2);
 assertTrue(calc.calculate()==0);
 +--
 
-  	Using implicit variable declarations in the expression string using e.g. "f(x,y)":.
-  	
-+--
-Calculable calc = new ExpressionBuilder("f(x,y)=x * y - 2")
-	.build();
-calc.setVariable("x",1);
-calc.setVariable("y",2);
-assertTrue(calc.calculate()==0);
-+--
+* API CHANGE in 0.3.0 Implicit variable declaration no longer possible!
 
-  	Using ExpresionBuilder.withVariable():
+	The feature to use implicit variable declarations as in new ExpressionBuilder("f(x,y)=x*y") has been removed. You will have to use ExpressionBuilder.withVariableNames() or ExpressionBuilder.withVariable() for variable declaration.
+  	
+* Using ExpressionBuilder.withVariable()
   	
 +--
 Calculable calc = new ExpressionBuilder("x * y - 2")
@@ -101,10 +95,10 @@ assertTrue(varX == calc.calculate());
 * Custom operators
 
 	you can extend the abstract class CustomOperator in order to declare custom operators for use in expressions, with the symbol being one of 
-	+,-,^,/,*,!,#,§,$,%,&,;,:,~,\<,\>,|. Be aware that adding a CustomOperator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the '+' operator.
+	!,#,§,$,&,;,:,~,\<,\>,|,=. Be aware that adding a CustomOperator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the '+' operator.
 	The Constructor of a CustomOperator takes up to 4 arguments:
 	
- * the symbol used for this operation (one of +,-,^,/,*,!,#,§,$,%,&,;,:,~,\<,\>,|)
+ * the symbol used for this operation (one of !,#,§,$,&,;,:,~,\<,\>,|,=)
  
  * if the operation is left associative
  
@@ -185,6 +179,12 @@ assertTrue(varX == calc.calculate());
  
 
 * API changes
+
+ * Version 0.3.0: implicit variable declarations á la "f(x)=2x" have been removed
+ 
+ * Version 0.3.0: PostfixExpression API has been removed
+ 
+ * Version 0.3.0: The CustomOperator API has been added
   	
  * Version 0.2.5: the argument type for CustomFunction changed from double to double[] with an array holding the arguments of the function call, in order to allow multi argument functions like max(x,y,z)
  
