@@ -350,6 +350,18 @@ public class ExpressionBuilderTest {
         assertTrue(1d == calc.calculate());
         calc = new ExpressionBuilder("1>=>2").withOperation(newPlus).build();
         assertTrue(3d == calc.calculate());
+        calc = new ExpressionBuilder("1>=>2>2").withOperation(greater).withOperation(newPlus).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("1>=>2>2>=1").withOperation(greater).withOperation(newPlus).withOperation(greaterEq).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("1 >=> 2 > 2 >= 1").withOperation(greater).withOperation(newPlus).withOperation(greaterEq).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("1 >=> 2 >= 2 > 1").withOperation(greater).withOperation(newPlus).withOperation(greaterEq).build();
+        assertTrue(0d == calc.calculate());
+        calc = new ExpressionBuilder("1 >=> 2 >= 2 > 0").withOperation(greater).withOperation(newPlus).withOperation(greaterEq).build();
+        assertTrue(1d == calc.calculate());
+        calc = new ExpressionBuilder("1 >=> 2 >= 2 >= 1").withOperation(greater).withOperation(newPlus).withOperation(greaterEq).build();
+        assertTrue(1d == calc.calculate());
     }
 
     @Test(expected = UnparsableExpressionException.class)
