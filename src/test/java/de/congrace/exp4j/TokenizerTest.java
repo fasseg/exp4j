@@ -35,25 +35,25 @@ public class TokenizerTest {
 	public static void setup() throws Exception {
 		CustomOperator add = new CustomOperator("+") {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] + values[1];
 			}
 		};
 		CustomOperator sub = new CustomOperator("-") {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] - values[1];
 			}
 		};
 		CustomOperator div = new CustomOperator("/", 1) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] / values[1];
 			}
 		};
 		CustomOperator mul = new CustomOperator("*", 1) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] / values[1];
 			}
 		};

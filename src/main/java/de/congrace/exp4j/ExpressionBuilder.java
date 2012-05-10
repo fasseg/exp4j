@@ -47,43 +47,43 @@ public class ExpressionBuilder {
 	private Map<String, CustomOperator> getBuiltinOperators() {
 		CustomOperator add = new CustomOperator("+") {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] + values[1];
 			}
 		};
 		CustomOperator sub = new CustomOperator("-") {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] - values[1];
 			}
 		};
 		CustomOperator div = new CustomOperator("/", 3) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] / values[1];
 			}
 		};
 		CustomOperator mul = new CustomOperator("*", 3) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] * values[1];
 			}
 		};
 		CustomOperator mod = new CustomOperator("%", false, 3) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] % values[1];
 			}
 		};
 		CustomOperator umin = new CustomOperator("\'", false, 7, 1) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return -values[0];
 			}
 		};
 		CustomOperator pow = new CustomOperator("^", false, 5, 2) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return Math.pow(values[0], values[1]);
 			}
 		};

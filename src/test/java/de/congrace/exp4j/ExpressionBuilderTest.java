@@ -260,7 +260,7 @@ public class ExpressionBuilderTest {
 	public void testCustomOperators1() throws Exception {
 		CustomOperator factorial = new CustomOperator("!", true, 6, 1) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				double tmp = 1d;
 				int steps = 1;
 				while (steps < values[0]) {
@@ -287,7 +287,7 @@ public class ExpressionBuilderTest {
 	public void testCustomOperators2() throws Exception {
 		CustomOperator factorial = new CustomOperator("!", true, 6, 1) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				double tmp = 1d;
 				int steps = 1;
 				while (steps < values[0]) {
@@ -309,7 +309,7 @@ public class ExpressionBuilderTest {
 	public void testCustomOperators3() throws Exception {
 		CustomOperator factorial = new CustomOperator(">=", true, 4, 2) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				if (values[0] >= values[1]) {
 					return 1d;
 				} else {
@@ -331,7 +331,7 @@ public class ExpressionBuilderTest {
 	public void testCustomOperators4() throws Exception {
 		CustomOperator greaterEq = new CustomOperator(">=", true, 4, 2) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				if (values[0] >= values[1]) {
 					return 1d;
 				} else {
@@ -341,7 +341,7 @@ public class ExpressionBuilderTest {
 		};
 		CustomOperator greater = new CustomOperator(">", true, 4, 2) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				if (values[0] > values[1]) {
 					return 1d;
 				} else {
@@ -351,7 +351,7 @@ public class ExpressionBuilderTest {
 		};
 		CustomOperator newPlus = new CustomOperator(">=>", true, 4, 2) {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return values[0] + values[1];
 			}
 		};
@@ -384,7 +384,7 @@ public class ExpressionBuilderTest {
 	public void testInvalidOperator1() throws Exception {
 		CustomOperator fail = new CustomOperator("2") {
 			@Override
-			double applyOperation(double[] values) {
+			protected double applyOperation(double[] values) {
 				return 0;
 			}
 		};
