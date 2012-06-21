@@ -255,6 +255,25 @@ public class ExpressionBuilderTest {
 		double expected = Math.log(Math.pow(varX, 3)) * Math.PI;
 		assertTrue(expected == calc.calculate());
 	}
+	
+    // thanks to Marcin Domanski who issued http://jira.congrace.de/jira/browse/EXP-11
+    // i have this test, which fails in 0.2.9
+    @Test
+    public void testCustomFunction18() throws Exception{
+    	CustomFunction minFunction = new CustomFunction("min", 2) {
+            @Override
+            public double applyFunction(double[] values) {
+                double currentMin = Double.POSITIVE_INFINITY;
+                for (double value : values) {
+                    currentMin = Math.min(currentMin, value);
+                }
+                return currentMin;
+            }
+        };
+        ExpressionBuilder b=new ExpressionBuilder("-min(5, 0) + 10").withCustomFunction(minFunction);
+        double calculated = b.build().calculate();
+        assertTrue(calculated == 10);
+    }
 
 	@Test
 	public void testCustomOperators1() throws Exception {
