@@ -18,6 +18,7 @@ package de.congrace.exp4j;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -215,6 +216,28 @@ public class RPNConverterTest {
 		if (!actual.equals(expected)) {
 			System.err.println("expected:\t" + expected);
 			System.err.println("actual:\t" + actual);
+		}
+		assertEquals(actual, expected);
+	}
+	@Test
+	public void testInfixTranslation12() throws Exception {
+		String expr = "-min(4,0)+10";
+		String expected = "4 0 min ' 10 +"; // ' is a placeholder for unary minus
+		CustomFunction minFunction=new CustomFunction("min") {
+			@Override
+			public double applyFunction(double... args) {
+				double tmp=Double.POSITIVE_INFINITY;
+				for (int i=0;i<args.length;i++){
+					if (args[i] < tmp) tmp=args[i];
+				}
+				return tmp;
+			}
+		};
+		customFunctions.put("min", minFunction);
+		String actual = RPNConverter.toRPNExpression(expr, variables, customFunctions, operations).expression;
+		if (!actual.equals(expected)) {
+			System.err.println("expected:\t" + expected);
+			System.err.println("actual:\t\t" + actual);
 		}
 		assertEquals(actual, expected);
 	}
