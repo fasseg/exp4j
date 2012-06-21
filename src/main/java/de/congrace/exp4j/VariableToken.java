@@ -36,6 +36,19 @@ class VariableToken extends CalculationToken {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof VariableToken) {
+			return super.getValue().equals(((VariableToken) obj).getValue());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return super.getValue().hashCode();
+	}
+
+	@Override
 	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
 		double value = variableValues.get(this.getValue());
 		stack.push(value);

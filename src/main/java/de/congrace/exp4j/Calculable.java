@@ -3,7 +3,7 @@ package de.congrace.exp4j;
 /**
  * This is the basic result class of the exp4j {@link ExpressionBuilder}
  * 
- * @author ruckus
+ * @author frank asseg
  * 
  */
 public interface Calculable {
@@ -13,6 +13,16 @@ public interface Calculable {
 	 * @return the result of the calculation
 	 */
 	public double calculate();
+
+	/**
+	 * calculate the result of the expression
+	 * 
+	 * @param variableValues
+	 *            the values of the variable. The values must be in the same order as the declaration of variables in
+	 *            the {@link ExpressionBuilder} used to construct this {@link Calculable} instance
+	 * @return the result of the calculation
+	 */
+	public double calculate(double... variableValues);
 
 	/**
 	 * return the expression in reverse polish postfix notation

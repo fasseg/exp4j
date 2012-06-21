@@ -1,123 +1,52 @@
-/*
-Copyright 2011 frank asseg
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
- */
 package de.congrace.exp4j;
 
 import java.util.Map;
 import java.util.Stack;
 
-/**
- * A {@link Token} for functions
- * 
- * @author fas@congrace.de
- * 
- */
 class FunctionToken extends CalculationToken {
-	/**
-	 * the functionNames that can be used in an expression
-	 * 
-	 * @author ruckus
-	 * 
-	 */
-	enum Function {
-		ABS, ACOS, ASIN, ATAN, CBRT, CEIL, COS, COSH, EXP, EXPM1, FLOOR, LOG, SIN, SINH, SQRT, TAN, TANH
-	}
 
-	private Function function;
+	final String functionName;
 
-	/**
-	 * construct a new {@link FunctionToken}
-	 * 
-	 * @param value
-	 *            the name of the function
-	 * @throws UnknownFunctionException
-	 *             if an unknown function name is encountered
-	 */
-	FunctionToken(String value) throws UnknownFunctionException {
+	final CustomFunction function;
+
+	FunctionToken(String value, CustomFunction function) throws UnknownFunctionException {
 		super(value);
+		if (value == null) {
+			throw new UnknownFunctionException(value);
+		}
 		try {
-			function = Function.valueOf(value.toUpperCase());
+			this.functionName = function.name;
+			this.function = function;
 		} catch (IllegalArgumentException e) {
 			throw new UnknownFunctionException(value);
 		}
-		if (function == null) {
-			throw new UnknownFunctionException(value);
-		}
 	}
 
-	/**
-	 * apply a function to a value x
-	 * 
-	 * @param x
-	 *            the value the function should be applied to
-	 * @return the result of the function
-	 */
-	double applyFunction(double x) {
-		switch (function) {
-		case ABS:
-			return Math.abs(x);
-		case ACOS:
-			return Math.acos(x);
-		case ASIN:
-			return Math.asin(x);
-		case ATAN:
-			return Math.atan(x);
-		case CBRT:
-			return Math.cbrt(x);
-		case CEIL:
-			return Math.ceil(x);
-		case COS:
-			return Math.cos(x);
-		case COSH:
-			return Math.cosh(x);
-		case EXP:
-			return Math.exp(x);
-		case EXPM1:
-			return Math.expm1(x);
-		case FLOOR:
-			return Math.floor(x);
-		case LOG:
-			return Math.log(x);
-		case SIN:
-			return Math.sin(x);
-		case SINH:
-			return Math.sinh(x);
-		case SQRT:
-			return Math.sqrt(x);
-		case TAN:
-			return Math.tan(x);
-		case TANH:
-			return Math.tanh(x);
-		default:
-			return Double.NaN; // should not happen ;)
-		}
+	String getName() {
+		return functionName;
 	}
 
-	/**
-	 * get the {@link Function}
-	 * 
-	 * @return the correspoding {@link Function}
-	 */
-	Function getFunction() {
-		return function;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FunctionToken) {
+			return functionName.equals(((FunctionToken) obj).functionName);
+
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return functionName.hashCode();
 	}
 
 	@Override
 	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-		stack.push(this.applyFunction(stack.pop()));
+		double[] args = new double[function.argc];
+		for (int i = 0; i < function.argc; i++) {
+			args[i] = stack.pop();
+		}
+		stack.push(this.function.applyFunction(args));
 	}
 
 	@Override

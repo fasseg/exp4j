@@ -46,8 +46,7 @@ class ParenthesisToken extends Token {
 	/**
 	 * check the direction of the parenthesis
 	 * 
-	 * @return true if it's a left parenthesis (open) false if it is a right
-	 *         parenthesis (closed)
+	 * @return true if it's a left parenthesis (open) false if it is a right parenthesis (closed)
 	 */
 	boolean isOpen() {
 		return getValue().equals("(") || getValue().equals("[") || getValue().equals("{");
@@ -59,7 +58,7 @@ class ParenthesisToken extends Token {
 			operatorStack.push(this);
 		} else {
 			Token next;
-			while ((next = operatorStack.peek()) instanceof OperatorToken || next instanceof FunctionToken || next instanceof CustomFunction
+			while ((next = operatorStack.peek()) instanceof OperatorToken || next instanceof FunctionToken
 					|| (next instanceof ParenthesisToken && !((ParenthesisToken) next).isOpen())) {
 				output.append(operatorStack.pop().getValue()).append(" ");
 			}

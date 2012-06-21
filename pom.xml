@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.congrace</groupId>
 	<artifactId>exp4j</artifactId>
-	<version>0.2.10-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<name>exp4j</name>
 	<description>A simple mathematical expression evaluator for java.</description>
 	<properties>
@@ -15,8 +15,8 @@
 	</scm>
 	<url>https://exp4j.congrace.de</url>
 	<issueManagement>
-		<url>http://mantis.congrace.de</url>
-		<system>Mantis</system>
+		<url>http://jira.congrace.de/jira/</url>
+		<system>Jira</system>
 	</issueManagement>
 	<mailingLists>
 		<mailingList>

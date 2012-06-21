@@ -1,15 +1,10 @@
 package de.congrace.exp4j;
 
-import java.util.Map;
-import java.util.Stack;
-
-import de.congrace.exp4j.FunctionToken.Function;
-
 /**
  * this classed is used to create custom functions for exp4j<br/>
  * <br/>
  * <b>Example</b><br/>
- * <code><pre>{@code 
+ * <code><pre>{@code}	
  * CustomFunction fooFunc = new CustomFunction("foo") {
  * 		public double applyFunction(double value) {
  * 			return value*Math.E;
@@ -20,11 +15,13 @@ import de.congrace.exp4j.FunctionToken.Function;
  * assertTrue(calc.calculate() == Math.E * varX);
  * }</pre></code>
  * 
- * @author ruckus
+ * @author frank asseg
  * 
  */
-public abstract class CustomFunction extends CalculationToken {
-    private int argc=1;
+public abstract class CustomFunction {
+	final int argc;
+
+	final String name;
 
 	/**
 	 * create a new single value input CustomFunction with a set name
@@ -32,54 +29,25 @@ public abstract class CustomFunction extends CalculationToken {
 	 * @param value
 	 *            the name of the function (e.g. foo)
 	 */
-	protected CustomFunction(String value) throws InvalidCustomFunctionException{
-		super(value);
-		for (Function f:Function.values()) {
-			if (value.equalsIgnoreCase(f.toString())){
-				throw new InvalidCustomFunctionException(value + " is already reserved as a function name");
-			}
+	protected CustomFunction(String name) throws InvalidCustomFunctionException {
+		this.argc = 1;
+		this.name = name;
+		int firstChar = (int) name.charAt(0);
+		if ((firstChar < 65 || firstChar > 90) && (firstChar < 97 || firstChar > 122)) {
+			throw new InvalidCustomFunctionException("functions have to start with a lowercase or uppercase character");
 		}
 	}
 
-    /**
-     * create a new single value input CustomFunction with a set name
-     * 
-     * @param value
-     *            the name of the function (e.g. foo)
-     */
-    protected CustomFunction(String value,int argumentCount) throws InvalidCustomFunctionException{
-        super(value);
-        this.argc=argumentCount;
-        for (Function f:Function.values()) {
-            if (value.equalsIgnoreCase(f.toString())){
-                throw new InvalidCustomFunctionException(value + " is already reserved as a function name");
-            }
-        }
-    }
-
-    /**
-	 * apply the function to a value
+	/**
+	 * create a new single value input CustomFunction with a set name
 	 * 
-	 * @param values
-	 *            the values to which the function should be applied.
-	 * @return the function value
+	 * @param value
+	 *            the name of the function (e.g. foo)
 	 */
-	public abstract double applyFunction(double[] values);
-
-    @Override
-	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-	    double[] args=new double[argc];
-	    for (int i=0;i<argc;i++) {
-	        args[i]=stack.pop();
-	    }
-		stack.push(this.applyFunction(args));
+	protected CustomFunction(String name, int argumentCount) throws InvalidCustomFunctionException {
+		this.argc = argumentCount;
+		this.name = name;
 	}
 
-	@Override
-	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
-		operatorStack.push(this);
-	}
-	public int getArgumentCount() {
-	    return argc;
-	}
+	public abstract double applyFunction(double... args);
 }

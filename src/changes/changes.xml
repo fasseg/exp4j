@@ -24,5 +24,8 @@
 			<action dev="fas" type="add">added references to site</action>
 			<action dev="fas" type="add">added multivariable custom function handling</action>
 		</release>
+		<release version="0.3.0" description="added custom operators">
+			<action dev="fas" type="add">added CustomOperator to exp4j. see http://jira.congrace.de/jira/browse/EXP-1</action>
+		</release>
 	</body>
 </document>

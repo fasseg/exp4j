@@ -26,56 +26,7 @@ import java.util.Stack;
  */
 class OperatorToken extends CalculationToken {
 
-	/**
-	 * the valid {@link Operation}s for the {@link OperatorToken}
-	 * 
-	 * @author fas@congrace.de
-	 */
-	enum Operation {
-		ADDITION(1, true), SUBTRACTION(1, true), MULTIPLICATION(2, true), DIVISION(2, true), MODULO(2, true), EXPONENTIATION(3, false), UNARY_MINUS(4, false), UNARY_PLUS(
-				4, false);
-		private final int precedence;
-		private final boolean leftAssociative;
-
-		private Operation(int precedence, boolean leftAssociative) {
-			this.precedence = precedence;
-			this.leftAssociative = leftAssociative;
-		}
-	}
-
-	/**
-	 * return a corresponding {@link Operation} for a symbol
-	 * 
-	 * @param c
-	 *            the symbol of the operation
-	 * @return the corresponding {@link Operation}
-	 */
-	static Operation getOperation(char c) {
-		switch (c) {
-		case '+':
-			return Operation.ADDITION;
-		case '-':
-			return Operation.SUBTRACTION;
-		case '*':
-			return Operation.MULTIPLICATION;
-		case '/':
-			return Operation.DIVISION;
-		case '^':
-			return Operation.EXPONENTIATION;
-		case '#':
-			return Operation.UNARY_MINUS;
-		case '%':
-			return Operation.MODULO;
-		default:
-			return null;
-		}
-	}
-
-	static boolean isOperator(char c) {
-		return getOperation(c) != null;
-	}
-
-	private final Operation operation;
+	CustomOperator operation;
 
 	/**
 	 * construct a new {@link OperatorToken}
@@ -83,41 +34,22 @@ class OperatorToken extends CalculationToken {
 	 * @param value
 	 *            the symbol (e.g.: '+')
 	 * @param operation
-	 *            the {@link Operation} of this {@link Token}
+	 *            the {@link CustomOperator} of this {@link Token}
 	 */
-	OperatorToken(String value, Operation operation) {
+	OperatorToken(String value, CustomOperator operation) {
 		super(value);
 		this.operation = operation;
 	}
 
 	/**
-	 * apply the {@link Operation}
+	 * apply the {@link CustomOperator}
 	 * 
 	 * @param values
 	 *            the doubles to operate on
-	 * @return the result of the {@link Operation}
+	 * @return the result of the {@link CustomOperator}
 	 */
 	double applyOperation(double... values) {
-		switch (operation) {
-		case ADDITION:
-			return values[0] + values[1];
-		case SUBTRACTION:
-			return values[0] - values[1];
-		case MULTIPLICATION:
-			return values[0] * values[1];
-		case EXPONENTIATION:
-			return Math.pow(values[0], values[1]);
-		case DIVISION:
-			return values[0] / values[1];
-		case UNARY_MINUS:
-			return -values[0];
-		case UNARY_PLUS:
-			return values[0];
-		case MODULO:
-			return values[0] % values[1];
-		default:
-			return 0;
-		}
+		return operation.applyOperation(values);
 	}
 
 	@Override
@@ -129,66 +61,25 @@ class OperatorToken extends CalculationToken {
 		return false;
 	}
 
-	int getOperandCount() {
-		switch (operation) {
-		case ADDITION:
-		case SUBTRACTION:
-		case MULTIPLICATION:
-		case DIVISION:
-		case EXPONENTIATION:
-		case MODULO:
-			return 2;
-		case UNARY_MINUS:
-		case UNARY_PLUS:
-			return 1;
-		default:
-			return 0;
-		}
-	}
-
-	/**
-	 * get the {@link Operation} of this {@link Token}
-	 * 
-	 * @return the {@link Operation}
-	 */
-	Operation getOperation() {
-		return operation;
-	}
-
-	int getPrecedence() {
-		return operation.precedence;
-	}
-
 	@Override
 	public int hashCode() {
 		return getValue().hashCode();
 	}
 
-	/**
-	 * check if the operation is left associative
-	 * 
-	 * @return true if left associative, otherwise false
-	 */
-	boolean isLeftAssociative() {
-		return operation.leftAssociative;
-	}
-
 	@Override
 	void mutateStackForCalculation(Stack<Double> stack, Map<String, Double> variableValues) {
-		if (this.getOperandCount() == 2) {
-			final double n2 = stack.pop();
-			final double n1 = stack.pop();
-			stack.push(this.applyOperation(n1, n2));
-		} else if (this.getOperandCount() == 1) {
-			final double n1 = stack.pop();
-			stack.push(this.applyOperation(n1));
+		final double[] operands = new double[operation.operandCount];
+		for (int i = 0; i < operation.operandCount; i++) {
+			operands[operation.operandCount - i - 1] = stack.pop();
 		}
+		stack.push(operation.applyOperation(operands));
 	}
 
 	@Override
 	void mutateStackForInfixTranslation(Stack<Token> operatorStack, StringBuilder output) {
 		Token before;
-		while (!operatorStack.isEmpty() && (before = operatorStack.peek()) != null && (before instanceof OperatorToken || before instanceof FunctionToken)) {
+		while (!operatorStack.isEmpty() && (before = operatorStack.peek()) != null
+				&& (before instanceof OperatorToken || before instanceof FunctionToken)) {
 			if (before instanceof FunctionToken) {
 				operatorStack.pop();
 				output.append(before.getValue()).append(" ");
@@ -204,5 +95,13 @@ class OperatorToken extends CalculationToken {
 			}
 		}
 		operatorStack.push(this);
+	}
+
+	private boolean isLeftAssociative() {
+		return operation.leftAssociative;
+	}
+
+	private int getPrecedence() {
+		return operation.precedence;
 	}
 }
