@@ -347,6 +347,12 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
+	public void testModulo1() throws Exception{
+		double result = new ExpressionBuilder("33%(20/2)%2").build().calculate();
+		assertTrue(result == 1d);
+	}
+
+	@Test
 	public void testCustomOperators4() throws Exception {
 		CustomOperator greaterEq = new CustomOperator(">=", true, 4, 2) {
 			@Override

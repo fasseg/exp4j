@@ -69,7 +69,7 @@ public class ExpressionBuilder {
 				return values[0] * values[1];
 			}
 		};
-		CustomOperator mod = new CustomOperator("%", false, 3) {
+		CustomOperator mod = new CustomOperator("%", true, 3) {
 			@Override
 			protected double applyOperation(double[] values) {
 				return values[0] % values[1];
