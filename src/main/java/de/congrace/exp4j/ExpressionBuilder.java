@@ -75,7 +75,7 @@ public class ExpressionBuilder {
 				return values[0] % values[1];
 			}
 		};
-		CustomOperator umin = new CustomOperator("\'", false, 7, 1) {
+		CustomOperator umin = new CustomOperator("\'", false, 5, 1) {
 			@Override
 			protected double applyOperation(double[] values) {
 				return -values[0];

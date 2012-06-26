@@ -587,13 +587,13 @@ public class ExpressionBuilderTest {
 		assertTrue(operators.get("^").precedence > operators.get("-").precedence);
 		assertTrue(operators.get("^").precedence > operators.get("*").precedence);
 		assertTrue(operators.get("^").precedence > operators.get("/").precedence);
-		assertTrue(operators.get("^").precedence < operators.get("\'").precedence);
+		assertTrue(operators.get("^").precedence == operators.get("\'").precedence);
 
 		assertTrue(operators.get("\'").precedence > operators.get("+").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("-").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("*").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("/").precedence);
-		assertTrue(operators.get("\'").precedence > operators.get("^").precedence);
+		assertTrue(operators.get("\'").precedence == operators.get("^").precedence);
 	}
 
 	@Test
@@ -838,6 +838,47 @@ public class ExpressionBuilderTest {
 		assertTrue(expected == calc.calculate());
 	}
 
+	@Test
+	public void testExpression35() throws Exception {
+		String expr = "-3^2";
+		double expected = -Math.pow(3,2);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression36() throws Exception {
+		String expr = "-3^-2";
+		double expected = -Math.pow(3,-2);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression37() throws Exception {
+		String expr = "-3^-2^-4";
+		double expected = -Math.pow(3,-Math.pow(2, -4));
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression38() throws Exception {
+		String expr = "-3^(-2*3)";
+		double expected = -Math.pow(3,-6);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression39() throws Exception {
+		String expr = "3^(2*-3)";
+		double expected = Math.pow(3,-6);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
