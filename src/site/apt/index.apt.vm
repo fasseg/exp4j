@@ -110,19 +110,19 @@ assertTrue(varX == calc.calculate());
  * the number of operands the operator has (1 or 2) 
 
 +--
-        CustomOperator factorial = new CustomOperator('!', true, 6, 1) {
-            @Override
-            double applyOperation(double[] values) {
-                double tmp = 1d;
-                int steps = 1;
-                while (steps < values[0]) {
-                    tmp = tmp * (++steps);
-                }
-                return tmp;
-            }
-        };
-        Calculable calc = new ExpressionBuilder("11!").withOperation(factorial).build();
-        assertTrue(39916800d == calc.calculate());
+CustomOperator factorial = new CustomOperator('!', true, 6, 1) {
+	@Override
+    double applyOperation(double[] values) {
+    	double tmp = 1d;
+        int steps = 1;
+        while (steps < values[0]) {
+        	tmp = tmp * (++steps);
+        }
+        return tmp;
+    }
+};
+Calculable calc = new ExpressionBuilder("11!").withOperation(factorial).build();
+assertTrue(39916800d == calc.calculate());
 
 +--
 
@@ -143,7 +143,25 @@ assertTrue(varX == calc.calculate());
  
  * Modulo: '2 % 2'
  
-	 
+
+* Precedence of unary minus
+
+	In order to accommodate different use cases the precedence for the unary operators in respect to exponentiation can be set via the System property "exp4j.unary.precedence.high".
+	You can set the property via System.getProperty(PROPERTY_UNARY_HIGH_PRECEDENCE,"false") in order to change evaluation from an expression like "-3^2" from "(-3)^2" to "-(3^2)":
+
++--
+
+String expr = "-3^2";
+System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
+Calculable calc = new ExpressionBuilder(expr).build();
+assertTrue(-Math.pow(3, 2) == calc.calculate()); // evaluates to '-9'
+
+System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
+calc = new ExpressionBuilder(expr).build();
+assertTrue(Math.pow(-3,2) == calc.calculate()); // evaluates to '9'
+
++--
+
 	 
 * Built-in functions
 	 
@@ -183,6 +201,8 @@ assertTrue(varX == calc.calculate());
 
 * API changes
 
+ * Version 0.3.2: choice for unary minus precedence via System property
+
  * Version 0.3.0: implicit variable declarations á la "f(x)=2x" have been removed
  
  * Version 0.3.0: PostfixExpression API has been removed
@@ -206,7 +226,10 @@ assertTrue(varX == calc.calculate());
  
  * {{{http://www.javierllamas.es/index.php/en/blog/14-interprete-de-formulas-para-java.html}Javier Llamas}} blogged about exp4j
  
- * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j 
+ * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
+ 
+ * {{{http://simplesassim.wordpress.com/?s=exp4j}Fernando Ribeiro}} blogged about exp4j
+  
 
 * References
  
@@ -220,7 +243,7 @@ assertTrue(varX == calc.calculate());
  
  * {{{http://www.opensourceautomation.net/}free\{dom\}}} building automation framework uses exp4j
  
-  *{{{http://jwork.org/jhepwork/}jHepWork}} a Multiplatform environment for scientific computation and data analysis uses exp4j
+ *{{{http://jwork.org/jhepwork/}jHepWork}} a Multiplatform environment for scientific computation and data analysis uses exp4j
  
 
  Please {{{mailto:fas@congrace.de}let me know}} if you're project uses exp4j and you want it listed here

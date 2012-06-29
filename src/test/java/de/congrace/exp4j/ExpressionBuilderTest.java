@@ -255,25 +255,25 @@ public class ExpressionBuilderTest {
 		double expected = Math.log(Math.pow(varX, 3)) * Math.PI;
 		assertTrue(expected == calc.calculate());
 	}
-	
-    // thanks to Marcin Domanski who issued http://jira.congrace.de/jira/browse/EXP-11
-    // i have this test, which fails in 0.2.9
-    @Test
-    public void testCustomFunction18() throws Exception{
-    	CustomFunction minFunction = new CustomFunction("min", 2) {
-            @Override
-            public double applyFunction(double[] values) {
-                double currentMin = Double.POSITIVE_INFINITY;
-                for (double value : values) {
-                    currentMin = Math.min(currentMin, value);
-                }
-                return currentMin;
-            }
-        };
-        ExpressionBuilder b=new ExpressionBuilder("-min(5, 0) + 10").withCustomFunction(minFunction);
-        double calculated = b.build().calculate();
-        assertTrue(calculated == 10);
-    }
+
+	// thanks to Marcin Domanski who issued http://jira.congrace.de/jira/browse/EXP-11
+	// i have this test, which fails in 0.2.9
+	@Test
+	public void testCustomFunction18() throws Exception {
+		CustomFunction minFunction = new CustomFunction("min", 2) {
+			@Override
+			public double applyFunction(double[] values) {
+				double currentMin = Double.POSITIVE_INFINITY;
+				for (double value : values) {
+					currentMin = Math.min(currentMin, value);
+				}
+				return currentMin;
+			}
+		};
+		ExpressionBuilder b = new ExpressionBuilder("-min(5, 0) + 10").withCustomFunction(minFunction);
+		double calculated = b.build().calculate();
+		assertTrue(calculated == 10);
+	}
 
 	@Test
 	public void testCustomOperators1() throws Exception {
@@ -347,7 +347,7 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void testModulo1() throws Exception{
+	public void testModulo1() throws Exception {
 		double result = new ExpressionBuilder("33%(20/2)%2").build().calculate();
 		assertTrue(result == 1d);
 	}
@@ -587,13 +587,13 @@ public class ExpressionBuilderTest {
 		assertTrue(operators.get("^").precedence > operators.get("-").precedence);
 		assertTrue(operators.get("^").precedence > operators.get("*").precedence);
 		assertTrue(operators.get("^").precedence > operators.get("/").precedence);
-		assertTrue(operators.get("^").precedence == operators.get("\'").precedence);
+		assertTrue(operators.get("^").precedence < operators.get("\'").precedence);
 
 		assertTrue(operators.get("\'").precedence > operators.get("+").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("-").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("*").precedence);
 		assertTrue(operators.get("\'").precedence > operators.get("/").precedence);
-		assertTrue(operators.get("\'").precedence == operators.get("^").precedence);
+		assertTrue(operators.get("\'").precedence > operators.get("^").precedence);
 	}
 
 	@Test
@@ -841,44 +841,61 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression35() throws Exception {
 		String expr = "-3^2";
-		double expected = -Math.pow(3,2);
+		double expected = -Math.pow(3, 2);
+		System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+		System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
+		calc = new ExpressionBuilder(expr).build();
+		assertTrue(9d == calc.calculate());
 	}
 
 	@Test
 	public void testExpression36() throws Exception {
 		String expr = "-3^-2";
-		double expected = -Math.pow(3,-2);
+		double expected = -Math.pow(3, -2);
+		System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+		System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
+		calc = new ExpressionBuilder(expr).build();
+		assertTrue(Math.pow(-3, -2) == calc.calculate());
 	}
 
 	@Test
 	public void testExpression37() throws Exception {
 		String expr = "-3^-2^-4";
-		double expected = -Math.pow(3,-Math.pow(2, -4));
+		double expected = -Math.pow(3, -Math.pow(2, -4));
+		System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+		System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
 	}
 
 	@Test
 	public void testExpression38() throws Exception {
 		String expr = "-3^(-2*3)";
-		double expected = -Math.pow(3,-6);
+		double expected = -Math.pow(3, -6);
+		System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+		System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
+		calc = new ExpressionBuilder(expr).build();
+		assertTrue(Math.pow(-3, -6) == calc.calculate());
 	}
 
 	@Test
 	public void testExpression39() throws Exception {
 		String expr = "3^(2*-3)";
-		double expected = Math.pow(3,-6);
+		double expected = Math.pow(3, -6);
+		System.setProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE, "false");
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+		System.clearProperty(ExpressionBuilder.PROPERTY_UNARY_HIGH_PRECEDENCE);
+		calc = new ExpressionBuilder(expr).build();
+		assertTrue(Math.pow(3, 2 * -3) == calc.calculate());
 	}
 
-	
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;

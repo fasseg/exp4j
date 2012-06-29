@@ -15,6 +15,13 @@ import java.util.Map.Entry;
  * 
  */
 public class ExpressionBuilder {
+	
+	/**
+	 * Property name for unary precedence choice. You can set System.getProperty(PROPERTY_UNARY_HIGH_PRECEDENCE,"false")
+	 * in order to change evaluation from an expression like "-3^2" from "(-3)^2" to "-(3^2)"
+	 */
+	public static final String PROPERTY_UNARY_HIGH_PRECEDENCE="exp4j.unary.precedence.high";
+	
 	private final Map<String, Double> variables = new LinkedHashMap<String, Double>();
 
 	private final Map<String, CustomFunction> customFunctions;
@@ -24,6 +31,8 @@ public class ExpressionBuilder {
 	private Map<String, CustomOperator> customOperators = new HashMap<String, CustomOperator>();
 
 	private final List<Character> validOperatorSymbols;
+
+	private final boolean highUnaryPrecedence;
 
 	private String expression;
 
@@ -35,6 +44,7 @@ public class ExpressionBuilder {
 	 */
 	public ExpressionBuilder(String expression) {
 		this.expression = expression;
+		highUnaryPrecedence = System.getProperty(PROPERTY_UNARY_HIGH_PRECEDENCE) == null || !System.getProperty(PROPERTY_UNARY_HIGH_PRECEDENCE).equals("false");
 		customFunctions = getBuiltinFunctions();
 		builtInOperators = getBuiltinOperators();
 		validOperatorSymbols = getValidOperators();
@@ -75,7 +85,7 @@ public class ExpressionBuilder {
 				return values[0] % values[1];
 			}
 		};
-		CustomOperator umin = new CustomOperator("\'", false, 5, 1) {
+		CustomOperator umin = new CustomOperator("\'", false, this.highUnaryPrecedence ? 7 : 5, 1) {
 			@Override
 			protected double applyOperation(double[] values) {
 				return -values[0];
