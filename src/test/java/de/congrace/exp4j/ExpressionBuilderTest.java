@@ -276,7 +276,7 @@ public class ExpressionBuilderTest {
 	}
 
 	// thanks to Sylvain Machefert who issued http://jira.congrace.de/jira/browse/EXP-11
-    // i have this test, which fails in 0.3.3
+    // i have this test, which fails in 0.3.2
     @Test
     public void testCustomFunction19() throws Exception {
         CustomFunction minFunction = new CustomFunction("power", 2) {
