@@ -231,7 +231,7 @@ public class ExpressionBuilderTest {
 		CustomFunction custom1 = new CustomFunction("multiply", 3) {
 			@Override
 			public double applyFunction(double... values) {
-				return values[0] * values[1];
+				return values[0] * values[1] * values[2];
 			}
 		};
 		double varX = 1;
@@ -275,7 +275,22 @@ public class ExpressionBuilderTest {
 		assertTrue(calculated == 10);
 	}
 
-	@Test
+	// thanks to Sylvain Machefert who issued http://jira.congrace.de/jira/browse/EXP-11
+    // i have this test, which fails in 0.3.3
+    @Test
+    public void testCustomFunction19() throws Exception {
+        CustomFunction minFunction = new CustomFunction("power", 2) {
+            @Override
+            public double applyFunction(double[] values) {
+                return Math.pow(values[0], values[1]);
+            }
+        };
+        ExpressionBuilder b = new ExpressionBuilder("power(2,3)").withCustomFunction(minFunction);
+        double calculated = b.build().calculate();
+        assertTrue(calculated == Math.pow(2, 3));
+    }
+
+    @Test
 	public void testCustomOperators1() throws Exception {
 		CustomOperator factorial = new CustomOperator("!", true, 6, 1) {
 			@Override

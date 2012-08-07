@@ -46,7 +46,7 @@ class FunctionToken extends CalculationToken {
 		for (int i = 0; i < function.argc; i++) {
 			args[i] = stack.pop();
 		}
-		stack.push(this.function.applyFunction(args));
+		stack.push(this.function.applyFunction(ArrayUtil.reverse(args)));
 	}
 
 	@Override
