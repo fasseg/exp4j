@@ -24,6 +24,14 @@ double result1=calc.calculate();
 
 * Variable declaration
 
+	Variable names must start with a letter or the underscore (_) and can only include letters, digits or underscores.
+	
+	the following are valid variable names:
+	 * varX
+	 * _x1
+	 * _var_X_1
+	 while for e.g. 1_var_x is not as it does not start with a letter or a underscore.
+	  
 	One has to make sure that the variable names are passed into the ExpressionBuilder before calling build(). If variables are used in the expression without setting at least their names,
 	an UnparseableErpessionExcetion will be thrown. The following three examples demonstrate the different possibilities to have exp4j recognize variables: 
 

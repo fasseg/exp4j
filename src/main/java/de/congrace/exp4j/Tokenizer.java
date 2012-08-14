@@ -21,7 +21,7 @@ class Tokenizer {
 		this.operators = operators;
 	}
 
-	private boolean isDigit(char c) {
+	private boolean isDigitOrDecimalSeparator(char c) {
 		return Character.isDigit(c) || c == '.';
 	}
 
@@ -58,12 +58,12 @@ class Tokenizer {
 			char c = chars[i];
 			if (c == ' ')
 				continue;
-			if (isDigit(c)) {
+			if (Character.isDigit(c)) {
 				final StringBuilder valueBuilder = new StringBuilder(1);
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				while (chars.length > i + numberLen && isDigit(chars[i + numberLen])) {
+				while (chars.length > i + numberLen && isDigitOrDecimalSeparator(chars[i + numberLen])) {
 					valueBuilder.append(chars[i + numberLen]);
 					numberLen++;
 				}

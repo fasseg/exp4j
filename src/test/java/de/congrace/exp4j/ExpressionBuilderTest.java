@@ -13,6 +13,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Categories.ExcludeCategory;
 
 public class ExpressionBuilderTest {
 	@Test
@@ -798,6 +799,23 @@ public class ExpressionBuilderTest {
 		double expected = 24.3343 % 3;
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testVarname1() throws Exception {
+		String expr = "12.23 * foo.bar";
+		Calculable calc = new ExpressionBuilder(expr)
+			.withVariable("foo.bar", 1d)
+			.build();
+		assertTrue(12.23 == calc.calculate());
+	}
+
+	public void testVarname2() throws Exception {
+		String expr = "12.23 * foo.bar";
+		Calculable calc = new ExpressionBuilder(expr)
+			.withVariable("_foo", 1d)
+			.build();
+		assertTrue(12.23 == calc.calculate());
 	}
 
 	@Test
