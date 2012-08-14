@@ -1,6 +1,12 @@
 package de.congrace.exp4j;
 
-import static org.junit.Assert.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.floor;
+import static java.lang.Math.log;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.internal.runners.statements.RunAfters;
-
-import static java.lang.Math.*;
 
 public class ConcurrentExpressionBuilderTest {
 	@Test

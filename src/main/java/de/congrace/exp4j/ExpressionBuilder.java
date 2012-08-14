@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.internal.matchers.IsCollectionContaining;
-
 /**
  * This is Builder implementation for the exp4j API used to create a Calculable
  * instance for the user

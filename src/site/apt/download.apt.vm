@@ -12,10 +12,6 @@ Download exp4j ${project.version}
   exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-javadoc.jar}Javadoc}}\
   exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-sources.jar}Sources}}
 
-Older Versions
-
-  Older version  can be downloaded from the nexus server {{http://nexus.congrace.de/nexus/index.html}}
-
 Using Apache Maven
 
   you can include the artifact
