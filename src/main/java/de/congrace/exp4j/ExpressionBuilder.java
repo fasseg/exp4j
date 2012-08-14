@@ -285,11 +285,11 @@ public class ExpressionBuilder {
 		char[] name = varName.toCharArray();
 		for (int i = 0; i < name.length; i++) {
 			if (i == 0){
-				if (!Character.isAlphabetic(name[i]) && name[i] != '_'){
+				if (!Character.isLetter(name[i]) && name[i] != '_'){
 					throw new UnparsableExpressionException(varName + " is not a valid variable name: character '" + name[i] + " at " + i); 
 				}
 			}else{
-				if (!Character.isAlphabetic(name[i]) && !Character.isDigit(name[i]) && name[i] != '_'){
+				if (!Character.isLetter(name[i]) && !Character.isDigit(name[i]) && name[i] != '_'){
 					throw new UnparsableExpressionException(varName + " is not a valid variable name: character '" + name[i] + " at " + i); 
 				}
 			}
