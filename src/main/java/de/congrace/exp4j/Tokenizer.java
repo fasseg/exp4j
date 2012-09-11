@@ -13,8 +13,7 @@ class Tokenizer {
 
 	private final Map<String, CustomOperator> operators;
 
-	Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions,
-			Map<String, CustomOperator> operators) {
+	Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<String, CustomOperator> operators) {
 		super();
 		this.variableNames = variableNames;
 		this.functions = functions;
@@ -23,6 +22,10 @@ class Tokenizer {
 
 	private boolean isDigitOrDecimalSeparator(char c) {
 		return Character.isDigit(c) || c == '.';
+	}
+
+	private boolean isNotationSeparator(char c) {
+		return c == 'e' || c == 'E';
 	}
 
 	private boolean isVariable(String name) {
@@ -63,8 +66,21 @@ class Tokenizer {
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				while (chars.length > i + numberLen && isDigitOrDecimalSeparator(chars[i + numberLen])) {
-					valueBuilder.append(chars[i + numberLen]);
+				boolean lastCharNotationSeparator = false;
+				while (chars.length > i + numberLen) {
+					if (isDigitOrDecimalSeparator(chars[i + numberLen])) {
+						valueBuilder.append(chars[i + numberLen]);
+					}else if (isNotationSeparator(chars[i+numberLen])){
+						if (lastCharNotationSeparator == true){
+							throw new UnparsableExpressionException("Expression can have only one notation separator");
+						}
+						valueBuilder.append(chars[i + numberLen]);
+						lastCharNotationSeparator = true;
+					}else if (lastCharNotationSeparator && (chars[i+numberLen] == '-' || chars[i+numberLen] == '+')){
+						valueBuilder.append(chars[i + numberLen]);
+					}else {
+						break; // break out of the while loop here, since the number seem finished
+					}
 					numberLen++;
 				}
 				i += numberLen - 1;

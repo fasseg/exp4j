@@ -37,7 +37,17 @@ class NumberToken extends CalculationToken {
 	 */
 	NumberToken(String value) {
 		super(value);
-		this.doubleValue = Double.parseDouble(value);
+		if (value.indexOf('E') > 0 || value.indexOf('e') > 0){
+			//scientific notation as requested in EXP-17
+			value = value.toLowerCase();
+			int pos = value.indexOf('e');
+			double mantissa = Double.parseDouble(value.substring(0,pos));
+			double exponent = Double.parseDouble(value.substring(pos + 1));
+			this.doubleValue = mantissa * Math.pow(10, exponent);
+		}else{
+			this.doubleValue = Double.parseDouble(value);
+		}
+		System.out.println("value is " + value + " = " + this.doubleValue);
 	}
 
 	@Override
