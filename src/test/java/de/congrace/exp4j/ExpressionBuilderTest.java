@@ -938,6 +938,19 @@ public class ExpressionBuilderTest {
 		assertTrue(expected == calc.calculate());
 	}
 
+	@Test(expected=UnparsableExpressionException.class)
+	public void testExpression40() throws Exception {
+		String expr;
+		double expected;
+		// invalid!! exp4j still needs the explicit * operator
+		expr = "2x + 5";
+		expected = 2 * 4 + 5;
+		
+		Calculable calc = new ExpressionBuilder(expr)
+			.withVariable("x", 4)
+			.build();
+	}
+
 	@Test
 	public void testExpression5() throws Exception {
 		String expr;
