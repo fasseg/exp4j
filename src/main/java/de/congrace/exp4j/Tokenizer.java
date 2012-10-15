@@ -1,6 +1,5 @@
 package de.congrace.exp4j;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +49,11 @@ class Tokenizer {
 		return false;
 	}
 
-	List<Token> getTokens(final String expression)
-			throws UnparsableExpressionException, UnknownFunctionException {
+	List<Token> getTokens(final String expression) throws UnparsableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = expression.toCharArray();
 		// iterate over the chars and fork on different types of input
-		Token lastToken = null;
+		Token lastToken;
 		for (int i = 0; i < chars.length; i++) {
 			char c = chars[i];
 			if (c == ' ')
@@ -65,26 +63,19 @@ class Tokenizer {
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				while (chars.length > i + numberLen
-						&& isDigitOrDecimalSeparator(chars[i + numberLen])) {
+				while (chars.length > i + numberLen && isDigitOrDecimalSeparator(chars[i + numberLen])) {
 					valueBuilder.append(chars[i + numberLen]);
 					numberLen++;
 				}
 				i += numberLen - 1;
 				lastToken = new NumberToken(valueBuilder.toString());
 			} else if (Character.isLetter(c) || c == '_') {
-				if (lastToken != null && lastToken instanceof NumberToken) {
-					throw new UnparsableExpressionException(
-							"invalid character at position" + (i + 1) + ": '" + c
-									+ "'. Might be a missing '*' operator");
-				}
 				// can be a variable or function
 				final StringBuilder nameBuilder = new StringBuilder();
 				nameBuilder.append(c);
 				int offset = 1;
 				while (chars.length > i + offset
-						&& (Character.isLetter(chars[i + offset])
-								|| Character.isDigit(chars[i + offset]) || chars[i
+						&& (Character.isLetter(chars[i + offset]) || Character.isDigit(chars[i + offset]) || chars[i
 								+ offset] == '_')) {
 					nameBuilder.append(chars[i + offset++]);
 				}
@@ -109,10 +100,8 @@ class Tokenizer {
 				StringBuilder symbolBuilder = new StringBuilder();
 				symbolBuilder.append(c);
 				int offset = 1;
-				while (chars.length > i + offset
-						&& (isOperatorCharacter(chars[i + offset]))
-						&& isOperatorStart(symbolBuilder.toString()
-								+ chars[i + offset])) {
+				while (chars.length > i + offset && (isOperatorCharacter(chars[i + offset]))
+						&& isOperatorStart(symbolBuilder.toString() + chars[i + offset])) {
 					symbolBuilder.append(chars[i + offset]);
 					offset++;
 				}
@@ -123,8 +112,7 @@ class Tokenizer {
 				} else {
 					throw new UnparsableExpressionException(c, i);
 				}
-			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{'
-					|| c == '}') {
+			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
 				lastToken = new ParenthesisToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
