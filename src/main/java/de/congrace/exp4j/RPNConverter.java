@@ -1,5 +1,6 @@
 package de.congrace.exp4j;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -49,7 +50,8 @@ abstract class RPNConverter {
 		final Tokenizer tokenizer = new Tokenizer(variables.keySet(), customFunctions, operators);
 		final StringBuilder output = new StringBuilder(infix.length());
 		final Stack<Token> operatorStack = new Stack<Token>();
-		for (final Token token : tokenizer.getTokens(substituteUnaryOperators(infix, operators))) {
+		List<Token> tokens = tokenizer.getTokens(substituteUnaryOperators(infix, operators));
+		for (final Token token : tokens) {
 			token.mutateStackForInfixTranslation(operatorStack, output);
 		}
 		// all tokens read, put the rest of the operations on the output;

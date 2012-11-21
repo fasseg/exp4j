@@ -55,8 +55,11 @@ class Tokenizer {
 	List<Token> getTokens(final String expression) throws UnparsableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = expression.toCharArray();
+		int openBraces=0;
+		int openCurly=0;
+		int openSquare=0;
 		// iterate over the chars and fork on different types of input
-		Token lastToken;
+		Token lastToken=null;
 		for (int i = 0; i < chars.length; i++) {
 			char c = chars[i];
 			if (c == ' ')
@@ -128,13 +131,54 @@ class Tokenizer {
 				} else {
 					throw new UnparsableExpressionException(expression,  c, i + 1);
 				}
-			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
+			}else if (c == '('){
+				openBraces++;
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			} else if (c == '{'){
+				openCurly++;
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			}else if( c == '['){
+				openSquare++;
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			}else if ( c == ')'){
+				openBraces--;
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			}else if ( c == '}'){
+				openCurly--;
+				lastToken = new ParenthesisToken(String.valueOf(c));
+			}else if ( c == ']'){
+				openSquare--;
 				lastToken = new ParenthesisToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
 				throw new UnparsableExpressionException(expression, c, i + 1);
 			}
 			tokens.add(lastToken);
+		}
+		if (openCurly != 0 || openBraces != 0 | openSquare != 0){
+			StringBuilder errorBuilder=new StringBuilder();
+			errorBuilder.append("There are ");
+			boolean first=true;
+			if (openBraces != 0) {
+				errorBuilder.append(Math.abs(openBraces) + " unmatched parantheses ");
+				first=false;
+			}
+			if (openCurly != 0) {
+				if (!first){
+					errorBuilder.append(" and ");
+				}
+				errorBuilder.append(Math.abs(openCurly) + " unmatched curly brackets ");
+				first=false;
+			}
+			if (openSquare != 0){
+				if (!first){
+					errorBuilder.append(" and ");
+				}
+				errorBuilder.append(Math.abs(openSquare) + " unmatched square brackets ");
+				first=false;
+			}
+			errorBuilder.append("in expression '" + expression + "'");
+			throw new UnparsableExpressionException(errorBuilder.toString());
 		}
 		return tokens;
 

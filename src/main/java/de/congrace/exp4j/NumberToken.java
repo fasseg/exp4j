@@ -47,7 +47,6 @@ class NumberToken extends CalculationToken {
 		}else{
 			this.doubleValue = Double.parseDouble(value);
 		}
-		System.out.println("value is " + value + " = " + this.doubleValue);
 	}
 
 	@Override

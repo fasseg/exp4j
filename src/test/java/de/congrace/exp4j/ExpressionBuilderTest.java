@@ -257,7 +257,8 @@ public class ExpressionBuilderTest {
 		assertTrue(expected == calc.calculate());
 	}
 
-	// thanks to Marcin Domanski who issued http://jira.congrace.de/jira/browse/EXP-11
+	// thanks to Marcin Domanski who issued
+	// http://jira.congrace.de/jira/browse/EXP-11
 	// i have this test, which fails in 0.2.9
 	@Test
 	public void testCustomFunction18() throws Exception {
@@ -276,25 +277,27 @@ public class ExpressionBuilderTest {
 		assertTrue(calculated == 10);
 	}
 
-	// thanks to Sylvain Machefert who issued http://jira.congrace.de/jira/browse/EXP-11
-    // i have this test, which fails in 0.3.2
-    @Test
-    public void testCustomFunction19() throws Exception {
-        CustomFunction minFunction = new CustomFunction("power", 2) {
-            @Override
-            public double applyFunction(double[] values) {
-                return Math.pow(values[0], values[1]);
-            }
-        };
-        ExpressionBuilder b = new ExpressionBuilder("power(2,3)").withCustomFunction(minFunction);
-        double calculated = b.build().calculate();
-        assertTrue(calculated == Math.pow(2, 3));
-    }
+	// thanks to Sylvain Machefert who issued
+	// http://jira.congrace.de/jira/browse/EXP-11
+	// i have this test, which fails in 0.3.2
+	@Test
+	public void testCustomFunction19() throws Exception {
+		CustomFunction minFunction = new CustomFunction("power", 2) {
+			@Override
+			public double applyFunction(double[] values) {
+				return Math.pow(values[0], values[1]);
+			}
+		};
+		ExpressionBuilder b = new ExpressionBuilder("power(2,3)").withCustomFunction(minFunction);
+		double calculated = b.build().calculate();
+		assertTrue(calculated == Math.pow(2, 3));
+	}
 
-	// thanks to Narendra Harmwal who noticed that getArgumentCount was not implemented
-    // this test has been added in 0.3.5
-    @Test
-    public void testCustomFunction20() throws Exception {
+	// thanks to Narendra Harmwal who noticed that getArgumentCount was not
+	// implemented
+	// this test has been added in 0.3.5
+	@Test
+	public void testCustomFunction20() throws Exception {
 		CustomFunction maxFunction = new CustomFunction("max", 3) {
 			@Override
 			public double applyFunction(double... values) {
@@ -307,13 +310,13 @@ public class ExpressionBuilderTest {
 				return max;
 			}
 		};
-        ExpressionBuilder b = new ExpressionBuilder("max(1,2,3)").withCustomFunction(maxFunction);
-        double calculated = b.build().calculate();
-        assertTrue(maxFunction.getArgumentCount() == 3);
-        assertTrue(calculated == 3);
-    }
+		ExpressionBuilder b = new ExpressionBuilder("max(1,2,3)").withCustomFunction(maxFunction);
+		double calculated = b.build().calculate();
+		assertTrue(maxFunction.getArgumentCount() == 3);
+		assertTrue(calculated == 3);
+	}
 
-    @Test
+	@Test
 	public void testCustomOperators1() throws Exception {
 		CustomOperator factorial = new CustomOperator("!", true, 6, 1) {
 			@Override
@@ -827,16 +830,16 @@ public class ExpressionBuilderTest {
 	public void testVarname1() throws Exception {
 		String expr = "12.23 * foo.bar";
 		Calculable calc = new ExpressionBuilder(expr)
-			.withVariable("foo.bar", 1d)
-			.build();
+				.withVariable("foo.bar", 1d)
+				.build();
 		assertTrue(12.23 == calc.calculate());
 	}
 
 	public void testVarname2() throws Exception {
 		String expr = "12.23 * foo.bar";
 		Calculable calc = new ExpressionBuilder(expr)
-			.withVariable("_foo", 1d)
-			.build();
+				.withVariable("_foo", 1d)
+				.build();
 		assertTrue(12.23 == calc.calculate());
 	}
 
@@ -968,8 +971,9 @@ public class ExpressionBuilderTest {
 	}
 
 	/**
-	 * Added tests for expressions with scientific notation
-	 * see http://jira.congrace.de/jira/browse/EXP-17
+	 * Added tests for expressions with scientific notation see
+	 * http://jira.congrace.de/jira/browse/EXP-17
+	 * 
 	 * @throws Exception
 	 */
 	@Test
@@ -1014,6 +1018,56 @@ public class ExpressionBuilderTest {
 		new ExpressionBuilder(expr).build();
 	}
 
+	// tests for EXP-20: No exception is thrown for unmatched parenthesis in
+	// build
+	// Thanks go out to maheshkurmi for reporting
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression48() throws Exception {
+		String expr = "(1*2";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		double result = calc.calculate();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression49() throws Exception {
+		String expr = "{1*2";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		double result = calc.calculate();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression50() throws Exception {
+		String expr = "[1*2";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		double result = calc.calculate();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression51() throws Exception {
+		String expr = "(1*{2+[3}";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		double result = calc.calculate();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression52() throws Exception {
+		String expr = "(1*(2+(3";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		double result = calc.calculate();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression53() throws Exception {
+		String expr = "1*3+";
+		Calculable calc = new ExpressionBuilder(expr).build();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression54() throws Exception {
+		String expr = "1**3";
+		Calculable calc = new ExpressionBuilder(expr).build();
+	}
+
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
@@ -1030,10 +1084,10 @@ public class ExpressionBuilderTest {
 	public void testCharacterPositionInException1() throws Exception {
 		String expr;
 		expr = "2 + sn(4)";
-		try{
+		try {
 			Calculable calc = new ExpressionBuilder(expr).build();
 			Assert.fail("Expression was parsed but should throw an Exception");
-		}catch(UnparsableExpressionException e){
+		} catch (UnparsableExpressionException e) {
 			String expected = "Unable to parse character 's' at position 5 in expression '2 + sn(4)'";
 			assertEquals(expected, e.getMessage());
 		}
