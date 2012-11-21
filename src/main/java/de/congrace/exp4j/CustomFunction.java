@@ -49,5 +49,9 @@ public abstract class CustomFunction {
 		this.name = name;
 	}
 
+	public int getArgumentCount(){
+		return argc;
+	}
+	
 	public abstract double applyFunction(double... args);
 }

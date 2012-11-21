@@ -290,6 +290,28 @@ public class ExpressionBuilderTest {
         assertTrue(calculated == Math.pow(2, 3));
     }
 
+	// thanks to Narendra Harmwal who noticed that getArgumentCount was not implemented
+    // this test has been added in 0.3.5
+    @Test
+    public void testCustomFunction20() throws Exception {
+		CustomFunction maxFunction = new CustomFunction("max", 3) {
+			@Override
+			public double applyFunction(double... values) {
+				double max = values[0];
+				for (int i = 1; i < argc; i++) {
+					if (values[i] > max) {
+						max = values[i];
+					}
+				}
+				return max;
+			}
+		};
+        ExpressionBuilder b = new ExpressionBuilder("max(1,2,3)").withCustomFunction(maxFunction);
+        double calculated = b.build().calculate();
+        assertTrue(maxFunction.getArgumentCount() == 3);
+        assertTrue(calculated == 3);
+    }
+
     @Test
 	public void testCustomOperators1() throws Exception {
 		CustomOperator factorial = new CustomOperator("!", true, 6, 1) {
