@@ -952,6 +952,69 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
+	public void testExpression40() throws Exception {
+		String expr = "1e1";
+		double expected = 10d;
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression41() throws Exception {
+		String expr = "1e-1";
+		double expected = 0.1d;
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	/**
+	 * Added tests for expressions with scientific notation
+	 * see http://jira.congrace.de/jira/browse/EXP-17
+	 * @throws Exception
+	 */
+	@Test
+	public void testExpression42() throws Exception {
+		String expr = "7.2973525698e-3";
+		double expected = 7.2973525698d * Math.pow(10, -3);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression43() throws Exception {
+		String expr = "6.02214E23";
+		double expected = 6.02214d * Math.pow(10, 23);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test
+	public void testExpression44() throws Exception {
+		String expr = "6.02214E23";
+		double expected = 6.02214d * Math.pow(10, 23);
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(expected == calc.calculate());
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression45() throws Exception {
+		String expr = "6.02214E2E3";
+		new ExpressionBuilder(expr).build();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression46() throws Exception {
+		String expr = "6.02214e2E3";
+		new ExpressionBuilder(expr).build();
+	}
+
+	@Test(expected = UnparsableExpressionException.class)
+	public void testExpression47() throws Exception {
+		String expr = "6.02214y3";
+		new ExpressionBuilder(expr).build();
+	}
+
+	@Test
 	public void testExpression4() throws Exception {
 		String expr;
 		double expected;
