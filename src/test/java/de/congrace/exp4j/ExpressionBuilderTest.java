@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ExpressionBuilderTest {
@@ -958,6 +959,21 @@ public class ExpressionBuilderTest {
 		expected = 2 + 4 * 5;
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(expected == calc.calculate());
+	}
+
+	// test for https://www.objecthunter.net/jira/browse/EXP-19
+	// thanks go out to Yunior Peralta for the report
+	@Test
+	public void testCharacterPositionInException1() throws Exception {
+		String expr;
+		expr = "2 + sn(4)";
+		try{
+			Calculable calc = new ExpressionBuilder(expr).build();
+			Assert.fail("Expression was parsed but should throw an Exception");
+		}catch(UnparsableExpressionException e){
+			String expected = "Unable to parse character 's' at position 5 in expression '2 + sn(4)'";
+			assertEquals(expected, e.getMessage());
+		}
 	}
 
 	@Test

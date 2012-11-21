@@ -37,9 +37,7 @@ abstract class RPNConverter {
 				}
 				break;
 			default:
-				if (!Character.isWhitespace(c)) {
-					exprBuilder.append(c);
-				}
+				exprBuilder.append(c);
 			}
 		}
 		return exprBuilder.toString();

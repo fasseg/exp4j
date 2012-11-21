@@ -90,7 +90,7 @@ class Tokenizer {
 					lastToken = new FunctionToken(name, functions.get(name));
 				} else {
 					// an unknown symbol was encountered
-					throw new UnparsableExpressionException(c, i);
+					throw new UnparsableExpressionException(expression, c, i + 1);
 				}
 			} else if (c == ',') {
 				// a function separator, hopefully
@@ -110,13 +110,13 @@ class Tokenizer {
 					i += offset - 1;
 					lastToken = new OperatorToken(symbol, operators.get(symbol));
 				} else {
-					throw new UnparsableExpressionException(c, i);
+					throw new UnparsableExpressionException(expression,  c, i + 1);
 				}
 			} else if (c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}') {
 				lastToken = new ParenthesisToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
-				throw new UnparsableExpressionException(c, i);
+				throw new UnparsableExpressionException(expression, c, i + 1);
 			}
 			tokens.add(lastToken);
 		}

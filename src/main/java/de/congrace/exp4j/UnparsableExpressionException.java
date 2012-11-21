@@ -32,8 +32,8 @@ public class UnparsableExpressionException extends Exception {
 	 * @param pos
 	 *            the position of the character in the expression
 	 */
-	public UnparsableExpressionException(char c, int pos) {
-		super("Unable to parse character at position " + pos + ": '" + String.valueOf(c) + "'");
+	public UnparsableExpressionException(String expression, char c, int pos) {
+		super("Unable to parse character '" + String.valueOf(c) + "' at position " + pos + " in expression '" + expression + "'");
 	}
 
 	/**
