@@ -73,7 +73,7 @@
 		<site>
 			<id>congrace.exp4j</id>
 			<name>congrace.de - exp4j</name>
-			<url>scpexe://congrace.de/var/www/projects/exp4j</url>
+			<url>scpexe://congrace.de/opt/www/projects/exp4j</url>
 		</site>
 	</distributionManagement>
 	<licenses>
