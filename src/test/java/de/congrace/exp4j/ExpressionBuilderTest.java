@@ -1056,18 +1056,6 @@ public class ExpressionBuilderTest {
 		double result = calc.calculate();
 	}
 
-	@Test(expected = UnparsableExpressionException.class)
-	public void testExpression53() throws Exception {
-		String expr = "1*3+";
-		Calculable calc = new ExpressionBuilder(expr).build();
-	}
-
-	@Test(expected = UnparsableExpressionException.class)
-	public void testExpression54() throws Exception {
-		String expr = "1**3";
-		Calculable calc = new ExpressionBuilder(expr).build();
-	}
-
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
