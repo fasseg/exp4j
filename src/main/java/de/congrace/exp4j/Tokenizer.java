@@ -51,7 +51,7 @@ class Tokenizer {
 		}
 		return false;
 	}
-
+	
 	List<Token> getTokens(final String expression) throws UnparsableExpressionException, UnknownFunctionException {
 		final List<Token> tokens = new ArrayList<Token>();
 		final char[] chars = expression.toCharArray();
@@ -133,22 +133,22 @@ class Tokenizer {
 				}
 			}else if (c == '('){
 				openBraces++;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			} else if (c == '{'){
 				openCurly++;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			}else if( c == '['){
 				openSquare++;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			}else if ( c == ')'){
 				openBraces--;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			}else if ( c == '}'){
 				openCurly--;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			}else if ( c == ']'){
 				openSquare--;
-				lastToken = new ParenthesisToken(String.valueOf(c));
+				lastToken = new ParenthesesToken(String.valueOf(c));
 			} else {
 				// an unknown symbol was encountered
 				throw new UnparsableExpressionException(expression, c, i + 1);

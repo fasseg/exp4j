@@ -219,11 +219,11 @@ public class TokenizerTest {
 	public void testInfixTokenize4() throws Exception {
 		String expr = "2*4.4+(2.3/12)*4+(20-2)";
 		Token[] expected = new Token[] { new NumberToken("2"), new OperatorToken("*", operations.get('*')),
-				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesisToken("("),
+				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesesToken("("),
 				new NumberToken("2.3"), new OperatorToken("/", operations.get('/')), new NumberToken("12"),
-				new ParenthesisToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
-				new OperatorToken("+", operations.get('+')), new ParenthesisToken("("), new NumberToken("20"),
-				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesisToken(")") };
+				new ParenthesesToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
+				new OperatorToken("+", operations.get('+')), new ParenthesesToken("("), new NumberToken("20"),
+				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesesToken(")") };
 		Tokenizer tokenizer = new Tokenizer(new HashSet<String>(), functions, operations);
 		Token[] actual = tokenizer.getTokens(expr).toArray(new Token[0]);
 		assertArrayEquals(expected, actual);
@@ -233,13 +233,13 @@ public class TokenizerTest {
 	public void testInfixTokenize5() throws Exception {
 		String expr = "2*4.4+(2.3/12) - cos(x) *4+(20-2)";
 		Token[] expected = new Token[] { new NumberToken("2"), new OperatorToken("*", operations.get('*')),
-				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesisToken("("),
+				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesesToken("("),
 				new NumberToken("2.3"), new OperatorToken("/", operations.get('/')), new NumberToken("12"),
-				new ParenthesisToken(")"), new OperatorToken("-", operations.get('-')),
-				new FunctionToken("cos", functions.get("cos")), new ParenthesisToken("("), new VariableToken("x"),
-				new ParenthesisToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
-				new OperatorToken("+", operations.get('+')), new ParenthesisToken("("), new NumberToken("20"),
-				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesisToken(")") };
+				new ParenthesesToken(")"), new OperatorToken("-", operations.get('-')),
+				new FunctionToken("cos", functions.get("cos")), new ParenthesesToken("("), new VariableToken("x"),
+				new ParenthesesToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
+				new OperatorToken("+", operations.get('+')), new ParenthesesToken("("), new NumberToken("20"),
+				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesesToken(")") };
 		Set<String> variableNames = new HashSet<String>();
 		variableNames.add("x");
 		Tokenizer tokenizer = new Tokenizer(variableNames, functions, operations);
@@ -251,13 +251,13 @@ public class TokenizerTest {
 	public void testInfixTokenize6() throws Exception {
 		String expr = "2*4.4+(2.3/12)*y - cos(x) *4+(20-2)";
 		Token[] expected = new Token[] { new NumberToken("2"), new OperatorToken("*", operations.get('*')),
-				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesisToken("("),
+				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesesToken("("),
 				new NumberToken("2.3"), new OperatorToken("/", operations.get('/')), new NumberToken("12"),
-				new ParenthesisToken(")"), new OperatorToken("-", operations.get('-')),
-				new FunctionToken("cos", functions.get("cos")), new ParenthesisToken("("), new VariableToken("x"),
-				new ParenthesisToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
-				new OperatorToken("+", operations.get('+')), new ParenthesisToken("("), new NumberToken("20"),
-				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesisToken(")") };
+				new ParenthesesToken(")"), new OperatorToken("-", operations.get('-')),
+				new FunctionToken("cos", functions.get("cos")), new ParenthesesToken("("), new VariableToken("x"),
+				new ParenthesesToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
+				new OperatorToken("+", operations.get('+')), new ParenthesesToken("("), new NumberToken("20"),
+				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesesToken(")") };
 		Set<String> variableNames = new HashSet<String>();
 		variableNames.add("x");
 		Tokenizer tokenizer = new Tokenizer(variableNames, functions, operations);
@@ -269,13 +269,13 @@ public class TokenizerTest {
 	public void testInfixTokenize7() throws Exception {
 		String expr = "2*4.4+(2.3/12) - cos(x) *4+(20-2)";
 		Token[] expected = new Token[] { new NumberToken("2"), new OperatorToken("*", operations.get('*')),
-				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesisToken("("),
+				new NumberToken("4.4"), new OperatorToken("+", operations.get('+')), new ParenthesesToken("("),
 				new NumberToken("2.3"), new OperatorToken("/", operations.get('/')), new NumberToken("12"),
-				new ParenthesisToken(")"), new OperatorToken("-", operations.get('-')),
-				new FunctionToken("cos", functions.get("cos")), new ParenthesisToken("("), new VariableToken("x"),
-				new ParenthesisToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
-				new OperatorToken("+", operations.get('+')), new ParenthesisToken("("), new NumberToken("20"),
-				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesisToken(")") };
+				new ParenthesesToken(")"), new OperatorToken("-", operations.get('-')),
+				new FunctionToken("cos", functions.get("cos")), new ParenthesesToken("("), new VariableToken("x"),
+				new ParenthesesToken(")"), new OperatorToken("*", operations.get('*')), new NumberToken("4"),
+				new OperatorToken("+", operations.get('+')), new ParenthesesToken("("), new NumberToken("20"),
+				new OperatorToken("-", operations.get('-')), new NumberToken("2"), new ParenthesesToken(")") };
 		Set<String> variableNames = new HashSet<String>();
 		variableNames.add("x");
 		Tokenizer tokenizer = new Tokenizer(variableNames, functions, operations);

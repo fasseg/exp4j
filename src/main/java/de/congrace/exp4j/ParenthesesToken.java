@@ -23,16 +23,16 @@ import java.util.Stack;
  * 
  * @author fas@congrace.de
  */
-class ParenthesisToken extends Token {
+class ParenthesesToken extends Token {
 
-	ParenthesisToken(String value) {
+	ParenthesesToken(String value) {
 		super(value);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ParenthesisToken) {
-			final ParenthesisToken t = (ParenthesisToken) obj;
+		if (obj instanceof ParenthesesToken) {
+			final ParenthesesToken t = (ParenthesesToken) obj;
 			return t.getValue().equals(this.getValue());
 		}
 		return false;
@@ -59,7 +59,7 @@ class ParenthesisToken extends Token {
 		} else {
 			Token next;
 			while ((next = operatorStack.peek()) instanceof OperatorToken || next instanceof FunctionToken
-					|| (next instanceof ParenthesisToken && !((ParenthesisToken) next).isOpen())) {
+					|| (next instanceof ParenthesesToken && !((ParenthesesToken) next).isOpen())) {
 				output.append(operatorStack.pop().getValue()).append(" ");
 			}
 			operatorStack.pop();

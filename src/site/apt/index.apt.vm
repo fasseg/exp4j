@@ -61,6 +61,20 @@ Calculable calc = new ExpressionBuilder("x * y - 2")
 assertTrue(calc.calculate()==0);
 +--
 
+* Scientific notation
+
+	Since version 0.3.5 it is possible to use scientific notation for numbers (see http://en.wikipedia.org/wiki/Scientific_notation).
+	The number is split into a significand/mantissa (y) and exponent (x) of the form 'yEx' which is evaluated as 'y * 10^x'.
+	Be aware that 'e/E' is no operator and therefore an expression like "1.1e-(x*2)" can not be evaluated. 
+	An example using the Fine-structure constant 'α=7.2973525698  * 10^−3':
+	 
++--
+String expr = "7.2973525698e-3";
+double expected = 7.2973525698d * Math.pow(10, -3);
+Calculable calc = new ExpressionBuilder(expr).build();
+assertTrue(expected == calc.calculate());
++--
+
 * Custom functions
 
   	you can extend the abstract class CustomFunction in order to use custom functions in expressions. you only have to implement the 
@@ -251,7 +265,9 @@ assertTrue(Math.pow(-3,2) == calc.calculate()); // evaluates to '9'
  
  * {{{http://www.opensourceautomation.net/}free\{dom\}}} building automation framework uses exp4j
  
- *{{{http://jwork.org/jhepwork/}jHepWork}} a Multiplatform environment for scientific computation and data analysis uses exp4j
+ * {{{http://jwork.org/jhepwork/}jHepWork}} a Multiplatform environment for scientific computation and data analysis uses exp4j
+ 
+ * {{{http://code.google.com/p/calc3d/}cacl3d}} a 3d calculus visualisation engine uses exp4j.
  
 
  Please {{{mailto:fas@congrace.de}let me know}} if you're project uses exp4j and you want it listed here

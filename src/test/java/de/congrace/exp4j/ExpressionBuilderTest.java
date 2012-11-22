@@ -1056,6 +1056,25 @@ public class ExpressionBuilderTest {
 		double result = calc.calculate();
 	}
 
+	@Test(expected=UnparsableExpressionException.class)
+	public void testExpression53() throws Exception {
+		String expr = "14 * 2x";
+		Calculable calc = new ExpressionBuilder(expr).withVariableNames("x").build();
+	}
+
+	@Test(expected=UnparsableExpressionException.class)
+	public void testExpression54() throws Exception {
+		String expr = "2 ((-(x)))";
+		Calculable calc = new ExpressionBuilder(expr).withVariableNames("x").build();
+	}
+
+	@Test(expected=UnparsableExpressionException.class)
+	public void testExpression55() throws Exception {
+		String expr = "2 sin(x)";
+		Calculable calc = new ExpressionBuilder(expr).withVariableNames("x").build();
+		System.out.println(calc.calculate(1));
+	}
+
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
