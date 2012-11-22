@@ -71,9 +71,7 @@ abstract class RPNConverter {
 				if (t instanceof VariableToken || 
 					(t instanceof ParenthesesToken && ((ParenthesesToken)t).isOpen()) ||
 					t instanceof FunctionToken) {
-					tokens.add(i, new OperatorToken("*",operators.get("*")));
-					i++;
-					continue;
+					throw new UnparsableExpressionException("Implicit multiplication is not supported. E.g. always use '2*x' instead of '2x'");
 				}
 			}
 		}

@@ -61,11 +61,6 @@ Calculable calc = new ExpressionBuilder("x * y - 2")
 assertTrue(calc.calculate()==0);
 +--
 
-* Implicit multiplication
-
-	Support for implicit multiplication in expressions like '2x' or 'sin(2x)' has been added in version 0.3.5. A missing operator in between a Number and a left parentheses, a variable and a function will be interpreted as multiplication.
-	Therefore the expression '2log(3x)' is equivalent to '2*log(3*x)'.
-
 * Scientific notation
 
 	Since version 0.3.5 it is possible to use scientific notation for numbers (see http://en.wikipedia.org/wiki/Scientific_notation).
