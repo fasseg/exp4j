@@ -29,6 +29,7 @@
 		</release>
 		<release version="0.3.5" description="Feature and bug fix release">
 			<action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-17</action>
+			<action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-18</action>
 			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-21</action>
 			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-19</action>
 			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-20</action>

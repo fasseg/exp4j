@@ -51,7 +51,7 @@ abstract class RPNConverter {
 		final StringBuilder output = new StringBuilder(infix.length());
 		final Stack<Token> operatorStack = new Stack<Token>();
 		List<Token> tokens = tokenizer.getTokens(substituteUnaryOperators(infix, operators));
-		validateRPNExpression(tokens);
+		validateRPNExpression(tokens,operators);
 		for (final Token token : tokens) {
 			token.mutateStackForInfixTranslation(operatorStack, output);
 		}
@@ -64,16 +64,16 @@ abstract class RPNConverter {
 		return new RPNExpression(tokens, postfix, variables);
 	}
 
-	private static void validateRPNExpression(List<Token> tokens) throws UnparsableExpressionException{
+	private static void validateRPNExpression(List<Token> tokens,Map<String,CustomOperator> operators) throws UnparsableExpressionException{
 		for (int i = 1; i < tokens.size(); i++) {
 			Token t = tokens.get(i);
 			if (tokens.get(i - 1) instanceof NumberToken){
-				if (t instanceof VariableToken) {
-					throw new UnparsableExpressionException("implicit multiplication not possible. Use '2*x' instead of '2x'");
-				}else if (t instanceof ParenthesesToken && ((ParenthesesToken)t).isOpen()){
-					throw new UnparsableExpressionException("implicit multiplication not possible. Use '2*(x)' instead of '2(x)'");
-				}else if (t instanceof FunctionToken){
-					throw new UnparsableExpressionException("implicit multiplication not possible. Use '2*sin(x)' instead of '2sin(x)'");
+				if (t instanceof VariableToken || 
+					(t instanceof ParenthesesToken && ((ParenthesesToken)t).isOpen()) ||
+					t instanceof FunctionToken) {
+					tokens.add(i, new OperatorToken("*",operators.get("*")));
+					i++;
+					continue;
 				}
 			}
 		}
