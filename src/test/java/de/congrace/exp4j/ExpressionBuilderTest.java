@@ -1084,6 +1084,15 @@ public class ExpressionBuilderTest {
 		assertTrue(Math.sin(6d) * 2 == calc.calculate(2d));
 	}
 
+	// Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
+	// https://www.objecthunter.net/jira/browse/EXP-22
+	@Test(expected=ArithmeticException.class)
+	public void testExpression57() throws Exception {
+		String expr = "1 / 0";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(Double.POSITIVE_INFINITY == calc.calculate());
+	}
+
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
