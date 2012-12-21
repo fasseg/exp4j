@@ -1305,6 +1305,7 @@ public class ExpressionBuilderTest {
 		expr = "cos(x) - (1/cbrt(x))";
 		Calculable calc = new ExpressionBuilder(expr).withVariableNames("x").build();
 		for (double x = -10; x < 10; x = x + 0.5d) {
+			if (x == 0d) continue;
 			expected = Math.cos(x) - (1 / Math.cbrt(x));
 			assertTrue(expected == calc.calculate(x));
 		}

@@ -92,9 +92,6 @@ public class ExpressionBuilder {
 		CustomOperator mod = new CustomOperator("%", true, 3) {
 			@Override
 			protected double applyOperation(double[] values) {
-				if (values[1] == 0d){
-					throw new ArithmeticException("Division by zero!");
-				}
 				return values[0] % values[1];
 			}
 		};

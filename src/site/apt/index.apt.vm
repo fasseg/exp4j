@@ -184,6 +184,26 @@ assertTrue(Math.pow(-3,2) == calc.calculate()); // evaluates to '9'
 
 +--
 
+* Division by zero in operations and functions
+	
+	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing CustomOperator or CustomFunction involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
+	The following example from the exp4j sources shows how to check for such a condition.
+	
++--
+
+		CustomOperator mod = new CustomOperator("%", true, 3) {
+			@Override
+			protected double applyOperation(double[] values) {
+				if (values[1] == 0d){
+					throw new ArithmeticException("Division by zero!");
+				}
+				return values[0] % values[1];
+			}
+		};
+
+
++--
+
 	 
 * Built-in functions
 	 

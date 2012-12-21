@@ -34,5 +34,8 @@
 			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-19</action>
 			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-20</action>
 		</release>
+		<release version="0.3.6" description="Bugfix release">
+			<action dev="fas" type="fix">added check for Division by zero in divsion operations: https://www.objecthunter.net/jira/browse/EXP-22</action>
+		</release>
 	</body>
 </document>
