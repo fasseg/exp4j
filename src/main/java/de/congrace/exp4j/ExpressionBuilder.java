@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * This is Builder implementation for the exp4j API used to create a Calculable
+ * This is a Builder implementation for the exp4j API used to create a Calculable
  * instance for the user
  * 
  * @author frank asseg

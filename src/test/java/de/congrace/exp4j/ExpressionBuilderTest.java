@@ -1092,6 +1092,13 @@ public class ExpressionBuilderTest {
 		Calculable calc = new ExpressionBuilder(expr).build();
 		assertTrue(Double.POSITIVE_INFINITY == calc.calculate());
 	}
+	
+	@Test
+	public void testExpression58() throws Exception {
+		String expr = "17 * sqrt(-1) * 12";
+		Calculable calc = new ExpressionBuilder(expr).build();
+		assertTrue(Double.isNaN(calc.calculate()));
+	}
 
 	@Test
 	public void testExpression4() throws Exception {
