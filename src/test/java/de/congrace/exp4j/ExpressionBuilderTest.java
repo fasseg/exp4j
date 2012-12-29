@@ -1100,6 +1100,13 @@ public class ExpressionBuilderTest {
 		assertTrue(Double.isNaN(calc.calculate()));
 	}
 
+	// Thanks go out to Alex Dolinsky for reporting the missing exception when an empty
+	// expression is passed as in new ExpressionBuilder("")
+	@Test(expected=IllegalArgumentException.class)
+	public void testExpression59() throws Exception {
+		Calculable calc = new ExpressionBuilder("").build();
+	}
+
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;
