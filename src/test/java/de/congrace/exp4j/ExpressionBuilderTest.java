@@ -1107,11 +1107,18 @@ public class ExpressionBuilderTest {
 		Calculable calc = new ExpressionBuilder("").build();
 	}
 
-	@Test(expected=ArithmeticException.class)
+	@Test(expected=IllegalArgumentException.class)
 	public void testExpression60() throws Exception {
+		Calculable calc = new ExpressionBuilder("   ").build();
+		calc.calculate();
+	}
+
+	@Test(expected=ArithmeticException.class)
+	public void testExpression61() throws Exception {
 		Calculable calc = new ExpressionBuilder("14 % 0").build();
 		calc.calculate();
 	}
+
 
 	@Test
 	public void testExpression4() throws Exception {
