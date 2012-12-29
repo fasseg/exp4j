@@ -36,6 +36,7 @@
 		</release>
 		<release version="0.3.6" description="Bugfix release">
 			<action dev="fas" type="fix">added check for Division by zero in divsion operations: https://www.objecthunter.net/jira/browse/EXP-22</action>
+			<action dev="fas" type="fix">added exception when using empty expressions: https://www.objecthunter.net/jira/browse/EXP-23</action>
 		</release>
 	</body>
 </document>
