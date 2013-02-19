@@ -1119,7 +1119,17 @@ public class ExpressionBuilderTest {
 		calc.calculate();
 	}
 
+	// https://www.objecthunter.net/jira/browse/EXP-24
+	// thanks go out to Rémi for the issue report
+	@Test
+	public void testExpression62() throws Exception {
+		Calculable calc = new ExpressionBuilder("x*1.0e5+5")
+			.withVariableNames("x")
+			.build();
+		assertTrue(Math.E * 1.0 * Math.pow(10, 5) + 5 == calc.calculate(Math.E));
+	}
 
+	
 	@Test
 	public void testExpression4() throws Exception {
 		String expr;

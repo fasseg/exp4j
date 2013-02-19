@@ -69,18 +69,22 @@ class Tokenizer {
 				// handle the numbers of the expression
 				valueBuilder.append(c);
 				int numberLen = 1;
-				boolean lastCharNotationSeparator = false;
+				boolean lastCharNotationSeparator = false; // needed to determine if a + or - following an e/E is a unary operation
+				boolean notationSeparatorOccured = false; // to check if only one notation separator has occured
 				while (chars.length > i + numberLen) {
 					if (isDigitOrDecimalSeparator(chars[i + numberLen])) {
 						valueBuilder.append(chars[i + numberLen]);
+						lastCharNotationSeparator = false;
 					}else if (isNotationSeparator(chars[i+numberLen])){
-						if (lastCharNotationSeparator == true){
-							throw new UnparsableExpressionException("Expression can have only one notation separator");
+						if (notationSeparatorOccured){
+							throw new UnparsableExpressionException("Number can have only one notation separator 'e/E'");
 						}
 						valueBuilder.append(chars[i + numberLen]);
 						lastCharNotationSeparator = true;
+						notationSeparatorOccured = true;
 					}else if (lastCharNotationSeparator && (chars[i+numberLen] == '-' || chars[i+numberLen] == '+')){
 						valueBuilder.append(chars[i + numberLen]);
+						lastCharNotationSeparator = false;
 					}else {
 						break; // break out of the while loop here, since the number seem finished
 					}
