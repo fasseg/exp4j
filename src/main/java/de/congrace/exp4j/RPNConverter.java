@@ -52,37 +52,6 @@ abstract class RPNConverter {
 			whitespaceCount = 0;
 		}
 		return resultBuilder.toString();
-		// for (int i = 0; i < expr.length(); i++) {
-		// if (exprBuilder.length() > 0) {
-		// lastChar = exprBuilder.charAt(exprBuilder.length() - 1);
-		// }
-		// final char c = data[i];
-		// if (i > 0 && isOperatorCharacter(expr.charAt(i - 1), operators)) {
-		// if (!operators.containsKey(lastOperation.toString() + expr.charAt(i - 1))) {
-		// lastOperation = new StringBuilder();
-		// }
-		// lastOperation.append(expr.charAt(i - 1));
-		// } else if (i > 0 && !Character.isWhitespace(expr.charAt(i - 1))) {
-		// lastOperation = new StringBuilder();
-		// }
-		// switch (c) {
-		// case '+':
-		// if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
-		// exprBuilder.append(c);
-		// }
-		// break;
-		// case '-':
-		// if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
-		// exprBuilder.append(c);
-		// } else {
-		// exprBuilder.append('\'');
-		// }
-		// break;
-		// default:
-		// exprBuilder.append(c);
-		// }
-		// }
-//		return exprBuilder.toString();
 	}
 
 	static RPNExpression toRPNExpression(String infix, Map<String, Double> variables,
