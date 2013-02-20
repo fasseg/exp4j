@@ -7,41 +7,82 @@ import java.util.Stack;
 abstract class RPNConverter {
 
 	private static String substituteUnaryOperators(String expr, Map<String, CustomOperator> operators) {
-		final StringBuilder exprBuilder = new StringBuilder(expr.length());
-		final char[] data = expr.toCharArray();
-		char lastChar = ' ';
-		StringBuilder lastOperation = new StringBuilder();
+		StringBuilder resultBuilder = new StringBuilder();
+		int whitespaceCount = 0;
 		for (int i = 0; i < expr.length(); i++) {
-			if (exprBuilder.length() > 0) {
-				lastChar = exprBuilder.charAt(exprBuilder.length() - 1);
+			boolean afterOperator = false;
+			boolean afterParantheses = false;
+			boolean expressionStart = false;
+			final char c = expr.charAt(i);
+			if (Character.isWhitespace(c)) {
+				whitespaceCount++;
+				resultBuilder.append(c);
+				continue;
 			}
-			final char c = data[i];
-			if (i > 0 && isOperatorCharacter(expr.charAt(i - 1), operators)) {
-				if (!operators.containsKey(lastOperation.toString() + expr.charAt(i - 1))) {
-					lastOperation = new StringBuilder();
+			if (resultBuilder.length() == whitespaceCount){
+				expressionStart = true;
+			}
+			// check if last char in the result is an operator
+			if (resultBuilder.length() > whitespaceCount){
+				if (isOperatorCharacter(resultBuilder.charAt(resultBuilder.length() - 1 - whitespaceCount), operators)){
+					afterOperator = true;
+				}else if (resultBuilder.charAt(resultBuilder.length() - 1 - whitespaceCount) == '('){
+					afterParantheses = true;
 				}
-				lastOperation.append(expr.charAt(i - 1));
-			} else if (i > 0 && !Character.isWhitespace(expr.charAt(i - 1))) {
-				lastOperation = new StringBuilder();
 			}
 			switch (c) {
 			case '+':
-				if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
-					exprBuilder.append(c);
+				if (resultBuilder.length() > 0 && !afterOperator && !afterParantheses && !expressionStart) {
+					// not an unary plus so append the char
+					resultBuilder.append(c);
 				}
 				break;
 			case '-':
-				if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
-					exprBuilder.append(c);
-				} else {
-					exprBuilder.append('\'');
+				if (resultBuilder.length() > 0 && !afterOperator && !afterParantheses && !expressionStart) {
+					// not unary 
+					resultBuilder.append(c);
+				}else{
+					//unary so we substitute it
+					resultBuilder.append('\'');
 				}
 				break;
 			default:
-				exprBuilder.append(c);
+				resultBuilder.append(c);
 			}
+			whitespaceCount = 0;
 		}
-		return exprBuilder.toString();
+		return resultBuilder.toString();
+		// for (int i = 0; i < expr.length(); i++) {
+		// if (exprBuilder.length() > 0) {
+		// lastChar = exprBuilder.charAt(exprBuilder.length() - 1);
+		// }
+		// final char c = data[i];
+		// if (i > 0 && isOperatorCharacter(expr.charAt(i - 1), operators)) {
+		// if (!operators.containsKey(lastOperation.toString() + expr.charAt(i - 1))) {
+		// lastOperation = new StringBuilder();
+		// }
+		// lastOperation.append(expr.charAt(i - 1));
+		// } else if (i > 0 && !Character.isWhitespace(expr.charAt(i - 1))) {
+		// lastOperation = new StringBuilder();
+		// }
+		// switch (c) {
+		// case '+':
+		// if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
+		// exprBuilder.append(c);
+		// }
+		// break;
+		// case '-':
+		// if (i > 0 && lastChar != '(' && operators.get(lastOperation.toString()) == null) {
+		// exprBuilder.append(c);
+		// } else {
+		// exprBuilder.append('\'');
+		// }
+		// break;
+		// default:
+		// exprBuilder.append(c);
+		// }
+		// }
+//		return exprBuilder.toString();
 	}
 
 	static RPNExpression toRPNExpression(String infix, Map<String, Double> variables,
@@ -51,7 +92,7 @@ abstract class RPNConverter {
 		final StringBuilder output = new StringBuilder(infix.length());
 		final Stack<Token> operatorStack = new Stack<Token>();
 		List<Token> tokens = tokenizer.getTokens(substituteUnaryOperators(infix, operators));
-		validateRPNExpression(tokens,operators);
+		validateRPNExpression(tokens, operators);
 		for (final Token token : tokens) {
 			token.mutateStackForInfixTranslation(operatorStack, output);
 		}
@@ -64,14 +105,15 @@ abstract class RPNConverter {
 		return new RPNExpression(tokens, postfix, variables);
 	}
 
-	private static void validateRPNExpression(List<Token> tokens,Map<String,CustomOperator> operators) throws UnparsableExpressionException{
+	private static void validateRPNExpression(List<Token> tokens, Map<String, CustomOperator> operators)
+			throws UnparsableExpressionException {
 		for (int i = 1; i < tokens.size(); i++) {
 			Token t = tokens.get(i);
-			if (tokens.get(i - 1) instanceof NumberToken){
-				if (t instanceof VariableToken || 
-					(t instanceof ParenthesesToken && ((ParenthesesToken)t).isOpen()) ||
-					t instanceof FunctionToken) {
-					throw new UnparsableExpressionException("Implicit multiplication is not supported. E.g. always use '2*x' instead of '2x'");
+			if (tokens.get(i - 1) instanceof NumberToken) {
+				if (t instanceof VariableToken || (t instanceof ParenthesesToken && ((ParenthesesToken) t).isOpen())
+						|| t instanceof FunctionToken) {
+					throw new UnparsableExpressionException(
+							"Implicit multiplication is not supported. E.g. always use '2*x' instead of '2x'");
 				}
 			}
 		}

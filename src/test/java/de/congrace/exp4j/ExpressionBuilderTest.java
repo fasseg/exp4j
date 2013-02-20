@@ -1129,8 +1129,29 @@ public class ExpressionBuilderTest {
 		assertTrue(Math.E * 1.0 * Math.pow(10, 5) + 5 == calc.calculate(Math.E));
 	}
 
-	
-	@Test
+	// thanks go out to Janny for providing the tests and the bug report
+    @Test
+    public void testUnaryMinusInParenthesisSpace() throws Exception {
+        ExpressionBuilder b = new ExpressionBuilder("( -1)^2");
+        double calculated = b.build().calculate();
+        assertTrue(calculated == 1d);
+    }
+
+    @Test
+    public void testUnaryMinusSpace() throws Exception {
+        ExpressionBuilder b = new ExpressionBuilder(" -1");
+        double calculated = b.build().calculate();
+        assertTrue(calculated == -1d);
+    }
+    
+    @Test
+    public void testUnaryMinusSpace1() throws Exception {
+        ExpressionBuilder b = new ExpressionBuilder("-1");
+        double calculated = b.build().calculate();
+        assertTrue(calculated == -1d);
+    }
+
+    @Test
 	public void testExpression4() throws Exception {
 		String expr;
 		double expected;
