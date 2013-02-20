@@ -1139,11 +1139,18 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testUnaryMinusSpace() throws Exception {
-        ExpressionBuilder b = new ExpressionBuilder(" -1");
+        ExpressionBuilder b = new ExpressionBuilder(" -1 + 2");
         double calculated = b.build().calculate();
-        assertTrue(calculated == -1d);
+        assertTrue(calculated == 1d);
     }
     
+    @Test
+    public void testUnaryMinusSpaces() throws Exception {
+        ExpressionBuilder b = new ExpressionBuilder(" -1 + + 2 +   -   1");
+        double calculated = b.build().calculate();
+        assertTrue(calculated == 0d);
+    }
+
     @Test
     public void testUnaryMinusSpace1() throws Exception {
         ExpressionBuilder b = new ExpressionBuilder("-1");
