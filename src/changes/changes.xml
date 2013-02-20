@@ -39,7 +39,10 @@
 			<action dev="fas" type="fix">added exception when using empty expressions: https://www.objecthunter.net/jira/browse/EXP-23</action>
 		</release>
         <release version="0.3.9" description="Bugfix release">
-            <action dev="fas" type="fix">fix for EXP-24</action>
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-24</action>
+        </release>
+        <release version="0.3.10" description="Bugfix release">
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-25</action>
         </release>
 	</body>
 </document>
