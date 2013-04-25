@@ -85,4 +85,26 @@ public class TokenizerTest {
 		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 1d);
 		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == 1d);
 	}
+	
+	@Test
+	public void testComplexTokenization2() {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "10.4 + 17.8i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 1);
+		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 10.4d);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == 17.8d);
+	}
+
+	@Test
+	public void testComplexTokenization3() {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "10.4 - 17.8i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 1);
+		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 10.4d);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == -17.8d);
+	}
 }

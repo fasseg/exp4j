@@ -65,7 +65,7 @@ public class Tokenizer<T> {
 							pos++;
 							while (expression.length() > pos) {
 								next = expression.charAt(pos);
-								if (Character.isDigit(next)) {
+								if (Character.isDigit(next) || next == '.') {
 									complex.append(next);
 									pos++;
 								} else {
