@@ -4,6 +4,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import net.objecthunter.exp4j.ComplexNumber;
 import net.objecthunter.exp4j.tokens.Tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokens.Tokenizer.Token;
 import net.objecthunter.exp4j.tokens.Tokenizer.Token.Type;
@@ -72,5 +73,16 @@ public class TokenizerTest {
 		Assert.assertTrue(tokens.get(11).getType() == Type.OPERATOR);
 		Assert.assertTrue(tokens.get(12).getType() == Type.NUMBER);
 
+	}
+
+	@Test
+	public void testComplexTokenization1() {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1 + 1i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 1);
+		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 1d);
+		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == 1d);
 	}
 }
