@@ -38,6 +38,7 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -46,14 +47,8 @@
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.livetribe</groupId>
-			<artifactId>livetribe-jsr223</artifactId>
-			<version>2.0.6</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
+	
 	<distributionManagement>
 		<snapshotRepository>
 			<uniqueVersion>false</uniqueVersion>
@@ -76,6 +71,7 @@
 			<url>scpexe://congrace.de/opt/www/exp4j</url>
 		</site>
 	</distributionManagement>
+	
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
@@ -83,6 +79,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	
 	<build>
 		<extensions>
 			<extension>
@@ -91,15 +88,17 @@
 			</extension>
 		</extensions>
 		<plugins>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -108,6 +107,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -116,6 +116,7 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -160,6 +161,7 @@
 					</reportPlugins>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -173,11 +175,13 @@
 					</archive>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.2.1</version>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
@@ -194,4 +198,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 </project>
