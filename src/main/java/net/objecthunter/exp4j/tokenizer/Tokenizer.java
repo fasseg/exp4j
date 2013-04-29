@@ -5,8 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.objecthunter.exp4j.ComplexNumber;
-import net.objecthunter.exp4j.CustomFunction;
-import net.objecthunter.exp4j.Functions;
+import net.objecthunter.exp4j.function.CustomFunction;
+import net.objecthunter.exp4j.function.Functions;
+import net.objecthunter.exp4j.operator.CustomOperator;
+import net.objecthunter.exp4j.operator.Operators;
 
 public class Tokenizer<T> {
 
@@ -58,9 +60,9 @@ public class Tokenizer<T> {
 					throw new RuntimeException("Unable to handle the type " + type);
 				}
 
-			} else if (isOperator(c)) {
+			} else if (Operators.isOperator(c)) {
 				/* an operator */
-				OperatorToken op = new OperatorToken(String.valueOf(c));
+				OperatorToken op = new OperatorToken(Operators.getOperator(c));
 				tokens.add(op);
 
 			} else if (Character.isAlphabetic(c)) {
@@ -88,22 +90,18 @@ public class Tokenizer<T> {
 				tokens.add(new ParanthesesToken(true));
 			} else if (c == ')' || c == ']') {
 				tokens.add(new ParanthesesToken(false));
+			} else if (c == ','){
+				tokens.add(new ArgumentSeparatorToken());
 			}
 		}
 		return tokens;
 	}
 
-	private boolean isOperator(char c) {
-		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
-			return true;
-		}
-		return false;
-	}
 
 	public abstract static class Token {
 
 		public enum Type {
-			NUMBER, FUNCTION, OPERATOR, PARANTHESES;
+			NUMBER, FUNCTION, OPERATOR, PARANTHESES, ARGUMENT_SEPARATOR;
 		}
 
 		private final Type type;
@@ -168,12 +166,20 @@ public class Tokenizer<T> {
 	}
 
 	public static class OperatorToken extends Token {
-		private final String operation;
+		private final CustomOperator operator;
 
-		public OperatorToken(final String op) {
+		public OperatorToken(final CustomOperator op) {
 			super(Token.Type.OPERATOR);
-			this.operation = op;
+			this.operator = op;
+		}
+		
+		public CustomOperator getOperator() {
+			return operator;
 		}
 	}
-
+	public static class ArgumentSeparatorToken extends Token {
+		public ArgumentSeparatorToken() {
+			super(Token.Type.ARGUMENT_SEPARATOR);
+		}
+	}
 }

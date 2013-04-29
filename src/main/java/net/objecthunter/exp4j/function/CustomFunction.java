@@ -1,4 +1,4 @@
-package net.objecthunter.exp4j;
+package net.objecthunter.exp4j.function;
 
 public abstract class CustomFunction {
 	final int argc;

@@ -77,6 +77,58 @@ public class TokenizerTest {
 	}
 
 	@Test
+	public void testTokenization5() {
+		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
+		String expression = "log(sin(1.0) + abs(2.5))";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 12);
+		Assert.assertTrue(tokens.get(0).getType() == Type.FUNCTION);
+		Assert.assertTrue(tokens.get(1).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(2).getType() == Type.FUNCTION);
+		Assert.assertTrue(tokens.get(3).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(4).getType() == Type.NUMBER);
+		Assert.assertTrue(tokens.get(5).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(6).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(7).getType() == Type.FUNCTION);
+		Assert.assertTrue(tokens.get(8).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(9).getType() == Type.NUMBER);
+		Assert.assertTrue(tokens.get(10).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(11).getType() == Type.PARANTHESES);
+	}
+
+	@Test
+	public void testTokenization6() {
+		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
+		String expression = "-1";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 2);
+		Assert.assertTrue(tokens.get(0).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(1).getType() == Type.NUMBER);
+		Assert.assertTrue(((NumberToken<Float>) tokens.get(1)).getValue() == 1d);
+	}
+
+	@Test
+	public void testTokenization7() {
+		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
+		String expression = "-1 * -sin(3 * (-1.2d))";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 13);
+		Assert.assertTrue(tokens.get(0).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(1).getType() == Type.NUMBER);
+		Assert.assertTrue(tokens.get(2).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(3).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(4).getType() == Type.FUNCTION);
+		Assert.assertTrue(tokens.get(5).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(6).getType() == Type.NUMBER);
+		Assert.assertTrue(tokens.get(7).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(8).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(9).getType() == Type.OPERATOR);
+		Assert.assertTrue(tokens.get(10).getType() == Type.NUMBER);
+		Assert.assertTrue(tokens.get(11).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(12).getType() == Type.PARANTHESES);
+	}
+
+	@Test
 	public void testComplexTokenization1() {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "1 + 1i";

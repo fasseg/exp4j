@@ -1,8 +1,10 @@
-package net.objecthunter.exp4j;
+package net.objecthunter.exp4j.function;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.objecthunter.exp4j.ComplexNumber;
 
 public class Functions {
 	private static Map<String, CustomFunction> builtin = new HashMap<String, CustomFunction>();

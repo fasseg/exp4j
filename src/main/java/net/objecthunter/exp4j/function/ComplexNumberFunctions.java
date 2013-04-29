@@ -1,4 +1,6 @@
-package net.objecthunter.exp4j;
+package net.objecthunter.exp4j.function;
+
+import net.objecthunter.exp4j.ComplexNumber;
 
 public abstract class ComplexNumberFunctions {
 	public static ComplexNumber power(final ComplexNumber base, final ComplexNumber exponent) {
