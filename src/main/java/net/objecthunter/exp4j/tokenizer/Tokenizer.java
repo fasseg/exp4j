@@ -1,4 +1,4 @@
-package net.objecthunter.exp4j.tokens;
+package net.objecthunter.exp4j.tokenizer;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -27,93 +27,32 @@ public class Tokenizer<T> {
 			}
 
 			if (Character.isDigit(c)) {
+				boolean imaginary = false;
 				StringBuilder numberString = new StringBuilder();
 
-				if (this.type == ComplexNumber.class) {
-					numberString.append(c);
-					/* might be a complex number */
-					/* parse the real part */
-					while (expression.length() > i + 1) {
-						char next = expression.charAt(++i);
-						if (Character.isDigit(next) || next == '.') {
-							numberString.append((char) next);
-						} else {
-							break;
-						}
-					}
-					/* check if there is a complex part */
-					StringBuilder complex = new StringBuilder();
-					int pos = i;
-					boolean hasI = false;
-					boolean hasOp = false;
-					boolean hasComplex = false;
-					while (expression.length() > pos) {
-						char next = expression.charAt(pos);
-						if (Character.isWhitespace(next)) {
-							pos++;
-							continue;
-						} else if (next == '+' || next == '-') {
-							complex.append(next);
-							hasOp = true;
-							pos++;
-						} else if (next == 'i') {
-							hasI = true;
-							pos++;
-						} else if (Character.isDigit(next) && hasOp) {
-							hasComplex = true;
-							complex.append(next);
-							pos++;
-							while (expression.length() > pos) {
-								next = expression.charAt(pos);
-								if (Character.isDigit(next) || next == '.') {
-									complex.append(next);
-									pos++;
-								} else {
-									i=pos;
-									break;
-								}
-							}
-						}
-						if (hasOp && hasI && hasComplex) {
-							numberString.append(complex.toString());
-							numberString.append('i');
-							i = pos;
-							break;
-						}
+				/* a number */
+				numberString.append(c);
 
-					}
-
-				} else {
-
-					/* a number */
-					numberString.append(c);
-
-					while (expression.length() > i + 1) {
-						char next = expression.charAt(++i);
-						if (Character.isDigit(next) || next == '.') {
-							numberString.append((char) next);
-						} else {
-							--i; // go back a char or we lose something
-							break;
-						}
+				while (expression.length() > i + 1) {
+					char next = expression.charAt(++i);
+					if (Character.isDigit(next) || next == '.') {
+						numberString.append((char) next);
+					} else if (type == ComplexNumber.class && next == 'i') {
+						imaginary = true;
+					} else {
+						--i; // go back a char or we lose something
+						break;
 					}
 				}
 
 				if (type == Float.class) {
-					NumberToken<Float> n = new NumberToken<Float>(Float.class,
-							Float.parseFloat(numberString.toString()));
+					NumberToken<Float> n = new NumberToken<Float>(Float.class, Float.parseFloat(numberString.toString()));
 					tokens.add(n);
-				} else if (type == Double.class) {
-					NumberToken<Double> n = new NumberToken<Double>(Double.class, Double.parseDouble(numberString
-							.toString()));
+				} else if (type == Double.class || type == ComplexNumber.class) {
+					NumberToken<Double> n = new NumberToken<Double>(Double.class, Double.parseDouble(numberString.toString()), imaginary);
 					tokens.add(n);
 				} else if (type == BigDecimal.class) {
-					NumberToken<BigDecimal> n = new NumberToken<BigDecimal>(BigDecimal.class, new BigDecimal(
-							numberString.toString()));
-					tokens.add(n);
-				} else if (type == ComplexNumber.class) {
-					NumberToken<ComplexNumber> n = new NumberToken<ComplexNumber>(ComplexNumber.class,
-							ComplexNumber.parseComplex(numberString.toString()));
+					NumberToken<BigDecimal> n = new NumberToken<BigDecimal>(BigDecimal.class, new BigDecimal(numberString.toString()));
 					tokens.add(n);
 				} else {
 					throw new RuntimeException("Unable to handle the type " + type);
@@ -181,6 +120,7 @@ public class Tokenizer<T> {
 	public static class NumberToken<T> extends Token {
 		private final T value;
 		private final Class<T> valueType;
+		boolean imaginary = false;
 
 		public NumberToken(final Class<T> valueType, final T value) {
 			super(Token.Type.NUMBER);
@@ -188,8 +128,19 @@ public class Tokenizer<T> {
 			this.valueType = valueType;
 		}
 
+		public NumberToken(final Class<T> valueType, final T value, boolean imaginary) {
+			super(Token.Type.NUMBER);
+			this.value = value;
+			this.valueType = valueType;
+			this.imaginary = imaginary;
+		}
+
 		public T getValue() {
 			return value;
+		}
+
+		public boolean isImaginary() {
+			return imaginary;
 		}
 	}
 

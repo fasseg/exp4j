@@ -1,13 +1,14 @@
-package net.objecthunter.exp4j.tokens;
+package net.objecthunter.exp4j.tokenizer;
 
 import java.util.List;
 
 import junit.framework.Assert;
 
 import net.objecthunter.exp4j.ComplexNumber;
-import net.objecthunter.exp4j.tokens.Tokenizer.NumberToken;
-import net.objecthunter.exp4j.tokens.Tokenizer.Token;
-import net.objecthunter.exp4j.tokens.Tokenizer.Token.Type;
+import net.objecthunter.exp4j.tokenizer.Tokenizer;
+import net.objecthunter.exp4j.tokenizer.Tokenizer.NumberToken;
+import net.objecthunter.exp4j.tokenizer.Tokenizer.Token;
+import net.objecthunter.exp4j.tokenizer.Tokenizer.Token.Type;
 
 import org.junit.Test;
 
@@ -80,10 +81,12 @@ public class TokenizerTest {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "1 + 1i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
-		Assert.assertTrue(tokens.size() == 1);
-		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 1d);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == 1d);
+		Assert.assertTrue(tokens.size() == 3);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(0)).getValue() == 1d);
+		Assert.assertFalse(((NumberToken<Double>) tokens.get(0)).isImaginary());
+		Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(2)).getValue() == 1d);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(2)).isImaginary());
 	}
 	
 	@Test
@@ -91,10 +94,10 @@ public class TokenizerTest {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "10.4 + 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
-		Assert.assertTrue(tokens.size() == 1);
-		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 10.4d);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == 17.8d);
+		Assert.assertTrue(tokens.size() == 3);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(0)).getValue() == 10.4d);
+		Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(2)).getValue() == 17.8d);
 	}
 
 	@Test
@@ -102,9 +105,37 @@ public class TokenizerTest {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "10.4 - 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
-		Assert.assertTrue(tokens.size() == 1);
-		Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getReal() == 10.4d);
-		Assert.assertTrue(((NumberToken<ComplexNumber>) tokens.get(0)).getValue().getImaginary() == -17.8d);
+		Assert.assertTrue(tokens.size() == 3);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(0)).getValue() == 10.4d);
+		Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(2)).getValue() == 17.8d);
+	}
+
+	@Test
+	public void testComplexTokenization4() {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "3 * 10.4 - 17.8i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 5);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(0)).getValue() == 3d);
+		Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(2)).getValue() == 10.4d);
+		Assert.assertTrue(tokens.get(3).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(4)).getValue() == 17.8d);
+	}
+
+	@Test
+	public void testComplexTokenization5() {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "(3 * 10.4) - 17.8i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		Assert.assertTrue(tokens.size() == 7);
+		Assert.assertTrue(tokens.get(0).getType() == Type.PARANTHESES);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(1)).getValue() == 3d);
+		Assert.assertTrue(tokens.get(2).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(3)).getValue() == 10.4d);
+		Assert.assertTrue(tokens.get(4).getType() == Type.PARANTHESES);
+		Assert.assertTrue(tokens.get(5).getType() == Type.OPERATOR);
+		Assert.assertTrue(((NumberToken<Double>) tokens.get(6)).getValue() == 17.8d);
 	}
 }

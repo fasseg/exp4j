@@ -9,8 +9,8 @@ public class ComplexNumber {
 		if (posSep == -1) {
 			posSep = number.indexOf("-");
 		}
-		double real = Double.parseDouble(number.substring(0, posSep));
-		double img = Double.parseDouble(number.substring(posSep,number.length() - 1));
+		double real = (posSep == -1) ? Double.parseDouble(number) : Double.parseDouble(number.substring(0, posSep));
+		double img = (posSep == -1) ? 0d : Double.parseDouble(number.substring(posSep, number.length() - 1));
 		return new ComplexNumber(real, img);
 	}
 
