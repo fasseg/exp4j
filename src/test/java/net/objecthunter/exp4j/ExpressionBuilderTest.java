@@ -9,35 +9,35 @@ import org.junit.Test;
 public class ExpressionBuilderTest {
 	
 	@Test
-	public void tesFloatExpression1(){
+	public void testFloatExpression1(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2+2",Float.class);
 		float result = e.build().calculate();
 		assertTrue(4f == result);
 	}
 
 	@Test
-	public void tesFloatExpression2(){
+	public void testFloatExpression2(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2-2",Float.class);
 		float result = e.build().calculate();
 		assertTrue(0f == result);
 	}
 	
 	@Test
-	public void tesFloatExpression3(){
+	public void testFloatExpression3(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2/2",Float.class);
 		float result = e.build().calculate();
 		assertTrue(1f == result);
 	}
 	
 	@Test
-	public void tesFloatExpression4(){
+	public void testFloatExpression4(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45-1",Float.class);
 		float result = e.build().calculate();
 		assertTrue(1.45f == result);
 	}
 
 	@Test
-	public void tesFloatExpression5(){
+	public void testFloatExpression5(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45-3",Float.class);
 		float result = e.build().calculate();
 		float expected = 2.45f - 3f;
@@ -45,19 +45,19 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected=RuntimeException.class)
-	public void tesFloatExpression6(){
+	public void testFloatExpression6(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45(-3",Float.class);
 		float result = e.build().calculate();
 	}
 
 	@Test(expected=RuntimeException.class)
-	public void tesFloatExpression7(){
+	public void testFloatExpression7(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45)-3",Float.class);
 		float result = e.build().calculate();
 	}
 
 	@Test
-	public void tesFloatExpression8(){
+	public void testFloatExpression8(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(1.0)",Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.sin(1.0);
@@ -65,7 +65,7 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void tesFloatExpression9(){
+	public void testFloatExpression9(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(1.0) * 1 + 1",Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.sin(1.0) * 1 + 1;
@@ -73,7 +73,7 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void tesFloatExpression10(){
+	public void testFloatExpression10(){
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("-1",Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, -1f == result);
