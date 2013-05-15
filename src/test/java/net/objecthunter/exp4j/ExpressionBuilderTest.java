@@ -80,6 +80,20 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
+	public void testFloatExpression11(){
+		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7+-1",Float.class);
+		float result = e.build().calculate();
+		assertTrue("exp4j calulated " + result, 6f == result);
+	}
+
+	@Test
+	public void testFloatExpression12(){
+		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7+--1",Float.class);
+		float result = e.build().calculate();
+		assertTrue("exp4j calulated " + result, 8f == result);
+	}
+
+	@Test
 	public void testExpression1(){
 		ExpressionBuilder<Double> e = new ExpressionBuilder<>("2+2",Double.class);
 		System.out.println(e.build().calculate());

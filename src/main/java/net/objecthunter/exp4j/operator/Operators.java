@@ -103,4 +103,23 @@ public class Operators {
 	public static CustomOperator getOperator(char c){
 		return builtin.get(String.valueOf(c));
 	}
+	public static CustomOperator getUnaryMinusOperator(){
+		return new CustomOperator("-",PRECEDENCE_SUBTRACTION,1,false) {
+			@Override
+			public Object apply(Object... args) {
+				if (args[0] instanceof Float){
+					return (float) args[0] * -1f;
+				}else if (args[0] instanceof Double){
+					return (double) args[0] * -1d;
+				}else if (args[0] instanceof BigDecimal){
+					return ((BigDecimal)args[0]).negate();
+				}else if (args[0] instanceof ComplexNumber){
+					ComplexNumber c = (ComplexNumber)args[0];
+					return new ComplexNumber(c.getReal() * -1d, c.getImaginary() * -1d);
+				}else {
+					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
+				}
+			}
+		};
+	}
 }

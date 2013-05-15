@@ -9,6 +9,7 @@ import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.operator.Operators;
+import net.objecthunter.exp4j.tokenizer.Token.Type;
 
 public class Tokenizer<T> {
 
@@ -62,8 +63,34 @@ public class Tokenizer<T> {
 
 			} else if (Operators.isOperator(c)) {
 				/* an operator */
-				OperatorToken op = new OperatorToken(Operators.getOperator(c));
-				tokens.add(op);
+				OperatorToken op;
+				/* check for the unary minus/plus */
+				if (c == '-' || c == '+'){
+					if (tokens.isEmpty()){
+						/* unary op */
+						if (c == '-') {
+							/* just skip unary plus signs */
+							tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
+						}
+					}else{
+						Token last = tokens.get(tokens.size() - 1);
+						if (last.getType() == Type.OPERATOR || (last.getType() == Type.PARANTHESES && ((ParanthesesToken)last).isOpen())) {
+							/* unary op */
+							if (c == '-') {
+								/* just skip unary plus signs */
+								tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
+							}
+						}else{
+							/* binary op */
+							op = new OperatorToken(Operators.getOperator(c));
+							tokens.add(op);
+						}
+					}
+				}else{
+					/* binary op */
+					op = new OperatorToken(Operators.getOperator(c));
+					tokens.add(op);
+				}
 
 			} else if (Character.isAlphabetic(c)) {
 
