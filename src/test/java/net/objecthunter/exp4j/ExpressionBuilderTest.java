@@ -94,6 +94,20 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
+	public void testFloatExpression13(){
+		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7++1",Float.class);
+		float result = e.build().calculate();
+		assertTrue("exp4j calulated " + result, 8f == result);
+	}
+
+	@Test
+	public void testFloatExpression14(){
+		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(-1.0)",Float.class);
+		float result = e.build().calculate();
+		assertTrue("exp4j calulated " + result, (float) Math.sin(-1.0f) == result);
+	}
+
+	@Test
 	public void testExpression1(){
 		ExpressionBuilder<Double> e = new ExpressionBuilder<>("2+2",Double.class);
 		System.out.println(e.build().calculate());

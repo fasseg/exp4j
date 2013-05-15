@@ -43,7 +43,7 @@ public class ShuntingYard {
 					stack.push(t);
 				} else {
 					/* a right para */
-					while (stack.peek().getType() != Type.PARANTHESES && ((ParanthesesToken) stack.peek()).isOpen()) {
+					while (stack.peek().getType() != Type.PARANTHESES || !((ParanthesesToken) stack.peek()).isOpen()) {
 						output.push(stack.pop());
 					}
 					stack.pop(); // pop the left parantheses
