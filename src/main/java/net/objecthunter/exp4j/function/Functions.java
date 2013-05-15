@@ -36,7 +36,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.cos((double) arg);
+					return (float) Math.cos(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.cos((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -55,7 +55,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.tan((double) arg);
+					return (float) Math.tan(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.tan((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -73,7 +73,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.abs((float)arg);
+					return Math.abs(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.abs((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -91,7 +91,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.log((float)arg);
+					return (float) Math.log(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.log((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -109,7 +109,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.log10((float)arg);
+					return (float) Math.log10(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.log10((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -127,7 +127,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.ceil((float)arg);
+					return (float) Math.ceil(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.ceil((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -145,7 +145,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.floor((float)arg);
+					return (float) Math.floor(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.floor((double) arg);
 				} else if (arg instanceof BigDecimal) {
@@ -163,9 +163,27 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.exp((float)arg);
+					return (float) Math.exp(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.exp((double) arg);
+				} else if (arg instanceof BigDecimal) {
+					throw new RuntimeException("no support for big decimal");
+				} else if (arg instanceof ComplexNumber) {
+					throw new RuntimeException("no supprt for complex");
+				} else {
+					throw new RuntimeException("unknown type " + arg.getClass().getName());
+				}
+			}
+		});
+		builtin.put("sqrt", new CustomFunction("sqrt") {
+
+			@Override
+			public Object apply(Object... args) {
+				Object arg = args[0];
+				if (arg instanceof Float) {
+					return (float) Math.sqrt(((Float) arg).doubleValue());
+				} else if (arg instanceof Double) {
+					return Math.sqrt((double) arg);
 				} else if (arg instanceof BigDecimal) {
 					throw new RuntimeException("no support for big decimal");
 				} else if (arg instanceof ComplexNumber) {

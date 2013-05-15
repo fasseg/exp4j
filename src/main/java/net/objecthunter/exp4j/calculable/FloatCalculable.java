@@ -9,6 +9,7 @@ import net.objecthunter.exp4j.tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.Token;
 import net.objecthunter.exp4j.tokenizer.Token.Type;
+import net.objecthunter.exp4j.tokenizer.VariableToken;
 
 public class FloatCalculable extends Calculable<Float> {
 
@@ -28,6 +29,11 @@ public class FloatCalculable extends Calculable<Float> {
 				/* push values onto the stack */
 				output.push(((NumberToken<Float>) t).getValue());
 
+			} else if (t.getType() == Type.VARIABLE) {
+				
+				/* push the variable value onto the stack */
+				output.push(variables.get(((VariableToken)t).getName()));
+				
 			} else if (t.getType() == Type.OPERATOR) {
 
 				OperatorToken op = (OperatorToken) t;
@@ -52,7 +58,7 @@ public class FloatCalculable extends Calculable<Float> {
 				if (output.size() < func.getFunction().getArgumentCount()) {
 					throw new RuntimeException("Invalid number of arguments available");
 				}
-				
+
 				/* collect the arguments from the stack */
 				Object[] args = new Object[func.getFunction().getArgumentCount()];
 				for (int i = func.getFunction().getArgumentCount() - 1; i >= 0; i--) {

@@ -4,7 +4,7 @@ package net.objecthunter.exp4j.tokenizer;
 public abstract class Token {
 
 	public enum Type {
-		NUMBER, FUNCTION, OPERATOR, PARANTHESES, ARGUMENT_SEPARATOR;
+		NUMBER, FUNCTION, OPERATOR, PARANTHESES, ARGUMENT_SEPARATOR, VARIABLE;
 	}
 
 	private final Type type;

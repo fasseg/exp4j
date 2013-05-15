@@ -3,11 +3,11 @@ package net.objecthunter.exp4j.tokenizer;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import net.objecthunter.exp4j.ComplexNumber;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.function.Functions;
-import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.Token.Type;
 
@@ -21,6 +21,10 @@ public class Tokenizer<T> {
 	}
 
 	public List<Token> tokenizeExpression(String expression) {
+		return this.tokenizeExpression(expression, null);
+	}
+
+	public List<Token> tokenizeExpression(String expression, Set<String> variables) {
 		List<Token> tokens = new LinkedList<Token>();
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
@@ -65,28 +69,28 @@ public class Tokenizer<T> {
 				/* an operator */
 				OperatorToken op;
 				/* check for the unary minus/plus */
-				if (c == '-' || c == '+'){
-					if (tokens.isEmpty()){
+				if (c == '-' || c == '+') {
+					if (tokens.isEmpty()) {
 						/* unary op */
 						if (c == '-') {
 							/* just skip unary plus signs */
 							tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
 						}
-					}else{
+					} else {
 						Token last = tokens.get(tokens.size() - 1);
-						if (last.getType() == Type.OPERATOR || (last.getType() == Type.PARANTHESES && ((ParanthesesToken)last).isOpen())) {
+						if (last.getType() == Type.OPERATOR || (last.getType() == Type.PARANTHESES && ((ParanthesesToken) last).isOpen())) {
 							/* unary op */
 							if (c == '-') {
 								/* just skip unary plus signs */
 								tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
 							}
-						}else{
+						} else {
 							/* binary op */
 							op = new OperatorToken(Operators.getOperator(c));
 							tokens.add(op);
 						}
 					}
-				}else{
+				} else {
 					/* binary op */
 					op = new OperatorToken(Operators.getOperator(c));
 					tokens.add(op);
@@ -111,13 +115,15 @@ public class Tokenizer<T> {
 				CustomFunction func = Functions.getFunction(nameBuilder.toString());
 				if (func != null) {
 					tokens.add(new FunctionToken(func));
+				}else if (variables.contains(nameBuilder.toString())){
+					tokens.add(new VariableToken(nameBuilder.toString()));
 				}
 
 			} else if (c == '(' || c == '[') {
 				tokens.add(new ParanthesesToken(true));
 			} else if (c == ')' || c == ']') {
 				tokens.add(new ParanthesesToken(false));
-			} else if (c == ','){
+			} else if (c == ',') {
 				tokens.add(new ArgumentSeparatorToken());
 			}
 		}

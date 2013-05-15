@@ -106,7 +106,7 @@ public class TokenizerTest {
 	@Test
 	public void testTokenization7() {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
-		String expression = "-1 * -sin(3 * (-1.2d))";
+		String expression = "-1 * -sin(3 * (-1.2))";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
 		Assert.assertTrue(tokens.size() == 13);
 		Assert.assertTrue(tokens.get(0).getType() == Type.OPERATOR);

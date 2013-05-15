@@ -12,6 +12,7 @@ public class Operators {
 	public static final int PRECEDENCE_MULTIPLICATION = 1000;
 	public static final int PRECEDENCE_DIVISION = PRECEDENCE_MULTIPLICATION;
 	public static final int PRECEDENCE_MODULO = PRECEDENCE_DIVISION;
+	public static final int PRECEDENCE_EXPONENTATION = 10000;
 	
 	private static Map<String,CustomOperator> builtin = new HashMap<String, CustomOperator>();
 	
@@ -85,6 +86,22 @@ public class Operators {
 			public Object apply(Object... args) {
 				if (args[0] instanceof Float){
 					return (float) args[0] % (float) args[1];
+				}else if (args[0] instanceof Double){
+					return (double) args[0] % (double) args[1];
+				}else if (args[0] instanceof BigDecimal){
+					throw new RuntimeException("No support for big decimals");
+				}else if (args[0] instanceof ComplexNumber){
+					throw new RuntimeException("No support for complex numbers");
+				}else {
+					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
+				}
+			}
+		});
+		builtin.put("^",new CustomOperator("^",PRECEDENCE_EXPONENTATION) {
+			@Override
+			public Object apply(Object... args) {
+				if (args[0] instanceof Float){
+					return (float) Math.pow(((Float) args[0]).doubleValue(),((Float)args[1]).doubleValue());
 				}else if (args[0] instanceof Double){
 					return (double) args[0] % (double) args[1];
 				}else if (args[0] instanceof BigDecimal){

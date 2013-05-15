@@ -16,7 +16,7 @@ public class ShuntingYard {
 		Stack<Token> output = new Stack<Token>();
 		Stack<Token> stack = new Stack<Token>();
 		for (Token t : tokens) {
-			if (t.getType() == Type.NUMBER) {
+			if (t.getType() == Type.NUMBER || t.getType() == Type.VARIABLE) {
 				output.add(t);
 			} else if (t.getType() == Type.FUNCTION) {
 				stack.push(t);
