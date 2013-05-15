@@ -17,7 +17,7 @@ public class Functions {
 			public Object apply(Object... args) {
 				Object arg = args[0];
 				if (arg instanceof Float) {
-					return Math.sin((double) arg);
+					return (float) Math.sin(((Float) arg).doubleValue());
 				} else if (arg instanceof Double) {
 					return Math.sin((double) arg);
 				} else if (arg instanceof BigDecimal) {

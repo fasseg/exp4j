@@ -3,12 +3,8 @@ package net.objecthunter.exp4j.tokenizer;
 import java.util.List;
 
 import junit.framework.Assert;
-
 import net.objecthunter.exp4j.ComplexNumber;
-import net.objecthunter.exp4j.tokenizer.Tokenizer;
-import net.objecthunter.exp4j.tokenizer.Tokenizer.NumberToken;
-import net.objecthunter.exp4j.tokenizer.Tokenizer.Token;
-import net.objecthunter.exp4j.tokenizer.Tokenizer.Token.Type;
+import net.objecthunter.exp4j.tokenizer.Token.Type;
 
 import org.junit.Test;
 
