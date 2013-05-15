@@ -3,11 +3,13 @@ package net.objecthunter.exp4j.tokenizer;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.objecthunter.exp4j.ComplexNumber;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.function.Functions;
+import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.Token.Type;
 
@@ -21,10 +23,10 @@ public class Tokenizer<T> {
 	}
 
 	public List<Token> tokenizeExpression(String expression) {
-		return this.tokenizeExpression(expression, null);
+		return this.tokenizeExpression(expression, null, null, null);
 	}
 
-	public List<Token> tokenizeExpression(String expression, Set<String> variables) {
+	public List<Token> tokenizeExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators) {
 		List<Token> tokens = new LinkedList<Token>();
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
@@ -65,7 +67,7 @@ public class Tokenizer<T> {
 					throw new RuntimeException("Unable to handle the type " + type);
 				}
 
-			} else if (Operators.isOperator(c)) {
+			} else if (isOperatorCaracter(c, customOperators)) {
 				/* an operator */
 				OperatorToken op;
 				/* check for the unary minus/plus */
@@ -86,13 +88,29 @@ public class Tokenizer<T> {
 							}
 						} else {
 							/* binary op */
-							op = new OperatorToken(Operators.getOperator(c));
+							CustomOperator o = Operators.getOperator(c);
+							if (o == null){
+								/* can be a custom operator */
+								o = customOperators.get(String.valueOf(c));
+							}
+							if (o == null){
+								throw new RuntimeException("Unknown operator " + o.getSymbol());
+							}
+							op = new OperatorToken(o);
 							tokens.add(op);
 						}
 					}
 				} else {
 					/* binary op */
-					op = new OperatorToken(Operators.getOperator(c));
+					CustomOperator o = Operators.getOperator(c);
+					if (o == null){
+						/* can be a custom operator */
+						o = customOperators.get(String.valueOf(c));
+					}
+					if (o == null){
+						throw new RuntimeException("Unknown operator " + o.getSymbol());
+					}
+					op = new OperatorToken(o);
 					tokens.add(op);
 				}
 
@@ -115,8 +133,14 @@ public class Tokenizer<T> {
 				CustomFunction func = Functions.getFunction(nameBuilder.toString());
 				if (func != null) {
 					tokens.add(new FunctionToken(func));
-				}else if (variables.contains(nameBuilder.toString())){
-					tokens.add(new VariableToken(nameBuilder.toString()));
+				} else {
+					/* might be a custom function */
+					func = customFunctions.get(nameBuilder.toString());
+					if (func != null) {
+						tokens.add(new FunctionToken(func));
+					} else if (variables.contains(nameBuilder.toString())) {
+						tokens.add(new VariableToken(nameBuilder.toString()));
+					}
 				}
 
 			} else if (c == '(' || c == '[') {
@@ -128,5 +152,18 @@ public class Tokenizer<T> {
 			}
 		}
 		return tokens;
+	}
+
+	private boolean isOperatorCaracter(char c, Map<String, CustomOperator> operators) {
+		if (Operators.isOperator(c)) {
+			return true;
+		} else if (operators != null) {
+			for (String key : operators.keySet()) {
+				if (key.startsWith(String.valueOf(c))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

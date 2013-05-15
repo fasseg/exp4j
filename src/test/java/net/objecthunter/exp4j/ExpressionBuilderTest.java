@@ -500,7 +500,27 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testModulo1() throws Exception {
 		float result = (float) new ExpressionBuilder("33%(20/2)%2", Float.class).build().calculate();
-		assertTrue(result == 1d);
+		float expected = 33f % (20f / 2f) % 2f;
+		assertTrue("exp4j calculated " + result + " instead of " + expected, result == expected);
+	}
+
+	@Test
+	public void testModulo2() throws Exception {
+		float result = (float) new ExpressionBuilder("33%(20/2)", Float.class).build().calculate();
+		assertTrue("exp4j calculated " + result, result == 3f);
+	}
+
+	@Test
+	public void testDivision1() throws Exception {
+		float result = (float) new ExpressionBuilder("33/11", Float.class).build().calculate();
+		assertTrue("exp4j calculated " + result, result == 3f);
+	}
+
+	@Test
+	public void testDivision2() throws Exception {
+		float result = (float) new ExpressionBuilder("20/10/5", Float.class).build().calculate();
+		float expected = 20f / 10f / 5f;
+		assertTrue("exp4j calculated " + result + " instead of " + expected, result == expected);
 	}
 
 	@Test
@@ -584,14 +604,18 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testExpressionBuilder1() throws Exception {
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x","y").build();
+		calc.setVariable("x", 1f);
+		calc.setVariable("y", 2f);
 		float result = calc.calculate();
 		assertTrue(result == 13d);
 	}
 
 	@Test
 	public void testExpressionBuilder2() throws Exception {
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x","y").build();
+		calc.setVariable("x", 1f);
+		calc.setVariable("y", 2f);
 		float result = calc.calculate();
 		assertTrue(result == 13d);
 	}
@@ -600,9 +624,11 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder3() throws Exception {
 		float varX = 1.3f;
 		float varY = 4.22f;
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).variables("x","y").build();
+		calc.setVariable("x", varX);
+		calc.setVariable("y", varY);
 		float result = calc.calculate();
-		assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
+		assertTrue(result == 7f * varX + 3 * varY - (float) Math.pow( (float) Math.log(varY / varX * 12f), varY));
 	}
 
 	@Test
