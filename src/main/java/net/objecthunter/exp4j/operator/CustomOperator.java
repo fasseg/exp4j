@@ -22,6 +22,14 @@ public abstract class CustomOperator {
 		this.precedence = precedence;
 	}
 
+	public CustomOperator(String symbol) {
+		super();
+		this.argc = 2;
+		this.leftAssociative = false;
+		this.symbol = symbol;
+		this.precedence = Operators.PRECEDENCE_ADDITION;
+	}
+
 	public int getArgumentCount() {
 		return argc;
 	}
