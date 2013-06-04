@@ -15,6 +15,7 @@ import javax.script.ScriptEngineManager;
 import net.objecthunter.exp4j.calculable.Calculable;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.operator.CustomOperator;
+import net.objecthunter.exp4j.operator.Operators;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -147,6 +148,7 @@ public class ExpressionBuilderTest {
 		};
 		Calculable<Float> calc = new ExpressionBuilder("timespi(x)", Float.class).variable("x").function(custom).build();
 		float result = calc.calculate();
+		calc.setVariable("x", 1f);
 		assertTrue(result == Math.PI);
 	}
 
@@ -319,7 +321,7 @@ public class ExpressionBuilderTest {
 		};
 		float varX = 1;
 		Calculable<Float> calc = new ExpressionBuilder("multiply(sin(x),x+1)", Float.class).function(custom1).build();
-		double expected = Math.sin(varX) * (varX + 1);
+		float expected = (float) Math.sin(varX) * (varX + 1);
 		double actual = calc.calculate();
 		assertTrue(expected == actual);
 	}
@@ -334,7 +336,7 @@ public class ExpressionBuilderTest {
 		};
 		float varX = 1;
 		Calculable<Float> calc = new ExpressionBuilder("timesPi(x^2)", Float.class).function(custom1).build();
-		double expected = varX * Math.PI;
+		float expected = varX * (float) Math.PI;
 		double actual = calc.calculate();
 		assertTrue(expected == actual);
 	}
@@ -349,7 +351,7 @@ public class ExpressionBuilderTest {
 		};
 		float varX = 1;
 		Calculable<Float> calc = new ExpressionBuilder("multiply(sin(x),x+1^(-2),log(x))", Float.class).function(custom1).build();
-		double expected = Math.sin(varX) * Math.pow((varX + 1), -2) * Math.log(varX);
+		float expected = (float) Math.sin(varX) * (float) Math.pow((varX + 1f), -2f) * (float) Math.log(varX);
 		assertTrue(expected == calc.calculate());
 	}
 
@@ -363,7 +365,7 @@ public class ExpressionBuilderTest {
 		};
 		float varX = (float) Math.E;
 		Calculable<Float> calc = new ExpressionBuilder("timesPi(log(x^(2+1)))", Float.class).function(custom1).build();
-		double expected = Math.log(Math.pow(varX, 3)) * Math.PI;
+		float expected = (float) Math.log((float) Math.pow(varX, 3)) * (float) Math.PI;
 		assertTrue(expected == calc.calculate());
 	}
 
@@ -604,7 +606,7 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testExpressionBuilder1() throws Exception {
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x","y").build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x", "y").build();
 		calc.setVariable("x", 1f);
 		calc.setVariable("y", 2f);
 		float result = calc.calculate();
@@ -613,7 +615,7 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testExpressionBuilder2() throws Exception {
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x","y").build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y", Float.class).variables("x", "y").build();
 		calc.setVariable("x", 1f);
 		calc.setVariable("y", 2f);
 		float result = calc.calculate();
@@ -624,35 +626,37 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder3() throws Exception {
 		float varX = 1.3f;
 		float varY = 4.22f;
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).variables("x","y").build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).variables("x", "y").build();
 		calc.setVariable("x", varX);
 		calc.setVariable("y", varY);
 		float result = calc.calculate();
-		assertTrue(result == 7f * varX + 3 * varY - (float) Math.pow( (float) Math.log(varY / varX * 12f), varY));
+		assertTrue(result == 7f * varX + 3 * varY - (float) Math.pow((float) Math.log(varY / varX * 12f), varY));
 	}
 
 	@Test
 	public void testExpressionBuilder4() throws Exception {
 		float varX = 1.3f;
 		float varY = 4.22f;
-		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).build();
+		Calculable<Float> calc = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y", Float.class).variables("x", "y").build();
+		calc.setVariable("x", varX);
+		calc.setVariable("y", varY);
 		float result = calc.calculate();
-		assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
+		assertTrue(result == 7f * varX + 3f * varY - (float) Math.pow((float) Math.log(varY / varX * 12f), varY));
 		varX = 1.79854f;
 		varY = 9281.123f;
 		calc.setVariable("x", varX);
 		calc.setVariable("y", varY);
 		result = calc.calculate();
-		assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
+		assertTrue(result == 7f * varX + 3f * varY - (float) Math.pow((float) Math.log(varY / varX * 12f), varY));
 	}
 
 	@Test
 	public void testExpressionBuilder5() throws Exception {
-		float varX = 1.3f;
 		float varY = 4.22f;
-		Calculable<Float> calc = new ExpressionBuilder("3*y", Float.class).build();
+		Calculable<Float> calc = new ExpressionBuilder("3*y", Float.class).variables("y").build();
+		calc.setVariable("y", varY);
 		float result = calc.calculate();
-		assertTrue(result == 3 * varY);
+		assertTrue(result == 3f * varY);
 	}
 
 	@Test
@@ -672,16 +676,18 @@ public class ExpressionBuilderTest {
 	public void testExpressionBuilder7() throws Exception {
 		float varX = 1.3f;
 		Calculable<Float> calc = new ExpressionBuilder("log(sin(x))", Float.class).variable("x").build();
+		calc.setVariable("x", varX);
 		float result = calc.calculate();
-		assertTrue(result == Math.log(Math.sin(varX)));
+		assertTrue(result == (float) Math.log((float) Math.sin(varX)));
 	}
 
 	@Test
 	public void testExpressionBuilder8() throws Exception {
 		float varX = 1.3f;
 		Calculable<Float> calc = new ExpressionBuilder("log(sin(x))", Float.class).variable("x").build();
+		calc.setVariable("x", varX);
 		float result = calc.calculate();
-		assertTrue(result == Math.log(Math.sin(varX)));
+		assertTrue(result == (float) Math.log((float) Math.sin(varX)));
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -717,7 +723,7 @@ public class ExpressionBuilderTest {
 	public void testOperatorPrecedence() throws Exception {
 
 		ExpressionBuilder builder = new ExpressionBuilder("1", Float.class);
-		Field operatorField = ExpressionBuilder.class.getDeclaredField("builtInOperators");
+		Field operatorField = Operators.class.getDeclaredField("builtin");
 		operatorField.setAccessible(true);
 		Map<Character, CustomOperator> operators = (Map<Character, CustomOperator>) operatorField.get(builder);
 
@@ -726,43 +732,32 @@ public class ExpressionBuilderTest {
 		assertTrue(operators.get("-").isLeftAssociative());
 		assertTrue(operators.get("/").isLeftAssociative());
 		assertTrue(!operators.get("^").isLeftAssociative());
-		assertTrue(!operators.get("\'").isLeftAssociative());
 
 		assertTrue(operators.get("+").getPrecedence() == operators.get("-").getPrecedence());
 		assertTrue(operators.get("+").getPrecedence() < operators.get("*").getPrecedence());
 		assertTrue(operators.get("+").getPrecedence() < operators.get("/").getPrecedence());
 		assertTrue(operators.get("+").getPrecedence() < operators.get("^").getPrecedence());
-		assertTrue(operators.get("+").getPrecedence() < operators.get("\'").getPrecedence());
 
 		assertTrue(operators.get("-").getPrecedence() == operators.get("+").getPrecedence());
 		assertTrue(operators.get("-").getPrecedence() < operators.get("*").getPrecedence());
 		assertTrue(operators.get("-").getPrecedence() < operators.get("/").getPrecedence());
 		assertTrue(operators.get("-").getPrecedence() < operators.get("^").getPrecedence());
-		assertTrue(operators.get("-").getPrecedence() < operators.get("\'").getPrecedence());
 
 		assertTrue(operators.get("*").getPrecedence() > operators.get("+").getPrecedence());
 		assertTrue(operators.get("*").getPrecedence() > operators.get("-").getPrecedence());
 		assertTrue(operators.get("*").getPrecedence() == operators.get("/").getPrecedence());
 		assertTrue(operators.get("*").getPrecedence() < operators.get("^").getPrecedence());
-		assertTrue(operators.get("*").getPrecedence() < operators.get("\'").getPrecedence());
 
 		assertTrue(operators.get("/").getPrecedence() > operators.get("+").getPrecedence());
 		assertTrue(operators.get("/").getPrecedence() > operators.get("-").getPrecedence());
 		assertTrue(operators.get("/").getPrecedence() == operators.get("*").getPrecedence());
 		assertTrue(operators.get("/").getPrecedence() < operators.get("^").getPrecedence());
-		assertTrue(operators.get("/").getPrecedence() < operators.get("\'").getPrecedence());
 
 		assertTrue(operators.get("^").getPrecedence() > operators.get("+").getPrecedence());
 		assertTrue(operators.get("^").getPrecedence() > operators.get("-").getPrecedence());
 		assertTrue(operators.get("^").getPrecedence() > operators.get("*").getPrecedence());
 		assertTrue(operators.get("^").getPrecedence() > operators.get("/").getPrecedence());
-		assertTrue(operators.get("^").getPrecedence() < operators.get("\'").getPrecedence());
 
-		assertTrue(operators.get("\'").getPrecedence() > operators.get("+").getPrecedence());
-		assertTrue(operators.get("\'").getPrecedence() > operators.get("-").getPrecedence());
-		assertTrue(operators.get("\'").getPrecedence() > operators.get("*").getPrecedence());
-		assertTrue(operators.get("\'").getPrecedence() > operators.get("/").getPrecedence());
-		assertTrue(operators.get("\'").getPrecedence() > operators.get("^").getPrecedence());
 	}
 
 	@Test
@@ -787,18 +782,20 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testExpression11() throws Exception {
-		double x = 1d;
-		double y = 2d;
+		float x = 1f;
+		float y = 2f;
 		String expr = "log(x) ^ sin(y)";
-		double expected = Math.pow(Math.log(x), Math.sin(y));
+		float expected = (float) Math.pow((float) Math.log(x), (float) Math.sin(y));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "y").build();
+		calc.setVariable("x", x);
+		calc.setVariable("y", y);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression12() throws Exception {
 		String expr = "log(2.5333333333)^(0-1)";
-		double expected = Math.pow(Math.log(2.5333333333d), -1);
+		float expected = (float) Math.pow((float) Math.log(2.5333333333f), -1f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -806,7 +803,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression13() throws Exception {
 		String expr = "2.5333333333^(0-1)";
-		double expected = Math.pow(2.5333333333d, -1);
+		float expected = (float) Math.pow(2.5333333333f, -1f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -814,7 +811,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression14() throws Exception {
 		String expr = "2 * 17.41 + (12*2)^(0-1)";
-		double expected = 2 * 17.41d + Math.pow((12 * 2), -1);
+		float expected = 2f * 17.41f + (float) Math.pow((12f * 2f), -1f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -822,7 +819,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression15() throws Exception {
 		String expr = "2.5333333333 * 17.41 + (12*2)^log(2.764)";
-		double expected = 2.5333333333d * 17.41d + Math.pow((12 * 2), Math.log(2.764d));
+		float expected = 2.5333333333f * 17.41f + (float) Math.pow((12f * 2f), (float) Math.log(2.764f));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -830,7 +827,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression16() throws Exception {
 		String expr = "2.5333333333/2 * 17.41 + (12*2)^(log(2.764) - sin(5.6664))";
-		double expected = 2.5333333333d / 2 * 17.41d + Math.pow((12 * 2), Math.log(2.764d) - Math.sin(5.6664d));
+		float expected = 2.5333333333f / 2f * 17.41f + (float) Math.pow((12f * 2f), (float) Math.log(2.764f) - (float) Math.sin(5.6664f));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -838,17 +835,19 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression17() throws Exception {
 		String expr = "x^2 - 2 * y";
-		double x = Math.E;
-		double y = Math.PI;
-		double expected = x * x - 2 * y;
+		float x = (float) Math.E;
+		float y = (float) Math.PI;
+		float expected = x * x - 2f * y;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "y").build();
+		calc.setVariable("x", x);
+		calc.setVariable("y", y);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression18() throws Exception {
 		String expr = "-3";
-		double expected = -3;
+		float expected = -3;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -856,7 +855,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression19() throws Exception {
 		String expr = "-3 * -24.23";
-		double expected = -3 * -24.23d;
+		float expected = -3 * -24.23f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -874,7 +873,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression20() throws Exception {
 		String expr = "-2 * 24/log(2) -2";
-		double expected = -2 * 24 / Math.log(2) - 2;
+		float expected = -2f * 24f / (float) Math.log(2f) - 2f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -882,34 +881,49 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression21() throws Exception {
 		String expr = "-2 *33.34/log(x)^-2 + 14 *6";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
+		float x = 1.334f;
+		float expected = -2f * 33.34f / (float) Math.pow((float) Math.log(x), -2f) + 14f * 6f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		assertTrue(expected == calc.calculate());
+		calc.setVariable("x", x);
+		float result = calc.calculate();
+		assertTrue("expected " + expected + " but got " + result, expected == result);
+	}
+
+	@Test
+	public void testExpression21_1() throws Exception {
+		String expr = "log(x)^-2";
+		float x = 1.334f;
+		float expected = (float) Math.pow((float) Math.log(x), -2f);
+		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variable("x").build();
+		calc.setVariable("x", x);
+		float result = calc.calculate();
+		assertTrue("expected " + expected + " but got " + result, expected == result);
 	}
 
 	@Test
 	public void testExpression22() throws Exception {
 		String expr = "-2 *33.34/log(x)^-2 + 14 *6";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
+		float x = 1.334f;
+		float expected = -2f * 33.34f / (float) Math.pow((float) Math.log(x), -2f) + 14f * 6f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
+		calc.setVariable("x", x);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression23() throws Exception {
 		String expr = "-2 *33.34/(log(foo)^-2 + 14 *6) - sin(foo)";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / (Math.pow(Math.log(x), -2) + 14 * 6) - Math.sin(x);
+		float x = 1.334f;
+		float expected = -2f * 33.34f / ((float) Math.pow((float) Math.log(x), -2f) + 14f * 6f) - (float) Math.sin(x);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("foo").build();
+		calc.setVariable("foo", x);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression24() throws Exception {
 		String expr = "3+4-log(23.2)^(2-1) * -1";
-		double expected = 3 + 4 - Math.pow(Math.log(23.2), (2 - 1)) * -1;
+		float expected = 3f + 4f - (float) Math.pow((float) Math.log(23.2f), (2f - 1f)) * -1f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -917,7 +931,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression25() throws Exception {
 		String expr = "+3+4-+log(23.2)^(2-1) * + 1";
-		double expected = 3 + 4 - Math.log(23.2d);
+		float expected = 3f + 4f - (float) Math.log(23.2f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -925,7 +939,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression26() throws Exception {
 		String expr = "14 + -(1 / 2.22^3)";
-		double expected = 14 + -(1d / Math.pow(2.22d, 3d));
+		float expected = 14f + -(1f / (float) Math.pow(2.22f, 3f));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -933,7 +947,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression27() throws Exception {
 		String expr = "12^-+-+-+-+-+-+---2";
-		double expected = Math.pow(12, -2);
+		float expected = (float) Math.pow(12d, -2d);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -941,7 +955,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression28() throws Exception {
 		String expr = "12^-+-+-+-+-+-+---2 * (-14) / 2 ^ -log(2.22323) ";
-		double expected = Math.pow(12, -2) * -14 / Math.pow(2, -Math.log(2.22323));
+		float expected = (float) Math.pow(12f, -2f) * -14f / (float) Math.pow(2f, (float) -Math.log(2.22323f));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -949,7 +963,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression29() throws Exception {
 		String expr = "24.3343 % 3";
-		double expected = 24.3343 % 3;
+		float expected = 24.3343f % 3f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -958,21 +972,21 @@ public class ExpressionBuilderTest {
 	public void testVarname1() throws Exception {
 		String expr = "12.23 * foo.bar";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variable("foo.bar").build();
-		assertTrue(12.23 == calc.calculate());
+		assertTrue(12.23f == calc.calculate());
 	}
 
 	public void testVarname2() throws Exception {
 		String expr = "12.23 * foo.bar";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variable("_foo").build();
-		assertTrue(12.23 == calc.calculate());
+		assertTrue(12.23f == calc.calculate());
 	}
 
 	@Test
 	public void testExpression3() throws Exception {
 		String expr;
-		double expected;
+		float expected;
 		expr = "2+4*5";
-		expected = 2 + 4 * 5;
+		expected = 2f + 4f * 5f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -980,7 +994,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression30() throws Exception {
 		String expr = "24.3343 % 3 * 20 ^ -(2.334 % log(2 / 14))";
-		double expected = 24.3343d % 3 * Math.pow(20, -(2.334 % Math.log(2d / 14d)));
+		float expected = 24.3343f % 3f * (float) Math.pow(20f, -(2.334f % (float) Math.log(2f / 14f)));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -988,34 +1002,37 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression31() throws Exception {
 		String expr = "-2 *33.34/log(y_x)^-2 + 14 *6";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
+		float x = 1.334f;
+		float expected = -2f * 33.34f / (float) Math.pow((float) Math.log(x), -2f) + 14f * 6f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("y_x").build();
+		calc.setVariable("y_x", x);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression32() throws Exception {
 		String expr = "-2 *33.34/log(y_2x)^-2 + 14 *6";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
+		float x = 1.334f;
+		float expected = -2f * 33.34f / (float) Math.pow((float) Math.log(x), -2f) + 14f * 6f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("y_2x").build();
+		calc.setVariable("y_2x", x);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression33() throws Exception {
 		String expr = "-2 *33.34/log(_y)^-2 + 14 *6";
-		double x = 1.334d;
-		double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
+		float x = 1.334f;
+		float expected = -2f * 33.34f / (float) Math.pow((float) Math.log(x), -2f) + 14f * 6f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("_y").build();
+		calc.setVariable("_y", x);
 		assertTrue(expected == calc.calculate());
 	}
 
 	@Test
 	public void testExpression34() throws Exception {
 		String expr = "-2 + + (+4) +(4)";
-		double expected = -2 + 4 + 4;
+		float expected = -2 + 4 + 4;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1023,7 +1040,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression40() throws Exception {
 		String expr = "1e1";
-		double expected = 10d;
+		float expected = 10f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1031,7 +1048,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression41() throws Exception {
 		String expr = "1e-1";
-		double expected = 0.1d;
+		float expected = 0.1f;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1045,7 +1062,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression42() throws Exception {
 		String expr = "7.2973525698e-3";
-		double expected = 7.2973525698d * Math.pow(10, -3);
+		float expected = 7.2973525698f * (float) Math.pow(10f, -3f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1053,7 +1070,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression43() throws Exception {
 		String expr = "6.02214E23";
-		double expected = 6.02214d * Math.pow(10, 23);
+		float expected = 6.02214f * (float) Math.pow(10f, 23f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1061,7 +1078,7 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testExpression44() throws Exception {
 		String expr = "6.02214E23";
-		double expected = 6.02214d * Math.pow(10, 23);
+		float expected = 6.02214f * (float) Math.pow(10f, 23f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1373,7 +1390,7 @@ public class ExpressionBuilderTest {
 	public void testPostfixExponentation3() throws Exception {
 		String expr;
 		double expected;
-		double x = 4.334d;
+		float x = 4.334f;
 		expr = "24 + 4 * 2^x";
 		expected = 24 + 4 * Math.pow(2, x);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1384,7 +1401,7 @@ public class ExpressionBuilderTest {
 	public void testPostfixExponentation4() throws Exception {
 		String expr;
 		double expected;
-		double x = 4.334d;
+		float x = 4.334f;
 		expr = "(24 + 4) * 2^log(x)";
 		expected = (24 + 4) * Math.pow(2, Math.log(x));
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1407,7 +1424,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "cbrt(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.cbrt(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1419,7 +1436,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "cos(x) - (1/cbrt(x))";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			if (x == 0d)
 				continue;
 			expected = Math.cos(x) - (1 / Math.cbrt(x));
@@ -1433,7 +1450,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "acos(x) * expm1(asin(x)) - exp(atan(x)) + floor(x) + cosh(x) - sinh(cbrt(x))";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.acos(x) * Math.expm1(Math.asin(x)) - Math.exp(Math.atan(x)) + Math.floor(x) + Math.cosh(x) - Math.sinh(Math.cbrt(x));
 			if (Double.isNaN(expected)) {
 				assertTrue(Double.isNaN(calc.calculate()));
@@ -1449,7 +1466,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "acos(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.acos(x);
 			if (Double.isNaN(expected)) {
 				assertTrue(Double.isNaN(calc.calculate()));
@@ -1465,7 +1482,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = " expm1(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.expm1(x);
 			if (Double.isNaN(expected)) {
 				assertTrue(Double.isNaN(calc.calculate()));
@@ -1481,7 +1498,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "asin(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.asin(x);
 			if (Double.isNaN(expected)) {
 				assertTrue(Double.isNaN(calc.calculate()));
@@ -1497,7 +1514,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = " exp(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.exp(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1509,7 +1526,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "floor(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.floor(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1521,7 +1538,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = " cosh(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.cosh(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1533,7 +1550,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "sinh(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.sinh(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1545,7 +1562,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "cbrt(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.cbrt(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1557,7 +1574,7 @@ public class ExpressionBuilderTest {
 		double expected;
 		expr = "tanh(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
-		for (double x = -10; x < 10; x = x + 0.5d) {
+		for (float x = -10; x < 10; x = x + 0.5f) {
 			expected = Math.tanh(x);
 			assertTrue(expected == calc.calculate());
 		}
@@ -1597,10 +1614,10 @@ public class ExpressionBuilderTest {
 	public void testPostfixFunction6() throws Exception {
 		String expr;
 		double expected;
-		double x = 1.565d;
+		float x = 1.565f;
 		double y = 2.1323d;
 		expr = "ceil(x) + 1 / y * abs(1.4)";
-		expected = Math.ceil(x) + 1 / y * Math.abs(1.4);
+		expected = (float) Math.ceil(x) + 1f / y * (float) Math.abs(1.4f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "y").build();
 		assertTrue(expected == calc.calculate());
 	}
@@ -1609,7 +1626,7 @@ public class ExpressionBuilderTest {
 	public void testPostfixFunction7() throws Exception {
 		String expr;
 		double expected;
-		double x = Math.E;
+		float x =(float) Math.E;
 		expr = "tan(x)";
 		expected = Math.tan(x);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1631,7 +1648,7 @@ public class ExpressionBuilderTest {
 	public void testPostfixFunction9() throws Exception {
 		String expr;
 		double expected;
-		double x = Math.E;
+		float x = (float)Math.E;
 		expr = "cbrt(x)";
 		expected = Math.cbrt(x);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1642,7 +1659,7 @@ public class ExpressionBuilderTest {
 	public void testPostfixInvalidVariableName() throws Exception {
 		String expr;
 		double expected;
-		double x = 4.5334332d;
+		float x = 4.5334332f;
 		double log = Math.PI;
 		expr = "x * pi";
 		expected = x * log;
@@ -1663,9 +1680,9 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testPostfixVariables() throws Exception {
 		String expr;
-		double expected;
-		double x = 4.5334332d;
-		double pi = Math.PI;
+		float expected;
+		float x = 4.5334332f;
+		float pi = (float)Math.PI;
 		expr = "x * pi";
 		expected = x * pi;
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "pi").build();

@@ -97,7 +97,7 @@ public class Operators {
 				}
 			}
 		});
-		builtin.put("^",new CustomOperator("^",PRECEDENCE_EXPONENTATION) {
+		builtin.put("^",new CustomOperator("^",PRECEDENCE_EXPONENTATION,2,false) {
 			@Override
 			public Object apply(Object... args) {
 				if (args[0] instanceof Float){
@@ -121,7 +121,7 @@ public class Operators {
 		return builtin.get(String.valueOf(c));
 	}
 	public static CustomOperator getUnaryMinusOperator(){
-		return new CustomOperator("-",PRECEDENCE_SUBTRACTION,1,false) {
+		return new CustomOperator("-",PRECEDENCE_EXPONENTATION,1,false) {
 			@Override
 			public Object apply(Object... args) {
 				if (args[0] instanceof Float){
