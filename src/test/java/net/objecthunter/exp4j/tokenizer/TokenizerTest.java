@@ -11,7 +11,7 @@ import org.junit.Test;
 public class TokenizerTest {
 
 	@Test
-	public void testTokenization1() {
+	public void testTokenization1() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "2 + 2";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -22,7 +22,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testTokenization2() {
+	public void testTokenization2() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "sin(2)";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -33,7 +33,7 @@ public class TokenizerTest {
 		Assert.assertTrue(tokens.get(3).getType() == Type.PARANTHESES);
 	}
 	@Test
-	public void testTokenization3() {
+	public void testTokenization3() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "3 * sin(2)/0.5";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -51,7 +51,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testTokenization4() {
+	public void testTokenization4() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "3 * sin(2+sin(12.745))/0.5";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -73,7 +73,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testTokenization5() {
+	public void testTokenization5() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "log(sin(1.0) + abs(2.5))";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -93,7 +93,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testTokenization6() {
+	public void testTokenization6() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "-1";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -104,7 +104,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testTokenization7() {
+	public void testTokenization7() throws Exception {
 		Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
 		String expression = "-1 * -sin(3 * (-1.2))";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -125,7 +125,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testComplexTokenization1() {
+	public void testComplexTokenization1() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "1 + 1i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -138,7 +138,7 @@ public class TokenizerTest {
 	}
 	
 	@Test
-	public void testComplexTokenization2() {
+	public void testComplexTokenization2() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "10.4 + 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -149,7 +149,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testComplexTokenization3() {
+	public void testComplexTokenization3() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "10.4 - 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -160,7 +160,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testComplexTokenization4() {
+	public void testComplexTokenization4() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "3 * 10.4 - 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
@@ -173,7 +173,7 @@ public class TokenizerTest {
 	}
 
 	@Test
-	public void testComplexTokenization5() {
+	public void testComplexTokenization5() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "(3 * 10.4) - 17.8i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);

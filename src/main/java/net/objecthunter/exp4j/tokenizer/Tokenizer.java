@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import net.objecthunter.exp4j.ComplexNumber;
+import net.objecthunter.exp4j.exceptions.UnknownCharacterException;
+import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.CustomOperator;
@@ -22,11 +24,11 @@ public class Tokenizer<T> {
 		this.type = type;
 	}
 
-	public List<Token> tokenizeExpression(String expression) {
+	public List<Token> tokenizeExpression(String expression) throws UnparseableExpressionException{
 		return this.tokenizeExpression(expression, null, null, null);
 	}
 
-	public List<Token> tokenizeExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators) {
+	public List<Token> tokenizeExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators) throws UnparseableExpressionException {
 		List<Token> tokens = new LinkedList<Token>();
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
@@ -138,8 +140,11 @@ public class Tokenizer<T> {
 					func = customFunctions.get(nameBuilder.toString());
 					if (func != null) {
 						tokens.add(new FunctionToken(func));
+					/* might be a variable */
 					} else if (variables.contains(nameBuilder.toString())) {
 						tokens.add(new VariableToken(nameBuilder.toString()));
+					}else{
+						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expressoin '" + expression +"'");
 					}
 				}
 
@@ -149,6 +154,8 @@ public class Tokenizer<T> {
 				tokens.add(new ParanthesesToken(false));
 			} else if (c == ',') {
 				tokens.add(new ArgumentSeparatorToken());
+			} else {
+				throw new UnknownCharacterException(c, i, expression);
 			}
 		}
 		return tokens;

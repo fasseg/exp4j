@@ -13,6 +13,7 @@ import net.objecthunter.exp4j.calculable.Calculable;
 import net.objecthunter.exp4j.calculable.ComplexCalculable;
 import net.objecthunter.exp4j.calculable.DoubleCalculable;
 import net.objecthunter.exp4j.calculable.FloatCalculable;
+import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.tokenizer.Token;
@@ -89,7 +90,7 @@ public class ExpressionBuilder<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Calculable<T> build() {
+	public Calculable<T> build() throws UnparseableExpressionException {
 		if (this.returnType == Double.class) {
 			Tokenizer<Double> tok = new Tokenizer<>(Double.class);
 			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));

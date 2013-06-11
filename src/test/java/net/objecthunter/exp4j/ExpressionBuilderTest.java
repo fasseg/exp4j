@@ -23,35 +23,35 @@ import org.junit.Test;
 public class ExpressionBuilderTest {
 
 	@Test
-	public void testFloatExpression1() {
+	public void testFloatExpression1() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2+2", Float.class);
 		float result = e.build().calculate();
 		assertTrue(4f == result);
 	}
 
 	@Test
-	public void testFloatExpression2() {
+	public void testFloatExpression2() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2-2", Float.class);
 		float result = e.build().calculate();
 		assertTrue(0f == result);
 	}
 
 	@Test
-	public void testFloatExpression3() {
+	public void testFloatExpression3() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2/2", Float.class);
 		float result = e.build().calculate();
 		assertTrue(1f == result);
 	}
 
 	@Test
-	public void testFloatExpression4() {
+	public void testFloatExpression4() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45-1", Float.class);
 		float result = e.build().calculate();
 		assertTrue(1.45f == result);
 	}
 
 	@Test
-	public void testFloatExpression5() {
+	public void testFloatExpression5() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45-3", Float.class);
 		float result = e.build().calculate();
 		float expected = 2.45f - 3f;
@@ -59,19 +59,19 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testFloatExpression6() {
+	public void testFloatExpression6() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45(-3", Float.class);
 		float result = e.build().calculate();
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testFloatExpression7() {
+	public void testFloatExpression7() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("2.45)-3", Float.class);
 		float result = e.build().calculate();
 	}
 
 	@Test
-	public void testFloatExpression8() {
+	public void testFloatExpression8() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(1.0)", Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.sin(1.0);
@@ -79,7 +79,7 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void testFloatExpression9() {
+	public void testFloatExpression9() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(1.0) * 1 + 1", Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.sin(1.0) * 1 + 1;
@@ -87,42 +87,42 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void testFloatExpression10() {
+	public void testFloatExpression10() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("-1", Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, -1f == result);
 	}
 
 	@Test
-	public void testFloatExpression11() {
+	public void testFloatExpression11() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7+-1", Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, 6f == result);
 	}
 
 	@Test
-	public void testFloatExpression12() {
+	public void testFloatExpression12() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7+--1", Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, 8f == result);
 	}
 
 	@Test
-	public void testFloatExpression13() {
+	public void testFloatExpression13() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("7++1", Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, 8f == result);
 	}
 
 	@Test
-	public void testFloatExpression14() {
+	public void testFloatExpression14() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sin(-1.0)", Float.class);
 		float result = e.build().calculate();
 		assertTrue("exp4j calulated " + result, (float) Math.sin(-1.0f) == result);
 	}
 
 	@Test
-	public void testFloatExpression15() {
+	public void testFloatExpression15() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("log(4) - 3 * (sqrt(3^cos(2)))", Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.log(4f) - 3f * (float) (Math.sqrt((float) Math.pow(3f, (float) Math.cos(2f))));
@@ -130,7 +130,7 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test
-	public void testFloatExpression16() {
+	public void testFloatExpression16() throws Exception {
 		ExpressionBuilder<Float> e = new ExpressionBuilder<>("sqrt(3^cos(2))", Float.class);
 		float result = e.build().calculate();
 		float expected = (float) Math.sqrt((float) Math.pow(3f, (float) Math.cos(2f)));
@@ -193,9 +193,9 @@ public class ExpressionBuilderTest {
 			}
 		};
 		float varX = 32.24979131f;
-		Calculable<Float> calc = new ExpressionBuilder("foo(log(x))", Float.class).function(custom1).build();
-		float result = calc.calculate();
-		assertTrue(result == Math.log(varX) * Math.E);
+		Calculable<Float> calc = new ExpressionBuilder("foo(log(x))", Float.class).variable("x").function(custom1).build();
+		float result = calc.setVariable("x", varX).calculate();
+		assertTrue(result == (float) Math.log(varX) * (float) Math.E);
 	}
 
 	@Test

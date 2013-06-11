@@ -16,8 +16,9 @@ public abstract class Calculable<T> {
 		this.tokens = tokens;
 	}
 
-	public void setVariable(String name, T value){
+	public Calculable<T> setVariable(String name, T value){
 		this.variables.put(name, value);
+		return this;
 	}
 	
 	public abstract T calculate();
