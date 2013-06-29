@@ -193,6 +193,168 @@ public class Functions {
 				}
 			}
 		});
+        builtin.put("cbrt", new CustomFunction("cqrt") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.cbrt(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.cbrt((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("acos", new CustomFunction("acos") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.acos(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.acos((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("expm1", new CustomFunction("expm1") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.expm1(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.expm1((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("asin", new CustomFunction("asin") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.asin(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.asin((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("exp", new CustomFunction("exp") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.exp(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.exp((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("sinh", new CustomFunction("sinh") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.sinh(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.sinh((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("cosh", new CustomFunction("cosh") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.cosh(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.cosh((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("atan", new CustomFunction("atan") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.atan(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.atan((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
+        builtin.put("tanh", new CustomFunction("tanh") {
+
+            @Override
+            public Object apply(Object... args) {
+                Object arg = args[0];
+                if (arg instanceof Float) {
+                    return (float) Math.tanh(((Float) arg).doubleValue());
+                } else if (arg instanceof Double) {
+                    return Math.tanh((double) arg);
+                } else if (arg instanceof BigDecimal) {
+                    throw new RuntimeException("no support for big decimal");
+                } else if (arg instanceof ComplexNumber) {
+                    throw new RuntimeException("no supprt for complex");
+                } else {
+                    throw new RuntimeException("unknown type " + arg.getClass().getName());
+                }
+            }
+        });
 	}
 	
 	public static CustomFunction getFunction(String name){

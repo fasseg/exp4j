@@ -27,6 +27,9 @@ public class ExpressionBuilder<T> {
 	private final Map<String, CustomOperator> operators = new HashMap<>();
 
 	public ExpressionBuilder(final String expression, final Class<T> returnType) {
+        if (expression.trim().length() == 0){
+            throw new IllegalArgumentException("expression can not be empty");
+        }
 		this.expression = expression;
 		this.returnType = returnType;
 	}

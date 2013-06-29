@@ -69,8 +69,14 @@ public class Operators {
 			@Override
 			public Object apply(Object... args) {
 				if (args[0] instanceof Float){
+                    if ((float) args[1] == 0f){
+                        throw new ArithmeticException("Division by zero");
+                    }
 					return (float) args[0] / (float) args[1];
 				}else if (args[0] instanceof Double){
+                    if ((double) args[1] == 0d){
+                        throw new ArithmeticException("Division by zero");
+                    }
 					return (double) args[0] / (double) args[1];
 				}else if (args[0] instanceof BigDecimal){
 					return ((BigDecimal)args[0]).divide((BigDecimal) args[1]);
@@ -85,8 +91,14 @@ public class Operators {
 			@Override
 			public Object apply(Object... args) {
 				if (args[0] instanceof Float){
+                    if ((float) args[1] == 0f){
+                        throw new ArithmeticException("Division by zero");
+                    }
 					return (float) args[0] % (float) args[1];
 				}else if (args[0] instanceof Double){
+                    if ((double) args[1] == 0d){
+                        throw new ArithmeticException("Division by zero");
+                    }
 					return (double) args[0] % (double) args[1];
 				}else if (args[0] instanceof BigDecimal){
 					throw new RuntimeException("No support for big decimals");

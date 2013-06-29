@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.ParanthesesToken;
@@ -12,7 +13,7 @@ import net.objecthunter.exp4j.tokenizer.Token;
 import net.objecthunter.exp4j.tokenizer.Token.Type;
 
 public class ShuntingYard {
-	public static List<Token> translateToReversePolishNotation(List<Token> tokens) {
+	public static List<Token> translateToReversePolishNotation(List<Token> tokens) throws UnparseableExpressionException{
 		Stack<Token> output = new Stack<Token>();
 		Stack<Token> stack = new Stack<Token>();
 		for (Token t : tokens) {
@@ -57,7 +58,7 @@ public class ShuntingYard {
 		while (!stack.empty()) {
 			Token t = stack.pop();
 			if (t.getType() == Type.PARANTHESES) {
-				throw new RuntimeException("Mismatched parantheses");
+				throw new UnparseableExpressionException("Mismatched parantheses");
 			}
 			output.push(t);
 		}

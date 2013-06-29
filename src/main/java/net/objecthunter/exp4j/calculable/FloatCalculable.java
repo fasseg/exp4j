@@ -21,7 +21,7 @@ public class FloatCalculable extends Calculable<Float> {
 	@Override
 	public Float calculate() {
 		final Stack<Float> output = new Stack<>();
-		Iterator<Token> tokenIterator = tokens.iterator();
+		final Iterator<Token> tokenIterator = tokens.iterator();
 		while (tokenIterator.hasNext()) {
 			Token t = tokenIterator.next();
 
@@ -31,10 +31,9 @@ public class FloatCalculable extends Calculable<Float> {
 				output.push(((NumberToken<Float>) t).getValue());
 
 			} else if (t.getType() == Type.VARIABLE) {
-				
 				/* push the variable value onto the stack */
 				output.push(variables.get(((VariableToken)t).getName()));
-				
+
 			} else if (t.getType() == Type.OPERATOR) {
 
 				OperatorToken op = (OperatorToken) t;

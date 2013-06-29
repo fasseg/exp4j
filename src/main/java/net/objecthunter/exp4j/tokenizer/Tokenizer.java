@@ -116,14 +116,14 @@ public class Tokenizer<T> {
 					tokens.add(op);
 				}
 
-			} else if (Character.isAlphabetic(c)) {
+			} else if (Character.isAlphabetic(c) || c == '_') {
 
 				/* might be a function or a variable */
 				StringBuilder nameBuilder = new StringBuilder();
 				nameBuilder.append(c);
 				while (expression.length() > i + 1) {
 					char next = expression.charAt(++i);
-					if (Character.isAlphabetic(next) || Character.isDigit(next)) {
+					if (Character.isAlphabetic(next) || Character.isDigit(next) || next == '_') {
 						nameBuilder.append(next);
 					} else {
 						--i; // step back or we might lose something
@@ -144,13 +144,13 @@ public class Tokenizer<T> {
 					} else if (variables.contains(nameBuilder.toString())) {
 						tokens.add(new VariableToken(nameBuilder.toString()));
 					}else{
-						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expressoin '" + expression +"'");
+						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression +"'");
 					}
 				}
 
-			} else if (c == '(' || c == '[') {
+			} else if (c == '(' || c == '[' || c == '{') {
 				tokens.add(new ParanthesesToken(true));
-			} else if (c == ')' || c == ']') {
+			} else if (c == ')' || c == ']' || c == '}') {
 				tokens.add(new ParanthesesToken(false));
 			} else if (c == ',') {
 				tokens.add(new ArgumentSeparatorToken());
