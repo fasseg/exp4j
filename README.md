@@ -22,10 +22,18 @@ FutureResolver solver = new FutureResolver() {
 };
 FuturesFactory.registerFutureResolver(solver);
 
-Calculable calc = new ExpressionBuilder().withVariable("X", 12).buildWithFutures();
+Calculable calc = new ExpressionBuilder(expression).withVariable("X", 12).buildWithFutures();
 
 calc.calculate();
 
 // When done with the solver, unregister it
 FuturesFactory.unregisterFutureResolver(solver);
 ```
+
+Also, there's support for dotted variable names, to support object oriented variable notation:
+
+```java
+new ExpressionBuilder("object.value").buildWithFutures()
+```
+
+So you could use Java reflection on a `FutureResolver` to access an object's fields.
