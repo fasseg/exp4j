@@ -6,7 +6,7 @@ expression, small in size, without any external libraries and simple to use.
 
 check out http://www.objecthunter.net/exp4j/
 
-What's new in this branch?
+What's new in this fork?
 ==========================
 
 Future variable support. This means that an expression can have unsolved variables that can be later solved during evaluation.
