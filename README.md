@@ -22,7 +22,9 @@ FutureResolver solver = new FutureResolver() {
 };
 FuturesFactory.registerFutureResolver(solver);
 
-Calculable calc = new ExpressionBuilder().withVariable(...). ... .buildWithFutures();
+Calculable calc = new ExpressionBuilder().withVariable("X", 12).buildWithFutures();
+
+calc.calculate();
 
 // When done with the solver, unregister it
 FuturesFactory.unregisterFutureResolver(solver);
