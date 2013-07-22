@@ -1,0 +1,7 @@
+target/
+
+# IntelliJ config files
+*.iws
+*.iml
+*.ids
+.idea
