@@ -1,8 +1,10 @@
 package net.objecthunter.exp4j.tokenizer;
 
-import java.util.List;
+import java.util.*;
 
-import junit.framework.Assert;
+import net.objecthunter.exp4j.function.CustomFunction;
+import net.objecthunter.exp4j.operator.CustomOperator;
+import org.junit.Assert;
 import net.objecthunter.exp4j.ComplexNumber;
 import net.objecthunter.exp4j.tokenizer.Token.Type;
 
@@ -100,7 +102,7 @@ public class TokenizerTest {
 		Assert.assertTrue(tokens.size() == 2);
 		Assert.assertTrue(tokens.get(0).getType() == Type.OPERATOR);
 		Assert.assertTrue(tokens.get(1).getType() == Type.NUMBER);
-		Assert.assertTrue(((NumberToken<Float>) tokens.get(1)).getValue() == 1d);
+		Assert.assertTrue(((NumberToken<Float>) tokens.get(1)).getValue() == 1f);
 	}
 
 	@Test
@@ -124,9 +126,80 @@ public class TokenizerTest {
 		Assert.assertTrue(tokens.get(12).getType() == Type.PARANTHESES);
 	}
 
+    @Test
+    public void testTokenization8() throws Exception {
+
+        CustomOperator greaterEq = new CustomOperator(">=", 4, 2, true) {
+            @Override
+            public Object apply(Object... values) {
+                if ((float) values[0] >= (float) values[1]) {
+                    return 1f;
+                } else {
+                    return 0f;
+                }
+            }
+        };
+        CustomOperator greater = new CustomOperator(">", 4, 2, true) {
+            @Override
+            public Object apply(Object... values) {
+                if ((float) values[0] > (float) values[1]) {
+                    return 1f;
+                } else {
+                    return 0f;
+                }
+            }
+        };
+        CustomOperator newPlus = new CustomOperator(">=>", 4, 2, true) {
+            @Override
+            public Object apply(Object... values) {
+                return (float) values[0] + (float) values[1];
+            }
+        };
+
+        Map<String, CustomOperator> customOperators = new HashMap<>();
+        customOperators.put(greaterEq.getSymbol(), greaterEq);
+        customOperators.put(greater.getSymbol(), greater);
+        customOperators.put(newPlus.getSymbol(), newPlus);
+
+        Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
+        String expression = "1>=>2>2>=1";
+
+        List<Token> tokens = tokenizer.tokenizeExpression(expression, Collections.<String>emptySet(), Collections.<String, CustomFunction>emptyMap(), customOperators);
+        Assert.assertTrue(tokens.size() == 7);
+        Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
+        Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+        Assert.assertTrue(tokens.get(2).getType() == Type.NUMBER);
+        Assert.assertTrue(tokens.get(3).getType() == Type.OPERATOR);
+        Assert.assertTrue(tokens.get(4).getType() == Type.NUMBER);
+        Assert.assertTrue(tokens.get(5).getType() == Type.OPERATOR);
+        Assert.assertTrue(tokens.get(6).getType() == Type.NUMBER);
+    }
+
+    @Test
+    public void testTokenization9() throws Exception {
+
+        CustomOperator newPlus = new CustomOperator(">=>", 4, 2, true) {
+            @Override
+            public Object apply(Object... values) {
+                return (float) values[0] + (float) values[1];
+            }
+        };
+
+        final Map<String, CustomOperator> customOperators = Collections.singletonMap(newPlus.getSymbol(), newPlus);
+
+        Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
+        String expression = "1>=>2";
+
+        List<Token> tokens = tokenizer.tokenizeExpression(expression, Collections.<String>emptySet(), Collections.<String, CustomFunction>emptyMap(), customOperators);
+        Assert.assertTrue(tokens.size() == 3);
+        Assert.assertTrue(tokens.get(0).getType() == Type.NUMBER);
+        Assert.assertTrue(tokens.get(1).getType() == Type.OPERATOR);
+        Assert.assertTrue(tokens.get(2).getType() == Type.NUMBER);
+    }
+
 	@Test
 	public void testComplexTokenization1() throws Exception {
-		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<>(ComplexNumber.class);
 		String expression = "1 + 1i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
 		Assert.assertTrue(tokens.size() == 3);

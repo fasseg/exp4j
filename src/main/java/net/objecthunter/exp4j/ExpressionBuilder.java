@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.objecthunter.exp4j.calculable.BigDecimalCalculable;
 import net.objecthunter.exp4j.calculable.Calculable;
-import net.objecthunter.exp4j.calculable.ComplexCalculable;
-import net.objecthunter.exp4j.calculable.DoubleCalculable;
-import net.objecthunter.exp4j.calculable.FloatCalculable;
 import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.operator.CustomOperator;
@@ -20,14 +16,15 @@ import net.objecthunter.exp4j.tokenizer.Token;
 import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 public class ExpressionBuilder<T> {
+
 	private String expression;
-	private Class<?> returnType;
+	private Class<T> returnType;
 	private final Set<String> variables = new HashSet<>();
 	private final Map<String, CustomFunction> functions = new HashMap<>();
 	private final Map<String, CustomOperator> operators = new HashMap<>();
 
 	public ExpressionBuilder(final String expression, final Class<T> returnType) {
-        if (expression.trim().length() == 0){
+        if (expression == null || expression.trim().length() == 0){
             throw new IllegalArgumentException("expression can not be empty");
         }
 		this.expression = expression;
@@ -92,27 +89,14 @@ public class ExpressionBuilder<T> {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Calculable<T> build() throws UnparseableExpressionException {
-		if (this.returnType == Double.class) {
-			Tokenizer<Double> tok = new Tokenizer<>(Double.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
-			return (Calculable<T>) new DoubleCalculable(tokens);
-		} else if (this.returnType == Float.class) {
-			Tokenizer<Float> tok = new Tokenizer<>(Float.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
-			return (Calculable<T>) new FloatCalculable(tokens);
-		} else if (this.returnType == BigDecimal.class) {
-			Tokenizer<BigDecimal> tok = new Tokenizer<>(BigDecimal.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
-			return (Calculable<T>) new BigDecimalCalculable(tokens);
-		} else if (this.returnType == ComplexNumber.class) {
-			Tokenizer<ComplexNumber> tok = new Tokenizer<>(ComplexNumber.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
-			return (Calculable<T>) new ComplexCalculable(tokens);
+		if (Double.class.equals(this.returnType) || Float.class.equals(this.returnType) ||
+                BigDecimal.class.equals(this.returnType) || ComplexNumber.class.equals(this.returnType)) {
+			Tokenizer<T> tok = new Tokenizer<>(this.returnType);
+			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
+			return new Calculable<T>(tokens);
 		} else {
-			throw new RuntimeException("Unparseable");
+			throw new RuntimeException("Unparseable because calculation return type is unknown to exp4j.");
 		}
 	}
-
 }
