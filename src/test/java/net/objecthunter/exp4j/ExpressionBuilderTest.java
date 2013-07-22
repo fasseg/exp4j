@@ -301,7 +301,7 @@ public class ExpressionBuilderTest {
 			}
 		};
 		Calculable<Float> calc = new ExpressionBuilder<>("max(1,2.43311,51.13,43,12)", Float.class).function(custom1).build();
-		assertEquals(51.13d, calc.calculate(), MathUtils.EPSILON);
+		assertEquals(51.13f, calc.calculate(), MathUtils.EPSILON);
 	}
 
 	@Test
@@ -474,7 +474,7 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testCustomOperators2() throws Exception {
-		CustomOperator factorial = new CustomOperator("!", 6, 1, true) {
+		CustomOperator factorial = new CustomOperator("!", 1+Operators.PRECEDENCE_EXPONENTATION, 1, true) {
 			@Override
 			public Object apply(Object... args) {
 				float tmp = 1f;
@@ -485,13 +485,13 @@ public class ExpressionBuilderTest {
 				return tmp;
 			}
 		};
-		Calculable<Double> calc = new ExpressionBuilder<>("2^2!", Double.class).operator(factorial).build();
+		Calculable<Float> calc = new ExpressionBuilder<>("2^2!", Float.class).operator(factorial).build();
         assertEquals(4f, calc.calculate(), MathUtils.EPSILON);
-		calc = new ExpressionBuilder<>("2!^2", Double.class).operator(factorial).build();
+		calc = new ExpressionBuilder<>("2!^2", Float.class).operator(factorial).build();
 		assertEquals(4f, calc.calculate(), MathUtils.EPSILON);
-		calc = new ExpressionBuilder<>("-(3!)^-1", Double.class).operator(factorial).build();
+		calc = new ExpressionBuilder<>("-(3!)^-1", Float.class).operator(factorial).build();
 		double actual = calc.calculate();
-		assertEquals((float) Math.pow(-6f, -1), actual, MathUtils.EPSILON);
+		assertEquals(Math.pow(-6f, -1), actual, 0.0000001);
 	}
 
 	@Test
@@ -570,6 +570,7 @@ public class ExpressionBuilderTest {
 				return (float) values[0] + (float) values[1];
 			}
 		};
+
 		Calculable<Float> calc = new ExpressionBuilder<>("1>2", Float.class).operator(greater).build();
         assertEquals(0d, calc.calculate(), MathUtils.EPSILON);
 		calc = new ExpressionBuilder<>("2>=2", Float.class).operator(greaterEq).build();
@@ -1654,16 +1655,15 @@ public class ExpressionBuilderTest {
 	@Test
 	public void testPostfixFunction6() throws Exception {
 		String expr;
-		float expected;
-		float x = 1.565f;
-		float y = 2.1323f;
+		final float x = 1.565f;
+        final float y = 2.1323f;
 		expr = "ceil(x) + 1 / y * abs(1.4)";
-		expected = (float) Math.ceil(x) + ((float) 1f / y) * (float) Math.abs(1.4f);
+		final float expected = ((float) Math.ceil(x)) + (1f / y) * Math.abs(1.4f);
 		Calculable<Float> calc = new ExpressionBuilder<>(expr, Float.class).variables("x", "y").build();
-        calc.setVariable("x",x);
-        calc.setVariable("y",y);
+        calc.setVariable("x", x);
+        calc.setVariable("y", y);
         float actual = calc.calculate();
-        assertTrue(expected == actual);
+        assertEquals(expected, actual, MathUtils.EPSILON);
 	}
 
 	@Test

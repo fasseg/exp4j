@@ -185,8 +185,7 @@ public class TokenizerTest {
             }
         };
 
-        Map<String, CustomOperator> customOperators = new HashMap<>();
-        customOperators.put(newPlus.getSymbol(), newPlus);
+        final Map<String, CustomOperator> customOperators = Collections.singletonMap(newPlus.getSymbol(), newPlus);
 
         Tokenizer<Float> tokenizer = new Tokenizer<>(Float.class);
         String expression = "1>=>2";
@@ -200,7 +199,7 @@ public class TokenizerTest {
 
 	@Test
 	public void testComplexTokenization1() throws Exception {
-		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<>(ComplexNumber.class);
 		String expression = "1 + 1i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
 		Assert.assertTrue(tokens.size() == 3);
