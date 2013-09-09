@@ -474,7 +474,7 @@ public class ExpressionBuilderTest {
 
 	@Test
 	public void testCustomOperators2() throws Exception {
-		CustomOperator factorial = new CustomOperator("!", 6, 1, true) {
+		CustomOperator factorial = new CustomOperator("!", Operators.PRECEDENCE_EXPONENTATION + 100, 1, true) {
 			@Override
 			public Object apply(Object... args) {
 				float tmp = 1f;
@@ -486,7 +486,7 @@ public class ExpressionBuilderTest {
 			}
 		};
 		Calculable<Float> calc = new ExpressionBuilder("2^2!", Float.class).operator(factorial).build();
-		assertTrue(4f == calc.calculate());
+		assertEquals((Float) 4f , calc.calculate());
 		calc = new ExpressionBuilder("2!^2", Float.class).operator(factorial).build();
 		assertTrue(4f == calc.calculate());
 		calc = new ExpressionBuilder("-(3!)^-1", Float.class).operator(factorial).build();
@@ -1165,7 +1165,6 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected = UnparseableExpressionException.class)
-	@Ignore
 	public void testExpression53() throws Exception {
 		String expr = "14 * 2x";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1173,7 +1172,6 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected = UnparseableExpressionException.class)
-	@Ignore
 	public void testExpression54() throws Exception {
 		String expr = "2 ((-(x)))";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1181,7 +1179,6 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected = UnparseableExpressionException.class)
-	@Ignore
 	public void testExpression55() throws Exception {
 		String expr = "2 sin(x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1189,7 +1186,6 @@ public class ExpressionBuilderTest {
 	}
 
 	@Test(expected = UnparseableExpressionException.class)
-	@Ignore
 	public void testExpression56() throws Exception {
 		String expr = "2 sin(3x)";
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x").build();
@@ -1664,13 +1660,13 @@ public class ExpressionBuilderTest {
 		float expected;
 		float x = 1.565f;
 		float y = 2.1323f;
-		expr = "ceil(x) + 1 / y * abs(1.4)";
-		expected = (float) Math.ceil(x) + ((float) 1f / y) * (float) Math.abs(1.4f);
+		expr = "ceil(x) + 1  / y * abs(1.4)";
+		expected = (float) Math.ceil(x) + (float) 1f / y * (float) Math.abs(1.4f);
 		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "y").build();
 		calc.setVariable("x", x);
 		calc.setVariable("y", y);
 		float actual = calc.calculate();
-		assertTrue(expected == actual);
+		assertEquals((Float) expected, (Float) actual);
 	}
 
 	@Test

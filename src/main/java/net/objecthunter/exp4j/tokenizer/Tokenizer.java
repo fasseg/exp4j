@@ -103,15 +103,30 @@ public class Tokenizer<T> {
 						}
 					}
 				} else {
+					/* might be a custom operator with more than one symbol */
+					final StringBuilder nameBuilder = new StringBuilder();
+					nameBuilder.append(c);
+					while(expression.length() > i+1){
+						char next = expression.charAt(++i);
+						if (Operators.isAllowedOperatorSymbol(next)){
+							nameBuilder.append(next);
+						}else{
+							--i;
+							break;
+						}
+					}
+					
 					/* binary op */
-					CustomOperator o = Operators.getOperator(c);
+					CustomOperator o = Operators.getOperator(nameBuilder.toString());
+					
 					if (o == null){
 						/* can be a custom operator */
-						o = customOperators.get(String.valueOf(c));
+						o = customOperators.get(nameBuilder.toString());
+						if (o == null){
+							throw new RuntimeException("Unknown operator '" + nameBuilder.toString() + "'");
+						}
 					}
-					if (o == null){
-						throw new RuntimeException("Unknown operator " + o.getSymbol());
-					}
+					
 					op = new OperatorToken(o);
 					tokens.add(op);
 				}
@@ -134,6 +149,9 @@ public class Tokenizer<T> {
 				/* check if a function is available by that name */
 				CustomFunction func = Functions.getFunction(nameBuilder.toString());
 				if (func != null) {
+					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken){
+						throw new UnparseableExpressionException("Invalid function usage at position " + i);
+					}
 					tokens.add(new FunctionToken(func));
 				} else {
 					/* might be a custom function */
@@ -142,6 +160,9 @@ public class Tokenizer<T> {
 						tokens.add(new FunctionToken(func));
 					/* might be a variable */
 					} else if (variables.contains(nameBuilder.toString())) {
+						if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
+							throw new UnparseableExpressionException("Invalid variable usage for '" + nameBuilder.toString() + "'");
+						}
 						tokens.add(new VariableToken(nameBuilder.toString()));
 					}else{
 						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression +"'");
@@ -149,6 +170,9 @@ public class Tokenizer<T> {
 				}
 
 			} else if (c == '(' || c == '[' || c == '{') {
+				if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken){
+					throw new UnparseableExpressionException("Invalid parantheses usage at " + i);
+				}
 				tokens.add(new ParanthesesToken(true));
 			} else if (c == ')' || c == ']' || c == '}') {
 				tokens.add(new ParanthesesToken(false));
