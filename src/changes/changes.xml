@@ -44,5 +44,8 @@
         <release version="0.3.10" description="Bugfix release">
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-25</action>
         </release>
+        <release version="0.3.11" description="Bugfix release">
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
+        </release>
 	</body>
 </document>
