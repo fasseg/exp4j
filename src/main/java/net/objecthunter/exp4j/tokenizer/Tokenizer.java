@@ -1,6 +1,7 @@
 package net.objecthunter.exp4j.tokenizer;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;

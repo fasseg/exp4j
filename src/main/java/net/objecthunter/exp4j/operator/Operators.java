@@ -117,7 +117,7 @@ public class Operators {
 				} else if (args[0] instanceof Double) {
 					return Math.pow((double) args[0], (double) args[1]);
 				} else if (args[0] instanceof BigDecimal) {
-					throw new RuntimeException("No support for big decimals");
+					throw new UnsupportedOperationException("builtin power operator is not available for BigDecimal");
 				} else if (args[0] instanceof ComplexNumber) {
 					throw new RuntimeException("No support for complex numbers");
 				} else {

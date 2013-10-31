@@ -21,7 +21,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.sin((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					return Math.sin(((BigDecimal)arg).doubleValue());
+					throw new UnsupportedOperationException("No builtin sine function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					return ComplexNumberFunctions.sin((ComplexNumber) arg);
 				} else {
@@ -40,9 +40,9 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.cos((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					return Math.cos(((BigDecimal)arg).doubleValue());
+					throw new UnsupportedOperationException("No builtin cosine function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
-					throw new RuntimeException("no supprt for complex");
+					throw new RuntimeException("no support for complex");
 				} else {
 					throw new RuntimeException("unknown type " + arg.getClass().getName());
 				}
@@ -59,7 +59,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.tan((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					return Math.tan(((BigDecimal)arg).doubleValue());
+					throw new UnsupportedOperationException("No builtin tan function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -77,7 +77,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.abs((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					return ((BigDecimal)arg).abs();
+					return ((BigDecimal) arg).abs();
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -95,7 +95,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.log((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					throw new RuntimeException("no supprt for big decimal");
+					throw new UnsupportedOperationException("no builtin log function available for big decimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -113,7 +113,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.log10((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					throw new RuntimeException("no supprt for big decimal");
+					throw new UnsupportedOperationException("No builtin log10 function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -131,7 +131,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.ceil((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					throw new RuntimeException("no supprt for bigdecimal");
+					throw new UnsupportedOperationException("No builtin ceil function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -149,7 +149,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.floor((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin floor function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no support for complex");
 				} else {
@@ -167,7 +167,7 @@ public class Functions {
 				} else if (arg instanceof Double) {
 					return Math.sqrt((double) arg);
 				} else if (arg instanceof BigDecimal) {
-					throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin sqrt function available for BigDecimal");
 				} else if (arg instanceof ComplexNumber) {
 					throw new RuntimeException("no supprt for complex");
 				} else {
@@ -185,7 +185,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.cbrt((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin cbrt function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -203,7 +203,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.acos((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin acos function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -221,7 +221,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.expm1((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin expm1 function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -239,7 +239,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.asin((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin arcsine function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -257,7 +257,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.exp((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin exp function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -275,7 +275,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.sinh((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin hyperbolic sine function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -293,7 +293,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.cosh((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No hyperbolic cosine function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -311,7 +311,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.atan((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin arc tan function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
@@ -329,7 +329,7 @@ public class Functions {
                 } else if (arg instanceof Double) {
                     return Math.tanh((double) arg);
                 } else if (arg instanceof BigDecimal) {
-                    throw new RuntimeException("no support for big decimal");
+					throw new UnsupportedOperationException("No builtin hyperbolic tan function available for BigDecimal");
                 } else if (arg instanceof ComplexNumber) {
                     throw new RuntimeException("no supprt for complex");
                 } else {
