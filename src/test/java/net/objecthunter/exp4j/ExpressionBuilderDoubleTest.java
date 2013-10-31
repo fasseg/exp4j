@@ -1739,33 +1739,4 @@ public class ExpressionBuilderDoubleTest {
 		calc.setVariable("pi", pi);
 		assertTrue(expected == calc.calculate());
 	}
-
-	@Test
-	public void testBench1() throws Exception {
-		if (System.getProperty("skipBenchmark") != null) {
-			System.out.println(":: skipping naive benchmarks...");
-			return;
-		}
-		System.out.println(":: running naive benchmarks, set -DskipBenchmark to skip");
-		String expr = "log(x) - y * (sqrt(x^cos(y)))";
-		Calculable<Double> calc = new ExpressionBuilder<Double>(expr, Double.class).variables("x", "y").build();
-		@SuppressWarnings("unused")
-		double val;
-		Random rnd = new Random();
-		long timeout = 2;
-		long time = System.currentTimeMillis() + (1000 * timeout);
-		int count = 0;
-		while (time > System.currentTimeMillis()) {
-			calc.setVariable("x", rnd.nextDouble());
-			calc.setVariable("y", rnd.nextDouble());
-			val = calc.calculate();
-			count++;
-		}
-		System.out.println("\n:: running simple benchmarks [" + timeout + " seconds]");
-		System.out.println("expression\t\t" + expr);
-		double rate = count / timeout;
-		System.out.println("exp4j\t\t\t" + count + " ["
-				+ (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec]");
-	}
-
 }
