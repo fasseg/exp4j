@@ -115,7 +115,7 @@ public class Operators {
 				if (args[0] instanceof Float) {
 					return (float) Math.pow(((Float) args[0]).doubleValue(), ((Float) args[1]).doubleValue());
 				} else if (args[0] instanceof Double) {
-					return (double) args[0] % (double) args[1];
+					return Math.pow((double) args[0], (double) args[1]);
 				} else if (args[0] instanceof BigDecimal) {
 					throw new RuntimeException("No support for big decimals");
 				} else if (args[0] instanceof ComplexNumber) {

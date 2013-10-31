@@ -11,9 +11,4 @@ public class BigDecimalCalculable extends Calculable<BigDecimal> {
 		super(tokens);
 	}
 
-	@Override
-	public BigDecimal calculate() {
-		return new BigDecimal("1238913812312312312312313123123123213123213123131311231232131");
-	}
-
 }

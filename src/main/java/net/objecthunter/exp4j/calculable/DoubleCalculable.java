@@ -9,8 +9,4 @@ public class DoubleCalculable extends Calculable<Double> {
 	public DoubleCalculable(List<Token> tokens) {
 		super(tokens);
 	}
-
-	public Double calculate() {
-		return 0.0d;
-	}
 }

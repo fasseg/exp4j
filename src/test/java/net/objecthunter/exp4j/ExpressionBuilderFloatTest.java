@@ -23,7 +23,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 @SuppressWarnings({ "unchecked", "rawtypes"})
-public class ExpressionBuilderTest {
+public class ExpressionBuilderFloatTest {
 
 	@Test
 	public void testFloatExpression1() throws Exception {

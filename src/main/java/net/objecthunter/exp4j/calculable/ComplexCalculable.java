@@ -10,10 +10,4 @@ public class ComplexCalculable extends Calculable<ComplexNumber> {
 	public ComplexCalculable(List<Token> tokens) {
 		super(tokens);
 	}
-
-	@Override
-	public ComplexNumber calculate() {
-		return new ComplexNumber(3d, 14d);
-	}
-
 }
