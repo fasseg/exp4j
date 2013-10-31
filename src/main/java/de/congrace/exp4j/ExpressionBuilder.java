@@ -192,6 +192,12 @@ public class ExpressionBuilder {
 					return Math.log(args[0]);
 				}
 			};
+			CustomFunction log10 = new CustomFunction("log10") {
+				@Override
+				public double applyFunction(double... args) {
+					return Math.log10(args[0]);
+				}
+			};
 			CustomFunction sine = new CustomFunction("sin") {
 				@Override
 				public double applyFunction(double... args) {
@@ -235,6 +241,7 @@ public class ExpressionBuilder {
 			customFunctions.put("expm1", expm1);
 			customFunctions.put("floor", floor);
 			customFunctions.put("log", log);
+			customFunctions.put("log10", log10);
 			customFunctions.put("sin", sine);
 			customFunctions.put("sinh", sinh);
 			customFunctions.put("sqrt", sqrt);
