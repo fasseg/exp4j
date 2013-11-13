@@ -333,7 +333,7 @@ public class ExpressionBuilderBigDecimalTest {
 			public Object apply(Object... args) {
 				BigDecimal tmp = BigDecimal.ONE;
 				BigInteger steps = BigInteger.ONE;
-				while (new BigDecimal(steps).compareTo(tmp) < 0) {
+				while (new BigDecimal(steps).compareTo((BigDecimal) args[0]) < 0) {
 					steps = steps.add(BigInteger.ONE);
 					tmp = tmp.multiply(new BigDecimal(steps));
 				}
