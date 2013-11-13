@@ -2,6 +2,7 @@ package net.objecthunter.exp4j.tokenizer;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.security.acl.LastOwnerException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -237,7 +238,7 @@ public class Tokenizer<T> {
 							}
 							if (tmp == 'i') {
 								imaginary = true;
-								i = tmpIndex;
+								i = tmpIndex-1;
 							}else {
 								--i;
 								break;
@@ -251,15 +252,21 @@ public class Tokenizer<T> {
 				}
 
 				if (imaginary) {
+					Token lastToken = tokens.size() > 0 ? tokens.get(tokens.size() - 1) : null;
+					double real;
+					if (lastToken != null && lastToken.getType() == Type.OPERATOR && ((OperatorToken) lastToken).getOperator().getArgumentCount() == 1 && ((OperatorToken) lastToken).getOperator().getSymbol().equals("-")){
+						real = Double.parseDouble("-" + numberString.toString());
+						tokens.remove(tokens.size() - 1);
+					}else{
+						real = Double.parseDouble(numberString.toString());
+					}
 					NumberToken<ComplexNumber> n = new NumberToken<>(
 							ComplexNumber.class, 
-							new ComplexNumber(
-									Double.parseDouble(numberString.toString()), 
-									Double.parseDouble(imgBuilder.toString())),
+							new ComplexNumber(real, Double.parseDouble(imgBuilder.toString())),
 							true);
 					tokens.add(n);
 				} else {
-					NumberToken<Double> n = new NumberToken<Double>(Double.class, Double.parseDouble(numberString.toString()));
+					NumberToken<ComplexNumber> n = new NumberToken<ComplexNumber>(ComplexNumber.class, new ComplexNumber(Double.parseDouble(numberString.toString()), 0d));
 					tokens.add(n);
 				}
 

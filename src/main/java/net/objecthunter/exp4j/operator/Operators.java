@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.objecthunter.exp4j.ComplexNumber;
+import net.objecthunter.exp4j.function.ComplexNumberFunctions;
 
 public class Operators {
 	public static final int PRECEDENCE_ADDITION = 500;
@@ -27,9 +28,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).add((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					ComplexNumber z1 = (ComplexNumber) args[0];
-					ComplexNumber z2 = (ComplexNumber) args[0];
-					return new ComplexNumber(z1.getReal() + z2.getReal(), z1.getImaginary() + z2.getImaginary());
+					return ComplexNumberFunctions.add((ComplexNumber) args[0], (ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
@@ -45,7 +44,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).subtract((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
+					return ComplexNumberFunctions.substract((ComplexNumber) args[0], (ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
@@ -61,7 +60,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).multiply((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
+					return ComplexNumberFunctions.multiply((ComplexNumber) args[0], (ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
@@ -83,7 +82,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).divide((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
+					return ComplexNumberFunctions.divide((ComplexNumber) args[0],(ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
@@ -121,7 +120,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					throw new UnsupportedOperationException("builtin power operator is not available for BigDecimal");
 				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
+					return ComplexNumberFunctions.power((ComplexNumber) args[0], (ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}

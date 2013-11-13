@@ -22,6 +22,13 @@ public abstract class ComplexNumberFunctions {
 		
 	}
 	
+	public static ComplexNumber divide(ComplexNumber z1, ComplexNumber z2) {
+		double denominator = z2.getImaginary() * z2.getImaginary() + z2.getReal() * z2.getReal();
+		double real = (z1.getReal() * z2.getReal() + z1.getImaginary() * z2.getImaginary()) / denominator;
+		double img = (z1.getImaginary() * z2.getReal() - z1.getReal() * z2.getImaginary()) / denominator;
+		return new ComplexNumber(real, img);
+	}
+	
 	public static ComplexNumber multiply(ComplexNumber z, double scalefactor){
 		return new ComplexNumber(z.getReal() * scalefactor, z.getImaginary() * scalefactor);
 	}
@@ -72,12 +79,84 @@ public abstract class ComplexNumberFunctions {
 	}
 
 	public static ComplexNumber sin(ComplexNumber z) {
-		if (z.getImaginary() == 0){
-			return new ComplexNumber(Math.sin(z.getReal()),0d);
-		}else if (z.getReal() == 0){
-			return new ComplexNumber(0, Math.sinh(z.getImaginary()));
-		}else {
-			throw new RuntimeException("unable to calcaluate a single sine value for " + z);
-		}
+		return new ComplexNumber(Math.cosh(-z.getImaginary())*Math.sin(z.getReal()), -Math.sinh(-z.getImaginary())*Math.cos(z.getReal()));
+	}
+
+	public static ComplexNumber multiply(ComplexNumber z1, ComplexNumber z2) {
+		return new ComplexNumber(z1.getReal() * z2.getReal() - (z1.getImaginary()*z2.getImaginary()), z1.getReal() * z2.getImaginary() + (z1.getImaginary()*z2.getReal()));
+	}
+
+	public static Object cos(ComplexNumber z) {
+		return new ComplexNumber(Math.cosh(-z.getImaginary())*Math.cos(z.getReal()), -Math.sinh(-z.getImaginary())*Math.sin(z.getReal()));
+	}
+
+	public static Object tan(ComplexNumber z) {
+		ComplexNumber z1 = new ComplexNumber(Math.tan(z.getReal()),-Math.tanh(-z.getImaginary()));
+		ComplexNumber z2 = new ComplexNumber(1d,Math.tanh(-z.getImaginary()) * Math.tan(z.getReal()));
+		return divide(z1, z2);
+	}
+
+	public static Object tanh(ComplexNumber z) {
+		ComplexNumber z1 = new ComplexNumber(Math.tanh(z.getReal()),Math.tan(z.getImaginary()));
+		ComplexNumber z2 = new ComplexNumber(1d,Math.tanh(z.getReal()) * Math.tan(z.getImaginary()));
+		return divide(z1, z2);
+	}
+
+	public static Object atan(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object cosh(ComplexNumber z) {
+		return new ComplexNumber(Math.cosh(z.getReal())*Math.cos(z.getImaginary()), Math.sinh(z.getReal())*Math.sin(z.getImaginary()));
+	}
+
+	public static Object sinh(ComplexNumber z) {
+		return new ComplexNumber(Math.sinh(z.getReal())*Math.cos(z.getImaginary()), Math.cosh(z.getReal())*Math.sin(z.getImaginary()));
+	}
+
+	public static Object exp(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object asin(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object expm1(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object acos(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object cbrt(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object sqrt(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object floor(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object ceil(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object log10(ComplexNumber arg) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

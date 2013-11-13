@@ -178,4 +178,32 @@ public class TokenizerTest {
 		assertEquals(new Double(1), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getReal());
 		assertEquals(new Double(-2), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getImaginary());
 	}
+
+	@Test
+	public void testComplexTokenization5() throws Exception {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1 - 2i * sin(3+2i)";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(6, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertEquals(new Double(1), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getReal());
+		assertEquals(new Double(-2), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getImaginary());
+	}
+
+	@Test
+	public void testComplexTokenization6() throws Exception {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1.73 - 16i * sin(3+2i)";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(6, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertEquals(new Double(1.73d), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getReal());
+		assertEquals(new Double(-16d), (Double) ((ComplexNumber) ((NumberToken) tokens.get(0)).getValue()).getImaginary());
+
+		assertTrue(((NumberToken) tokens.get(4)).imaginary);
+		assertEquals(new Double(3d), (Double) ((ComplexNumber) ((NumberToken) tokens.get(4)).getValue()).getReal());
+		assertEquals(new Double(2d), (Double) ((ComplexNumber) ((NumberToken) tokens.get(4)).getValue()).getImaginary());
+	}
 }
