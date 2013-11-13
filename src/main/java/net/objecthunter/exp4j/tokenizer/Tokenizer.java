@@ -25,11 +25,21 @@ public class Tokenizer<T> {
 		this.type = type;
 	}
 
-	public List<Token> tokenizeExpression(String expression) throws UnparseableExpressionException{
+	public List<Token> tokenizeExpression(String expression) throws UnparseableExpressionException {
 		return this.tokenizeExpression(expression, null, null, null);
 	}
 
-	public List<Token> tokenizeExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators) throws UnparseableExpressionException {
+	public List<Token> tokenizeExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators)
+			throws UnparseableExpressionException {
+		if (type == ComplexNumber.class) {
+			return tokenizeComplexExpression(expression, variables, customFunctions, customOperators);
+		} else {
+			return tokenizeRealExpression(expression, variables, customFunctions, customOperators);
+		}
+	}
+
+	private List<Token> tokenizeRealExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators)
+			throws UnparseableExpressionException {
 		List<Token> tokens = new LinkedList<Token>();
 		for (int i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
@@ -92,11 +102,11 @@ public class Tokenizer<T> {
 						} else {
 							/* binary op */
 							CustomOperator o = Operators.getOperator(c);
-							if (o == null){
+							if (o == null) {
 								/* can be a custom operator */
 								o = customOperators.get(String.valueOf(c));
 							}
-							if (o == null){
+							if (o == null) {
 								throw new RuntimeException("Unknown operator " + o.getSymbol());
 							}
 							op = new OperatorToken(o);
@@ -107,27 +117,27 @@ public class Tokenizer<T> {
 					/* might be a custom operator with more than one symbol */
 					final StringBuilder nameBuilder = new StringBuilder();
 					nameBuilder.append(c);
-					while(expression.length() > i+1){
+					while (expression.length() > i + 1) {
 						char next = expression.charAt(++i);
-						if (Operators.isAllowedOperatorSymbol(next)){
+						if (Operators.isAllowedOperatorSymbol(next)) {
 							nameBuilder.append(next);
-						}else{
+						} else {
 							--i;
 							break;
 						}
 					}
-					
+
 					/* binary op */
 					CustomOperator o = Operators.getOperator(nameBuilder.toString());
-					
-					if (o == null){
+
+					if (o == null) {
 						/* can be a custom operator */
 						o = customOperators.get(nameBuilder.toString());
-						if (o == null){
+						if (o == null) {
 							throw new RuntimeException("Unknown operator '" + nameBuilder.toString() + "'");
 						}
 					}
-					
+
 					op = new OperatorToken(o);
 					tokens.add(op);
 				}
@@ -150,7 +160,7 @@ public class Tokenizer<T> {
 				/* check if a function is available by that name */
 				CustomFunction func = Functions.getFunction(nameBuilder.toString());
 				if (func != null) {
-					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken){
+					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 						throw new UnparseableExpressionException("Invalid function usage at position " + i);
 					}
 					tokens.add(new FunctionToken(func));
@@ -159,19 +169,202 @@ public class Tokenizer<T> {
 					func = customFunctions.get(nameBuilder.toString());
 					if (func != null) {
 						tokens.add(new FunctionToken(func));
-					/* might be a variable */
+						/* might be a variable */
 					} else if (variables.contains(nameBuilder.toString())) {
 						if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 							throw new UnparseableExpressionException("Invalid variable usage for '" + nameBuilder.toString() + "'");
 						}
 						tokens.add(new VariableToken(nameBuilder.toString()));
-					}else{
-						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression +"'");
+					} else {
+						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression + "'");
 					}
 				}
 
 			} else if (c == '(' || c == '[' || c == '{') {
-				if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken){
+				if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
+					throw new UnparseableExpressionException("Invalid parantheses usage at " + i);
+				}
+				tokens.add(new ParanthesesToken(true));
+			} else if (c == ')' || c == ']' || c == '}') {
+				tokens.add(new ParanthesesToken(false));
+			} else if (c == ',') {
+				tokens.add(new ArgumentSeparatorToken());
+			} else {
+				throw new UnknownCharacterException(c, i, expression);
+			}
+		}
+		return tokens;
+	}
+
+	private List<Token> tokenizeComplexExpression(String expression, Set<String> variables, Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> customOperators)
+			throws UnparseableExpressionException {
+		final int expressionLength = expression.length();
+		List<Token> tokens = new LinkedList<Token>();
+		for (int i = 0; i < expressionLength; i++) {
+			char c = expression.charAt(i);
+			/* skip blanks */
+			if (Character.isWhitespace(c)) {
+				continue;
+			}
+
+			if (Character.isDigit(c)) {
+				boolean imaginary = false;
+				StringBuilder numberString = new StringBuilder();
+				StringBuilder imgBuilder = new StringBuilder();
+
+				/* a number */
+				numberString.append(c);
+
+				while (expressionLength > i + 1) {
+					char next = expression.charAt(++i);
+					if (Character.isDigit(next) || next == '.') {
+						numberString.append((char) next);
+					} else{
+						while (expressionLength > i+1 && Character.isWhitespace(next)) {
+							next = expression.charAt(++i);
+						}
+						if (next == '+' || next == '-') {
+							imgBuilder.append(next);
+							int tmpIndex = i + 1;
+							char tmp = expression.charAt(tmpIndex);
+							while (expressionLength > tmpIndex + 1 && Character.isWhitespace(tmp)) {
+								tmp = expression.charAt(++tmpIndex);
+							}
+							/* check if there's an imaginary part coming */
+							while (expressionLength > ++tmpIndex && (Character.isDigit(tmp) || tmp == '.')) {
+								imgBuilder.append(tmp);
+								tmp=expression.charAt(tmpIndex);
+							}
+							if (tmp == 'i') {
+								imaginary = true;
+								i = tmpIndex;
+							}else {
+								--i;
+								break;
+							}
+						} else {
+							--i; // go back a char or we lose something
+							break;
+						}
+				    }
+						
+				}
+
+				if (imaginary) {
+					NumberToken<ComplexNumber> n = new NumberToken<>(
+							ComplexNumber.class, 
+							new ComplexNumber(
+									Double.parseDouble(numberString.toString()), 
+									Double.parseDouble(imgBuilder.toString())),
+							true);
+					tokens.add(n);
+				} else {
+					NumberToken<Double> n = new NumberToken<Double>(Double.class, Double.parseDouble(numberString.toString()));
+					tokens.add(n);
+				}
+
+			} else if (isOperatorCaracter(c, customOperators)) {
+				/* an operator */
+				OperatorToken op;
+				/* check for the unary minus/plus */
+				if (c == '-' || c == '+') {
+					if (tokens.isEmpty()) {
+						/* unary op */
+						if (c == '-') {
+							/* just skip unary plus signs */
+							tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
+						}
+					} else {
+						Token last = tokens.get(tokens.size() - 1);
+						if (last.getType() == Type.OPERATOR || (last.getType() == Type.PARANTHESES && ((ParanthesesToken) last).isOpen())) {
+							/* unary op */
+							if (c == '-') {
+								/* just skip unary plus signs */
+								tokens.add(new OperatorToken(Operators.getUnaryMinusOperator()));
+							}
+						} else {
+							/* binary op */
+							CustomOperator o = Operators.getOperator(c);
+							if (o == null) {
+								/* can be a custom operator */
+								o = customOperators.get(String.valueOf(c));
+							}
+							if (o == null) {
+								throw new RuntimeException("Unknown operator " + o.getSymbol());
+							}
+							op = new OperatorToken(o);
+							tokens.add(op);
+						}
+					}
+				} else {
+					/* might be a custom operator with more than one symbol */
+					final StringBuilder nameBuilder = new StringBuilder();
+					nameBuilder.append(c);
+					while (expression.length() > i + 1) {
+						char next = expression.charAt(++i);
+						if (Operators.isAllowedOperatorSymbol(next)) {
+							nameBuilder.append(next);
+						} else {
+							--i;
+							break;
+						}
+					}
+
+					/* binary op */
+					CustomOperator o = Operators.getOperator(nameBuilder.toString());
+
+					if (o == null) {
+						/* can be a custom operator */
+						o = customOperators.get(nameBuilder.toString());
+						if (o == null) {
+							throw new RuntimeException("Unknown operator '" + nameBuilder.toString() + "'");
+						}
+					}
+
+					op = new OperatorToken(o);
+					tokens.add(op);
+				}
+
+			} else if (Character.isAlphabetic(c) || c == '_') {
+
+				/* might be a function or a variable */
+				StringBuilder nameBuilder = new StringBuilder();
+				nameBuilder.append(c);
+				while (expression.length() > i + 1) {
+					char next = expression.charAt(++i);
+					if (Character.isAlphabetic(next) || Character.isDigit(next) || next == '_') {
+						nameBuilder.append(next);
+					} else {
+						--i; // step back or we might lose something
+						break;
+					}
+				}
+
+				/* check if a function is available by that name */
+				CustomFunction func = Functions.getFunction(nameBuilder.toString());
+				if (func != null) {
+					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
+						throw new UnparseableExpressionException("Invalid function usage at position " + i);
+					}
+					tokens.add(new FunctionToken(func));
+				} else {
+					/* might be a custom function */
+					func = customFunctions.get(nameBuilder.toString());
+					if (func != null) {
+						tokens.add(new FunctionToken(func));
+						/* might be a variable */
+					} else if (variables.contains(nameBuilder.toString())) {
+						if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
+							throw new UnparseableExpressionException("Invalid variable usage for '" + nameBuilder.toString() + "'");
+						}
+						tokens.add(new VariableToken(nameBuilder.toString()));
+					} else {
+						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression + "'");
+					}
+				}
+
+			} else if (c == '(' || c == '[' || c == '{') {
+				if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 					throw new UnparseableExpressionException("Invalid parantheses usage at " + i);
 				}
 				tokens.add(new ParanthesesToken(true));

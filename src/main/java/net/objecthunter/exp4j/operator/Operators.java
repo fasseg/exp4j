@@ -27,7 +27,9 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).add((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
+					ComplexNumber z1 = (ComplexNumber) args[0];
+					ComplexNumber z2 = (ComplexNumber) args[0];
+					return new ComplexNumber(z1.getReal() + z2.getReal(), z1.getImaginary() + z2.getImaginary());
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
