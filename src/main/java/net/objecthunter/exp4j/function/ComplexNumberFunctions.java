@@ -59,11 +59,11 @@ public abstract class ComplexNumberFunctions {
 		double img = z.getImaginary();
 		
 		if (real > 0) {
-			return Math.atan(real/img);
+			return Math.atan(img/real);
 		} else if (real < 0 && img >= 0) {
-			return Math.atan(real/img) + Math.PI;
+			return Math.atan(img/real) + Math.PI;
 		} else if (real < 0 && img < 0) {
-			return Math.atan(real/img) - Math.PI;
+			return Math.atan(img/real) - Math.PI;
 		} else if (real == 0 && img > 0) {
 			return Math.PI/2d;
 		} else if (real == 0 && img < 0) {
@@ -73,7 +73,7 @@ public abstract class ComplexNumberFunctions {
 		}
 	}
 
-	public static ComplexNumber substract(ComplexNumber minuend, ComplexNumber subtrahend) {
+	public static ComplexNumber subtract(ComplexNumber minuend, ComplexNumber subtrahend) {
 		return new ComplexNumber(minuend.getReal() - subtrahend.getReal(), minuend.getImaginary()
 				- subtrahend.getImaginary());
 	}
@@ -86,76 +86,81 @@ public abstract class ComplexNumberFunctions {
 		return new ComplexNumber(z1.getReal() * z2.getReal() - (z1.getImaginary()*z2.getImaginary()), z1.getReal() * z2.getImaginary() + (z1.getImaginary()*z2.getReal()));
 	}
 
-	public static Object cos(ComplexNumber z) {
+	public static ComplexNumber cos(ComplexNumber z) {
 		return new ComplexNumber(Math.cosh(-z.getImaginary())*Math.cos(z.getReal()), -Math.sinh(-z.getImaginary())*Math.sin(z.getReal()));
 	}
 
-	public static Object tan(ComplexNumber z) {
+	public static ComplexNumber tan(ComplexNumber z) {
 		ComplexNumber z1 = new ComplexNumber(Math.tan(z.getReal()),-Math.tanh(-z.getImaginary()));
 		ComplexNumber z2 = new ComplexNumber(1d,Math.tanh(-z.getImaginary()) * Math.tan(z.getReal()));
 		return divide(z1, z2);
 	}
 
-	public static Object tanh(ComplexNumber z) {
+	public static ComplexNumber tanh(ComplexNumber z) {
 		ComplexNumber z1 = new ComplexNumber(Math.tanh(z.getReal()),Math.tan(z.getImaginary()));
 		ComplexNumber z2 = new ComplexNumber(1d,Math.tanh(z.getReal()) * Math.tan(z.getImaginary()));
 		return divide(z1, z2);
 	}
 
-	public static Object atan(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber atan(ComplexNumber z) {
+		double a = z.getReal();
+		double b = z.getImaginary();
+		return multiply(new ComplexNumber(0d, 0.5d), subtract(log(new ComplexNumber(1+b, -a)), log(new ComplexNumber(1-b,a))));
 	}
 
-	public static Object cosh(ComplexNumber z) {
+	public static ComplexNumber cosh(ComplexNumber z) {
 		return new ComplexNumber(Math.cosh(z.getReal())*Math.cos(z.getImaginary()), Math.sinh(z.getReal())*Math.sin(z.getImaginary()));
 	}
 
-	public static Object sinh(ComplexNumber z) {
+	public static ComplexNumber sinh(ComplexNumber z) {
 		return new ComplexNumber(Math.sinh(z.getReal())*Math.cos(z.getImaginary()), Math.cosh(z.getReal())*Math.sin(z.getImaginary()));
 	}
 
-	public static Object exp(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber exp(ComplexNumber z) {
+		return multiply(new ComplexNumber(Math.cos(z.getImaginary()), Math.sin(z.getImaginary())), Math.exp(z.getReal()));
 	}
 
-	public static Object asin(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber asin(ComplexNumber z) {
+		double a = z.getReal();
+		double b = z.getImaginary();
+		double c1 =(Math.sqrt((a*a+2*a+1)+b*b) - Math.sqrt((1-2*a+a*a)+b*b))/2d;
+		double c2 =(Math.sqrt((a*a+2*a+1)+b*b) + Math.sqrt((1-2*a+a*a)+b*b))/2d;
+		return new ComplexNumber(Math.asin(c1), Math.log(c2 + Math.sqrt(c2*c2 - 1d)));
 	}
 
-	public static Object expm1(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber expm1(ComplexNumber z) {
+		return subtract(multiply(new ComplexNumber(Math.cos(z.getImaginary()), Math.sin(z.getImaginary())), Math.exp(z.getReal())), new ComplexNumber(1d, 1d));
 	}
 
-	public static Object acos(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber conj(ComplexNumber z) {
+		return new ComplexNumber(z.getReal(), -z.getImaginary());
 	}
 
-	public static Object cbrt(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber acos(ComplexNumber z) {
+		double a = z.getReal();
+		double b = z.getImaginary();
+		double c1 =(Math.sqrt((a*a+2*a+1)+b*b) - Math.sqrt((1-2*a+a*a)+b*b))/2d;
+		double c2 =(Math.sqrt((a*a+2*a+1)+b*b) + Math.sqrt((1-2*a+a*a)+b*b))/2d;
+		return new ComplexNumber(Math.acos(c1), -Math.log(c2 + Math.sqrt(c2*c2 - 1d)));
 	}
 
-	public static Object sqrt(ComplexNumber z) {
+	public static ComplexNumber cbrt(ComplexNumber z) {
+		return power(z, new ComplexNumber(1d/3d, 0d));
+	}
+
+	public static ComplexNumber sqrt(ComplexNumber z) {
 		return power(z, new ComplexNumber(0.5d, 0d));
 	}
 
-	public static Object floor(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber floor(ComplexNumber z) {
+		return new ComplexNumber(Math.floor(z.getReal()), Math.floor(z.getImaginary()));
 	}
 
-	public static Object ceil(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber ceil(ComplexNumber z) {
+		return new ComplexNumber(Math.ceil(z.getReal()), Math.ceil(z.getImaginary()));
 	}
 
-	public static Object log10(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ComplexNumber log10(ComplexNumber z) {
+		return multiply(log(z),1/Math.log(10));
 	}
 }

@@ -146,5 +146,65 @@ public class ExpressionBuilderComplexNumberTest {
 		ComplexNumber result = e.build().calculate();
 		assertEquals(new ComplexNumber(1.6741492280355401d, 0.895977476129838d), result);
 	}
+	@Test
+	public void testComplexNumberExpression20() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("exp(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(-7.315110094901103d, 1.0427436562359044d), result);
+	}
+	@Test
+	public void testComplexNumberExpression21() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("expm1(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(-8.315110094901102517d, 0.04274365623590448d), result);
+	}
+	@Test
+	public void testComplexNumberExpression22() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("log10(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(0.5569716761534182d, 0.42682189085546657d), result);
+	}
+	@Test
+	public void testComplexNumberExpression23() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("cbrt(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(1.4518566183526649d,0.49340353410400467d), result);
+	}
+	@Test
+	public void testComplexNumberExpression24() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("acos(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(1.0001435424737974d, -1.983387029916535432d), result);
+	}
+	@Test
+	public void testComplexNumberExpression25() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("atan(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(1.40992104959657552253061d, 0.22907268296853878d), result);
+	}
+	@Test
+	public void testComplexNumberExpression26() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("asin(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(0.5706527843210991d, 1.983387029916535432d), result);
+	}
+	@Test
+	public void testComplexNumberExpression27() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("floor(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(2d, 3d), result);
+	}
+	@Test
+	public void testComplexNumberExpression28() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("ceil(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(2d, 3d), result);
+	}
+	@Test
+	public void testComplexNumberExpression29() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("log(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(1.2824746787307684d, 0.9827937232473290d), result);
+	}
 
 }

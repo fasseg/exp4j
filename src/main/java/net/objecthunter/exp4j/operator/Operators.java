@@ -44,7 +44,7 @@ public class Operators {
 				} else if (args[0] instanceof BigDecimal) {
 					return ((BigDecimal) args[0]).subtract((BigDecimal) args[1]);
 				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.substract((ComplexNumber) args[0], (ComplexNumber) args[1]);
+					return ComplexNumberFunctions.subtract((ComplexNumber) args[0], (ComplexNumber) args[1]);
 				} else {
 					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
 				}
