@@ -140,5 +140,11 @@ public class ExpressionBuilderComplexNumberTest {
 		ComplexNumber result = e.build().calculate();
 		assertEquals(new ComplexNumber(0.9653858790221331d, -0.00988437503832251d), result);
 	}
+	@Test
+	public void testComplexNumberExpression19() throws Exception {
+		ExpressionBuilder<ComplexNumber> e = new ExpressionBuilder<>("sqrt(2+3i)", ComplexNumber.class);
+		ComplexNumber result = e.build().calculate();
+		assertEquals(new ComplexNumber(1.6741492280355401d, 0.895977476129838d), result);
+	}
 
 }

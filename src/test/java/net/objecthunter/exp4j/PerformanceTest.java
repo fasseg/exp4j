@@ -52,6 +52,24 @@ public class PerformanceTest {
 		System.out.println("exp4j Float\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
 	}
 	@Test
+	public void testBenchComplex() throws Exception {
+		Calculable<ComplexNumber> calc = new ExpressionBuilder<ComplexNumber>(EXPRESSION, ComplexNumber.class).variables("x", "y").build();
+		@SuppressWarnings("unused")
+		ComplexNumber val;
+		Random rnd = new Random();
+		long timeout = BENCH_TIME;
+		long time = System.currentTimeMillis() + (1000 * timeout);
+		int count = 0;
+		while (time > System.currentTimeMillis()) {
+			calc.setVariable("x", new ComplexNumber(rnd.nextDouble(), rnd.nextDouble()));
+			calc.setVariable("y", new ComplexNumber(rnd.nextDouble(), rnd.nextDouble()));
+			val = calc.calculate();
+			count++;
+		}
+		double rate = count / timeout;
+		System.out.println("exp4j ComplexNumber\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+	}
+	@Test
 	public void testBenchJavaMath() throws Exception {
 		long timeout = BENCH_TIME;
 		long time = System.currentTimeMillis() + (1000 * timeout);

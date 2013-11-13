@@ -140,9 +140,8 @@ public abstract class ComplexNumberFunctions {
 		return null;
 	}
 
-	public static Object sqrt(ComplexNumber arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public static Object sqrt(ComplexNumber z) {
+		return power(z, new ComplexNumber(0.5d, 0d));
 	}
 
 	public static Object floor(ComplexNumber arg) {
