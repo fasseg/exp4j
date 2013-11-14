@@ -10,6 +10,8 @@ public abstract class ComplexNumberFunctions {
 		final double d = exponent.getImaginary();
 		if (a == 0d && b == 0d) {
 			return new ComplexNumber(0d, 0d);
+		}else if (base.isReal() && exponent.isReal()){
+			return new ComplexNumber(Math.pow(a, c), 0d);
 		}else if (a == 0d && b == 1d && exponent.isReal()){
 			// check if the exponent is a natural number
 			// then a simple check for the mod of the number will suffice
@@ -30,7 +32,7 @@ public abstract class ComplexNumberFunctions {
 				return new ComplexNumber(1d, 0d);
 			}
 			// DeMoivre's theorem can be used
-			double theta = Math.atan(b/a);
+			final double theta = Math.atan(b/a);
 			final double r = Math.pow(Math.sqrt(a*a+b*b),c) ;
 			return multiply(new ComplexNumber(Math.cos(c*theta),Math.sin(c*theta)), r);
 		}else if (base.isReal()) {
