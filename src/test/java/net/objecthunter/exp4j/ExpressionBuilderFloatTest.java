@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Future;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -1739,5 +1740,16 @@ public class ExpressionBuilderFloatTest {
 		calc.setVariable("x", x);
 		calc.setVariable("pi", pi);
 		assertTrue(expected == calc.calculate());
+	}
+	@Test
+	public void testFutureCalculable() throws Exception {
+		float x = 4.5334332f;
+		float pi = (float) Math.PI;
+		String expr = "x * pi";
+		Calculable<Float> calc = new ExpressionBuilder(expr, Float.class).variables("x", "pi").build();
+		calc.setVariable("x", x);
+		calc.setVariable("pi", pi);
+		Future<Float> future = calc.calculateAsync();
+		assertEquals(new Float(x * pi), future.get());
 	}
 }

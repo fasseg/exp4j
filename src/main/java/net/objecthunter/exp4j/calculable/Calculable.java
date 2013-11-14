@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import net.objecthunter.exp4j.tokenizer.FunctionToken;
 import net.objecthunter.exp4j.tokenizer.NumberToken;
@@ -17,6 +21,14 @@ import net.objecthunter.exp4j.tokenizer.Token.Type;
 public abstract class Calculable<T> {
 	protected final List<Token> tokens;
 	protected final Map<String,T> variables = new HashMap<String, T>();
+	private ExecutorService executor;
+	
+	public ExecutorService getExecutor() {
+		if (executor == null)  {
+			executor = Executors.newFixedThreadPool(1);
+		}
+		return executor;
+	}
 
 	public Calculable(List<Token> tokens) {
 		super();
@@ -26,6 +38,15 @@ public abstract class Calculable<T> {
 	public Calculable<T> setVariable(String name, T value){
 		this.variables.put(name, value);
 		return this;
+	}
+	
+	public Future<T> calculateAsync() {
+		return getExecutor().submit(new Callable<T>() {
+			@Override
+			public T call() throws Exception {
+				return calculate();
+			}
+		});
 	}
 	
 	public T calculate() {

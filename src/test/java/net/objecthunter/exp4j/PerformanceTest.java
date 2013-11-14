@@ -67,7 +67,7 @@ public class PerformanceTest {
 			count++;
 		}
 		double rate = count / timeout;
-		System.out.println("exp4j ComplexNumber\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+		System.out.println("exp4j Complex\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
 	}
 	@Test
 	public void testBenchJavaMath() throws Exception {
