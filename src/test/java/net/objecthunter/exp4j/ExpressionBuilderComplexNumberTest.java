@@ -241,4 +241,10 @@ public class ExpressionBuilderComplexNumberTest {
 		ComplexNumber result = e.build().calculate();
 		assertEquals(new ComplexNumber(1d, 0d), result);
 	}
+
+	@Test
+	public void testComplexNumberExpression35() throws Exception {
+		ComplexNumber result = ExpressionBuilder.complexExpression("2.31+7i*3+2+4i").build().calculate();
+		assertEquals(new ComplexNumber(8.93d,25d), result);
+	}
 }

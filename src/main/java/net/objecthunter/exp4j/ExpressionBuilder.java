@@ -26,10 +26,26 @@ public class ExpressionBuilder<T> {
 	private final Map<String, CustomFunction> functions = new HashMap<>();
 	private final Map<String, CustomOperator> operators = new HashMap<>();
 
+	public static ExpressionBuilder<Float> floatExpression(String expression) {
+		return new ExpressionBuilder<>(expression, Float.class);
+	}
+
+	public static ExpressionBuilder<Double> doubleExpression(String expression) {
+		return new ExpressionBuilder<>(expression, Double.class);
+	}
+
+	public static ExpressionBuilder<BigDecimal> bigDecimalExpression(String expression) {
+		return new ExpressionBuilder<>(expression, BigDecimal.class);
+	}
+
+	public static ExpressionBuilder<ComplexNumber> complexExpression(String expression) {
+		return new ExpressionBuilder<>(expression, ComplexNumber.class);
+	}
+
 	public ExpressionBuilder(final String expression, final Class<T> returnType) {
-        if (expression.trim().length() == 0){
-            throw new IllegalArgumentException("expression can not be empty");
-        }
+		if (expression.trim().length() == 0) {
+			throw new IllegalArgumentException("expression can not be empty");
+		}
 		this.expression = expression;
 		this.returnType = returnType;
 	}
@@ -57,7 +73,6 @@ public class ExpressionBuilder<T> {
 		operators.put(op.getSymbol(), op);
 		return this;
 	}
-
 
 	public ExpressionBuilder<T> operators(CustomOperator... ops) {
 		for (CustomOperator op : ops) {
@@ -96,19 +111,19 @@ public class ExpressionBuilder<T> {
 	public Calculable<T> build() throws UnparseableExpressionException {
 		if (this.returnType == Double.class) {
 			Tokenizer<Double> tok = new Tokenizer<>(Double.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
+			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new DoubleCalculable(tokens);
 		} else if (this.returnType == Float.class) {
 			Tokenizer<Float> tok = new Tokenizer<>(Float.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
+			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new FloatCalculable(tokens);
 		} else if (this.returnType == BigDecimal.class) {
 			Tokenizer<BigDecimal> tok = new Tokenizer<>(BigDecimal.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
+			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new BigDecimalCalculable(tokens);
 		} else if (this.returnType == ComplexNumber.class) {
 			Tokenizer<ComplexNumber> tok = new Tokenizer<>(ComplexNumber.class);
-			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables,functions,operators));
+			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new ComplexCalculable(tokens);
 		} else {
 			throw new RuntimeException("Unparseable");
