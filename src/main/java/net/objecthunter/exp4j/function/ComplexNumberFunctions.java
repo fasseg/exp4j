@@ -9,7 +9,7 @@ public abstract class ComplexNumberFunctions {
 		final double c = exponent.getReal();
 		final double d = exponent.getImaginary();
 		if (a == 0d && b == 0d) {
-			return new ComplexNumber(0d, 0d);
+			return ComplexNumber.ZERO;
 		}else if (base.isReal() && exponent.isReal()){
 			return new ComplexNumber(Math.pow(a, c), 0d);
 		}else if (a == 0d && b == 1d && exponent.isReal()){
@@ -20,7 +20,7 @@ public abstract class ComplexNumberFunctions {
 				if (n % 2 == 0){
 					return new ComplexNumber(-1d, 0d);
 				}else{
-					return new ComplexNumber(1d, 0d);
+					return ComplexNumber.ONE;
 				}
 			}
 			return new ComplexNumber(Math.cos(Math.PI*c/2d),Math.sin(Math.PI*c/2d));
@@ -29,7 +29,7 @@ public abstract class ComplexNumberFunctions {
 				return base;
 			}
 			if (exponent.getReal() == 0d) {
-				return new ComplexNumber(1d, 0d);
+				return ComplexNumber.ONE;
 			}
 			// DeMoivre's theorem can be used
 			final double theta = Math.atan(b/a);

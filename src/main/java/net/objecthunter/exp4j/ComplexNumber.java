@@ -1,6 +1,10 @@
 package net.objecthunter.exp4j;
 
 public class ComplexNumber {
+	public static final ComplexNumber ONE = new ComplexNumber(1d, 0d);
+	public static final ComplexNumber I = new ComplexNumber(0d, 1d);
+	public static final ComplexNumber ZERO = new ComplexNumber(0d, 1d);
+	
 	private final double real;
 	private final double imaginary;
 
