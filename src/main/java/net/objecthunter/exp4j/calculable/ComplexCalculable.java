@@ -10,4 +10,5 @@ public class ComplexCalculable extends Calculable<ComplexNumber> {
 	public ComplexCalculable(List<Token> tokens) {
 		super(tokens);
 	}
+	
 }

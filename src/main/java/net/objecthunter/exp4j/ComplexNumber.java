@@ -17,7 +17,7 @@ public class ComplexNumber {
 	public ComplexNumber(double real, double imaginary) {
 		super();
 		this.real = real;
-		this.imaginary = imaginary;
+		this.imaginary = (imaginary == -0d) ? 0d : imaginary;
 	}
 
 	public double getReal() {
@@ -26,6 +26,10 @@ public class ComplexNumber {
 
 	public double getImaginary() {
 		return imaginary;
+	}
+	
+	public boolean isReal() {
+		return this.imaginary == 0d;
 	}
 
 	

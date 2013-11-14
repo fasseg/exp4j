@@ -365,6 +365,8 @@ public class Tokenizer<T> {
 							throw new UnparseableExpressionException("Invalid variable usage for '" + nameBuilder.toString() + "'");
 						}
 						tokens.add(new VariableToken(nameBuilder.toString()));
+					} else if (nameBuilder.toString().equals("i")){
+						tokens.add(new NumberToken<ComplexNumber>(ComplexNumber.class, new ComplexNumber(0d, 1d)));
 					} else {
 						throw new UnparseableExpressionException("Unable to parse name '" + nameBuilder.toString() + "' in expression '" + expression + "'");
 					}
