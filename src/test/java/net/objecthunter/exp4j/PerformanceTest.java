@@ -1,6 +1,7 @@
 package net.objecthunter.exp4j;
 
 import java.text.DecimalFormat;
+import java.util.Formatter;
 import java.util.Random;
 
 import javax.script.ScriptEngine;
@@ -11,12 +12,53 @@ import net.objecthunter.exp4j.calculable.Calculable;
 import org.junit.Test;
 
 public class PerformanceTest {
-	
+
 	public static long BENCH_TIME = 2l;
 	public static String EXPRESSION = "log(x) - y * (sqrt(x^cos(y)))";
-	
+
 	@Test
-	public void testBenchDouble() throws Exception {
+	public void testBenches() throws Exception {
+		System.out.println("Running naive benchmarks...");
+		StringBuffer sb = new StringBuffer();
+		Formatter fmt = new Formatter(sb);
+		fmt.format("%n+------------------------+---------------------------+--------------------------+%n");
+		fmt.format("| %-22s | %-25s | %-24s |%n", "Implementation", "Calculations per Second", "Percentage of Math");
+		fmt.format("+------------------------+---------------------------+--------------------------+%n");
+		System.out.print(sb.toString());
+		sb.setLength(0);
+
+		int math = benchJavaMath();
+		double mathRate = (double) math / (double) BENCH_TIME;
+		fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "Java Math", mathRate, 100f);
+		System.out.print(sb.toString());
+		sb.setLength(0);
+
+		int fl = benchFloat();
+		double flRate = (double) fl / (double) BENCH_TIME;
+		fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j Float", flRate, flRate * 100 / mathRate);
+		System.out.print(sb.toString());
+		sb.setLength(0);
+
+		int db = benchDouble();
+		double dbRate = (double) db / (double) BENCH_TIME;
+		fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j Double", dbRate, dbRate * 100 / mathRate);
+		System.out.print(sb.toString());
+		sb.setLength(0);
+
+		int cmp = benchComplex();
+		double cmpRate = (double) cmp / (double) BENCH_TIME;
+		fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j Complex", cmpRate, cmpRate * 100 / mathRate);
+		System.out.print(sb.toString());
+		sb.setLength(0);
+
+		int js = benchJavaScript();
+		double jsRate = (double) js / (double) BENCH_TIME;
+		fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "JSR-223 (Java Script)", jsRate, jsRate * 100 / mathRate);
+		fmt.format("+------------------------+---------------------------+--------------------------+%n");
+		System.out.print(sb.toString());
+}
+
+	private int benchDouble() throws Exception {
 		Calculable<Double> calc = new ExpressionBuilder<Double>(EXPRESSION, Double.class).variables("x", "y").build();
 		@SuppressWarnings("unused")
 		double val;
@@ -31,10 +73,10 @@ public class PerformanceTest {
 			count++;
 		}
 		double rate = count / timeout;
-		System.out.println("exp4j Double\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+		return count;
 	}
-	@Test
-	public void testBenchFloat() throws Exception {
+
+	private int benchFloat() throws Exception {
 		Calculable<Float> calc = new ExpressionBuilder<Float>(EXPRESSION, Float.class).variables("x", "y").build();
 		@SuppressWarnings("unused")
 		double val;
@@ -49,10 +91,10 @@ public class PerformanceTest {
 			count++;
 		}
 		double rate = count / timeout;
-		System.out.println("exp4j Float\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+		return count;
 	}
-	@Test
-	public void testBenchComplex() throws Exception {
+
+	private int benchComplex() throws Exception {
 		Calculable<ComplexNumber> calc = new ExpressionBuilder<ComplexNumber>(EXPRESSION, ComplexNumber.class).variables("x", "y").build();
 		@SuppressWarnings("unused")
 		ComplexNumber val;
@@ -67,10 +109,10 @@ public class PerformanceTest {
 			count++;
 		}
 		double rate = count / timeout;
-		System.out.println("exp4j Complex\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+		return count;
 	}
-	@Test
-	public void testBenchJavaMath() throws Exception {
+
+	private int benchJavaMath() throws Exception {
 		long timeout = BENCH_TIME;
 		long time = System.currentTimeMillis() + (1000 * timeout);
 		double x, y, val, rate;
@@ -83,10 +125,10 @@ public class PerformanceTest {
 			count++;
 		}
 		rate = count / timeout;
-		System.out.println("Java Math\t\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
+		return count;
 	}
-	@Test
-	public void testBenchJavaScript() throws Exception {
+
+	private int benchJavaScript() throws Exception {
 		ScriptEngineManager mgr = new ScriptEngineManager();
 		ScriptEngine engine = mgr.getEngineByName("JavaScript");
 		long timeout = BENCH_TIME;
@@ -96,6 +138,7 @@ public class PerformanceTest {
 		Random rnd = new Random();
 		if (engine == null) {
 			System.err.println("Unable to instantiate javascript engine. skipping naive JS bench.");
+			return -1;
 		} else {
 			time = System.currentTimeMillis() + (1000 * timeout);
 			count = 0;
@@ -106,8 +149,8 @@ public class PerformanceTest {
 				count++;
 			}
 			rate = count / timeout;
-			System.out.println("JSR 223(Javascript)\t" + (rate > 1000 ? new DecimalFormat("#.##").format(rate / 1000) + "k" : rate) + " calc/sec");
 		}
+		return count;
 	}
 
 }
