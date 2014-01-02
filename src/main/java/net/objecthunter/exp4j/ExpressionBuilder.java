@@ -13,6 +13,7 @@ import net.objecthunter.exp4j.calculable.Calculable;
 import net.objecthunter.exp4j.calculable.ComplexCalculable;
 import net.objecthunter.exp4j.calculable.DoubleCalculable;
 import net.objecthunter.exp4j.calculable.FloatCalculable;
+import net.objecthunter.exp4j.exceptions.InvalidVariableException;
 import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.operator.CustomOperator;
@@ -89,12 +90,18 @@ public class ExpressionBuilder<T> {
 	}
 
 	public ExpressionBuilder<T> variable(String var) {
+		if (this.returnType == ComplexNumber.class && var.equals("i")) {
+			throw new InvalidVariableException("'i' can not be used a s a variable name in complex calculations");
+		}
 		variables.add(var);
 		return this;
 	}
 
 	public ExpressionBuilder<T> variables(Collection<String> vars) {
 		for (String var : vars) {
+			if (this.returnType == ComplexNumber.class && var.equals("i")) {
+				throw new InvalidVariableException("'i' can not be used a s a variable name in complex calculations");
+			}
 			this.variable(var);
 		}
 		return this;
@@ -102,6 +109,9 @@ public class ExpressionBuilder<T> {
 
 	public ExpressionBuilder<T> variables(String... vars) {
 		for (String var : vars) {
+			if (this.returnType == ComplexNumber.class && var.equals("i")) {
+				throw new InvalidVariableException("'i' can not be used a s a variable name in complex calculations");
+			}
 			this.variable(var);
 		}
 		return this;

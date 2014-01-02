@@ -217,4 +217,25 @@ public class TokenizerTest {
 		assertTrue(((NumberToken) tokens.get(0)).imaginary);
 		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
 	}
+
+	@Test
+	public void testComplexTokenization8() throws Exception {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1 -- 0i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(1, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+	}
+	@Test
+	public void testComplexTokenization9() throws Exception {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "-- 1 -- 0i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(1, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+	}
 }
