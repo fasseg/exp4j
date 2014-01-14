@@ -34,28 +34,16 @@ public class NextGenTokenizer<T> {
 			final Map<String, CustomFunction> customFunctions,
 			final Map<String, CustomOperator> customOperators)
 			throws UnparseableExpressionException {
-		if (type == ComplexNumber.class) {
-			return tokenizeComplexExpression(expression, variables,
-					customFunctions, customOperators);
-		} else {
-			return tokenizeRealExpression(expression, variables,
-					customFunctions, customOperators);
-		}
+		return tokenizeExpression(expression, variables,
+				customFunctions, customOperators, type == ComplexNumber.class);
 	}
 
-	private List<Token> tokenizeComplexExpression(
+	private List<Token> tokenizeExpression(
 			final String expression,
 			final Set<String> variables,
 			final Map<String, CustomFunction> functions,
-			final Map<String, CustomOperator> operators) {
-		return null;
-	}
-
-	private List<Token> tokenizeRealExpression(
-			final String expression,
-			final Set<String> variables,
-			final Map<String, CustomFunction> functions,
-			final Map<String, CustomOperator> operators)
+			final Map<String, CustomOperator> operators,
+			final boolean complex)
 			throws UnparseableExpressionException {
 
 		final LinkedList<Token> tokens = new LinkedList<>();
@@ -72,7 +60,11 @@ public class NextGenTokenizer<T> {
 			}
 			// numbers
 			else if (Character.isDigit(ch) || ch == '.') {
-				idx = tryParseRealNumber(expression, ch, idx + 1, tokens);
+				if (complex) {
+					idx = tryParseComplexNumber(expression, ch, idx + 1, tokens);
+				} else {
+					idx = tryParseRealNumber(expression, ch, idx + 1, tokens);
+				}
 			}
 			// functions and variables
 			else if (Character.isAlphabetic(ch) || ch == '_') {
@@ -143,6 +135,92 @@ public class NextGenTokenizer<T> {
 				throw new UnparseableExpressionException("Unknown symbol: "
 						+ name + "");
 			}
+		}
+		return offset;
+	}
+
+	private int tryParseComplexNumber(
+			final String expression,
+			final char ch,
+			int offset,
+			final LinkedList<Token> tokens) {
+
+		// first check the real part
+		final StringBuilder realBuilder = new StringBuilder();
+		realBuilder.append(ch);
+		final int len = expression.length();
+		if (offset < len) {
+			char next = expression.charAt(offset);
+			while (offset < len && (Character.isDigit(next) || next == '.')) {
+				realBuilder.append(next);
+				offset++;
+				if (offset < len) {
+					next = expression.charAt(offset);
+				}
+			}
+		}
+
+		// check if there is an imaginary part coming
+		int j = offset;
+		// now read an arbitrary number of plus/minus and whitespace
+		boolean negative = false;
+		boolean operatorEncountered = false;
+		while (j < len) {
+			char next = expression.charAt(j);
+			if (next == '+') {
+				operatorEncountered = true;
+			} else if (next == '-') {
+				operatorEncountered = true;
+				negative = !negative;
+			} else if (!Character.isWhitespace(next)) {
+				break;
+			}
+			j++;
+		}
+		if (!operatorEncountered) {
+			// can't be complex so return with the original offset
+			NumberToken<ComplexNumber> r = new NumberToken<ComplexNumber>(
+					ComplexNumber.class,
+					new ComplexNumber(
+							Double.parseDouble(realBuilder.toString()),
+							0d), false);
+			tokens.add(r);
+			return offset;
+		}
+		// read a number string and check that whether it contains an 'i'
+		final StringBuilder imgBuilder = new StringBuilder();
+		boolean imgPart = false;
+		while (j < len) {
+			char next = expression.charAt(j);
+			if (next == 'i') {
+				imgPart = true;
+			} else if (Character.isDigit(next) || next == '.') {
+				imgBuilder.append(next);
+			} else {
+				break;
+			}
+			j++;
+		}
+		if (imgPart) {
+			// a complex
+			double imaginary = Double.parseDouble(
+					(negative ? '-' + imgBuilder.toString() : imgBuilder
+							.toString()));
+			NumberToken<ComplexNumber> z = new NumberToken<ComplexNumber>(
+					ComplexNumber.class,
+					new ComplexNumber(
+							Double.parseDouble(realBuilder.toString()),
+							imaginary),imaginary != 0d);
+			tokens.add(z);
+			offset = j;
+		} else {
+			// a real
+			NumberToken<ComplexNumber> r = new NumberToken<ComplexNumber>(
+					ComplexNumber.class,
+					new ComplexNumber(
+							Double.parseDouble(realBuilder.toString()),
+							0d), false);
+			tokens.add(r);
 		}
 		return offset;
 	}
