@@ -9,6 +9,7 @@ import javax.script.ScriptEngineManager;
 
 import net.objecthunter.exp4j.calculable.Calculable;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PerformanceTest {
@@ -17,6 +18,7 @@ public class PerformanceTest {
 	public static String EXPRESSION = "log(x) - y * (sqrt(x^cos(y)))";
 
 	@Test
+	@Ignore
 	public void testBenches() throws Exception {
 		System.out.println("Running naive benchmarks...");
 		StringBuffer sb = new StringBuffer();

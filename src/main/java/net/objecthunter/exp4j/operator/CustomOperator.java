@@ -48,7 +48,7 @@ public abstract class CustomOperator {
 
 	public abstract Object apply(Object... args);
 	
-	private static boolean isAllowedOperatorChar(char s) {
+	public static boolean isAllowedOperatorChar(char s) {
 		for (char c : ALLOWED_OPERATOR_CHARS){
 			if (c == s){
 				return true;

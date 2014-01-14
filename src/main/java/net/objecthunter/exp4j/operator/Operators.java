@@ -128,15 +128,15 @@ public class Operators {
 		});
 	}
 
-	public static boolean isOperator(char c) {
+	public static boolean isBuiltinOperatorSymbol(char c) {
 		return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^';
 	}
 
-	public static CustomOperator getOperator(char c) {
+	public static CustomOperator getBuiltinOperator(char c) {
 		return builtin.get(String.valueOf(c));
 	}
 
-	public static CustomOperator getOperator(String symbols) {
+	public static CustomOperator getBuiltinOperator(String symbols) {
 		return builtin.get(symbols);
 	}
 
@@ -161,6 +161,6 @@ public class Operators {
 	}
 
 	public static boolean isAllowedOperatorSymbol(char c) {
-		return c == '>' || c == '<' || c == '#' || c == '~' || c == '&' || c == '$' || c == '!' || c == '§' || c == '=';
+		return CustomOperator.isAllowedOperatorChar(c);
 	}
 }

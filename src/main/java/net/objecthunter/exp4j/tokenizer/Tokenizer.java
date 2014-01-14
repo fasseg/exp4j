@@ -102,7 +102,7 @@ public class Tokenizer<T> {
 							}
 						} else {
 							/* binary op */
-							CustomOperator o = Operators.getOperator(c);
+							CustomOperator o = Operators.getBuiltinOperator(c);
 							if (o == null) {
 								/* can be a custom operator */
 								o = customOperators.get(String.valueOf(c));
@@ -129,7 +129,7 @@ public class Tokenizer<T> {
 					}
 
 					/* binary op */
-					CustomOperator o = Operators.getOperator(nameBuilder.toString());
+					CustomOperator o = Operators.getBuiltinOperator(nameBuilder.toString());
 
 					if (o == null) {
 						/* can be a custom operator */
@@ -159,7 +159,7 @@ public class Tokenizer<T> {
 				}
 
 				/* check if a function is available by that name */
-				CustomFunction func = Functions.getFunction(nameBuilder.toString());
+				CustomFunction func = Functions.getBuiltinFunction(nameBuilder.toString());
 				if (func != null) {
 					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 						throw new UnparseableExpressionException("Invalid function usage at position " + i);
@@ -225,11 +225,24 @@ public class Tokenizer<T> {
 							next = expression.charAt(++i);
 						}
 						if (next == '+' || next == '-') {
-							imgBuilder.append(next);
+							boolean negative = false;
 							int tmpIndex = i + 1;
 							char tmp = expression.charAt(tmpIndex);
+							if (next == '-') {
+								negative = true;
+							}
 							while (expressionLength > tmpIndex + 1 && Character.isWhitespace(tmp)) {
 								tmp = expression.charAt(++tmpIndex);
+							}
+							/* check for unary operations */
+							while (expressionLength > tmpIndex + 1 && (Character.isWhitespace(tmp) || tmp == '+' || tmp == '-')) {
+								if (tmp == '-') {
+									negative = !negative;
+								}
+								tmp = expression.charAt(++tmpIndex);
+							}
+							if (negative) {
+								imgBuilder.append('-');
 							}
 							/* check if there's an imaginary part coming */
 							while (expressionLength > ++tmpIndex && (Character.isDigit(tmp) || tmp == '.')) {
@@ -253,17 +266,12 @@ public class Tokenizer<T> {
 
 				if (imaginary) {
 					Token lastToken = tokens.size() > 0 ? tokens.get(tokens.size() - 1) : null;
-					double real;
-					if (lastToken != null && lastToken.getType() == Type.OPERATOR && ((OperatorToken) lastToken).getOperator().getArgumentCount() == 1 && ((OperatorToken) lastToken).getOperator().getSymbol().equals("-")){
-						real = Double.parseDouble("-" + numberString.toString());
-						tokens.remove(tokens.size() - 1);
-					}else{
-						real = Double.parseDouble(numberString.toString());
-					}
+					double real = Double.parseDouble(numberString.toString());
+					double img = Double.parseDouble(imgBuilder.toString());
 					NumberToken<ComplexNumber> n = new NumberToken<>(
 							ComplexNumber.class, 
-							new ComplexNumber(real, Double.parseDouble(imgBuilder.toString())),
-							true);
+							new ComplexNumber(real, img),
+							img != 0);
 					tokens.add(n);
 				} else {
 					NumberToken<ComplexNumber> n = new NumberToken<ComplexNumber>(ComplexNumber.class, new ComplexNumber(Double.parseDouble(numberString.toString()), 0d));
@@ -291,7 +299,7 @@ public class Tokenizer<T> {
 							}
 						} else {
 							/* binary op */
-							CustomOperator o = Operators.getOperator(c);
+							CustomOperator o = Operators.getBuiltinOperator(c);
 							if (o == null) {
 								/* can be a custom operator */
 								o = customOperators.get(String.valueOf(c));
@@ -318,7 +326,7 @@ public class Tokenizer<T> {
 					}
 
 					/* binary op */
-					CustomOperator o = Operators.getOperator(nameBuilder.toString());
+					CustomOperator o = Operators.getBuiltinOperator(nameBuilder.toString());
 
 					if (o == null) {
 						/* can be a custom operator */
@@ -348,7 +356,7 @@ public class Tokenizer<T> {
 				}
 
 				/* check if a function is available by that name */
-				CustomFunction func = Functions.getFunction(nameBuilder.toString());
+				CustomFunction func = Functions.getBuiltinFunction(nameBuilder.toString());
 				if (func != null) {
 					if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 						throw new UnparseableExpressionException("Invalid function usage at position " + i);
@@ -389,7 +397,7 @@ public class Tokenizer<T> {
 	}
 
 	private boolean isOperatorCaracter(char c, Map<String, CustomOperator> operators) {
-		if (Operators.isOperator(c)) {
+		if (Operators.isBuiltinOperatorSymbol(c)) {
 			return true;
 		} else if (operators != null) {
 			for (String key : operators.keySet()) {

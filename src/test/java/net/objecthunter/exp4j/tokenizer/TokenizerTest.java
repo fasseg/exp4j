@@ -214,28 +214,41 @@ public class TokenizerTest {
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
 		assertEquals(1, tokens.size());
 		assertEquals(tokens.get(0).getType(), Type.NUMBER);
-		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertFalse(((NumberToken) tokens.get(0)).imaginary);
 		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
 	}
 
 	@Test
 	public void testComplexTokenization8() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
-		String expression = "1 -- 0i";
+		String expression = "1 - -1i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
 		assertEquals(1, tokens.size());
 		assertEquals(tokens.get(0).getType(), Type.NUMBER);
 		assertTrue(((NumberToken) tokens.get(0)).imaginary);
-		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(new ComplexNumber(1d,1d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
 	}
 	@Test
 	public void testComplexTokenization9() throws Exception {
 		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
 		String expression = "-- 1 -- 0i";
 		List<Token> tokens = tokenizer.tokenizeExpression(expression);
-		assertEquals(1, tokens.size());
-		assertEquals(tokens.get(0).getType(), Type.NUMBER);
-		assertTrue(((NumberToken) tokens.get(0)).imaginary);
-		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(3, tokens.size());
+		assertEquals(tokens.get(2).getType(), Type.NUMBER);
+		assertFalse(((NumberToken) tokens.get(2)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
+	}
+
+	@Test
+	public void testComplexTokenization10() throws Exception {
+		Tokenizer<ComplexNumber> tokenizer = new Tokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "--1";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(3, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(1).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(2).getType(), Type.NUMBER);
+		assertFalse(((NumberToken) tokens.get(2)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
 	}
 }

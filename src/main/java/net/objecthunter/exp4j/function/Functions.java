@@ -339,7 +339,7 @@ public class Functions {
         });
 	}
 	
-	public static CustomFunction getFunction(String name){
+	public static CustomFunction getBuiltinFunction(String name){
 		return builtin.get(name);
 	}
 }
