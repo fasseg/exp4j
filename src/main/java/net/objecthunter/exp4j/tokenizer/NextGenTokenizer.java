@@ -66,6 +66,9 @@ public class NextGenTokenizer<T> {
 					idx = tryParseRealNumber(expression, ch, idx + 1, tokens);
 				}
 			}
+			else if (complex && ch == 'i') {
+				idx = tryParseComplexNumber(expression, ch, idx + 1, tokens);
+			}
 			// functions and variables
 			else if (Character.isAlphabetic(ch) || ch == '_') {
 				idx = tryParseFunctionOrVariable(expression, ch, idx + 1,
@@ -145,9 +148,14 @@ public class NextGenTokenizer<T> {
 			int offset,
 			final LinkedList<Token> tokens) {
 
+		boolean imgOnly = false;
 		// first check the real part
 		final StringBuilder realBuilder = new StringBuilder();
-		realBuilder.append(ch);
+		if (ch == 'i') {
+			imgOnly = true;
+		} else {
+			realBuilder.append(ch);
+		}
 		final int len = expression.length();
 		if (offset < len) {
 			char next = expression.charAt(offset);
@@ -159,7 +167,18 @@ public class NextGenTokenizer<T> {
 				}
 			}
 		}
-
+		if (imgOnly) {
+			// a complex
+			if (realBuilder.length() == 0) {
+				realBuilder.append('1');
+			}
+			double imaginary = Double.parseDouble(realBuilder.toString());
+			NumberToken<ComplexNumber> z = new NumberToken<ComplexNumber>(
+					ComplexNumber.class,
+					new ComplexNumber(0d, imaginary), true);
+			tokens.add(z);
+			return offset;
+		}
 		// check if there is an imaginary part coming
 		int j = offset;
 		// now read an arbitrary number of plus/minus and whitespace
@@ -203,6 +222,9 @@ public class NextGenTokenizer<T> {
 		}
 		if (imgPart) {
 			// a complex
+			if (imgBuilder.length() == 0) {
+				imgBuilder.append('1');
+			}
 			double imaginary = Double.parseDouble(
 					(negative ? '-' + imgBuilder.toString() : imgBuilder
 							.toString()));
@@ -210,7 +232,7 @@ public class NextGenTokenizer<T> {
 					ComplexNumber.class,
 					new ComplexNumber(
 							Double.parseDouble(realBuilder.toString()),
-							imaginary),imaginary != 0d);
+							imaginary), imaginary != 0d);
 			tokens.add(z);
 			offset = j;
 		} else {

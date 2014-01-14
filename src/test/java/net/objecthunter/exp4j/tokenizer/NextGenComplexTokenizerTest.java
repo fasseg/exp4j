@@ -135,4 +135,47 @@ public class NextGenComplexTokenizerTest {
 		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
 	}
 
+	@Test
+	public void testComplexTokenization11() throws Exception {
+		NextGenTokenizer<ComplexNumber> tokenizer = new NextGenTokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "0-i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(1, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(0)).imaginary);
+		assertEquals(new ComplexNumber(0d,-1d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+	}
+
+	@Test
+	public void testComplexTokenization12() throws Exception {
+		NextGenTokenizer<ComplexNumber> tokenizer = new NextGenTokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1*i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(3, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertEquals(tokens.get(1).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(2).getType(), Type.NUMBER);
+		assertFalse(((NumberToken) tokens.get(0)).imaginary);
+		assertTrue(((NumberToken) tokens.get(2)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(new ComplexNumber(0d,1d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
+	}
+	@Test
+	public void testComplexTokenization13() throws Exception {
+		NextGenTokenizer<ComplexNumber> tokenizer = new NextGenTokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "1*i+i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(5, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.NUMBER);
+		assertEquals(tokens.get(1).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(2).getType(), Type.NUMBER);
+		assertEquals(tokens.get(3).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(4).getType(), Type.NUMBER);
+		assertFalse(((NumberToken) tokens.get(0)).imaginary);
+		assertTrue(((NumberToken) tokens.get(2)).imaginary);
+		assertTrue(((NumberToken) tokens.get(4)).imaginary);
+		assertEquals(new ComplexNumber(1d,0d), (ComplexNumber) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(new ComplexNumber(0d,1d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
+		assertEquals(new ComplexNumber(0d,1d), (ComplexNumber) ((NumberToken) tokens.get(4)).getValue());
+	}
 }
