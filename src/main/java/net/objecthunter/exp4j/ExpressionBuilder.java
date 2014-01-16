@@ -17,6 +17,7 @@ import net.objecthunter.exp4j.exceptions.InvalidVariableException;
 import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.CustomFunction;
 import net.objecthunter.exp4j.operator.CustomOperator;
+import net.objecthunter.exp4j.tokenizer.NextGenTokenizer;
 import net.objecthunter.exp4j.tokenizer.Token;
 import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
@@ -120,19 +121,19 @@ public class ExpressionBuilder<T> {
 	@SuppressWarnings("unchecked")
 	public Calculable<T> build() throws UnparseableExpressionException {
 		if (this.returnType == Double.class) {
-			Tokenizer<Double> tok = new Tokenizer<>(Double.class);
+			NextGenTokenizer<Double> tok = new NextGenTokenizer<>(Double.class);
 			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new DoubleCalculable(tokens);
 		} else if (this.returnType == Float.class) {
-			Tokenizer<Float> tok = new Tokenizer<>(Float.class);
+			NextGenTokenizer<Float> tok = new NextGenTokenizer<>(Float.class);
 			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new FloatCalculable(tokens);
 		} else if (this.returnType == BigDecimal.class) {
-			Tokenizer<BigDecimal> tok = new Tokenizer<>(BigDecimal.class);
+			NextGenTokenizer<BigDecimal> tok = new NextGenTokenizer<>(BigDecimal.class);
 			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new BigDecimalCalculable(tokens);
 		} else if (this.returnType == ComplexNumber.class) {
-			Tokenizer<ComplexNumber> tok = new Tokenizer<>(ComplexNumber.class);
+			NextGenTokenizer<ComplexNumber> tok = new NextGenTokenizer<>(ComplexNumber.class);
 			List<Token> tokens = ShuntingYard.translateToReversePolishNotation(tok.tokenizeExpression(expression, variables, functions, operators));
 			return (Calculable<T>) new ComplexCalculable(tokens);
 		} else {

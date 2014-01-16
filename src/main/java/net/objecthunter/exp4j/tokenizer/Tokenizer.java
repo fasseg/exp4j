@@ -167,11 +167,13 @@ public class Tokenizer<T> {
 					tokens.add(new FunctionToken(func));
 				} else {
 					/* might be a custom function */
-					func = customFunctions.get(nameBuilder.toString());
-					if (func != null) {
-						tokens.add(new FunctionToken(func));
-						/* might be a variable */
+					if (customFunctions != null) {
+						func = customFunctions.get(nameBuilder.toString());
+						if (func != null) {
+							tokens.add(new FunctionToken(func));
+						}
 					} else if (variables.contains(nameBuilder.toString())) {
+						/* might be a variable */
 						if (tokens.size() > 0 && tokens.get(tokens.size() - 1) instanceof NumberToken) {
 							throw new UnparseableExpressionException("Invalid variable usage for '" + nameBuilder.toString() + "'");
 						}

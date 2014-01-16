@@ -178,4 +178,15 @@ public class NextGenComplexTokenizerTest {
 		assertEquals(new ComplexNumber(0d,1d), (ComplexNumber) ((NumberToken) tokens.get(2)).getValue());
 		assertEquals(new ComplexNumber(0d,1d), (ComplexNumber) ((NumberToken) tokens.get(4)).getValue());
 	}
+	@Test
+	public void testComplexTokenization14() throws Exception {
+		NextGenTokenizer<ComplexNumber> tokenizer = new NextGenTokenizer<ComplexNumber>(ComplexNumber.class);
+		String expression = "-1 +2i";
+		List<Token> tokens = tokenizer.tokenizeExpression(expression);
+		assertEquals(2, tokens.size());
+		assertEquals(tokens.get(0).getType(), Type.OPERATOR);
+		assertEquals(tokens.get(1).getType(), Type.NUMBER);
+		assertTrue(((NumberToken) tokens.get(1)).imaginary);
+		assertEquals(new ComplexNumber(-1d,2d), (ComplexNumber) ((NumberToken) tokens.get(1)).getValue());
+	}
 }
