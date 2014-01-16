@@ -54,6 +54,13 @@ public class TokenizerComparisonTest {
 		}
 		System.out.println("FastTokenizer took "
 				+ (System.currentTimeMillis() - time) + "ms");
-		System.out.println(tokens);
+	}
+	@Test
+	public void testFastTokenizerReturnList() throws Exception {
+		Set<String> variables = new HashSet<>(Arrays.asList("x", "y"));
+		long time = System.currentTimeMillis();
+		List<Token> tokens = FastTokenizer.tokenize(expression, variables, null, null);
+		System.out.println("FastTokenizer to List took "
+				+ (System.currentTimeMillis() - time) + "ms");
 	}
 }

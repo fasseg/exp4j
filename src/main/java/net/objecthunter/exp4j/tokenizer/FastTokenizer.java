@@ -1,5 +1,13 @@
 package net.objecthunter.exp4j.tokenizer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
+import net.objecthunter.exp4j.function.CustomFunction;
+import net.objecthunter.exp4j.operator.CustomOperator;
 import net.objecthunter.exp4j.operator.Operators;
 
 public class FastTokenizer {
@@ -22,6 +30,48 @@ public class FastTokenizer {
 	private int currentType = 0;
 	private final String[] functions;
 	private final String[] variables;
+	
+	public static List<Token> tokenize(String expression, Set<String> variables, Map<String, CustomFunction> functions, Map<String, CustomOperator> customOperators)
+			throws UnparseableExpressionException {
+		String[] functionNames = (functions != null) ? (String[]) functions.keySet().toArray(new String[functions.size()]) : new String[0];
+		String[] variableNames = (variables != null) ? (String[]) variables.toArray(new String[variables.size()]) : new String[0];
+		FastTokenizer tokenizer = new FastTokenizer(expression, functionNames, variableNames);
+		List<Token> tokens = new ArrayList<>();
+		while (!tokenizer.isEOF()) {
+			tokenizer.nextToken();
+			switch(tokenizer.getType()) {
+			case EOF:
+				return tokens;
+			case FUNCTION:
+				tokens.add(new FunctionToken(functions.get(tokenizer.getTokenValue())));
+				break;
+			case VARIABLE:
+				tokens.add(new VariableToken(tokenizer.getTokenValue()));
+				break;
+			case NUMBER:
+				tokens.add(new NumberToken<Double>(Double.class, Double.parseDouble(tokenizer.getTokenValue())));
+				break;
+			case OPERATOR:
+				CustomOperator op = null;
+				final String symbol = tokenizer.getTokenValue();
+				if (customOperators!= null) {
+					op = customOperators.get(symbol);
+				}
+				if (op == null) {
+					op =  Operators.getBuiltinOperator(symbol);
+				}
+				tokens.add(new OperatorToken(op));
+				break;
+			case PARANTHESES_CLOSE:
+				tokens.add(new ParanthesesToken(false));
+				break;
+			case PARANTHESES_OPEN:
+				tokens.add(new ParanthesesToken(true));
+				break;
+			}
+		}
+		throw new UnparseableExpressionException("No EOF encountered in expression");
+	}
 
 	public FastTokenizer(final char[] data, final String[] functions, final String[] variables) {
 		super();
