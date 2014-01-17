@@ -1,345 +1,200 @@
 package net.objecthunter.exp4j.function;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.objecthunter.exp4j.ComplexNumber;
-
 public class Functions {
-	private static Map<String, CustomFunction> builtin = new HashMap<String, CustomFunction>();
-
+	public static final int INDEX_SIN = 0;
+	public static final int INDEX_COS = 1;
+	public static final int INDEX_TAN = 2;
+	public static final int INDEX_LOG = 3;
+	public static final int INDEX_LOG1P = 4;
+	public static final int INDEX_ABS = 5;
+	public static final int INDEX_ACOS = 6;
+	public static final int INDEX_ASIN = 7;
+	public static final int INDEX_ATAN = 8;
+	public static final int INDEX_CBRT = 9;
+	public static final int INDEX_CEIL = 10;
+	public static final int INDEX_FLOOR = 11;
+	public static final int INDEX_SINH = 12;
+	public static final int INDEX_SQRT = 13;
+	public static final int INDEX_TANH = 14;
+	public static final int INDEX_COSH = 15;
+	public static final int INDEX_MAX = 16;
+	public static final int INDEX_MIN = 17;
+	
+	private static final Function[] builtin = new Function[18];
+	
 	static {
-		/* sine */
-		builtin.put("sin", new CustomFunction("sin") {
-
+		builtin[INDEX_SIN] = new Function("sin") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.sin(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.sin((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin sine function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.sin((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.sin(args[0]);
 			}
-		});
-
-		builtin.put("cos", new CustomFunction("cos") {
-
+		};
+		builtin[INDEX_COS] = new Function("cos") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.cos(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.cos((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin cosine function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.cos((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.cos(args[0]);
 			}
-		});
-
-		builtin.put("tan", new CustomFunction("tan") {
-
+		};
+		builtin[INDEX_TAN] = new Function("tan") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.tan(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.tan((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin tan function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.tan((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.tan(args[0]);
 			}
-		});
-		builtin.put("abs", new CustomFunction("abs") {
-
+		};
+		builtin[INDEX_LOG] = new Function("log") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return Math.abs(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.abs((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					return ((BigDecimal) arg).abs();
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.abs((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.log(args[0]);
 			}
-		});
-		builtin.put("log", new CustomFunction("log") {
-
+		};
+		builtin[INDEX_LOG1P] = new Function("log1p") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.log(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.log((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("no builtin log function available for big decimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.log((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.log1p(args[0]);
 			}
-		});
-		builtin.put("log10", new CustomFunction("log10") {
-
+		};
+		builtin[INDEX_ABS] = new Function("abs") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.log10(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.log10((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin log10 function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.log10((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.abs(args[0]);
 			}
-		});
-		builtin.put("ceil", new CustomFunction("ceil") {
-
+		};
+		builtin[INDEX_ACOS] = new Function("acos") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.ceil(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.ceil((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin ceil function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.ceil((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.acos(args[0]);
 			}
-		});
-		builtin.put("floor", new CustomFunction("floor") {
-
+		};
+		builtin[INDEX_ASIN] = new Function("asin") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.floor(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.floor((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin floor function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.floor((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.asin(args[0]);
 			}
-		});
-		builtin.put("sqrt", new CustomFunction("sqrt") {
-
+		};
+		builtin[INDEX_ATAN] = new Function("atan") {
 			@Override
-			public Object apply(Object... args) {
-				Object arg = args[0];
-				if (arg instanceof Float) {
-					return (float) Math.sqrt(((Float) arg).floatValue());
-				} else if (arg instanceof Double) {
-					return Math.sqrt((double) arg);
-				} else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin sqrt function available for BigDecimal");
-				} else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.sqrt((ComplexNumber) arg);
-				} else {
-					throw new RuntimeException("unknown type " + arg.getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.atan(args[0]);
 			}
-		});
-        builtin.put("cbrt", new CustomFunction("cqrt") {
+		};
+		builtin[INDEX_CBRT] = new Function("cbrt") {
+			@Override
+			public double apply(double... args) {
+				return Math.cbrt(args[0]);
+			}
+		};
+		builtin[INDEX_FLOOR] = new Function("floor") {
+			@Override
+			public double apply(double... args) {
+				return Math.floor(args[0]);
+			}
+		};
+		builtin[INDEX_SINH] = new Function("sinh") {
+			@Override
+			public double apply(double... args) {
+				return Math.sinh(args[0]);
+			}
+		};
+		builtin[INDEX_SQRT] = new Function("sqrt") {
+			@Override
+			public double apply(double... args) {
+				return Math.sqrt(args[0]);
+			}
+		};
+		builtin[INDEX_TANH] = new Function("tanh") {
+			@Override
+			public double apply(double... args) {
+				return Math.tanh(args[0]);
+			}
+		};
+		builtin[INDEX_COSH] = new Function("cosh") {
+			@Override
+			public double apply(double... args) {
+				return Math.cosh(args[0]);
+			}
+		};
+		builtin[INDEX_CEIL] = new Function("ceil") {
+			@Override
+			public double apply(double... args) {
+				return Math.ceil(args[0]);
+			}
+		};
+		builtin[INDEX_MAX] = new Function("max") {
+			@Override
+			public double apply(double... args) {
+				double max = Double.MIN_VALUE;
+				for (double arg: args) {
+					max = (arg > max) ? arg : max;
+				}
+				return max;
+			}
+		};
+		builtin[INDEX_MIN] = new Function("min") {
+			@Override
+			public double apply(double... args) {
+				double min = Double.MAX_VALUE;
+				for (double arg: args) {
+					min = (arg < min) ? arg : min;
+				}
+				return min;
+			}
+		};
 
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.cbrt(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.cbrt((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin cbrt function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.cbrt((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("acos", new CustomFunction("acos") {
+	}
 
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.acos(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.acos((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin acos function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.acos((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("expm1", new CustomFunction("expm1") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.expm1(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.expm1((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin expm1 function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.expm1((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("asin", new CustomFunction("asin") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.asin(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.asin((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin arcsine function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.asin((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("exp", new CustomFunction("exp") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.exp(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.exp((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin exp function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.exp((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("sinh", new CustomFunction("sinh") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.sinh(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.sinh((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin hyperbolic sine function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.sinh((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("cosh", new CustomFunction("cosh") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.cosh(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.cosh((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No hyperbolic cosine function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.cosh((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("atan", new CustomFunction("atan") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.atan(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.atan((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin arc tan function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.atan((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
-        builtin.put("tanh", new CustomFunction("tanh") {
-
-            @Override
-            public Object apply(Object... args) {
-                Object arg = args[0];
-                if (arg instanceof Float) {
-                    return (float) Math.tanh(((Float) arg).floatValue());
-                } else if (arg instanceof Double) {
-                    return Math.tanh((double) arg);
-                } else if (arg instanceof BigDecimal) {
-					throw new UnsupportedOperationException("No builtin hyperbolic tan function available for BigDecimal");
-                } else if (arg instanceof ComplexNumber) {
-					return ComplexNumberFunctions.tanh((ComplexNumber) arg);
-                } else {
-                    throw new RuntimeException("unknown type " + arg.getClass().getName());
-                }
-            }
-        });
+	public static char[] getAllowedFunctionCharacters() {
+		char[] chars = new char[53];
+		int count = 0;
+		for (int i = 65; i < 91; i++) {
+			chars[count++] = (char) i;
+		}
+		for (int i = 97; i < 123; i++) {
+			chars[count++] = (char) i;
+		}
+		chars[count] = '_';
+		return chars;
 	}
 	
-	public static CustomFunction getBuiltinFunction(String name){
-		return builtin.get(name);
+	public static Function getFunction(String name) {
+		switch(name) {
+		case "sin":
+			return builtin[INDEX_SIN];
+		case "cos":
+			return builtin[INDEX_COS];
+		case "tan":
+			return builtin[INDEX_TAN];
+		case "asin":
+			return builtin[INDEX_ASIN];
+		case "acos":
+			return builtin[INDEX_ACOS];
+		case "atan":
+			return builtin[INDEX_ATAN];
+		case "sinh":
+			return builtin[INDEX_SINH];
+		case "cosh":
+			return builtin[INDEX_COSH];
+		case "tanh":
+			return builtin[INDEX_TANH];
+		case "abs":
+			return builtin[INDEX_ABS];
+		case "log":
+			return builtin[INDEX_LOG];
+		case "log1p":
+			return builtin[INDEX_LOG1P];
+		case "ceil":
+			return builtin[INDEX_CEIL];
+		case "floor":
+			return builtin[INDEX_FLOOR];
+		case "max":
+			return builtin[INDEX_MAX];
+		case "min":
+			return builtin[INDEX_MIN];
+		case "sqrt":
+			return builtin[INDEX_SQRT];
+		case "cbrt":
+			return builtin[INDEX_CBRT];
+			default:
+				return null;
+		}
 	}
 }

@@ -1,13 +1,10 @@
 package net.objecthunter.exp4j.tokenizer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import net.objecthunter.exp4j.exceptions.UnparseableExpressionException;
-import net.objecthunter.exp4j.function.CustomFunction;
-import net.objecthunter.exp4j.operator.CustomOperator;
+import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 import net.objecthunter.exp4j.operator.Operators;
 
 public class FastTokenizer {
@@ -30,50 +27,10 @@ public class FastTokenizer {
 	private int currentType = 0;
 	private final String[] functions;
 	private final String[] variables;
-	
-	public static List<Token> tokenize(String expression, Set<String> variables, Map<String, CustomFunction> functions, Map<String, CustomOperator> customOperators)
-			throws UnparseableExpressionException {
-		String[] functionNames = (functions != null) ? (String[]) functions.keySet().toArray(new String[functions.size()]) : new String[0];
-		String[] variableNames = (variables != null) ? (String[]) variables.toArray(new String[variables.size()]) : new String[0];
-		FastTokenizer tokenizer = new FastTokenizer(expression, functionNames, variableNames);
-		List<Token> tokens = new ArrayList<>();
-		while (!tokenizer.isEOF()) {
-			tokenizer.nextToken();
-			switch(tokenizer.getType()) {
-			case EOF:
-				return tokens;
-			case FUNCTION:
-				tokens.add(new FunctionToken(functions.get(tokenizer.getTokenValue())));
-				break;
-			case VARIABLE:
-				tokens.add(new VariableToken(tokenizer.getTokenValue()));
-				break;
-			case NUMBER:
-				tokens.add(new NumberToken<Double>(Double.class, Double.parseDouble(tokenizer.getTokenValue())));
-				break;
-			case OPERATOR:
-				CustomOperator op = null;
-				final String symbol = tokenizer.getTokenValue();
-				if (customOperators!= null) {
-					op = customOperators.get(symbol);
-				}
-				if (op == null) {
-					op =  Operators.getBuiltinOperator(symbol);
-				}
-				tokens.add(new OperatorToken(op));
-				break;
-			case PARANTHESES_CLOSE:
-				tokens.add(new ParanthesesToken(false));
-				break;
-			case PARANTHESES_OPEN:
-				tokens.add(new ParanthesesToken(true));
-				break;
-			}
-		}
-		throw new UnparseableExpressionException("No EOF encountered in expression");
-	}
+	private final StringBuilder valBuilder = new StringBuilder();
 
-	public FastTokenizer(final char[] data, final String[] functions, final String[] variables) {
+	public FastTokenizer(final char[] data, final String[] functions,
+			final String[] variables) {
 		super();
 		this.data = data;
 		this.expressionLength = data.length;
@@ -83,12 +40,65 @@ public class FastTokenizer {
 		this.variablesLength = variables.length;
 	}
 
-	public FastTokenizer(final String data, final String[] functions, final String[] variables) {
+	public FastTokenizer(final String data, final String[] functions,
+			final String[] variables) {
 		this(data.toCharArray(), functions, variables);
 	}
 
+	public static void tokenize(final String expression,
+			final String[] functions, final String[] variables,
+			String[] tokensOut, int[] typesOut)
+			throws UnparseableExpressionException {
+		tokenize(expression.toCharArray(), functions, variables, tokensOut,
+				typesOut);
+	}
+
+	public static void tokenize(final char[] expression,
+			final String[] functions, final String[] variables,
+			String[] tokensOut, int[] typesOut)
+			throws UnparseableExpressionException {
+		final FastTokenizer tokenizer = new FastTokenizer(expression,
+				functions, variables);
+		int len = 4;
+		String[] tokens = new String[len];
+		int[] types = new int[len];
+		int count = 0;
+		while (true) {
+			if (count == len) {
+				len = 2 * len;
+				tokens = Arrays.copyOf(tokens, len);
+				types = Arrays.copyOf(types, len);
+			}
+			tokenizer.nextToken();
+			int type = tokenizer.getType();
+			if (type == EOF) {
+				tokensOut = tokens;
+				typesOut = types;
+				return;
+			} else if (type == NUMBER) {
+				types[count] = NUMBER;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == OPERATOR) {
+				types[count] = OPERATOR;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == FUNCTION) {
+				types[count] = FUNCTION;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == VARIABLE) {
+				types[count] = VARIABLE;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == PARANTHESES_OPEN) {
+				types[count] = PARANTHESES_OPEN;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == PARANTHESES_CLOSE) {
+				types[count] = PARANTHESES_CLOSE;
+				tokens[count++] = tokenizer.getTokenValue();
+			}
+		}
+	}
+
 	public void nextToken() {
-		final StringBuilder valBuilder = new StringBuilder();
+		valBuilder.setLength(0);
 		if (index >= expressionLength) {
 			this.currentType = EOF;
 			currentValue = null;
@@ -128,7 +138,7 @@ public class FastTokenizer {
 					}
 				}
 			}
-		} else if (Operators.isAllowedOperatorSymbol(ch)) {
+		} else if (Operators.isAllowedChar(ch)) {
 			valBuilder.append(ch);
 			currentValue = valBuilder.toString();
 			this.currentType = OPERATOR;
@@ -156,12 +166,12 @@ public class FastTokenizer {
 				this.currentType = VARIABLE;
 			}
 
-		} else if (ch == '(' || ch == '[' || ch == '{'){
-			this.currentType= PARANTHESES_OPEN;
-			this.currentValue="(";
-		} else if (ch == ')' || ch == ']' || ch == '}'){
-			this.currentType= PARANTHESES_CLOSE;
-			this.currentValue=")";
+		} else if (ch == '(' || ch == '[' || ch == '{') {
+			this.currentType = PARANTHESES_OPEN;
+			this.currentValue = "(";
+		} else if (ch == ')' || ch == ']' || ch == '}') {
+			this.currentType = PARANTHESES_CLOSE;
+			this.currentValue = ")";
 		}
 	}
 

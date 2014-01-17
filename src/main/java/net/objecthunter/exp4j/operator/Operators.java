@@ -1,166 +1,123 @@
 package net.objecthunter.exp4j.operator;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.objecthunter.exp4j.ComplexNumber;
-import net.objecthunter.exp4j.function.ComplexNumberFunctions;
+import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 
 public class Operators {
+
 	public static final int PRECEDENCE_ADDITION = 500;
 	public static final int PRECEDENCE_SUBTRACTION = PRECEDENCE_ADDITION;
 	public static final int PRECEDENCE_MULTIPLICATION = 1000;
 	public static final int PRECEDENCE_DIVISION = PRECEDENCE_MULTIPLICATION;
 	public static final int PRECEDENCE_MODULO = PRECEDENCE_DIVISION;
-	public static final int PRECEDENCE_EXPONENTATION = 10000;
+	public static final int PRECEDENCE_POWER = 10000;
+	public static final int PRECEDENCE_UNARY_MINUS = 20000;
 
-	private static Map<String, CustomOperator> builtin = new HashMap<String, CustomOperator>();
+	public static final int INDEX_ADDITION = 0;
+	public static final int INDEX_SUBTRACTION = 1;
+	public static final int INDEX_MUTLIPLICATION = 2;
+	public static final int INDEX_DIVISION = 3;
+	public static final int INDEX_POWER = 4;
+	public static final int INDEX_MODULO = 5;
+	public static final int INDEX_UNARYMINUS = 6;
+
+	private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
+			'%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
+			'=' };
+	private static final Operator[] builtin = new Operator[7];
 
 	static {
-		builtin.put("+", new CustomOperator("+", PRECEDENCE_ADDITION) {
+		builtin[INDEX_ADDITION] = new Operator("+", 2, true,
+				PRECEDENCE_ADDITION) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					return (float) args[0] + (float) args[1];
-				} else if (args[0] instanceof Double) {
-					return (double) args[0] + (double) args[1];
-				} else if (args[0] instanceof BigDecimal) {
-					return ((BigDecimal) args[0]).add((BigDecimal) args[1]);
-				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.add((ComplexNumber) args[0], (ComplexNumber) args[1]);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return args[0] + args[1];
 			}
-		});
-		builtin.put("-", new CustomOperator("-", PRECEDENCE_SUBTRACTION) {
+		};
+		builtin[INDEX_SUBTRACTION] = new Operator("-", 2, true,
+				PRECEDENCE_SUBTRACTION) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					return (float) args[0] - (float) args[1];
-				} else if (args[0] instanceof Double) {
-					return (double) args[0] - (double) args[1];
-				} else if (args[0] instanceof BigDecimal) {
-					return ((BigDecimal) args[0]).subtract((BigDecimal) args[1]);
-				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.subtract((ComplexNumber) args[0], (ComplexNumber) args[1]);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return args[0] - args[1];
 			}
-		});
-		builtin.put("*", new CustomOperator("*", PRECEDENCE_MULTIPLICATION) {
+		};
+		builtin[INDEX_MUTLIPLICATION] = new Operator("*", 2, true,
+				PRECEDENCE_MULTIPLICATION) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					return (float) args[0] * (float) args[1];
-				} else if (args[0] instanceof Double) {
-					return (double) args[0] * (double) args[1];
-				} else if (args[0] instanceof BigDecimal) {
-					return ((BigDecimal) args[0]).multiply((BigDecimal) args[1]);
-				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.multiply((ComplexNumber) args[0], (ComplexNumber) args[1]);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return args[0] * args[1];
 			}
-		});
-		builtin.put("/", new CustomOperator("/", PRECEDENCE_DIVISION) {
+		};
+		builtin[INDEX_DIVISION] = new Operator("/", 2, true,
+				PRECEDENCE_DIVISION) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					if ((float) args[1] == 0f) {
-						throw new ArithmeticException("Division by zero");
-					}
-					return (float) args[0] / (float) args[1];
-				} else if (args[0] instanceof Double) {
-					if ((double) args[1] == 0d) {
-						throw new ArithmeticException("Division by zero");
-					}
-					return (double) args[0] / (double) args[1];
-				} else if (args[0] instanceof BigDecimal) {
-					return ((BigDecimal) args[0]).divide((BigDecimal) args[1]);
-				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.divide((ComplexNumber) args[0],(ComplexNumber) args[1]);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return args[0] / args[1];
 			}
-		});
-		builtin.put("%", new CustomOperator("%", PRECEDENCE_MODULO) {
+		};
+		builtin[INDEX_POWER] = new Operator("^", 2, true,
+				PRECEDENCE_POWER) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					if ((float) args[1] == 0f) {
-						throw new ArithmeticException("Division by zero");
-					}
-					return (float) args[0] % (float) args[1];
-				} else if (args[0] instanceof Double) {
-					if ((double) args[1] == 0d) {
-						throw new ArithmeticException("Division by zero");
-					}
-					return (double) args[0] % (double) args[1];
-				} else if (args[0] instanceof BigDecimal) {
-					throw new RuntimeException("No support for big decimals");
-				} else if (args[0] instanceof ComplexNumber) {
-					throw new RuntimeException("No support for complex numbers");
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return Math.pow(args[0], args[1]);
 			}
-		});
-		builtin.put("^", new CustomOperator("^", PRECEDENCE_EXPONENTATION, 2, false) {
+		};
+		builtin[INDEX_MODULO] = new Operator("%", 2, true,
+				PRECEDENCE_MODULO) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					return (float) Math.pow(((Float) args[0]).doubleValue(), ((Float) args[1]).doubleValue());
-				} else if (args[0] instanceof Double) {
-					return Math.pow((double) args[0], (double) args[1]);
-				} else if (args[0] instanceof BigDecimal) {
-					throw new UnsupportedOperationException("builtin power operator is not available for BigDecimal");
-				} else if (args[0] instanceof ComplexNumber) {
-					return ComplexNumberFunctions.power((ComplexNumber) args[0], (ComplexNumber) args[1]);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double... args) {
+				return args[0] % args[1];
 			}
-		});
-	}
-
-	public static boolean isBuiltinOperatorSymbol(char c) {
-		return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^';
-	}
-
-	public static CustomOperator getBuiltinOperator(char c) {
-		return builtin.get(String.valueOf(c));
-	}
-
-	public static CustomOperator getBuiltinOperator(String symbols) {
-		return builtin.get(symbols);
-	}
-
-	public static CustomOperator getUnaryMinusOperator() {
-		return new CustomOperator("-", PRECEDENCE_EXPONENTATION, 1, false) {
+		};
+		builtin[INDEX_UNARYMINUS] = new Operator("-", 1, true,
+				PRECEDENCE_UNARY_MINUS) {
 			@Override
-			public Object apply(Object... args) {
-				if (args[0] instanceof Float) {
-					return (float) args[0] * -1f;
-				} else if (args[0] instanceof Double) {
-					return (double) args[0] * -1d;
-				} else if (args[0] instanceof BigDecimal) {
-					return ((BigDecimal) args[0]).negate();
-				} else if (args[0] instanceof ComplexNumber) {
-					ComplexNumber c = (ComplexNumber) args[0];
-					return new ComplexNumber(c.getReal() * -1d, c.getImaginary() * -1d);
-				} else {
-					throw new RuntimeException("Unknown type " + args[0].getClass().getName());
-				}
+			public double apply(double ... args) {
+				return -args[0];
 			}
 		};
 	}
 
-	public static boolean isAllowedOperatorSymbol(char c) {
-		return CustomOperator.isAllowedOperatorChar(c);
+	public static char[] getAllowedOperatorChars() {
+		return ALLOWED_OPERATOR_CHARS;
+	}
+	
+	public static boolean isAllowedChar(char ch) {
+		int len = ALLOWED_OPERATOR_CHARS.length;
+		for (int i = 0; i < len; i++) {
+			if (ch == ALLOWED_OPERATOR_CHARS[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isOperator(String symbol) {
+		return true;
+	}
+
+	public static Operator getBuiltinOperator(char ch, int argc) {
+		switch (ch) {
+		case '+':
+			return builtin[INDEX_ADDITION];
+		case '-':
+			if (argc == 1) {
+				return builtin[INDEX_UNARYMINUS];
+			}else {
+				return builtin[INDEX_SUBTRACTION];
+			}
+		case '*':
+			return builtin[INDEX_MUTLIPLICATION];
+		case '/':
+			return builtin[INDEX_DIVISION];
+		case '%':
+			return builtin[INDEX_MODULO];
+		case '^':
+			return builtin[INDEX_POWER];
+		default:
+			return null;
+		}
 	}
 }
