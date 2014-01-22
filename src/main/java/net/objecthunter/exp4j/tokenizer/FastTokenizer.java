@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
+import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operators;
 
 public class FastTokenizer {
@@ -16,6 +17,7 @@ public class FastTokenizer {
 	public static final int OPERATOR = 6;
 	public static final int PARANTHESES_OPEN = 7;
 	public static final int PARANTHESES_CLOSE = 8;
+	public static final int ARGUMENT_SEPARATOR = 9;
 
 	private final char[] data;
 	private final int expressionLength;
@@ -102,6 +104,9 @@ public class FastTokenizer {
 				tokens[count++] = tokenizer.getTokenValue();
 			} else if (type == PARANTHESES_CLOSE) {
 				types[count] = PARANTHESES_CLOSE;
+				tokens[count++] = tokenizer.getTokenValue();
+			} else if (type == ARGUMENT_SEPARATOR) {
+				types[count] = ARGUMENT_SEPARATOR;
 				tokens[count++] = tokenizer.getTokenValue();
 			}
 		}
@@ -200,6 +205,8 @@ public class FastTokenizer {
 				this.currentType = FUNCTION;
 			} else if (isVariable(currentValue)) {
 				this.currentType = VARIABLE;
+			} else {
+				throw new UnparseableExpressionException("Unknown name '" + valBuilder.toString());
 			}
 
 		} else if (ch == '(' || ch == '[' || ch == '{') {
@@ -208,6 +215,9 @@ public class FastTokenizer {
 		} else if (ch == ')' || ch == ']' || ch == '}') {
 			this.currentType = PARANTHESES_CLOSE;
 			this.currentValue = ")";
+		} else if (ch == ',' ) {
+			this.currentType = ARGUMENT_SEPARATOR;
+			this.currentValue = ",";
 		}
 	}
 
@@ -262,6 +272,9 @@ public class FastTokenizer {
 	}
 
 	private boolean isFunction(final String name) {
+		if (Functions.getFunction(name) != null) {
+			return true;
+		}
 		for (int i = 0; i < functionsLength; i++) {
 			if (functions[i].equals(name)) {
 				return true;

@@ -379,6 +379,97 @@ public class FastTokenizerRealTest {
 		tok.nextToken();
 	}
 
+	@Test(expected=UnparseableExpressionException.class)
+	public void testCustomFunction1() throws Exception {
+		String expression = "invalid(1,2,3)";
+		FastTokenizer tok = new FastTokenizer(expression);
+		tok.nextToken();
+	}
+
+	@Test
+	public void testCustomFunction2() throws Exception {
+		String expression = "sum(1,2,3)";
+		FastTokenizer tok = new FastTokenizer(expression, new String[] {"sum"});
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
+		assertEquals("sum", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
+		assertEquals("(", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("1", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
+		assertEquals(",", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("2", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
+		assertEquals(",", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("3", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
+		assertEquals(")", tok.getTokenValue());
+	}
+
+	@Test(expected=UnparseableExpressionException.class)
+	public void testCustomFunction3() throws Exception {
+		String expression = "su(1,2,3)";
+		FastTokenizer tok = new FastTokenizer(expression, new String[] {"sum"});
+		tok.nextToken();
+	}
+
+	@Test
+	public void testCustomFunction4() throws Exception {
+		String expression = "sin(sum(1,2+3,3))";
+		FastTokenizer tok = new FastTokenizer(expression, new String[] {"sum"});
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
+		assertEquals("sin", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
+		assertEquals("(", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
+		assertEquals("sum", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
+		assertEquals("(", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("1", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
+		assertEquals(",", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("2", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
+		assertEquals("+", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("3", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
+		assertEquals(",", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.NUMBER);
+		assertEquals("3", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
+		assertEquals(")", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
+		assertEquals(")", tok.getTokenValue());
+		tok.nextToken();
+		assertTrue(tok.isEOF());
+	}
+
 	@Test
     public void testFastTokenizer() throws Exception {
             String[] variables = { "x", "y" };
