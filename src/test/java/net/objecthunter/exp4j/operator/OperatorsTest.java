@@ -10,13 +10,13 @@ public class OperatorsTest {
 	@Test
 	public void testgetOperatorChars() throws Exception {
 		char[] chars = Operators.getAllowedOperatorChars();
-		assertEquals(18, chars.length);
+		assertEquals(19, chars.length);
 		for (char ch : chars) {
 			assertTrue(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch ==
 					'%' || ch == '^' || ch == '!' || ch == '#' || ch == '§'
 					|| ch == '$' || ch == '&' || ch == ';' || ch == ':'
 					|| ch == '~' || ch == '<' || ch == '>' || ch == '|' || ch ==
-					'=');
+					'=' || ch == 'E');
 		}
 	}
 	

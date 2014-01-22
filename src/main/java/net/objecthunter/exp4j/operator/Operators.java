@@ -22,11 +22,12 @@ public class Operators {
 	public static final int INDEX_POWER = 4;
 	public static final int INDEX_MODULO = 5;
 	public static final int INDEX_UNARYMINUS = 6;
+	public static final int INDEX_SCINOTATION = 7;
 
 	private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
 			'%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
-			'=' };
-	private static final Operator[] builtin = new Operator[7];
+			'=', 'E' };
+	private static final Operator[] builtin = new Operator[8];
 
 	static {
 		builtin[INDEX_ADDITION] = new Operator("+", 2, true,
@@ -78,6 +79,13 @@ public class Operators {
 				return -args[0];
 			}
 		};
+		builtin[INDEX_SCINOTATION] = new Operator("E", 2, true,
+				PRECEDENCE_POWER) {
+			@Override
+			public double apply(double ... args) {
+				return Math.pow(args[0], args[1]);
+			}
+		};
 	}
 
 	public static char[] getAllowedOperatorChars() {
@@ -92,10 +100,6 @@ public class Operators {
 			}
 		}
 		return false;
-	}
-
-	public static boolean isOperator(String symbol) {
-		return true;
 	}
 
 	public static Operator getBuiltinOperator(char ch, int argc) {
@@ -120,4 +124,8 @@ public class Operators {
 			return null;
 		}
 	}
+
+	public static boolean isBuiltinOperator(char ch) {
+		return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%' || ch == '^' || ch == 'E';
+	} 
 }

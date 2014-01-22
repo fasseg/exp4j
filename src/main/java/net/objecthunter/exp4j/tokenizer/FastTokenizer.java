@@ -27,10 +27,11 @@ public class FastTokenizer {
 	private int currentType = 0;
 	private final String[] functions;
 	private final String[] variables;
+	private final String[] operators;
 	private final StringBuilder valBuilder = new StringBuilder();
 
 	public FastTokenizer(final char[] data, final String[] functions,
-			final String[] variables) {
+			final String[] variables, final String[] operators) {
 		super();
 		this.data = data;
 		this.expressionLength = data.length;
@@ -38,27 +39,36 @@ public class FastTokenizer {
 		this.variables = variables;
 		this.functionsLength = functions.length;
 		this.variablesLength = variables.length;
+		this.operators = operators;
 	}
 
-	public FastTokenizer(final String data, final String[] functions,
-			final String[] variables) {
-		this(data.toCharArray(), functions, variables);
+	public FastTokenizer(final String expression, final String[] functions,
+			final String[] variables, final String[] operators) {
+		this(expression.toCharArray(), functions, variables, operators);
+	}
+
+	public FastTokenizer(final String expression) {
+		this(expression, new String[0], new String[0], new String[0]);
+	}
+
+	public FastTokenizer(final String expression, final String[] functions) {
+		this(expression, functions, new String[0], new String[0]);
 	}
 
 	public static void tokenize(final String expression,
 			final String[] functions, final String[] variables,
-			String[] tokensOut, int[] typesOut)
+			final String[] operators, String[] tokensOut, int[] typesOut)
 			throws UnparseableExpressionException {
-		tokenize(expression.toCharArray(), functions, variables, tokensOut,
-				typesOut);
+		tokenize(expression.toCharArray(), functions, variables, operators,
+				tokensOut, typesOut);
 	}
 
 	public static void tokenize(final char[] expression,
 			final String[] functions, final String[] variables,
-			String[] tokensOut, int[] typesOut)
+			final String[] operators, String[] tokensOut, int[] typesOut)
 			throws UnparseableExpressionException {
 		final FastTokenizer tokenizer = new FastTokenizer(expression,
-				functions, variables);
+				functions, variables, operators);
 		int len = 4;
 		String[] tokens = new String[len];
 		int[] types = new int[len];
@@ -97,7 +107,7 @@ public class FastTokenizer {
 		}
 	}
 
-	public void nextToken() {
+	public void nextToken() throws UnparseableExpressionException {
 		valBuilder.setLength(0);
 		if (index >= expressionLength) {
 			this.currentType = EOF;
@@ -139,9 +149,35 @@ public class FastTokenizer {
 				}
 			}
 		} else if (Operators.isAllowedChar(ch)) {
-			valBuilder.append(ch);
-			currentValue = valBuilder.toString();
-			this.currentType = OPERATOR;
+			if (isOperatorPrefix(ch, operators)) {
+				valBuilder.append(ch);
+				int offset = this.index;
+				while (true) {
+					if (offset >= expressionLength) {
+						break;
+					} else {
+						ch = data[offset];
+						final String tmp = valBuilder.toString() + ch;
+						if (isOperatorPrefix(tmp, operators)) {
+							valBuilder.append(ch);
+							this.index = ++offset;
+						} else {
+							break;
+						}
+					}
+				}
+				final String tmp = valBuilder.toString();
+				if (isOperator(tmp, operators)) {
+					currentValue = valBuilder.toString();
+				}else {
+					throw new UnparseableExpressionException("Unknown operator '"
+							+ tmp);
+				}
+				this.currentType = OPERATOR;
+			} else {
+				throw new UnparseableExpressionException("Unknown operator '"
+						+ valBuilder.toString());
+			}
 		} else if (Character.isAlphabetic(ch) || ch == '_') {
 			// might be a function or a variable since ch is alphabetic
 			valBuilder.append(ch);
@@ -173,6 +209,47 @@ public class FastTokenizer {
 			this.currentType = PARANTHESES_CLOSE;
 			this.currentValue = ")";
 		}
+	}
+
+	private boolean isOperator(String symbols, String[] operators2) {
+		final int opLen = operators.length;
+		final int symbolsLen = symbols.length();
+		if (symbolsLen == 1 && Operators.isBuiltinOperator(symbols.charAt(0))) {
+			return true;
+		}
+		for (int i = 0; i < opLen; i++) {
+			if (operators[i].equals(symbols)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isOperatorPrefix(String prefix, String[] operators) {
+		final int opLen = operators.length;
+		final int prefixLen = prefix.length();
+		if (prefixLen == 1 && Operators.isBuiltinOperator(prefix.charAt(0))) {
+			return true;
+		}
+		for (int i = 0; i < opLen; i++) {
+			if (operators[i].startsWith(prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isOperatorPrefix(char prefix, String[] operators) {
+		int len = operators.length;
+		if (Operators.isBuiltinOperator(prefix)) {
+			return true;
+		}
+		for (int i = 0; i < len; i++) {
+			if (operators[i].charAt(0) == prefix) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean isVariable(final String name) {
