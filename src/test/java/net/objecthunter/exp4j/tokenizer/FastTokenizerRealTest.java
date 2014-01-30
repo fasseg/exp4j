@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
+import net.objecthunter.exp4j.tokens.Token;
 
 import org.junit.Test;
 
@@ -25,10 +26,9 @@ public class FastTokenizerRealTest {
 		FastTokenizer tok = new FastTokenizer("2.2");
 		assertFalse(tok.isEOF());
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2.2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -36,25 +36,19 @@ public class FastTokenizerRealTest {
 		FastTokenizer tok = new FastTokenizer("2.2 +   3.1445 - -17");
 		assertFalse(tok.isEOF());
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2.2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3.1445", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("17", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -63,43 +57,31 @@ public class FastTokenizerRealTest {
 				"2.2 / - sin(3.1445) * 3.1445 - -17", new String[] { "sin" });
 		assertFalse(tok.isEOF());
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2.2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("/", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3.1445", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("*", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3.1445", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("17", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 	
 	@Test
@@ -107,16 +89,13 @@ public class FastTokenizerRealTest {
 		String expression = "2 + 2";
 		FastTokenizer tok = new FastTokenizer(expression);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -124,19 +103,15 @@ public class FastTokenizerRealTest {
 		String expression = "sin(2)";
 		FastTokenizer tok = new FastTokenizer(expression,new String[] { "sin" });
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -144,31 +119,23 @@ public class FastTokenizerRealTest {
 		String expression = "3 * sin(2)/0.5";
 		FastTokenizer tok = new FastTokenizer(expression,new String[] { "sin" });
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("*", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("/", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("0.5", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -176,46 +143,33 @@ public class FastTokenizerRealTest {
 		String expression = "3 * sin(2+sin(12.745))/0.5";
 		FastTokenizer tok = new FastTokenizer(expression,new String[] { "sin" });
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("*", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("12.745", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("/", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("0.5", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -223,43 +177,31 @@ public class FastTokenizerRealTest {
 		String expression = "log(sin(1.0) + abs(2.5))";
 		FastTokenizer tok = new FastTokenizer(expression,new String[] { "sin", "log", "abs" });
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("log", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1.0", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("abs", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2.5", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -267,13 +209,11 @@ public class FastTokenizerRealTest {
 		String expression = "-1";
 		FastTokenizer tok = new FastTokenizer(expression);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.EOF);
+		assertTrue(tok.getType() == Token.EOF);
 	}
 
 	@Test
@@ -287,17 +227,13 @@ public class FastTokenizerRealTest {
 		String expression = "-1.3422E2";
 		FastTokenizer tok = new FastTokenizer(expression);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1.3422", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("E", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 	}
 
 	@Test
@@ -305,11 +241,9 @@ public class FastTokenizerRealTest {
 		String expression = "1!";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {"!"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("!", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 	}
 	
 	@Test
@@ -317,17 +251,13 @@ public class FastTokenizerRealTest {
 		String expression = "-1$6";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {"$"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("-", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("$", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("6", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 	}
 
 	@Test
@@ -335,11 +265,9 @@ public class FastTokenizerRealTest {
 		String expression = "~1.44";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {"~"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("~", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1.44", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 	}
 
 	@Test
@@ -347,11 +275,9 @@ public class FastTokenizerRealTest {
 		String expression = "1++";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {"++"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("++", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
 		assertTrue(tok.isEOF());
 	}
@@ -361,8 +287,7 @@ public class FastTokenizerRealTest {
 		String expression = "1>>2";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {">="});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
 	}
 
@@ -371,11 +296,9 @@ public class FastTokenizerRealTest {
 		String expression = "1+>2";
 		FastTokenizer tok = new FastTokenizer(expression, new String[0], new String[0], new String[] {"++"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
 	}
 
@@ -391,29 +314,21 @@ public class FastTokenizerRealTest {
 		String expression = "sum(1,2,3)";
 		FastTokenizer tok = new FastTokenizer(expression, new String[] {"sum"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sum", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
-		assertEquals(",", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.ARGUMENT_SEPARATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
-		assertEquals(",", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.ARGUMENT_SEPARATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 	}
 
 	@Test(expected=UnparseableExpressionException.class)
@@ -428,96 +343,32 @@ public class FastTokenizerRealTest {
 		String expression = "sin(sum(1,2+3,3))";
 		FastTokenizer tok = new FastTokenizer(expression, new String[] {"sum"});
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sin", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.FUNCTION);
-		assertEquals("sum", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.FUNCTION);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_OPEN);
-		assertEquals("(", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("1", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
-		assertEquals(",", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.ARGUMENT_SEPARATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("2", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.OPERATOR);
-		assertEquals("+", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.OPERATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.ARGUMENT_SEPARATOR);
-		assertEquals(",", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.ARGUMENT_SEPARATOR);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.NUMBER);
-		assertEquals("3", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.NUMBER);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
-		assertTrue(tok.getType() == FastTokenizer.PARANTHESES_CLOSE);
-		assertEquals(")", tok.getTokenValue());
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
 		assertTrue(tok.isEOF());
 	}
-
-	@Test
-    public void testFastTokenizer() throws Exception {
-            String[] variables = { "x", "y" };
-            String[] functions = { "sin", "cos", "abs", "log", "sqrt" };
-            String[] operators = new String[0];
-            List<String> tokens = new ArrayList<>();
-            long time = System.currentTimeMillis();
-            for (int i = 0; i < 1000; i++) {
-			FastTokenizer tok = new FastTokenizer(defaultExpression2, functions,
-					variables, operators);
-                    while (!tok.isEOF()) {
-                            tok.nextToken();
-                            int type = tok.getType();
-                            String val = tok.getTokenValue();
-                            tokens.add(type + tok.getTokenValue());
-                    }
-            }
-            System.out.println("FastTokenizer took "
-                            + (System.currentTimeMillis() - time) + "ms");
-    }
-    @Test
-    public void testFastTokenizerCharArrayReturnList() throws Exception {
-    		String[] variables = { "x", "y" };
-            String[] functions = { "sin", "cos", "abs", "log", "sqrt" };
-            String[] operators = new String[0];
-            long time = System.currentTimeMillis();
-            for (int i = 0; i < 1000; i++) {
-            	int[] types = null;
-            	String[] tokens = null;
-                FastTokenizer.tokenize(defaultCharArray, functions, variables,operators, tokens, types);
-            }
-            System.out.println("FastTokenizer from char array to List took "
-                            + (System.currentTimeMillis() - time) + "ms");
-    }
-    
-    @Test
-    public void testFastTokenizerStringReturnList() throws Exception {
-		String[] variables = { "x", "y" };
-        String[] functions = { "sin", "cos", "abs", "log", "sqrt" };
-        String[] operators = new String[0];
-       	int[] types = null;
-       	String[] tokens = null;
-       	long time = System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
-            FastTokenizer.tokenize(defaultExpression4, functions, variables,operators, tokens, types);
-        }
-        System.out.println("FastTokenizer to List took "
-                + (System.currentTimeMillis() - time) + "ms");
-    }
-
 }

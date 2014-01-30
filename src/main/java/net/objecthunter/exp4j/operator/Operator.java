@@ -16,5 +16,20 @@ public abstract class Operator {
 		this.precedence = precedence;
 	}
 	
+	public boolean isLeftAssociative() {
+		return leftAssociative;
+	}
+	
+	public int getPrecedence() {
+		return precedence;
+	}
+	
 	public abstract double apply(double ... args);
+	
+	public String getSymbol() {
+		return symbol;
+	}
+	public int getArgumentCount() {
+		return argc;
+	}
 }
