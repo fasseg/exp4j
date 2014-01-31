@@ -1,4 +1,4 @@
-package net.objecthunter.exp4j.calculable;
+package net.objecthunter.exp4j.expression;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,9 @@ import net.objecthunter.exp4j.tokens.NumberToken;
 import net.objecthunter.exp4j.tokens.OperatorToken;
 import net.objecthunter.exp4j.tokens.Token;
 
-public class DoubleCalculable extends Calculable<Double> {
+public class DoubleExpression extends Expression<Double> {
 
-	public DoubleCalculable(String expression, List<Token> tokens) {
+	public DoubleExpression(String expression, List<Token> tokens) {
 		super(expression, tokens);
 	}
 

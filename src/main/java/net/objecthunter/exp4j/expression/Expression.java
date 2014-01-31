@@ -1,15 +1,15 @@
-package net.objecthunter.exp4j.calculable;
+package net.objecthunter.exp4j.expression;
 
 import java.util.List;
 import java.util.Map;
 
 import net.objecthunter.exp4j.tokens.Token;
 
-public abstract class Calculable<T> {
+public abstract class Expression<T> {
 	protected final String expression;
 	protected final List<Token> tokens;
 
-	public Calculable(String expression, List<Token> tokens) {
+	public Expression(String expression, List<Token> tokens) {
 		super();
 		this.expression = expression;
 		this.tokens = tokens;
