@@ -1,12 +1,12 @@
 package net.objecthunter.exp4j.shuntingyard;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
+import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.FastTokenizer;
@@ -15,17 +15,35 @@ import net.objecthunter.exp4j.tokens.Token;
 
 public class ShuntingYard {
 	private final Map<String, Operator> customOperators;
+	private final Map<String, Function> customFunctions;
+	private final Map<String, Double> variables;
 
-	public ShuntingYard(final Map<String, Operator> customOperators) {
-		super();
-		this.customOperators = customOperators;
+	public ShuntingYard(final Map<String, Double> variables) {
+		this(variables, null, null);
 	}
 
-	public List<Token> transformRpn(final String expression) throws UnparseableExpressionException {
-		final FastTokenizer tokenizer = new FastTokenizer(expression);
+	public ShuntingYard(Map<String, Double> variables,
+			Map<String, Function> customFunctions) {
+		this(variables, customFunctions, null);
+	}
+
+	public ShuntingYard(final Map<String, Double> variables,
+			final Map<String, Function> customFunctions,
+			final Map<String, Operator> customOperators) {
+		super();
+		this.customOperators = customOperators;
+		this.customFunctions = customFunctions;
+		this.variables = variables;
+	}
+
+	public List<Token> transformRpn(final String expression)
+			throws UnparseableExpressionException {
+		final FastTokenizer tokenizer = new FastTokenizer(expression,this.variables, 
+				this.customFunctions, this.customOperators);
+		
 		final List<Token> output = new ArrayList<>();
 		final Stack<Token> stack = new Stack<>();
-		
+
 		int lastType = 0;
 		tokenizer.nextToken();
 		while (!tokenizer.isEOF()) {
@@ -43,10 +61,14 @@ public class ShuntingYard {
 				break;
 			case Token.OPERATOR:
 			case Token.UNARY_OPERATOR:
-				final Operator o1 = ((OperatorToken) tokenizer.getTokenValue()).getOperator();
-				while (!stack.isEmpty() && stack.peek().getType() == Token.OPERATOR) {
-					final Operator o2 = ((OperatorToken) stack.peek()).getOperator();
-					if ((o1.isLeftAssociative() && o1.getPrecedence() == o2.getPrecedence()) ||
+				final Operator o1 = ((OperatorToken) tokenizer.getTokenValue())
+						.getOperator();
+				while (!stack.isEmpty()
+						&& stack.peek().getType() == Token.OPERATOR) {
+					final Operator o2 = ((OperatorToken) stack.peek())
+							.getOperator();
+					if ((o1.isLeftAssociative() && o1.getPrecedence() == o2
+							.getPrecedence()) ||
 							o1.getPrecedence() < o2.getPrecedence()) {
 						output.add(stack.pop());
 					}
@@ -57,16 +79,18 @@ public class ShuntingYard {
 				stack.push(tokenizer.getTokenValue());
 				break;
 			case Token.PARANTHESES_RIGHT:
-				while (stack.peek().getType() != Token.PARANTHESES_LEFT){
+				while (stack.peek().getType() != Token.PARANTHESES_LEFT) {
 					output.add(stack.pop());
 				}
 				stack.pop();
-				if (!stack.isEmpty() && stack.peek().getType() == Token.FUNCTION) {
+				if (!stack.isEmpty()
+						&& stack.peek().getType() == Token.FUNCTION) {
 					output.add(stack.pop());
 				}
 				break;
-				default:
-					throw new UnparseableExpressionException("Unknown token type " + tokenizer.getType());
+			default:
+				throw new UnparseableExpressionException("Unknown token type "
+						+ tokenizer.getType());
 			}
 			lastType = tokenizer.getType();
 			tokenizer.nextToken();
@@ -89,7 +113,9 @@ public class ShuntingYard {
 	}
 
 	private boolean isUnary(int lastType) {
-		return lastType == 0 || lastType == Token.PARANTHESES_LEFT || lastType == Token.ARGUMENT_SEPARATOR || lastType == Token.OPERATOR;
+		return lastType == 0 || lastType == Token.PARANTHESES_LEFT
+				|| lastType == Token.ARGUMENT_SEPARATOR
+				|| lastType == Token.OPERATOR;
 	}
 
 }
