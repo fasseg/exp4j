@@ -18,7 +18,12 @@ public class DoubleExpression extends Expression<Double> {
 	}
 
 	@Override
-	public Double calculate(Map<String, Double> variables) {
+	public Double evaluate() {
+		return evaluate(null);
+	}
+
+	@Override
+	public Double evaluate(Map<String, Double> variables) {
 		final Stack<Double> stack = new Stack<>();
 		for (Token t : tokens) {
 			switch (t.getType()) {

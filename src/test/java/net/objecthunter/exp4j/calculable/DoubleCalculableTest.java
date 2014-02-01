@@ -15,7 +15,7 @@ public class DoubleCalculableTest {
 		String expression = "1+1";
 		Expression<Double> c = new DoubleExpression(expression,
 				new ShuntingYard(null).transformRpn(expression));
-		assertEquals(2d,c.calculate(null),0d);
+		assertEquals(2d,c.evaluate(null),0d);
 	}
 
 	@Test
@@ -23,13 +23,13 @@ public class DoubleCalculableTest {
 		String expression = "sin(0)";
 		Expression<Double> c = new DoubleExpression(expression,
 				new ShuntingYard(null).transformRpn(expression));
-		assertEquals(0d,c.calculate(null),0d);
+		assertEquals(0d,c.evaluate(null),0d);
 	}
 	@Test
 	public void testCalculation3() throws Exception{
 		String expression = "cos(sin(0))";
 		Expression<Double> c = new DoubleExpression(expression,
 				new ShuntingYard(null).transformRpn(expression));
-		assertEquals(1d,c.calculate(null),0d);
+		assertEquals(1d,c.evaluate(null),0d);
 	}
 }
