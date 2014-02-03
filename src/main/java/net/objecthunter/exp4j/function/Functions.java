@@ -155,7 +155,7 @@ public class Functions {
 		return chars;
 	}
 	
-	public static Function getFunction(String name) {
+	public static Function getBuiltinFunction(String name) {
 		switch(name) {
 		case "sin":
 			return builtin[INDEX_SIN];
