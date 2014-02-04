@@ -12,14 +12,21 @@ class Tokenizer {
 	private final Map<String, CustomFunction> functions;
 
 	private final Map<String, CustomOperator> operators;
+	
+	private boolean storeFutures;
 
 	Tokenizer(Set<String> variableNames, Map<String, CustomFunction> functions, Map<String, CustomOperator> operators) {
 		super();
 		this.variableNames = variableNames;
 		this.functions = functions;
 		this.operators = operators;
+		this.storeFutures = false;
 	}
 
+	public void setStoreFutures(boolean newVal) {
+		this.storeFutures = newVal;
+	}
+	
 	private boolean isDigitOrDecimalSeparator(char c) {
 		return Character.isDigit(c) || c == '.';
 	}
@@ -92,14 +99,14 @@ class Tokenizer {
 				}
 				i += numberLen - 1;
 				lastToken = new NumberToken(valueBuilder.toString());
-			} else if (Character.isLetter(c) || c == '_') {
+			} else if (Character.isLetter(c) || c == '_' || c == '.') {
 				// can be a variable or function
 				final StringBuilder nameBuilder = new StringBuilder();
 				nameBuilder.append(c);
 				int offset = 1;
 				while (chars.length > i + offset
 						&& (Character.isLetter(chars[i + offset]) || Character.isDigit(chars[i + offset]) || chars[i
-								+ offset] == '_')) {
+								+ offset] == '_' || chars[i + offset] == '.')) {
 					nameBuilder.append(chars[i + offset++]);
 				}
 				String name = nameBuilder.toString();
@@ -113,7 +120,12 @@ class Tokenizer {
 					lastToken = new FunctionToken(name, functions.get(name));
 				} else {
 					// an unknown symbol was encountered
-					throw new UnparsableExpressionException(expression, c, i + 1);
+					if (this.storeFutures) {
+						i += offset - 1;
+						lastToken = new FutureVariableToken(name);
+					} else {
+						throw new UnparsableExpressionException(expression, c, i + 1);
+					}
 				}
 			} else if (c == ',') {
 				// a function separator, hopefully

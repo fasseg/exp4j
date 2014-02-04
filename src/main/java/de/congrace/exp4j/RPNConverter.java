@@ -73,6 +73,27 @@ abstract class RPNConverter {
 		tokens = tokenizer.getTokens(postfix);
 		return new RPNExpression(tokens, postfix, variables);
 	}
+	
+	static FutureRPNExpression toFutureRPNExpression(String infix, Map<String, Double> variables,
+			Map<String, CustomFunction> customFunctions, Map<String, CustomOperator> operators)
+			throws UnknownFunctionException, UnparsableExpressionException {
+		final Tokenizer tokenizer = new Tokenizer(variables.keySet(), customFunctions, operators);
+		tokenizer.setStoreFutures(true);
+		final StringBuilder output = new StringBuilder(infix.length());
+		final Stack<Token> operatorStack = new Stack<Token>();
+		List<Token> tokens = tokenizer.getTokens(substituteUnaryOperators(infix, operators));
+		validateRPNExpression(tokens, operators);
+		for (final Token token : tokens) {
+			token.mutateStackForInfixTranslation(operatorStack, output);
+		}
+		// all tokens read, put the rest of the operations on the output;
+		while (operatorStack.size() > 0) {
+			output.append(operatorStack.pop().getValue()).append(" ");
+		}
+		String postfix = output.toString().trim();
+		tokens = tokenizer.getTokens(postfix);
+		return new FutureRPNExpression(tokens, postfix, variables);
+	}
 
 	private static void validateRPNExpression(List<Token> tokens, Map<String, CustomOperator> operators)
 			throws UnparsableExpressionException {

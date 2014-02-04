@@ -275,6 +275,26 @@ public class ExpressionBuilder {
 		builtInOperators.putAll(customOperators);
 		return RPNConverter.toRPNExpression(expression, variables, customFunctions, builtInOperators);
 	}
+	
+	public Calculable buildWithFutures() throws UnknownFunctionException, UnparsableExpressionException {
+		for (CustomOperator op : customOperators.values()) {
+			for (int i = 0; i < op.symbol.length(); i++) {
+				if (!validOperatorSymbols.contains(op.symbol.charAt(i))) {
+					throw new UnparsableExpressionException("" + op.symbol
+							+ " is not a valid symbol for an operator please choose from: !,#,§,$,&,;,:,~,<,>,|,=");
+				}
+			}
+		}
+		for (String varName : variables.keySet()) {
+			checkVariableName(varName);
+			if (customFunctions.containsKey(varName)) {
+				throw new UnparsableExpressionException("Variable '" + varName
+						+ "' cannot have the same name as a function");
+			}
+		}
+		builtInOperators.putAll(customOperators);
+		return RPNConverter.toFutureRPNExpression(expression, variables, customFunctions, builtInOperators);
+	}
 
 	private void checkVariableName(String varName) throws UnparsableExpressionException {
 		char[] name = varName.toCharArray();
