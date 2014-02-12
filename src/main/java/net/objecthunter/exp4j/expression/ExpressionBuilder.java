@@ -13,6 +13,10 @@ import net.objecthunter.exp4j.tokens.Token;
 
 public class ExpressionBuilder {
 
+    public static final int MODE_DOUBLE = 1;
+    public static final int MODE_COMPLEX = 2;
+    public static final int MODE_BIGDECIMAL = 3;
+    
 	private final String expression;
 
 	private Map<String, Operator> customOperators = new HashMap<>();
@@ -69,7 +73,12 @@ public class ExpressionBuilder {
 
 	public DoubleExpression buildDouble() throws UnparseableExpressionException {
 		final List<Token> tokens = new ShuntingYard(variables, customFunctions,
-				customOperators).transformRpn(expression);
+				customOperators).transformRpn(expression, MODE_DOUBLE);
 		return new DoubleExpression(expression, tokens);
+	}
+	
+	public BigDecimalExpression buildBigDecimal() throws UnparseableExpressionException {
+		final List<Token> tokens = new ShuntingYard(variables, customFunctions, customOperators).transformRpn(expression, MODE_BIGDECIMAL);
+		return new BigDecimalExpression(expression, tokens);
 	}
 }

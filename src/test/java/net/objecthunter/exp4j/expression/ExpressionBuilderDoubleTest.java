@@ -1,8 +1,8 @@
 package net.objecthunter.exp4j.expression;
 
 import static org.junit.Assert.assertEquals;
+import static java.lang.Math.*;
 
-import java.rmi.server.Operation;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -10,7 +10,7 @@ import net.objecthunter.exp4j.operator.Operators;
 
 import org.junit.Test;
 
-public class ExpressionBuilderTest {
+public class ExpressionBuilderDoubleTest {
     @Test
     public void testExpression1() throws Exception {
         String exp = "2+3";
@@ -28,9 +28,9 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression3() throws Exception {
         String exp = "sum(1,1)";
-        double result = new ExpressionBuilder(exp).function(new Function("sum",2) {
+        double result = new ExpressionBuilder(exp).function(new Function<Double>("sum",2) {
             @Override
-            public double apply(double... args) {
+            public Double apply(Double... args) {
                 return args[0] + args[1];
             }
         }).buildDouble().evaluate();
@@ -39,9 +39,9 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression4() throws Exception {
         String exp = "sum(1,2,3,4,5,6,7,8,9,10)";
-        double result = new ExpressionBuilder(exp).function(new Function("sum",-1) {
+        double result = new ExpressionBuilder(exp).function(new Function<Double>("sum",-1) {
             @Override
-            public double apply(double... args) {
+            public Double apply(Double... args) {
                 double result = 0d;
                 for (double d : args) {
                     result += d;
@@ -54,9 +54,9 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression5() throws Exception {
         String expr = "2#2";
-        Operator op = new Operator("#",2,true,Operators.PRECEDENCE_ADDITION) {
+        Operator op = new Operator<Double>("#",2,true,Operators.PRECEDENCE_ADDITION) {
             @Override
-            public double apply(double... args) {
+            public Double apply(Double... args) {
                 return args[0] + args[1];
             }
         };
@@ -69,10 +69,10 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression6() throws Exception {
         String expr = "11!";
-        Operator op = new Operator("!",1,false,Operators.PRECEDENCE_MULTIPLICATION) {
+        Operator op = new Operator<Double>("!",1,false,Operators.PRECEDENCE_MULTIPLICATION) {
             @Override
-            public double apply(double... args) {
-                int result = (int) args[0];
+            public Double apply(Double... args) {
+                int result = args[0].intValue();
                 if ((double) result != args[0]) {
                     throw new IllegalArgumentException("Factorial can only be calculated from an integer. maybe impleent the Gamma function");
                 }
@@ -88,5 +88,29 @@ public class ExpressionBuilderTest {
             .buildDouble()
             .evaluate();
         assertEquals(39916800d,result,0d);
+    }
+    @Test
+    public void testExpression7() throws Exception {
+        String expr = "sin(11!)";
+        Operator op = new Operator<Double> ("!",1,false,Operators.PRECEDENCE_MULTIPLICATION) {
+            @Override
+            public Double apply(Double... args) {
+                int result = args[0].intValue();
+                if ((double) result != args[0]) {
+                    throw new IllegalArgumentException("Factorial can only be calculated from an integer. maybe impleent the Gamma function");
+                }
+                result = 1;
+                for (int i = 2; i<= args[0]; i++) {
+                    result = result * i;
+                }
+                return (double) result;
+            }
+        };
+        double result = new ExpressionBuilder(expr)
+            .operator(op)
+            .buildDouble()
+            .evaluate();
+        double expected = sin(39916800d);
+        assertEquals(expected,result,0d);
     }
 }

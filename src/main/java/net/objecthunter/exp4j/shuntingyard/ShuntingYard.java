@@ -36,9 +36,9 @@ public class ShuntingYard {
 		this.variables = variables;
 	}
 
-	public List<Token> transformRpn(final String expression)
+	public List<Token> transformRpn(final String expression, final int mode)
 			throws UnparseableExpressionException {
-		final FastTokenizer tokenizer = new FastTokenizer(expression,this.variables, 
+		final FastTokenizer tokenizer = new FastTokenizer(expression, mode, this.variables, 
 				this.customFunctions, this.customOperators);
 		
 		final List<Token> output = new ArrayList<>();
@@ -101,10 +101,10 @@ public class ShuntingYard {
 		return output;
 	}
 
-	private Operator getOperator(String symbol, boolean unary) {
+	private Operator getOperator(String symbol, boolean unary, final int mode) {
 		Operator op = null;
 		if (symbol.length() == 1) {
-			op = Operators.getBuiltinOperator(symbol.charAt(0), unary ? 1 : 2);
+			op = Operators.getBuiltinOperator(symbol.charAt(0), unary ? 1 : 2, mode);
 		}
 		if (op == null) {
 			op = customOperators.get(symbol);

@@ -1,5 +1,10 @@
 package net.objecthunter.exp4j.function;
 
+import java.math.BigDecimal;
+
+import net.objecthunter.exp4j.complex.ComplexNumber;
+import net.objecthunter.exp4j.expression.ExpressionBuilder;
+
 public class Functions {
 	public static final int INDEX_SIN = 0;
 	public static final int INDEX_COS = 1;
@@ -20,108 +25,273 @@ public class Functions {
 	public static final int INDEX_MAX = 16;
 	public static final int INDEX_MIN = 17;
 	
-	private static final Function[] builtin = new Function[18];
+	private static final Function<Double>[] builtinDouble = new Function[18];
+	private static final Function<ComplexNumber>[] builtinComplex = new Function[18];
+	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[18];
+
 	
 	static {
-		builtin[INDEX_SIN] = new Function("sin") {
+		builtinDouble[INDEX_SIN] = new Function<Double>("sin") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.sin(args[0]);
 			}
 		};
-		builtin[INDEX_COS] = new Function("cos") {
+		builtinComplex[INDEX_SIN] = new Function<ComplexNumber> ("sin") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_SIN]= new Function<BigDecimal> ("sin") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_COS] = new Function<Double>("cos") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.cos(args[0]);
 			}
 		};
-		builtin[INDEX_TAN] = new Function("tan") {
+		builtinComplex[INDEX_COS] = new Function<ComplexNumber> ("cos") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_COS]= new Function<BigDecimal> ("cos") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_TAN] = new Function<Double>("tan") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.tan(args[0]);
 			}
 		};
-		builtin[INDEX_LOG] = new Function("log") {
+		builtinComplex[INDEX_TAN] = new Function<ComplexNumber> ("tan") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_TAN]= new Function<BigDecimal> ("tan") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+
+		builtinDouble[INDEX_LOG] = new Function<Double>("log") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.log(args[0]);
 			}
 		};
-		builtin[INDEX_LOG1P] = new Function("log1p") {
+		builtinComplex[INDEX_LOG] = new Function<ComplexNumber> ("log") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_LOG]= new Function<BigDecimal> ("log") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_LOG1P] = new Function<Double>("log1p") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.log1p(args[0]);
 			}
 		};
-		builtin[INDEX_ABS] = new Function("abs") {
+		builtinComplex[INDEX_LOG1P] = new Function<ComplexNumber> ("log1p") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_LOG1P]= new Function<BigDecimal> ("log1p") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_ABS] = new Function<Double>("abs") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.abs(args[0]);
 			}
 		};
-		builtin[INDEX_ACOS] = new Function("acos") {
+		builtinComplex[INDEX_ABS] = new Function<ComplexNumber> ("abs") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_ABS]= new Function<BigDecimal> ("abs") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_ACOS] = new Function<Double>("acos") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.acos(args[0]);
 			}
 		};
-		builtin[INDEX_ASIN] = new Function("asin") {
+		builtinComplex[INDEX_ACOS] = new Function<ComplexNumber> ("acos") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_ACOS]= new Function<BigDecimal> ("acos") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_ASIN] = new Function<Double>("asin") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.asin(args[0]);
 			}
 		};
-		builtin[INDEX_ATAN] = new Function("atan") {
+		builtinComplex[INDEX_ASIN] = new Function<ComplexNumber> ("asin") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_ASIN]= new Function<BigDecimal> ("asin") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_ATAN] = new Function<Double>("atan") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.atan(args[0]);
 			}
 		};
-		builtin[INDEX_CBRT] = new Function("cbrt") {
+		builtinComplex[INDEX_ATAN] = new Function<ComplexNumber> ("atan") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_ATAN]= new Function<BigDecimal> ("atan") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_CBRT] = new Function<Double>("cbrt") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.cbrt(args[0]);
 			}
 		};
-		builtin[INDEX_FLOOR] = new Function("floor") {
+		builtinComplex[INDEX_CBRT] = new Function<ComplexNumber> ("cbrt") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_CBRT]= new Function<BigDecimal> ("cbrt") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_FLOOR] = new Function<Double>("floor") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.floor(args[0]);
 			}
 		};
-		builtin[INDEX_SINH] = new Function("sinh") {
+		builtinComplex[INDEX_FLOOR] = new Function<ComplexNumber> ("floor") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_FLOOR]= new Function<BigDecimal> ("floor") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_SINH] = new Function<Double>("sinh") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.sinh(args[0]);
 			}
 		};
-		builtin[INDEX_SQRT] = new Function("sqrt") {
+		builtinComplex[INDEX_SINH] = new Function<ComplexNumber> ("sinh") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_SINH]= new Function<BigDecimal> ("sinh") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+
+		builtinDouble[INDEX_SQRT] = new Function<Double>("sqrt") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.sqrt(args[0]);
 			}
 		};
-		builtin[INDEX_TANH] = new Function("tanh") {
+		builtinComplex[INDEX_SQRT] = new Function<ComplexNumber> ("sqrt") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_SQRT]= new Function<BigDecimal> ("sqrt") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_TANH] = new Function<Double>("tanh") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.tanh(args[0]);
 			}
 		};
-		builtin[INDEX_COSH] = new Function("cosh") {
+		builtinComplex[INDEX_TANH] = new Function<ComplexNumber> ("tanh") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_TANH]= new Function<BigDecimal> ("tanh") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_COSH] = new Function<Double>("cosh") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.cosh(args[0]);
 			}
 		};
-		builtin[INDEX_CEIL] = new Function("ceil") {
+		builtinComplex[INDEX_COSH] = new Function<ComplexNumber> ("cosh") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_COSH]= new Function<BigDecimal> ("cosh") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_CEIL] = new Function<Double>("ceil") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.ceil(args[0]);
 			}
 		};
-		builtin[INDEX_MAX] = new Function("max") {
+		builtinComplex[INDEX_CEIL] = new Function<ComplexNumber> ("ceil") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_CEIL]= new Function<BigDecimal> ("ceil") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_MAX] = new Function<Double>("max") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				double max = Double.MIN_VALUE;
 				for (double arg: args) {
 					max = (arg > max) ? arg : max;
@@ -129,9 +299,20 @@ public class Functions {
 				return max;
 			}
 		};
-		builtin[INDEX_MIN] = new Function("min") {
+		builtinComplex[INDEX_MAX] = new Function<ComplexNumber> ("max") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_MAX]= new Function<BigDecimal> ("max") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+
+		builtinDouble[INDEX_MIN] = new Function<Double>("min") {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				double min = Double.MAX_VALUE;
 				for (double arg: args) {
 					min = (arg < min) ? arg : min;
@@ -139,7 +320,16 @@ public class Functions {
 				return min;
 			}
 		};
-
+		builtinComplex[INDEX_MIN] = new Function<ComplexNumber> ("min") {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinBigDecimal[INDEX_MIN]= new Function<BigDecimal> ("min") {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
 	}
 
 	public static char[] getAllowedFunctionCharacters() {
@@ -155,44 +345,59 @@ public class Functions {
 		return chars;
 	}
 	
-	public static Function getBuiltinFunction(String name) {
+	public static Function getBuiltinFunction(final String name, final int mode) {
+		Function[] funcs;
+		switch(mode) {
+			case ExpressionBuilder.MODE_DOUBLE:
+				funcs = builtinDouble;
+				break;
+			case ExpressionBuilder.MODE_COMPLEX:
+				funcs = builtinComplex;
+				break;
+			case ExpressionBuilder.MODE_BIGDECIMAL:
+				funcs = builtinBigDecimal;
+				break;
+				default:
+					throw new IllegalArgumentException("Mode " + mode + " is not available");
+		}
+		
 		switch(name) {
 		case "sin":
-			return builtin[INDEX_SIN];
+			return funcs[INDEX_SIN];
 		case "cos":
-			return builtin[INDEX_COS];
+			return funcs[INDEX_COS];
 		case "tan":
-			return builtin[INDEX_TAN];
+			return funcs[INDEX_TAN];
 		case "asin":
-			return builtin[INDEX_ASIN];
+			return funcs[INDEX_ASIN];
 		case "acos":
-			return builtin[INDEX_ACOS];
+			return funcs[INDEX_ACOS];
 		case "atan":
-			return builtin[INDEX_ATAN];
+			return funcs[INDEX_ATAN];
 		case "sinh":
-			return builtin[INDEX_SINH];
+			return funcs[INDEX_SINH];
 		case "cosh":
-			return builtin[INDEX_COSH];
+			return funcs[INDEX_COSH];
 		case "tanh":
-			return builtin[INDEX_TANH];
+			return funcs[INDEX_TANH];
 		case "abs":
-			return builtin[INDEX_ABS];
+			return funcs[INDEX_ABS];
 		case "log":
-			return builtin[INDEX_LOG];
+			return funcs[INDEX_LOG];
 		case "log1p":
-			return builtin[INDEX_LOG1P];
+			return funcs[INDEX_LOG1P];
 		case "ceil":
-			return builtin[INDEX_CEIL];
+			return funcs[INDEX_CEIL];
 		case "floor":
-			return builtin[INDEX_FLOOR];
+			return funcs[INDEX_FLOOR];
 		case "max":
-			return builtin[INDEX_MAX];
+			return funcs[INDEX_MAX];
 		case "min":
-			return builtin[INDEX_MIN];
+			return funcs[INDEX_MIN];
 		case "sqrt":
-			return builtin[INDEX_SQRT];
+			return funcs[INDEX_SQRT];
 		case "cbrt":
-			return builtin[INDEX_CBRT];
+			return funcs[INDEX_CBRT];
 			default:
 				return null;
 		}

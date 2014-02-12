@@ -1,9 +1,9 @@
 package net.objecthunter.exp4j.operator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
 
-import net.objecthunter.exp4j.exception.UnparseableExpressionException;
+import net.objecthunter.exp4j.complex.ComplexNumber;
+import net.objecthunter.exp4j.expression.ExpressionBuilder;
 
 public class Operators {
 
@@ -27,66 +27,156 @@ public class Operators {
 	private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
 			'%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
 			'=', 'E' };
-	private static final Operator[] builtin = new Operator[8];
+	private static final Operator[] builtinDouble = new Operator[8];
+	private static final Operator[] builtinComplex = new Operator[8];
+	private static final Operator[] builtinBigDecimal = new Operator[8];
 
 	static {
-		builtin[INDEX_ADDITION] = new Operator("+", 2, true,
+		builtinDouble[INDEX_ADDITION] = new Operator<Double>("+", 2, true,
 				PRECEDENCE_ADDITION) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return args[0] + args[1];
 			}
 		};
-		builtin[INDEX_SUBTRACTION] = new Operator("-", 2, true,
+		builtinComplex[INDEX_ADDITION] = new Operator<ComplexNumber>("+", 2, true, PRECEDENCE_ADDITION) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_ADDITION] = new Operator<BigDecimal>("+", 2 , true, PRECEDENCE_ADDITION) {
+			public BigDecimal apply(BigDecimal ... args) {
+				return args[0].add(args[1]);
+			}
+		};
+		builtinDouble[INDEX_SUBTRACTION] = new Operator<Double>("-", 2, true,
 				PRECEDENCE_SUBTRACTION) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return args[0] - args[1];
 			}
 		};
-		builtin[INDEX_MUTLIPLICATION] = new Operator("*", 2, true,
+		builtinComplex[INDEX_SUBTRACTION] = new Operator<ComplexNumber>("-", 2, true, PRECEDENCE_SUBTRACTION) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_SUBTRACTION] = new Operator<BigDecimal>("-", 2 , true, PRECEDENCE_SUBTRACTION) {
+			public BigDecimal apply(BigDecimal ... args) {
+				return args[0].subtract(args[1]);
+			}
+		};
+		builtinDouble[INDEX_MUTLIPLICATION] = new Operator<Double>("*", 2, true,
 				PRECEDENCE_MULTIPLICATION) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return args[0] * args[1];
 			}
 		};
-		builtin[INDEX_DIVISION] = new Operator("/", 2, true,
+		builtinComplex[INDEX_MUTLIPLICATION] = new Operator<ComplexNumber>("*", 2, true, PRECEDENCE_MULTIPLICATION) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_MUTLIPLICATION] = new Operator<BigDecimal>("*", 2 , true, PRECEDENCE_MULTIPLICATION) {
+			public BigDecimal apply(BigDecimal ... args) {
+				return args[0].multiply(args[1]);
+			}
+		};
+		builtinDouble[INDEX_DIVISION] = new Operator<Double>("/", 2, true,
 				PRECEDENCE_DIVISION) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return args[0] / args[1];
 			}
 		};
-		builtin[INDEX_POWER] = new Operator("^", 2, true,
+		builtinComplex[INDEX_DIVISION] = new Operator<ComplexNumber>("/", 2, true, PRECEDENCE_DIVISION) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_DIVISION] = new Operator<BigDecimal>("/", 2 , true, PRECEDENCE_DIVISION) {
+			public BigDecimal apply(BigDecimal ... args) {
+				return args[0].divide(args[1]);
+			}
+		};
+		builtinDouble[INDEX_POWER] = new Operator<Double>("^", 2, true,
 				PRECEDENCE_POWER) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return Math.pow(args[0], args[1]);
 			}
 		};
-		builtin[INDEX_MODULO] = new Operator("%", 2, true,
+		builtinComplex[INDEX_POWER] = new Operator<ComplexNumber>("^", 2, true, PRECEDENCE_POWER) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_POWER] = new Operator<BigDecimal>("^", 2 , true, PRECEDENCE_POWER) {
+			public BigDecimal apply(BigDecimal ... args) {
+				int exponent = args[1].intValue();
+				if (! new BigDecimal(exponent).equals(args[1])) {
+					throw new IllegalArgumentException("Only integer powers are supported in BigDecimal mode");
+				}
+				return args[0].pow(exponent);
+			}
+		};
+		builtinDouble[INDEX_MODULO] = new Operator<Double>("%", 2, true,
 				PRECEDENCE_MODULO) {
 			@Override
-			public double apply(double... args) {
+			public Double apply(Double... args) {
 				return args[0] % args[1];
 			}
 		};
-		builtin[INDEX_UNARYMINUS] = new Operator("-", 1, true,
+		builtinComplex[INDEX_MODULO] = new Operator<ComplexNumber>("%", 2, true, PRECEDENCE_MODULO) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_MODULO] = new Operator<BigDecimal>("%", 2 , true, PRECEDENCE_MODULO) {
+			public BigDecimal apply(BigDecimal ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			}
+		};
+		builtinDouble[INDEX_UNARYMINUS] = new Operator<Double>("-", 1, true,
 				PRECEDENCE_UNARY_MINUS) {
 			@Override
-			public double apply(double ... args) {
+			public Double apply(Double... args) {
 				return -args[0];
 			}
 		};
-		builtin[INDEX_SCINOTATION] = new Operator("E", 2, true,
+		builtinComplex[INDEX_UNARYMINUS] = new Operator<ComplexNumber>("-", 1, true, PRECEDENCE_UNARY_MINUS) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_UNARYMINUS] = new Operator<BigDecimal>("-", 1 , true, PRECEDENCE_UNARY_MINUS) {
+			public BigDecimal apply(BigDecimal ... args) {
+				return args[0].multiply(new BigDecimal(-1));
+			}
+		};
+		builtinDouble[INDEX_SCINOTATION] = new Operator<Double>("E", 2, true,
 				PRECEDENCE_POWER) {
 			@Override
-			public double apply(double ... args) {
+			public Double apply(Double... args) {
 				return Math.pow(args[0], args[1]);
 			}
 		};
-	}
+		builtinComplex[INDEX_SCINOTATION] = new Operator<ComplexNumber>("E", 2, true, PRECEDENCE_POWER) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				throw new IllegalArgumentException("Not yet implemented");
+			};
+		};
+		builtinBigDecimal[INDEX_SCINOTATION] = new Operator<BigDecimal>("E", 2 , true, PRECEDENCE_POWER) {
+			public BigDecimal apply(BigDecimal ... args) {
+				int exponent = args[1].intValue();
+				if (! new BigDecimal(exponent).equals(args[1])) {
+					throw new IllegalArgumentException("Only integer powers are supported in BigDecimal mode");
+				}
+				return args[0].pow(exponent);
+			}
+		};
+}
 
 	public static char[] getAllowedOperatorChars() {
 		return ALLOWED_OPERATOR_CHARS;
@@ -102,24 +192,39 @@ public class Operators {
 		return false;
 	}
 
-	public static Operator getBuiltinOperator(char ch, int argc) {
+	public static Operator getBuiltinOperator(char ch, int argc, final int mode) {
+		Operator[] ops;
+		switch (mode) {
+			case ExpressionBuilder.MODE_DOUBLE:
+				ops = builtinDouble;
+				break;
+			case ExpressionBuilder.MODE_COMPLEX:
+				ops = builtinComplex;
+				break;
+			case ExpressionBuilder.MODE_BIGDECIMAL:
+				ops = builtinBigDecimal;
+				break;
+				default:
+					throw new IllegalArgumentException("Mode " + mode + " can not be used");
+		}
+		
 		switch (ch) {
 		case '+':
-			return builtin[INDEX_ADDITION];
+			return ops[INDEX_ADDITION];
 		case '-':
 			if (argc == 1) {
-				return builtin[INDEX_UNARYMINUS];
+				return ops[INDEX_UNARYMINUS];
 			}else {
-				return builtin[INDEX_SUBTRACTION];
+				return ops[INDEX_SUBTRACTION];
 			}
 		case '*':
-			return builtin[INDEX_MUTLIPLICATION];
+			return ops[INDEX_MUTLIPLICATION];
 		case '/':
-			return builtin[INDEX_DIVISION];
+			return ops[INDEX_DIVISION];
 		case '%':
-			return builtin[INDEX_MODULO];
+			return ops[INDEX_MODULO];
 		case '^':
-			return builtin[INDEX_POWER];
+			return ops[INDEX_POWER];
 		default:
 			return null;
 		}

@@ -1,5 +1,6 @@
 package net.objecthunter.exp4j.expression;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -11,53 +12,53 @@ import net.objecthunter.exp4j.tokens.NumberToken;
 import net.objecthunter.exp4j.tokens.OperatorToken;
 import net.objecthunter.exp4j.tokens.Token;
 
-public class DoubleExpression extends Expression<Double> {
+public class BigDecimalExpression extends Expression<BigDecimal> {
 
-	public DoubleExpression(String expression, List<Token> tokens) {
+	public BigDecimalExpression(String expression, List<Token> tokens) {
 		super(expression, tokens);
 	}
 
 	@Override
-	public Double evaluate() {
+	public BigDecimal evaluate() {
 		return evaluate(null);
 	}
 
 	@Override
-	public Double evaluate(Map<String, Double> variables) {
-		final Stack<Double> stack = new Stack<>();
+	public BigDecimal evaluate(Map<String, BigDecimal> variables) {
+		final Stack<BigDecimal> stack = new Stack<>();
 		for (Token t : tokens) {
 			switch (t.getType()) {
 			case Token.NUMBER:
-				stack.push((Double) ((NumberToken) t).getValue());
+				stack.push((BigDecimal) ((NumberToken) t).getValue());
 				break;
 			case Token.OPERATOR:
-				Operator<Double> op = ((OperatorToken) t).getOperator();
+				Operator<BigDecimal> op = ((OperatorToken) t).getOperator();
 				if (stack.size() < op.getArgumentCount()) {
 					throw new IllegalArgumentException(
 							"Not enough operands for operator "
 									+ op.getSymbol());
 				}
-				Double[] operands = new Double[op.getArgumentCount()];
+				BigDecimal[] operands = new BigDecimal[op.getArgumentCount()];
 				for (int i = 0; i < op.getArgumentCount(); i++) {
 					operands[i] = stack.pop();
 				}
 				stack.push(op.apply(operands));
 				break;
 			case Token.FUNCTION:
-				final Function<Double> func = ((FunctionToken) t).getFunction();
-				Double[] args;
+				final Function<BigDecimal> func = ((FunctionToken) t).getFunction();
+				BigDecimal[] args;
 				if (func.getArgumentCount() > 0) {
 					if (stack.size() < func.getArgumentCount()) {
 						throw new IllegalArgumentException(
 								"Not enough operands for function "
 										+ func.getName());
 					}
-					args = new Double[func.getArgumentCount()];
+					args = new BigDecimal[func.getArgumentCount()];
 					for (int i = 0; i < func.getArgumentCount(); i++) {
 						args[i] = stack.pop();
 					}
 				} else {
-					args = new Double[stack.size()];
+					args = new BigDecimal[stack.size()];
 					int count = 0;
 					while (!stack.isEmpty()) {
 						args[count++] = stack.pop();

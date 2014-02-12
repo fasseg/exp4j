@@ -1,6 +1,6 @@
 package net.objecthunter.exp4j.function;
 
-public abstract class Function {
+public abstract class Function<T> {
 	private final String name;
 	private final int argc;
 
@@ -24,5 +24,5 @@ public abstract class Function {
 		return name;
 	}
 
-	public abstract double apply(double... args);
+	public abstract T apply(T... args);
 }

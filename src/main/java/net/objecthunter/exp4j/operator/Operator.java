@@ -1,6 +1,6 @@
 package net.objecthunter.exp4j.operator;
 
-public abstract class Operator {
+public abstract class Operator<T> {
 
 	private final int argc;
 	private final boolean leftAssociative;
@@ -24,7 +24,7 @@ public abstract class Operator {
 		return precedence;
 	}
 	
-	public abstract double apply(double ... args);
+	public abstract T apply(T ... args);
 	
 	public String getSymbol() {
 		return symbol;
