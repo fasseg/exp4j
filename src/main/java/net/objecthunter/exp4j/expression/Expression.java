@@ -14,7 +14,8 @@ public abstract class Expression<T> {
 		this.expression = expression;
 		this.tokens = tokens;
 	}
-
+	public abstract Expression setVariables(Map<String, T> variables);
+	public abstract Expression setVariable(String name, T value);
 	public abstract T evaluate(Map<String,T> variables);
 	public abstract T evaluate();
 }

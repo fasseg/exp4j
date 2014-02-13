@@ -1,5 +1,6 @@
 package net.objecthunter.exp4j.expression;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -10,11 +11,25 @@ import net.objecthunter.exp4j.tokens.FunctionToken;
 import net.objecthunter.exp4j.tokens.NumberToken;
 import net.objecthunter.exp4j.tokens.OperatorToken;
 import net.objecthunter.exp4j.tokens.Token;
+import net.objecthunter.exp4j.tokens.VariableToken;
 
 public class DoubleExpression extends Expression<Double> {
-
+	final Map<String, Double> variables = new HashMap<String, Double>();
+	
 	public DoubleExpression(String expression, List<Token> tokens) {
 		super(expression, tokens);
+	}
+	
+	@Override
+	public Expression setVariable(String name, Double value) {
+		variables.put(name, value);
+		return this;
+	}
+	
+	@Override
+	public Expression setVariables(Map<String, Double> variables) {
+		this.variables.putAll(variables);
+		return this;
 	}
 
 	@Override
@@ -24,11 +39,17 @@ public class DoubleExpression extends Expression<Double> {
 
 	@Override
 	public Double evaluate(Map<String, Double> variables) {
+		if (variables != null) {
+			this.setVariables(variables);
+		}
 		final Stack<Double> stack = new Stack<>();
 		for (Token t : tokens) {
 			switch (t.getType()) {
 			case Token.NUMBER:
 				stack.push((Double) ((NumberToken) t).getValue());
+				break;
+			case Token.VARIABLE:
+				stack.push(this.variables.get(((VariableToken) t).getName()));
 				break;
 			case Token.OPERATOR:
 				Operator<Double> op = ((OperatorToken) t).getOperator();

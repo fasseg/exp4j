@@ -1,9 +1,6 @@
 package net.objecthunter.exp4j.tokenizer;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
@@ -14,11 +11,12 @@ import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokens.ArgumentSeparatorToken;
 import net.objecthunter.exp4j.tokens.FunctionToken;
+import net.objecthunter.exp4j.tokens.LeftParanthesesToken;
 import net.objecthunter.exp4j.tokens.NumberToken;
 import net.objecthunter.exp4j.tokens.OperatorToken;
-import net.objecthunter.exp4j.tokens.LeftParanthesesToken;
 import net.objecthunter.exp4j.tokens.RightParanthesesToken;
 import net.objecthunter.exp4j.tokens.Token;
+import net.objecthunter.exp4j.tokens.VariableToken;
 
 public class FastTokenizer {
 
@@ -259,6 +257,8 @@ public class FastTokenizer {
 		switch (this.currentType) {
 			case Token.ARGUMENT_SEPARATOR :
 				return new ArgumentSeparatorToken();
+			case Token.VARIABLE :
+				return new VariableToken(this.currentValue);
 			case Token.FUNCTION :
 				return new FunctionToken(this.getFunction(this.currentValue));
 			case Token.OPERATOR :

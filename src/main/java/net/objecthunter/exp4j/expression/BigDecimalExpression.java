@@ -1,6 +1,7 @@
 package net.objecthunter.exp4j.expression;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -11,13 +12,27 @@ import net.objecthunter.exp4j.tokens.FunctionToken;
 import net.objecthunter.exp4j.tokens.NumberToken;
 import net.objecthunter.exp4j.tokens.OperatorToken;
 import net.objecthunter.exp4j.tokens.Token;
+import net.objecthunter.exp4j.tokens.VariableToken;
 
 public class BigDecimalExpression extends Expression<BigDecimal> {
+	private final Map<String, BigDecimal> variables = new HashMap<>();
 
 	public BigDecimalExpression(String expression, List<Token> tokens) {
 		super(expression, tokens);
 	}
 
+	@Override
+	public Expression setVariable(String name, BigDecimal value) {
+		this.variables.put(name, value);
+		return this;
+	}
+	
+	@Override
+	public Expression setVariables(Map<String, BigDecimal> variables) {
+		this.variables.putAll(variables);
+		return this;
+	}
+	
 	@Override
 	public BigDecimal evaluate() {
 		return evaluate(null);
@@ -25,11 +40,17 @@ public class BigDecimalExpression extends Expression<BigDecimal> {
 
 	@Override
 	public BigDecimal evaluate(Map<String, BigDecimal> variables) {
+		if (variables != null) {
+			setVariables(variables);
+		}
 		final Stack<BigDecimal> stack = new Stack<>();
 		for (Token t : tokens) {
 			switch (t.getType()) {
 			case Token.NUMBER:
 				stack.push((BigDecimal) ((NumberToken) t).getValue());
+				break;
+			case Token.VARIABLE:
+				stack.push(this.variables.get(((VariableToken)t).getName()));
 				break;
 			case Token.OPERATOR:
 				Operator<BigDecimal> op = ((OperatorToken) t).getOperator();

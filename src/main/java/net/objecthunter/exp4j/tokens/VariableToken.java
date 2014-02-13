@@ -10,4 +10,8 @@ public class VariableToken extends Token {
 		this.name = name;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 }
