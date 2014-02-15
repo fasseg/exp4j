@@ -1,151 +1,183 @@
 package net.objecthunter.math;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 
 public class Cordic {
 	public static BigDecimal K[] = new BigDecimal[] {
-		new BigDecimal("0.7071067811865475244008443621048491", MathContext.DECIMAL128),
-		new BigDecimal("0.6324555320336758663997787088865439", MathContext.DECIMAL128),
-		new BigDecimal("0.6135719910778963496078090877580412", MathContext.DECIMAL128),
-		new BigDecimal("0.6088339125177524210221135075473903", MathContext.DECIMAL128),
-		new BigDecimal("0.6076482562561682009293216603095235", MathContext.DECIMAL128),
-		new BigDecimal("0.6073517701412959590535123903877649", MathContext.DECIMAL128),
-		new BigDecimal("0.6072776440935259990469153673375897", MathContext.DECIMAL128),
-		new BigDecimal("0.6072591122988927300602945418225043", MathContext.DECIMAL128),
-		new BigDecimal("0.6072544793325623297173980863251574", MathContext.DECIMAL128),
-		new BigDecimal("0.6072533210898751633434351985637673", MathContext.DECIMAL128),
-		new BigDecimal("0.6072530315291343354022846546615289", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529591389448136303517976375718", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529410413971635129701864241042", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529365170102341289712420797396", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529353859135007295556027452776", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529351031393173138631980695442", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350324457714558251909590865", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350147723849910585075599099", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350103540383748507628587645", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350092494517207978220677687", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350089733050572845240815379", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350089042683914061956607000", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088870092249366133102230", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088826944333192177072746", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088816157354148688055794", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088813460609387815800959", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812786423197597737211", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812617876650043221272", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812575740013154592287", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812565205853932435041", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812562572314126895728", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561913929175510901", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561749332937664696", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561708183878203145", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561697896613337759", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561695324797121413", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561694681843067325", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561694521104553806", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561694480919925426", MathContext.DECIMAL128),
-		new BigDecimal("0.6072529350088812561694470873768332", MathContext.DECIMAL128),
-	};
-	
-	public static BigDecimal A[] = new BigDecimal[] {
-		new BigDecimal("0.7853981633974482789994908671360463", MathContext.DECIMAL128),
-		new BigDecimal("0.2449786631268641434733268624768243", MathContext.DECIMAL128),
-		new BigDecimal("0.1106572211738956340587591853363847", MathContext.DECIMAL128),
-		new BigDecimal("0.0624188099959573500230547438150097", MathContext.DECIMAL128),
-		new BigDecimal("0.0399786871232900437034274432335224", MathContext.DECIMAL128),
-		new BigDecimal("0.0277706365934210358537015395086200", MathContext.DECIMAL128),
-		new BigDecimal("0.0204053306865380860990466516113884", MathContext.DECIMAL128),
-		new BigDecimal("0.0156237286204768312941615349132007", MathContext.DECIMAL128),
-		new BigDecimal("0.0123450518442244881744951356949969", MathContext.DECIMAL128),
-		new BigDecimal("0.0099996666866652376276514146979935", MathContext.DECIMAL128),
-		new BigDecimal("0.0082642746596511603568435688771388", MathContext.DECIMAL128),
-		new BigDecimal("0.0069443328150155508166063711428251", MathContext.DECIMAL128),
-		new BigDecimal("0.0059170907060273249949977625306019", MathContext.DECIMAL128),
-		new BigDecimal("0.0051019965469150732606529174972820", MathContext.DECIMAL128),
-		new BigDecimal("0.0044444151809595374563732761430401", MathContext.DECIMAL128),
-		new BigDecimal("0.0039062301319669717573901390750279", MathContext.DECIMAL128),
-		new BigDecimal("0.0034601938028250176990208153426920", MathContext.DECIMAL128),
-		new BigDecimal("0.0030864099527443968583317879250671", MathContext.DECIMAL128),
-		new BigDecimal("0.0027700760172437058174998991688653", MathContext.DECIMAL128),
-		new BigDecimal("0.0024999947916861976759950181303793", MathContext.DECIMAL128),
-		new BigDecimal("0.0022675698096185910139499508630934", MathContext.DECIMAL128),
-		new BigDecimal("0.0020661127625184834075144912901578", MathContext.DECIMAL128),
-		new BigDecimal("0.0018903569165405651689854105157451", MathContext.DECIMAL128),
-		new BigDecimal("0.0017361093668539701647540729467778", MathContext.DECIMAL128),
-		new BigDecimal("0.0015999986346687639863356489300372", MathContext.DECIMAL128),
-		new BigDecimal("0.0014792888617870532212694723028790", MathContext.DECIMAL128),
-		new BigDecimal("0.0013717412520922271906148592890418", MathContext.DECIMAL128),
-		new BigDecimal("0.0012755095123619503670597818967281", MathContext.DECIMAL128),
-		new BigDecimal("0.0011890600817027303318790254493820", MathContext.DECIMAL128),
-		new BigDecimal("0.0011111106538640789891114746268386", MathContext.DECIMAL128),
-		new BigDecimal("0.0010405823507416904309674787754147", MathContext.DECIMAL128),
-		new BigDecimal("0.0009765621895593194594364927496599", MathContext.DECIMAL128),
-		new BigDecimal("0.0009182733874422829498107567758325", MathContext.DECIMAL128),
-		new BigDecimal("0.0008650516873372378345852240499880", MathContext.DECIMAL128),
-		new BigDecimal("0.0008163263492819760941063278458785", MathContext.DECIMAL128),
-		new BigDecimal("0.0007716047851404402458525000341183", MathContext.DECIMAL128),
-		new BigDecimal("0.0007304600600019678542651480057657", MathContext.DECIMAL128),
-		new BigDecimal("0.0006925206649157694335783297390208", MathContext.DECIMAL128),
-		new BigDecimal("0.0006574621011929812283702823094700", MathContext.DECIMAL128),
-		new BigDecimal("0.0006249999186198107502601684082322", MathContext.DECIMAL128)
+				new BigDecimal("0.7071067811865474617150084668537602", MathContext.DECIMAL128),
+				new BigDecimal("0.6324555320336757713306496953009628", MathContext.DECIMAL128),
+				new BigDecimal("0.6135719910778962837838435007142834", MathContext.DECIMAL128),
+				new BigDecimal("0.6088339125177524291387953780940734", MathContext.DECIMAL128),
+				new BigDecimal("0.6076482562561682509993943313020281", MathContext.DECIMAL128),
+				new BigDecimal("0.6073517701412960434481647098436952", MathContext.DECIMAL128),
+				new BigDecimal("0.6072776440935261366149688910809346", MathContext.DECIMAL128),
+				new BigDecimal("0.6072591122988928447057332959957421", MathContext.DECIMAL128),
+				new BigDecimal("0.6072544793325624912228022367344238", MathContext.DECIMAL128),
+				new BigDecimal("0.6072533210898752864537186724191997", MathContext.DECIMAL128),
+				new BigDecimal("0.6072530315291344571448917122324929", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529591389449477034645497042220", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529410413972650317759871541057", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529365170102888527026152587496", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529353859135170523586566559970", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529351031393796134238982631359", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350324458174981145930360071", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350147723992137116511003114", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350103540446426109156163875", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350092494837554113473743200", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350089733712891870709427167", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350089043154170553862059023", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350088871069601736962795258", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350088827770903776581690181", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350088816668673530330124777", MathContext.DECIMAL128),
+				new BigDecimal("0.6072529350088814448227481079811696", MathContext.DECIMAL128)
 	};
 
-	public static BigDecimal sin(BigDecimal arg, MathContext mc) {
+	// In GNU octave this table is generated using this command: printf("%.34f\n",atan(2.^-(0:40)))
+	public static BigDecimal A[] = new BigDecimal[] {
+			new BigDecimal("0.7853981633974482789994908671360463",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.4636476090008060935154787784995278",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.2449786631268641434733268624768243",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.1243549945467614381566789916178095",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0624188099959573500230547438150097",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0312398334302682774421544564802389",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0156237286204768312941615349132007",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0078123410601011111439873069173245",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0039062301319669717573901390750279",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0019531225164788187584341550007139",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0009765621895593194594364927496599",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0004882812111948982899262139412144",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0002441406201493617712447448120372",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0001220703118936702078530659454358",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000610351561742087725935014541623",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000305175781155260957271547345160",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000152587890613157615423778681873",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000076293945311019699810389967098",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000038146972656064961417507561819",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000019073486328101869647792853193",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000009536743164059608441276310632",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000004768371582030888422810640821",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000002384185791015579736676881098",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000001192092895507806808997385635",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000596046447753905522081060953",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000298023223876953025738326494",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000149011611938476545956387749",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000074505805969238281250000000",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000037252902984619140625000000",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000018626451492309570312500000",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000009313225746154785156250000",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000004656612873077392578125000",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000002328306436538696289062500",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000001164153218269348144531250",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000582076609134674072265625",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000291038304567337036132812",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000145519152283668518066406",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000072759576141834259033203",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000036379788070917129516602",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000018189894035458564758301",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.0000000000009094947017729282379150",
+					MathContext.DECIMAL128)
+	};
+
+	public static BigDecimal[] apply(BigDecimal arg, MathContext mc) {
 		// TODO: reduce the arg to 0 <= arg <= 2*pi
 
 		if (arg.compareTo(BigDecimal.ZERO) == 0) {
-			return BigDecimal.ZERO;
+			return new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };
 		}
-		
+
 		if (arg.compareTo(new BigDecimal(Math.PI)) == 0) {
-			return BigDecimal.ZERO;
+			return new BigDecimal[] { BigDecimal.ONE.negate(), BigDecimal.ZERO };
 		}
 
 		if (arg.compareTo(new BigDecimal(2 * Math.PI)) == 0) {
-			return BigDecimal.ZERO;
+			return new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };
 		}
 
-		if (arg.compareTo(new BigDecimal(Math.PI/2d)) == 0) {
-			return BigDecimal.ONE;
+		if (arg.compareTo(new BigDecimal(Math.PI / 2d)) == 0) {
+			return new BigDecimal[] { BigDecimal.ZERO, BigDecimal.ONE };
 		}
-		
+
 		if (arg.compareTo(new BigDecimal(3d * Math.PI / 2d)) == 0) {
-			return BigDecimal.ONE.negate();
+			return new BigDecimal[] { BigDecimal.ZERO, BigDecimal.ONE.negate() };
 		}
-
-		BigDecimal[] v = new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };
-		BigDecimal[] vi = new BigDecimal[2];
-		BigDecimal beta = arg;
-		BigDecimal currentAngle = BigDecimal.ZERO;
-		BigDecimal angleDiff;
-
 		
+		BigDecimal beta = arg;
+		BigDecimal factor;
+		BigDecimal x = BigDecimal.ONE;
+		BigDecimal y = BigDecimal.ZERO;
+		BigDecimal invPowerOfTwo = BigDecimal.ONE;
+		BigDecimal angle = BigDecimal.ZERO;
 		int sigma;
-		int powerOfTwo = 1;
 		int i = 0;
-
-		for (; i < 25; i++) {
-			if ((angleDiff = (beta.subtract(currentAngle,mc)))
-					.compareTo(BigDecimal.ZERO) == 0d) {
-				return v[1].multiply(K[i],mc);
+		for (; i < 2000; i++) {
+			if (i < A.length - 1){
+				angle = A[i];
+			}else {
+				angle = angle.divide(new BigDecimal(2));
 			}
-			sigma = (beta.subtract(currentAngle,mc).compareTo(BigDecimal.ZERO) > 0) ? 1
-					: -1;
-			// calc the current angle
-			currentAngle = currentAngle.add(new BigDecimal(sigma,mc).multiply(A[i],mc),mc);
-
-			// rotate the vector
-			BigDecimal factor = new BigDecimal(sigma,mc).divide(new BigDecimal(powerOfTwo),mc);
-			vi[0] = v[0].subtract(factor.multiply(v[1],mc),mc);
-			vi[1] = factor.multiply(v[0],mc).add(v[1],mc);
-			v[0] = vi[0];
-			v[1] = vi[1];
-			powerOfTwo = powerOfTwo * 2;
+			sigma = (beta.compareTo(BigDecimal.ZERO) < 0) ? -1 : 1;
+			factor = invPowerOfTwo.multiply(new BigDecimal(sigma,mc),mc);
+			// rotate the vector (x y)
+			x = x.add(factor.negate(mc).multiply(y,mc),mc);
+			y = y.add(factor.multiply(x,mc),mc);
+			beta = (sigma == -1) ? beta.add(angle,mc) : beta.subtract(angle,mc);
+			invPowerOfTwo = invPowerOfTwo.divide(new BigDecimal(2),mc);
+			// update the angle
+			// check the error and return if necessary precision is reached;
+			if (angle.compareTo(BigDecimal.ZERO) == 0) {
+				break;
+			}
 		}
-		return v[1].multiply(K[i],mc);
+		return new BigDecimal[] {x.multiply(K[Math.min(K.length - 1, i)],mc), y.multiply(K[Math.min(K.length - 1, i)],mc)};
 	}
 
 	public static BigDecimal cos(BigDecimal arg, MathContext mc) {
-		throw new RuntimeException("Not yet Implemented");
+		return apply(arg, mc)[0];
+	}
+
+	public static BigDecimal sin(BigDecimal arg, MathContext mc) {
+		return apply(arg, mc)[1];
 	}
 }
