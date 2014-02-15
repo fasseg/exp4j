@@ -1,5 +1,7 @@
 package net.objecthunter.exp4j.function;
 
+import java.math.MathContext;
+
 public abstract class Function<T> {
 	private final String name;
 	private final int argc;

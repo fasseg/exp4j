@@ -7,7 +7,7 @@ import net.objecthunter.exp4j.function.Functions;
 
 import org.junit.Test;
 
-public class FunctionsTest {
+public class DoubleFunctionsTest {
 	@Test
 	public void testGetFunctionChars() throws Exception {
 		char[] chars = Functions.getAllowedFunctionCharacters();
