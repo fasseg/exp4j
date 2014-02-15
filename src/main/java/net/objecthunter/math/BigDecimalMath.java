@@ -1,6 +1,7 @@
 package net.objecthunter.math;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 
 public class BigDecimalMath {
@@ -74,28 +75,36 @@ public class BigDecimalMath {
 
 	public static BigDecimal sqrt(BigDecimal arg, MathContext mc) {
 		// implement the babylonian method approximation
+		MathContext mcp1 = new MathContext(mc.getPrecision() + 1);
+		if (arg.signum() < 0) {
+			throw new ArithmeticException("square root of a negative number");
+		}
 		if (arg.compareTo(BigDecimal.ZERO) == 0) {
 			return BigDecimal.ZERO;
 		}
 		if (arg.compareTo(BigDecimal.ONE) == 0) {
 			return BigDecimal.ONE;
 		}
-		BigDecimal result = sqrtGuess(arg);
-		final BigDecimal two = new BigDecimal(2);
-		for (int i = 0; i< 10 ; i++) {
-			result = result.subtract(result.pow(2).subtract(arg).divide(result.multiply(two), mc));
+		BigDecimal result = sqrtGuess(arg,mc);
+		BigDecimal precision = new BigDecimal(BigInteger.ONE,129).multiply(new BigDecimal(2,mc));
+		for (int i = 0; i< Integer.MAX_VALUE ; i++) {
+			BigDecimal z = arg.divide(result,mc);
+			if (result.subtract(z).compareTo(precision) < 0) {
+				return result;
+			}
+			result = result.add(z, mcp1).divide(new BigDecimal(2,mcp1),mcp1);
 		}
 		return result;
 	}
 
-	public static BigDecimal sqrtGuess(BigDecimal arg) {
+	public static BigDecimal sqrtGuess(BigDecimal arg, MathContext mc) {
 		double x = arg.doubleValue();
 	    double xhalf = 0.5d*x;
 	    long i = Double.doubleToLongBits(x);
 	    i = 0x5fe6ec85e7de30daL - (i>>1);
 	    x = Double.longBitsToDouble(i);
 	    x = x*(1.5d - xhalf*x*x);
-	    return new BigDecimal(1d/x);
+	    return new BigDecimal(1d/x,mc);
 	}
 
 	public static BigDecimal cbrt(BigDecimal arg, MathContext mc) {
