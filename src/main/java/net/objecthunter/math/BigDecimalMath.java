@@ -5,16 +5,8 @@ import java.math.BigInteger;
 import java.math.MathContext;
 
 public class BigDecimalMath {
-	
-	public static BigDecimal sin(BigDecimal arg, MathContext mc) {
-		// return known values
-		if (arg == BigDecimal.ZERO) {
-			return BigDecimal.ZERO;
-		}
-		if (arg == new BigDecimal(Math.PI)) {
-			return BigDecimal.ONE;
-		}
 
+	public static BigDecimal sin(BigDecimal arg, MathContext mc) {
 		return Cordic.sin(arg, mc);
 	}
 
@@ -26,7 +18,7 @@ public class BigDecimalMath {
 		if (arg == new BigDecimal(Math.PI)) {
 			return BigDecimal.ZERO;
 		}
-		return Cordic.cos(arg,mc);
+		return Cordic.cos(arg, mc);
 	}
 
 	public static BigDecimal tan(BigDecimal arg, MathContext mc) {
@@ -85,26 +77,27 @@ public class BigDecimalMath {
 		if (arg.compareTo(BigDecimal.ONE) == 0) {
 			return BigDecimal.ONE;
 		}
-		BigDecimal result = sqrtGuess(arg,mc);
-		BigDecimal precision = new BigDecimal(BigInteger.ONE,129).multiply(new BigDecimal(2,mc));
-		for (int i = 0; i< Integer.MAX_VALUE ; i++) {
-			BigDecimal z = arg.divide(result,mc);
-			if (result.subtract(z).compareTo(precision) < 0) {
+		BigDecimal result = sqrtGuess(arg, mc);
+		BigDecimal precision = new BigDecimal(BigInteger.ONE, mc.getPrecision())
+				.multiply(new BigDecimal(2, mc));
+		for (int i = 0; i < Integer.MAX_VALUE; i++) {
+			BigDecimal z = arg.divide(result, mc);
+			if (result.subtract(z, mc).compareTo(precision) < 0) {
 				return result;
 			}
-			result = result.add(z, mcp1).divide(new BigDecimal(2,mcp1),mcp1);
+			result = result.add(z, mcp1).divide(new BigDecimal(2, mcp1), mcp1);
 		}
 		return result;
 	}
 
 	public static BigDecimal sqrtGuess(BigDecimal arg, MathContext mc) {
 		double x = arg.doubleValue();
-	    double xhalf = 0.5d*x;
-	    long i = Double.doubleToLongBits(x);
-	    i = 0x5fe6ec85e7de30daL - (i>>1);
-	    x = Double.longBitsToDouble(i);
-	    x = x*(1.5d - xhalf*x*x);
-	    return new BigDecimal(1d/x,mc);
+		double xhalf = 0.5d * x;
+		long i = Double.doubleToLongBits(x);
+		i = 0x5fe6ec85e7de30daL - (i >> 1);
+		x = Double.longBitsToDouble(i);
+		x = x * (1.5d - xhalf * x * x);
+		return new BigDecimal(1d / x, mc);
 	}
 
 	public static BigDecimal cbrt(BigDecimal arg, MathContext mc) {

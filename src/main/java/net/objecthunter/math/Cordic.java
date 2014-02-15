@@ -98,7 +98,19 @@ public class Cordic {
 		}
 		
 		if (arg.compareTo(new BigDecimal(Math.PI)) == 0) {
+			return BigDecimal.ZERO;
+		}
+
+		if (arg.compareTo(new BigDecimal(2 * Math.PI)) == 0) {
+			return BigDecimal.ZERO;
+		}
+
+		if (arg.compareTo(new BigDecimal(Math.PI/2d)) == 0) {
 			return BigDecimal.ONE;
+		}
+		
+		if (arg.compareTo(new BigDecimal(3d * Math.PI / 2d)) == 0) {
+			return BigDecimal.ONE.negate();
 		}
 
 		BigDecimal[] v = new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };

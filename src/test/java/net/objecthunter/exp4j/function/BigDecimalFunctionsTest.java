@@ -17,7 +17,12 @@ public class BigDecimalFunctionsTest {
 		tmp = sine.apply(BigDecimal.ZERO);
 		assertEquals(BigDecimal.ZERO,tmp);
 		tmp = sine.apply(new BigDecimal(Math.PI));
+		assertEquals(BigDecimal.ZERO,tmp);
+		tmp = sine.apply(new BigDecimal(Math.PI/2));
 		assertEquals(BigDecimal.ONE,tmp);
+		tmp = sine.apply(new BigDecimal(3*Math.PI/2));
+		assertEquals(BigDecimal.ONE.negate(),tmp);
+
 	}
 
 	@Test
