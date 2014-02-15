@@ -7,6 +7,14 @@ import java.math.MathContext;
 public class BigDecimalMath {
 
 	public static BigDecimal sin(BigDecimal arg, MathContext mc) {
+		// return known values
+		if (arg == BigDecimal.ZERO) {
+			return BigDecimal.ZERO;
+		}
+		if (arg == new BigDecimal(Math.PI)) {
+			return BigDecimal.ONE;
+		}
+
 		return Cordic.sin(arg, mc);
 	}
 
@@ -78,14 +86,13 @@ public class BigDecimalMath {
 			return BigDecimal.ONE;
 		}
 		BigDecimal result = sqrtGuess(arg, mc);
-		BigDecimal precision = new BigDecimal(BigInteger.ONE, mc.getPrecision())
-				.multiply(new BigDecimal(2, mc));
+		BigDecimal precision = new BigDecimal(BigInteger.ONE, mc.getPrecision());
 		for (int i = 0; i < Integer.MAX_VALUE; i++) {
-			BigDecimal z = arg.divide(result, mc);
+			BigDecimal z = arg.divide(result, mcp1);
 			if (result.subtract(z, mc).compareTo(precision) < 0) {
 				return result;
 			}
-			result = result.add(z, mcp1).divide(new BigDecimal(2, mcp1), mcp1);
+			result = result.add(z, mc).divide(new BigDecimal(2, mc), mc);
 		}
 		return result;
 	}

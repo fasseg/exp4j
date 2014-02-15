@@ -21,7 +21,7 @@ public class ExpressionBuilderBigDecimalTest {
 		assertEquals(new BigDecimal(5), result);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testExpression2() throws Exception {
 		String exp = "sin(0)";
 		BigDecimal result = new ExpressionBuilder(exp).buildBigDecimal()
@@ -104,7 +104,7 @@ public class ExpressionBuilderBigDecimalTest {
 
 	@Test
 	public void testExpression7() throws Exception {
-		MathContext ctx = new MathContext(128);
+		MathContext ctx = MathContext.DECIMAL128;
 		BigDecimal third = BigDecimal.ONE.divide(new BigDecimal(3,ctx), ctx);
 		String exp = third.toString() + "+" + third.toString();
 		BigDecimal result = new ExpressionBuilder(exp)
@@ -116,7 +116,7 @@ public class ExpressionBuilderBigDecimalTest {
 	}
 	@Test
 	public void testExpression8() throws Exception {
-		MathContext ctx = new MathContext(128);
+		MathContext ctx = MathContext.DECIMAL128;
 		BigDecimal third = BigDecimal.ONE.divide(new BigDecimal(3,ctx), ctx);
 		String exp = "min(" + third.toString() + ", " + BigDecimal.ONE + ", " + BigDecimal.TEN + ")";
 		BigDecimal result = new ExpressionBuilder(exp)
@@ -127,7 +127,7 @@ public class ExpressionBuilderBigDecimalTest {
 	}
 	@Test
 	public void testExpression9() throws Exception {
-		MathContext ctx = new MathContext(128);
+		MathContext ctx = MathContext.DECIMAL128;
 		BigDecimal third = BigDecimal.ONE.divide(new BigDecimal(3,ctx), ctx);
 		String exp = "max(" + third.toString() + ", " + BigDecimal.ONE + ", " + BigDecimal.TEN + ")";
 		BigDecimal result = new ExpressionBuilder(exp)
@@ -138,13 +138,12 @@ public class ExpressionBuilderBigDecimalTest {
 
 	@Test
 	public void testExpression10() throws Exception {
-		MathContext ctx = new MathContext(128);
+		MathContext ctx = MathContext.DECIMAL128;
 		BigDecimal third = BigDecimal.ONE.divide(new BigDecimal(3,ctx), ctx);
 		String exp = "sin(" + third.toString() + ")";
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		System.out.println(result);
-		assertEquals(BigDecimal.TEN, result);
+		assertEquals(new BigDecimal("0.327194696796152244173344085267620606064301406893759791590056"), result);
 	}
 }
