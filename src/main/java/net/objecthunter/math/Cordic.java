@@ -7,6 +7,8 @@ import java.math.MathContext;
 import javax.print.attribute.standard.PresentationDirection;
 
 public class Cordic {
+	// in GNU octae this table can be generated using the command
+	// "printf("%.34f\n", cumprod(1./sqrt(1.+2.^-(2.*i))))"
 	public static BigDecimal K[] = new BigDecimal[]{
 			new BigDecimal("0.7071067811865474617150084668537602",
 					MathContext.DECIMAL128),
@@ -179,7 +181,8 @@ public class Cordic {
 		BigDecimal y = BigDecimal.ZERO;
 		BigDecimal angle = A[0];
 		BigDecimal two = BigDecimal.ONE.add(BigDecimal.ONE);
-		BigDecimal precision = new BigDecimal(BigInteger.ONE, mc.getPrecision() + 1);
+		BigDecimal precision = new BigDecimal(BigInteger.ONE,
+				mc.getPrecision() * 2);
 		BigDecimal tmpx;
 		BigDecimal tmpy;
 		for (; i < Integer.MAX_VALUE; i++) {
@@ -193,19 +196,20 @@ public class Cordic {
 			tmpy = y.add(x.multiply(factor, mc), mc);
 			x = tmpx;
 			y = tmpy;
-			beta = beta.subtract(sigma.multiply(angle));
+			beta = beta.subtract(sigma.multiply(angle,mc),mc);
 			powerOfTwo = powerOfTwo.divide(two, mc);
-			if (i + 2 >  A.length) {
+			if (i + 2 > A.length) {
 				angle = angle.divide(two);
-			}else {
+			} else {
 				angle = A[i + 1];
 			}
-			if (beta.abs().compareTo(precision) < 1) {
+			if (beta.abs().compareTo(precision) < 0) {
 				i++;
 				break;
 			}
 		}
-		return new BigDecimal[] {x.multiply(K[Math.min(K.length - 1,i)], mc), y.multiply(K[Math.min(K.length - 1,i)], mc)};
+		return new BigDecimal[]{x.multiply(K[Math.min(K.length - 1, i)], mc),
+				y.multiply(K[Math.min(K.length - 1, i)], mc)};
 	}
 
 	public static BigDecimal cos(BigDecimal arg, MathContext mc) {

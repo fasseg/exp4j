@@ -47,8 +47,26 @@ public class BigDecimalFunctionsTest {
 				"1.414213562373095048801688724209698")));
 	}
 
-	@Test(expected = ArithmeticException.class)
+	@Test
 	public void testFunction3() throws Exception {
+		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
+				ExpressionBuilder.MODE_BIGDECIMAL);
+		BigDecimal tmp = cos.apply(new BigDecimal(Math.PI));
+		assertEquals(BigDecimal.ONE.negate(), tmp);
+		tmp = cos.apply(BigDecimal.ZERO);
+		assertEquals(BigDecimal.ONE, tmp);
+		tmp = cos.apply(new BigDecimal(Math.PI / 2));
+		assertEquals(BigDecimal.ZERO, tmp);
+		tmp = cos.apply(new BigDecimal(3 * Math.PI / 2));
+		assertEquals(BigDecimal.ZERO, tmp);
+		BigDecimal oneThird = BigDecimal.ONE.divide(new BigDecimal(3, MathContext.DECIMAL128),MathContext.DECIMAL128);
+		tmp = cos.apply(oneThird);
+		System.out.println(tmp);
+		assertEquals(0, new BigDecimal("0.944956946314737664388284007675880609").compareTo(tmp));
+	}
+
+	@Test(expected = ArithmeticException.class)
+	public void testSqrtWithNegativeArgument() throws Exception {
 		Function<BigDecimal> sqrt = Functions.getBuiltinFunction("sqrt",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = sqrt.apply(new BigDecimal(-1));
