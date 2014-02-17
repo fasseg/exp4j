@@ -24,10 +24,10 @@ public class BigDecimalFunctionsTest {
 		assertEquals(BigDecimal.ONE, tmp);
 		tmp = sine.apply(new BigDecimal(3 * Math.PI / 2));
 		assertEquals(BigDecimal.ONE.negate(), tmp);
-		tmp = sine.apply(BigDecimal.ONE.divide(new BigDecimal(3,
-				MathContext.DECIMAL128), MathContext.DECIMAL128));
+		BigDecimal oneThird = BigDecimal.ONE.divide(new BigDecimal(3, MathContext.DECIMAL128),MathContext.DECIMAL128);
+		tmp = sine.apply(oneThird);
 		System.out.println(tmp);
-		assertEquals(0, new BigDecimal("0.327194696796152244173344085267620606064301406893759791590056").compareTo(tmp));
+		assertEquals(0, new BigDecimal("0.32719469679615224417334408526762060").compareTo(tmp));
 	}
 
 	@Test

@@ -4,38 +4,66 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-public class Cordic {
-	public static BigDecimal K[] = new BigDecimal[] {
-				new BigDecimal("0.7071067811865474617150084668537602", MathContext.DECIMAL128),
-				new BigDecimal("0.6324555320336757713306496953009628", MathContext.DECIMAL128),
-				new BigDecimal("0.6135719910778962837838435007142834", MathContext.DECIMAL128),
-				new BigDecimal("0.6088339125177524291387953780940734", MathContext.DECIMAL128),
-				new BigDecimal("0.6076482562561682509993943313020281", MathContext.DECIMAL128),
-				new BigDecimal("0.6073517701412960434481647098436952", MathContext.DECIMAL128),
-				new BigDecimal("0.6072776440935261366149688910809346", MathContext.DECIMAL128),
-				new BigDecimal("0.6072591122988928447057332959957421", MathContext.DECIMAL128),
-				new BigDecimal("0.6072544793325624912228022367344238", MathContext.DECIMAL128),
-				new BigDecimal("0.6072533210898752864537186724191997", MathContext.DECIMAL128),
-				new BigDecimal("0.6072530315291344571448917122324929", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529591389449477034645497042220", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529410413972650317759871541057", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529365170102888527026152587496", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529353859135170523586566559970", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529351031393796134238982631359", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350324458174981145930360071", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350147723992137116511003114", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350103540446426109156163875", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350092494837554113473743200", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350089733712891870709427167", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350089043154170553862059023", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350088871069601736962795258", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350088827770903776581690181", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350088816668673530330124777", MathContext.DECIMAL128),
-				new BigDecimal("0.6072529350088814448227481079811696", MathContext.DECIMAL128)
-	};
+import javax.print.attribute.standard.PresentationDirection;
 
-	// In GNU octave this table is generated using this command: printf("%.34f\n",atan(2.^-(0:40)))
-	public static BigDecimal A[] = new BigDecimal[] {
+public class Cordic {
+	public static BigDecimal K[] = new BigDecimal[]{
+			new BigDecimal("0.7071067811865474617150084668537602",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6324555320336757713306496953009628",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6135719910778962837838435007142834",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6088339125177524291387953780940734",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6076482562561682509993943313020281",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6073517701412960434481647098436952",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072776440935261366149688910809346",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072591122988928447057332959957421",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072544793325624912228022367344238",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072533210898752864537186724191997",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072530315291344571448917122324929",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529591389449477034645497042220",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529410413972650317759871541057",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529365170102888527026152587496",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529353859135170523586566559970",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529351031393796134238982631359",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350324458174981145930360071",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350147723992137116511003114",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350103540446426109156163875",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350092494837554113473743200",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350089733712891870709427167",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350089043154170553862059023",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350088871069601736962795258",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350088827770903776581690181",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350088816668673530330124777",
+					MathContext.DECIMAL128),
+			new BigDecimal("0.6072529350088814448227481079811696",
+					MathContext.DECIMAL128)};
+
+	// In GNU octave this table is generated using this command:
+	// printf("%.34f\n",atan(2.^-(0:40)))
+	public static BigDecimal A[] = new BigDecimal[]{
 			new BigDecimal("0.7853981633974482789994908671360463",
 					MathContext.DECIMAL128),
 			new BigDecimal("0.4636476090008060935154787784995278",
@@ -117,60 +145,67 @@ public class Cordic {
 			new BigDecimal("0.0000000000018189894035458564758301",
 					MathContext.DECIMAL128),
 			new BigDecimal("0.0000000000009094947017729282379150",
-					MathContext.DECIMAL128)
-	};
+					MathContext.DECIMAL128)};
 
 	public static BigDecimal[] apply(BigDecimal arg, MathContext mc) {
 		// TODO: reduce the arg to 0 <= arg <= 2*pi
 
 		if (arg.compareTo(BigDecimal.ZERO) == 0) {
-			return new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };
+			return new BigDecimal[]{BigDecimal.ONE, BigDecimal.ZERO};
 		}
 
 		if (arg.compareTo(new BigDecimal(Math.PI)) == 0) {
-			return new BigDecimal[] { BigDecimal.ONE.negate(), BigDecimal.ZERO };
+			return new BigDecimal[]{BigDecimal.ONE.negate(), BigDecimal.ZERO};
 		}
 
 		if (arg.compareTo(new BigDecimal(2 * Math.PI)) == 0) {
-			return new BigDecimal[] { BigDecimal.ONE, BigDecimal.ZERO };
+			return new BigDecimal[]{BigDecimal.ONE, BigDecimal.ZERO};
 		}
 
 		if (arg.compareTo(new BigDecimal(Math.PI / 2d)) == 0) {
-			return new BigDecimal[] { BigDecimal.ZERO, BigDecimal.ONE };
+			return new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ONE};
 		}
 
 		if (arg.compareTo(new BigDecimal(3d * Math.PI / 2d)) == 0) {
-			return new BigDecimal[] { BigDecimal.ZERO, BigDecimal.ONE.negate() };
+			return new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ONE.negate()};
 		}
-		
+
+		int i = 0;
 		BigDecimal beta = arg;
+		BigDecimal sigma;
 		BigDecimal factor;
+		BigDecimal powerOfTwo = BigDecimal.ONE;
 		BigDecimal x = BigDecimal.ONE;
 		BigDecimal y = BigDecimal.ZERO;
-		BigDecimal invPowerOfTwo = BigDecimal.ONE;
-		BigDecimal angle = BigDecimal.ZERO;
-		int sigma;
-		int i = 0;
-		for (; i < 2000; i++) {
-			if (i < A.length - 1){
-				angle = A[i];
-			}else {
-				angle = angle.divide(new BigDecimal(2));
+		BigDecimal angle = A[0];
+		BigDecimal two = BigDecimal.ONE.add(BigDecimal.ONE);
+		BigDecimal precision = new BigDecimal(BigInteger.ONE, mc.getPrecision() + 1);
+		BigDecimal tmpx;
+		BigDecimal tmpy;
+		for (; i < Integer.MAX_VALUE; i++) {
+			if (beta.compareTo(BigDecimal.ZERO) < 0) {
+				sigma = BigDecimal.ONE.negate();
+			} else {
+				sigma = BigDecimal.ONE;
 			}
-			sigma = (beta.compareTo(BigDecimal.ZERO) < 0) ? -1 : 1;
-			factor = invPowerOfTwo.multiply(new BigDecimal(sigma,mc),mc);
-			// rotate the vector (x y)
-			x = x.add(factor.negate(mc).multiply(y,mc),mc);
-			y = y.add(factor.multiply(x,mc),mc);
-			beta = (sigma == -1) ? beta.add(angle,mc) : beta.subtract(angle,mc);
-			invPowerOfTwo = invPowerOfTwo.divide(new BigDecimal(2),mc);
-			// update the angle
-			// check the error and return if necessary precision is reached;
-			if (angle.compareTo(BigDecimal.ZERO) == 0) {
+			factor = sigma.multiply(powerOfTwo, mc);
+			tmpx = x.subtract(y.multiply(factor, mc), mc);
+			tmpy = y.add(x.multiply(factor, mc), mc);
+			x = tmpx;
+			y = tmpy;
+			beta = beta.subtract(sigma.multiply(angle));
+			powerOfTwo = powerOfTwo.divide(two, mc);
+			if (i + 2 >  A.length) {
+				angle = angle.divide(two);
+			}else {
+				angle = A[i + 1];
+			}
+			if (beta.abs().compareTo(precision) < 1) {
+				i++;
 				break;
 			}
 		}
-		return new BigDecimal[] {x.multiply(K[Math.min(K.length - 1, i)],mc), y.multiply(K[Math.min(K.length - 1, i)],mc)};
+		return new BigDecimal[] {x.multiply(K[Math.min(K.length - 1,i)], mc), y.multiply(K[Math.min(K.length - 1,i)], mc)};
 	}
 
 	public static BigDecimal cos(BigDecimal arg, MathContext mc) {
