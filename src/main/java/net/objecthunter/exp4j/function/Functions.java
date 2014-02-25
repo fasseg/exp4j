@@ -5,7 +5,7 @@ import java.math.MathContext;
 
 import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
-import net.objecthunter.math.BigDecimalMath;
+import net.objecthunter.math.bigdecimal.BigDecimalMath;
 
 public class Functions {
 	public static final int INDEX_SIN = 0;
@@ -30,6 +30,7 @@ public class Functions {
 	private static final Function<Double>[] builtinDouble = new Function[18];
 	private static final Function<ComplexNumber>[] builtinComplex = new Function[18];
 	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[18];
+	private static final MathContext defaultCtx = MathContext.DECIMAL128;
 
 	
 	static {
@@ -152,62 +153,62 @@ public class Functions {
 
 		builtinBigDecimal[INDEX_SIN]= new Function<BigDecimal> ("sin") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sin(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.sin(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_COS]= new Function<BigDecimal> ("cos") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cos(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.cos(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_TAN]= new Function<BigDecimal> ("tan") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tan(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.tan(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_LOG]= new Function<BigDecimal> ("log") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.log(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.log(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_LOG1P]= new Function<BigDecimal> ("log1p") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.log1p(args[0], MathContext.DECIMAL128);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 		builtinBigDecimal[INDEX_ABS]= new Function<BigDecimal> ("abs") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.abs(args[0], MathContext.DECIMAL128);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 		builtinBigDecimal[INDEX_ACOS]= new Function<BigDecimal> ("acos") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.acos(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.acos(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_ASIN]= new Function<BigDecimal> ("asin") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.asin(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.asin(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_ATAN]= new Function<BigDecimal> ("atan") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.atan(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.atan(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_CBRT]= new Function<BigDecimal> ("cbrt") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cbrt(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.cbrt(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_FLOOR]= new Function<BigDecimal> ("floor") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.floor(args[0], MathContext.DECIMAL128);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 		builtinBigDecimal[INDEX_SINH]= new Function<BigDecimal> ("sinh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sinh(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.sinh(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_SQRT]= new Function<BigDecimal> ("sqrt") {
@@ -217,27 +218,27 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_TANH]= new Function<BigDecimal> ("tanh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tanh(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.tanh(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_COSH]= new Function<BigDecimal> ("cosh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cosh(args[0], MathContext.DECIMAL128);
+				return BigDecimalMath.cosh(args[0]).round(defaultCtx);
 			}
 		};
 		builtinBigDecimal[INDEX_CEIL]= new Function<BigDecimal> ("ceil") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.ceil(args[0], MathContext.DECIMAL128);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 		builtinBigDecimal[INDEX_MAX]= new Function<BigDecimal> ("max",0) {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.max(args);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 		builtinBigDecimal[INDEX_MIN]= new Function<BigDecimal> ("min",0) {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.min(args);
+				throw new RuntimeException("Not yet implemented");
 			}
 		};
 
