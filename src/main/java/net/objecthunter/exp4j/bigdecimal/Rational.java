@@ -1,4 +1,4 @@
-package net.objecthunter.math.bigdecimal;
+package net.objecthunter.exp4j.bigdecimal;
 
 import java.util.* ;
 import java.math.* ;

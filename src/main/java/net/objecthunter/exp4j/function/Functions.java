@@ -3,9 +3,9 @@ package net.objecthunter.exp4j.function;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
-import net.objecthunter.math.bigdecimal.BigDecimalMath;
 
 public class Functions {
 	public static final int INDEX_SIN = 0;

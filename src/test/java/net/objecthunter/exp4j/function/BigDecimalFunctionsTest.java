@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
-import net.objecthunter.math.bigdecimal.BigDecimalMath;
 
 import org.junit.Test;
 
@@ -136,7 +136,7 @@ public class BigDecimalFunctionsTest {
 	public void testCos4() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(new BigDecimal(2)).multiply(new BigDecimal(3)));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(new BigDecimal(2), mc).multiply(new BigDecimal(3), mc));
 		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
 	}
 
