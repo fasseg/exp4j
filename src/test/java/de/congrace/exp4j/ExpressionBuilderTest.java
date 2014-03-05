@@ -554,6 +554,14 @@ public class ExpressionBuilderTest {
 		double result = calc.calculate();
 		assertTrue(result == Math.log(Math.sin(varX)));
 	}
+	
+	@Test
+	public void testExpressionBuilder9() throws Exception {
+		double delta = .01;
+		assertEquals(.20, new ExpressionBuilder(".10+.10").build().calculate(), delta);
+		assertEquals(200, new ExpressionBuilder("1000 * (.10+.10) ").build().calculate(), delta);
+		assertEquals(.02, new ExpressionBuilder("(.10+.10)*.1").build().calculate(), delta);
+	}
 
 	@Test(expected = UnparsableExpressionException.class)
 	public void testSameName() throws Exception {
