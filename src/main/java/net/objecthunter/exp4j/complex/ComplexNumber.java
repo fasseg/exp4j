@@ -16,6 +16,14 @@ public class ComplexNumber {
 	public double getImaginary() {
 		return imaginary;
 	}
+	
+	public boolean isReal() {
+		return imaginary == 0d;
+	}
+	
+	public boolean isImaginary() {
+		return real == 0d;
+	}
 
 	public static ComplexNumber parseComplex(String val) {
 		final StringBuilder tmp = new StringBuilder();

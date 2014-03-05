@@ -81,4 +81,9 @@ public class ExpressionBuilder {
 		final List<Token> tokens = new ShuntingYard(variables, customFunctions, customOperators).transformRpn(expression, MODE_BIGDECIMAL);
 		return new BigDecimalExpression(expression, tokens);
 	}
+	
+	public ComplexExpression buildComplex() throws UnparseableExpressionException {
+		final List<Token> tokens = new ShuntingYard(variables, customFunctions, customOperators).transformRpn(expression, MODE_BIGDECIMAL);
+		return new ComplexExpression(expression, tokens);
+	}
 }

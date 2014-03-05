@@ -71,7 +71,53 @@ public class FastTokenizerComplexTest {
 		assertTrue(((NumberToken) tok.getTokenValue()).getValue().getClass() == ComplexNumber.class);
 		ComplexNumber z2 = (ComplexNumber) ((NumberToken) tok.getTokenValue()).getValue();
 		assertEquals(0d, z2.getReal(), 0d);
-		assertEquals(g2.2d, z2.getImaginary(), 0d);
+		assertEquals(2.2d, z2.getImaginary(), 0d);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.EOF);
+	}
+	@Test
+	public void testTokenization4() throws Exception {
+		FastTokenizer tok = new FastTokenizer("sin(2.2i)", ExpressionBuilder.MODE_COMPLEX);
+		assertFalse(tok.isEOF());
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.FUNCTION);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.NUMBER);
+		assertTrue(((NumberToken) tok.getTokenValue()).getValue().getClass() == ComplexNumber.class);
+		ComplexNumber z2 = (ComplexNumber) ((NumberToken) tok.getTokenValue()).getValue();
+		assertEquals(0d, z2.getReal(), 0d);
+		assertEquals(2.2d, z2.getImaginary(), 0d);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.EOF);
+	}
+	@Test
+	public void testTokenization5() throws Exception {
+		FastTokenizer tok = new FastTokenizer("sin(2i+2.2i)", ExpressionBuilder.MODE_COMPLEX);
+		assertFalse(tok.isEOF());
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.FUNCTION);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.PARANTHESES_LEFT);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.NUMBER);
+		assertTrue(((NumberToken) tok.getTokenValue()).getValue().getClass() == ComplexNumber.class);
+		ComplexNumber z = (ComplexNumber) ((NumberToken) tok.getTokenValue()).getValue();
+		assertEquals(0d, z.getReal(), 0d);
+		assertEquals(2d, z.getImaginary(), 0d);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.OPERATOR);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.NUMBER);
+		assertTrue(((NumberToken) tok.getTokenValue()).getValue().getClass() == ComplexNumber.class);
+		ComplexNumber z2 = (ComplexNumber) ((NumberToken) tok.getTokenValue()).getValue();
+		assertEquals(0d, z2.getReal(), 0d);
+		assertEquals(2.2d, z2.getImaginary(), 0d);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.PARANTHESES_RIGHT);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.EOF);
 	}

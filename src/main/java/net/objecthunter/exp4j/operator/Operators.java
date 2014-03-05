@@ -3,6 +3,7 @@ package net.objecthunter.exp4j.operator;
 import java.math.BigDecimal;
 
 import net.objecthunter.exp4j.complex.ComplexNumber;
+import net.objecthunter.exp4j.complex.ComplexNumberMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 
 public class Operators {
@@ -41,7 +42,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_ADDITION] = new Operator<ComplexNumber>("+", 2, true, PRECEDENCE_ADDITION) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return new ComplexNumberMath().add(args[0], args[1]);
 			};
 		};
 		builtinBigDecimal[INDEX_ADDITION] = new Operator<BigDecimal>("+", 2 , true, PRECEDENCE_ADDITION) {
@@ -58,7 +59,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_SUBTRACTION] = new Operator<ComplexNumber>("-", 2, true, PRECEDENCE_SUBTRACTION) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.subtract(args[0], args[1]);
 			};
 		};
 		builtinBigDecimal[INDEX_SUBTRACTION] = new Operator<BigDecimal>("-", 2 , true, PRECEDENCE_SUBTRACTION) {
@@ -75,7 +76,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_MUTLIPLICATION] = new Operator<ComplexNumber>("*", 2, true, PRECEDENCE_MULTIPLICATION) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.multiply(args[0], args[1]);
 			};
 		};
 		builtinBigDecimal[INDEX_MUTLIPLICATION] = new Operator<BigDecimal>("*", 2 , true, PRECEDENCE_MULTIPLICATION) {
@@ -92,7 +93,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_DIVISION] = new Operator<ComplexNumber>("/", 2, true, PRECEDENCE_DIVISION) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.divide(args[0], args[1]);
 			};
 		};
 		builtinBigDecimal[INDEX_DIVISION] = new Operator<BigDecimal>("/", 2 , true, PRECEDENCE_DIVISION) {
