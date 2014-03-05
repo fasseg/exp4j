@@ -64,7 +64,7 @@ class Tokenizer {
 			char c = chars[i];
 			if (c == ' ')
 				continue;
-			if (Character.isDigit(c)) {
+			if (isDigitOrDecimalSeparator(c)) {
 				final StringBuilder valueBuilder = new StringBuilder(1);
 				// handle the numbers of the expression
 				valueBuilder.append(c);
