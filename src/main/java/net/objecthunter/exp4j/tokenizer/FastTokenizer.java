@@ -3,6 +3,7 @@ package net.objecthunter.exp4j.tokenizer;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
@@ -97,7 +98,7 @@ public class FastTokenizer {
 		} while (Character.isWhitespace(ch));
 
 		// try parse a number from the stream
-		if (Character.isDigit(ch) || ch == '.') {
+		if (Character.isDigit(ch) || ch == '.' || (mode == ExpressionBuilder.MODE_COMPLEX && ch == 'i')) {
 			valBuilder.append(ch);
 			// read all chars into value and set the type to number
 			this.currentType = Token.NUMBER;
@@ -108,7 +109,7 @@ public class FastTokenizer {
 					break;
 				} else {
 					ch = data[offset];
-					if (Character.isDigit(ch) || ch == '.') {
+					if (Character.isDigit(ch) || ch == '.'|| (mode == ExpressionBuilder.MODE_COMPLEX && ch == 'i')) {
 						valBuilder.append(ch);
 						this.index = ++offset;
 					} else {
@@ -276,8 +277,7 @@ public class FastTokenizer {
 						return new NumberToken(
 								new BigDecimal(this.currentValue));
 					case ExpressionBuilder.MODE_COMPLEX :
-						throw new IllegalArgumentException(
-								"Not yet implemented");
+						return new NumberToken(ComplexNumber.parseComplex(this.currentValue));
 				}
 			case Token.PARANTHESES_RIGHT :
 				return new RightParanthesesToken();

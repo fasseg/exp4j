@@ -12,13 +12,15 @@ import org.junit.Test;
 
 public class BigDecimalFunctionsTest {
 	private static MathContext mc = MathContext.DECIMAL128;
+	private static MathContext mcp2 = new MathContext(mc.getPrecision() + 2, mc.getRoundingMode());
 
 	@Test
 	public void testSin1() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc));
-		assertEquals(BigDecimal.ZERO, tmp);
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2));
+		System.out.println(tmp.round(mc).toPlainString());
+		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
 	}
 
 	@Test
