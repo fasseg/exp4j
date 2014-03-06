@@ -60,7 +60,7 @@ public class BigDecimalExpression extends Expression<BigDecimal> {
 									+ op.getSymbol());
 				}
 				BigDecimal[] operands = new BigDecimal[op.getArgumentCount()];
-				for (int i = 0; i < op.getArgumentCount(); i++) {
+				for (int i = op.getArgumentCount() - 1; i >= 0; i--) {
 					operands[i] = stack.pop();
 				}
 				stack.push(op.apply(operands));
@@ -75,7 +75,7 @@ public class BigDecimalExpression extends Expression<BigDecimal> {
 										+ func.getName());
 					}
 					args = new BigDecimal[func.getArgumentCount()];
-					for (int i = 0; i < func.getArgumentCount(); i++) {
+					for (int i = func.getArgumentCount() - 1; i >= 0; i--) {
 						args[i] = stack.pop();
 					}
 				} else {
