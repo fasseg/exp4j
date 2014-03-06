@@ -5,6 +5,7 @@ import java.math.MathContext;
 
 import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.complex.ComplexNumber;
+import net.objecthunter.exp4j.complex.ComplexNumberMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 
 public class Functions {
@@ -260,7 +261,7 @@ public class Functions {
 
 		builtinComplex[INDEX_LOG] = new Function<ComplexNumber> ("log") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.log(args[0]);
 			}
 		};
 		builtinComplex[INDEX_LOG1P] = new Function<ComplexNumber> ("log1p") {

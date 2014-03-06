@@ -5,7 +5,7 @@ import net.objecthunter.exp4j.expression.Expression;
 import net.objecthunter.exp4j.expression.DoubleExpression;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
-import net.objecthunter.exp4j.tokenizer.FastTokenizer;
+import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 import org.junit.Test;
 

@@ -30,7 +30,7 @@ public class FastTokenizerDoubleTest {
 
 	@Test
 	public void testTokenization1() throws Exception {
-		FastTokenizer tok = new FastTokenizer("2.2",
+		Tokenizer tok = new Tokenizer("2.2",
 				ExpressionBuilder.MODE_DOUBLE);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
@@ -41,7 +41,7 @@ public class FastTokenizerDoubleTest {
 
 	@Test
 	public void testTokenization2() throws Exception {
-		FastTokenizer tok = new FastTokenizer("2.2 +   3.1445 - -17",
+		Tokenizer tok = new Tokenizer("2.2 +   3.1445 - -17",
 				ExpressionBuilder.MODE_DOUBLE);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
@@ -62,7 +62,7 @@ public class FastTokenizerDoubleTest {
 
 	@Test
 	public void testTokenization3() throws Exception {
-		FastTokenizer tok = new FastTokenizer(
+		Tokenizer tok = new Tokenizer(
 				"2.2 / - sin(3.1445) * 3.1445 - -17",
 				ExpressionBuilder.MODE_DOUBLE);
 		assertFalse(tok.isEOF());
@@ -97,7 +97,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization4() throws Exception {
 		String expression = "2 + 2";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -112,7 +112,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization5() throws Exception {
 		String expression = "sin(2)";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);
@@ -129,7 +129,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization6() throws Exception {
 		String expression = "3 * sin(2)/0.5";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -154,7 +154,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization7() throws Exception {
 		String expression = "3 * sin(2+sin(12.745))/0.5";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -189,7 +189,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization8() throws Exception {
 		String expression = "log(sin(1.0) + abs(2.5))";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);
@@ -222,7 +222,7 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization9() throws Exception {
 		String expression = "-1";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -235,14 +235,14 @@ public class FastTokenizerDoubleTest {
 	@Test
 	public void testTokenization10() throws Exception {
 		String expression = "-1 * -sin(3 * (-1.2))";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 	}
 
 	@Test
 	public void testTokenization11() throws Exception {
 		String expression = "-1.3422E2";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -259,7 +259,7 @@ public class FastTokenizerDoubleTest {
 		Map<String, Double> variables = new HashMap<>();
 		variables.put("x", 1d);
 		String expression = "-x";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, variables);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -275,7 +275,7 @@ public class FastTokenizerDoubleTest {
 		variables.put("x", 1d);
 		variables.put("y", 2d);
 		String expression = "-x*sin(y)";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, variables);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -299,7 +299,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator1() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"!"});
 		String expression = "1!";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -324,7 +324,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator2() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"$"});
 		String expression = "-1$6";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -340,7 +340,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator3() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"~"});
 		String expression = "~1.44";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.UNARY_OPERATOR);
@@ -352,7 +352,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator4() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"++"});
 		String expression = "1++";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -366,7 +366,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator5() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{">="});
 		String expression = "1>>2";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -377,7 +377,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomOperator6() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"++"});
 		String expression = "1+>2";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, null, customOperators);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -389,7 +389,7 @@ public class FastTokenizerDoubleTest {
 	@Test(expected = UnparseableExpressionException.class)
 	public void testCustomFunction1() throws Exception {
 		String expression = "invalid(1,2,3)";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE);
 		tok.nextToken();
 	}
@@ -398,7 +398,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomFunction2() throws Exception {
 		Map<String, Function> customFunctions = getCustomFunctionMap(new String[]{"sum"});
 		String expression = "sum(1,2,3)";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, customFunctions);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);
@@ -435,7 +435,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomFunction3() throws Exception {
 		Map<String, Function> customFunctions = getCustomFunctionMap(new String[]{"sum"});
 		String expression = "su(1,2,3)";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, customFunctions);
 		tok.nextToken();
 	}
@@ -444,7 +444,7 @@ public class FastTokenizerDoubleTest {
 	public void testCustomFunction4() throws Exception {
 		Map<String, Function> customFunctions = getCustomFunctionMap(new String[]{"sum"});
 		String expression = "sin(sum(1,2+3,3))";
-		FastTokenizer tok = new FastTokenizer(expression,
+		Tokenizer tok = new Tokenizer(expression,
 				ExpressionBuilder.MODE_DOUBLE, null, customFunctions);
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);

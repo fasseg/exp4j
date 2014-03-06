@@ -77,7 +77,7 @@ public class ComplexNumberMathTest {
 	}
 
 	@Test
-	public void testComplexMathArg() throws Exception {
+	public void testComplexArg() throws Exception {
 		double arg = ComplexNumberMath.arg(new ComplexNumber(0, 1));
 		assertEquals(Math.PI / 2d, arg, 0d);
 		arg = ComplexNumberMath.arg(new ComplexNumber(0d, 0d));
@@ -91,7 +91,7 @@ public class ComplexNumberMathTest {
 	}
 
 	@Test
-	public void testComplexMathMod() throws Exception {
+	public void testComplexMod() throws Exception {
 		double arg = ComplexNumberMath.mod(new ComplexNumber(1, 0));
 		assertEquals(1d, arg, 0);
 		arg = ComplexNumberMath.mod(new ComplexNumber(0, 1));

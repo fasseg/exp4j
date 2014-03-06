@@ -1,7 +1,7 @@
 package net.objecthunter.exp4j.tokens;
 
 import net.objecthunter.exp4j.function.Function;
-import net.objecthunter.exp4j.tokenizer.FastTokenizer;
+import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 public class FunctionToken extends Token {
 	private final Function func;

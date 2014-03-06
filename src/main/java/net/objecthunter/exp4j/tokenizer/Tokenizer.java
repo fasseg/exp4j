@@ -19,7 +19,7 @@ import net.objecthunter.exp4j.tokens.RightParanthesesToken;
 import net.objecthunter.exp4j.tokens.Token;
 import net.objecthunter.exp4j.tokens.VariableToken;
 
-public class FastTokenizer {
+public class Tokenizer {
 
 	private final char[] data;
 
@@ -41,7 +41,7 @@ public class FastTokenizer {
 
 	private final int mode;
 
-	public FastTokenizer(final char[] data, final int mode,
+	public Tokenizer(final char[] data, final int mode,
 			final Map<String, Double> variables,
 			final Map<String, Function> customFunctions,
 			final Map<String, Operator> customOperators) {
@@ -54,7 +54,7 @@ public class FastTokenizer {
 		this.customOperators = customOperators;
 	}
 
-	public FastTokenizer(final String expression, final int mode,
+	public Tokenizer(final String expression, final int mode,
 			final Map<String, Double> variables,
 			final Map<String, Function> customFunctions,
 			final Map<String, Operator> customOperators) {
@@ -62,16 +62,16 @@ public class FastTokenizer {
 				customOperators);
 	}
 
-	public FastTokenizer(final String expression, final int mode) {
+	public Tokenizer(final String expression, final int mode) {
 		this(expression, mode, null, null, null);
 	}
 
-	public FastTokenizer(final String expression, final int mode,
+	public Tokenizer(final String expression, final int mode,
 			final Map<String, Double> variables) {
 		this(expression.toCharArray(), mode, variables, null, null);
 	}
 
-	public FastTokenizer(final String expression, final int mode,
+	public Tokenizer(final String expression, final int mode,
 			final Map<String, Double> variables,
 			final Map<String, Function> customFunctions) {
 		this(expression.toCharArray(), mode, variables, customFunctions, null);

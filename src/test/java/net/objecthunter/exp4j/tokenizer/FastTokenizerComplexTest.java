@@ -24,7 +24,7 @@ import org.junit.Test;
 public class FastTokenizerComplexTest {
 	@Test
 	public void testTokenization1() throws Exception {
-		FastTokenizer tok = new FastTokenizer("2.2i", ExpressionBuilder.MODE_COMPLEX);
+		Tokenizer tok = new Tokenizer("2.2i", ExpressionBuilder.MODE_COMPLEX);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -37,7 +37,7 @@ public class FastTokenizerComplexTest {
 	}
 	@Test
 	public void testTokenization2() throws Exception {
-		FastTokenizer tok = new FastTokenizer("3+2.2i", ExpressionBuilder.MODE_COMPLEX);
+		Tokenizer tok = new Tokenizer("3+2.2i", ExpressionBuilder.MODE_COMPLEX);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -57,7 +57,7 @@ public class FastTokenizerComplexTest {
 	}
 	@Test
 	public void testTokenization3() throws Exception {
-		FastTokenizer tok = new FastTokenizer("3.1-2.2i", ExpressionBuilder.MODE_COMPLEX);
+		Tokenizer tok = new Tokenizer("3.1-2.2i", ExpressionBuilder.MODE_COMPLEX);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.NUMBER);
@@ -77,7 +77,7 @@ public class FastTokenizerComplexTest {
 	}
 	@Test
 	public void testTokenization4() throws Exception {
-		FastTokenizer tok = new FastTokenizer("sin(2.2i)", ExpressionBuilder.MODE_COMPLEX);
+		Tokenizer tok = new Tokenizer("sin(2.2i)", ExpressionBuilder.MODE_COMPLEX);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);
@@ -96,7 +96,7 @@ public class FastTokenizerComplexTest {
 	}
 	@Test
 	public void testTokenization5() throws Exception {
-		FastTokenizer tok = new FastTokenizer("sin(2i+2.2i)", ExpressionBuilder.MODE_COMPLEX);
+		Tokenizer tok = new Tokenizer("sin(2i+2.2i)", ExpressionBuilder.MODE_COMPLEX);
 		assertFalse(tok.isEOF());
 		tok.nextToken();
 		assertTrue(tok.getType() == Token.FUNCTION);

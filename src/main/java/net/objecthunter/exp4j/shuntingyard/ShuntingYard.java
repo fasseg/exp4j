@@ -9,7 +9,7 @@ import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
-import net.objecthunter.exp4j.tokenizer.FastTokenizer;
+import net.objecthunter.exp4j.tokenizer.Tokenizer;
 import net.objecthunter.exp4j.tokens.OperatorToken;
 import net.objecthunter.exp4j.tokens.Token;
 
@@ -38,7 +38,7 @@ public class ShuntingYard {
 
 	public List<Token> transformRpn(final String expression, final int mode)
 			throws UnparseableExpressionException {
-		final FastTokenizer tokenizer = new FastTokenizer(expression, mode,
+		final Tokenizer tokenizer = new Tokenizer(expression, mode,
 				this.variables,
 				this.customFunctions, this.customOperators);
 

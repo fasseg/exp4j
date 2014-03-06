@@ -60,7 +60,7 @@ public class ComplexExpression extends Expression<ComplexNumber> {
 									+ op.getSymbol());
 				}
 				ComplexNumber[] operands = new ComplexNumber[op.getArgumentCount()];
-				for (int i = 0; i < op.getArgumentCount(); i++) {
+				for (int i = op.getArgumentCount() - 1; i >= 0; i--) {
 					operands[i] = stack.pop();
 				}
 				stack.push(op.apply(operands));
@@ -75,7 +75,7 @@ public class ComplexExpression extends Expression<ComplexNumber> {
 										+ func.getName());
 					}
 					args = new ComplexNumber[func.getArgumentCount()];
-					for (int i = 0; i < func.getArgumentCount(); i++) {
+					for (int i = func.getArgumentCount() - 1; i >= 0; i--) {
 						args[i] = stack.pop();
 					}
 				} else {

@@ -59,7 +59,7 @@ public class DoubleExpression extends Expression<Double> {
 									+ op.getSymbol());
 				}
 				Double[] operands = new Double[op.getArgumentCount()];
-				for (int i = 0; i < op.getArgumentCount(); i++) {
+				for (int i = op.getArgumentCount() - 1; i >= 0; i--) {
 					operands[i] = stack.pop();
 				}
 				stack.push(op.apply(operands));
@@ -74,7 +74,7 @@ public class DoubleExpression extends Expression<Double> {
 										+ func.getName());
 					}
 					args = new Double[func.getArgumentCount()];
-					for (int i = 0; i < func.getArgumentCount(); i++) {
+					for (int i = func.getArgumentCount() - 1; i >= 0; i--) {
 						args[i] = stack.pop();
 					}
 				} else {

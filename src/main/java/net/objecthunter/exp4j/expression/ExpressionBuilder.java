@@ -83,7 +83,7 @@ public class ExpressionBuilder {
 	}
 	
 	public ComplexExpression buildComplex() throws UnparseableExpressionException {
-		final List<Token> tokens = new ShuntingYard(variables, customFunctions, customOperators).transformRpn(expression, MODE_BIGDECIMAL);
+		final List<Token> tokens = new ShuntingYard(variables, customFunctions, customOperators).transformRpn(expression, MODE_COMPLEX);
 		return new ComplexExpression(expression, tokens);
 	}
 }

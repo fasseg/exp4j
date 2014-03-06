@@ -113,4 +113,10 @@ public class ExpressionBuilderDoubleTest {
         double expected = sin(39916800d);
         assertEquals(expected,result,0d);
     }
+    @Test
+    public void testExpression8() throws Exception {
+        String exp = "2-3";
+        double result = new ExpressionBuilder(exp).buildDouble().evaluate();
+        assertEquals(-1d, result, 0d);
+    }
 }

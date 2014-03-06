@@ -80,7 +80,7 @@ public class ComplexNumber {
 			}
 		}
 		if (imaginary) {
-			img = Double.parseDouble(tmp.toString());
+			img = tmp.length() == 0 ? 1d : Double.parseDouble(tmp.toString());
 		} else {
 			real = Double.parseDouble(tmp.toString());
 		}

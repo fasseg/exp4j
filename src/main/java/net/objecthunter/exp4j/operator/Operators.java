@@ -110,7 +110,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_POWER] = new Operator<ComplexNumber>("^", 2, true, PRECEDENCE_POWER) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.power(args[0], args[1]);
 			};
 		};
 		builtinBigDecimal[INDEX_POWER] = new Operator<BigDecimal>("^", 2 , true, PRECEDENCE_POWER) {
@@ -148,7 +148,7 @@ public class Operators {
 		};
 		builtinComplex[INDEX_UNARYMINUS] = new Operator<ComplexNumber>("-", 1, true, PRECEDENCE_UNARY_MINUS) {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return new ComplexNumber(args[0].getReal() * -1d, args[0].getImaginary() * -1d);
 			};
 		};
 		builtinBigDecimal[INDEX_UNARYMINUS] = new Operator<BigDecimal>("-", 1 , true, PRECEDENCE_UNARY_MINUS) {
