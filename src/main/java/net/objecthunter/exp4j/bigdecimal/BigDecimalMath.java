@@ -2753,7 +2753,6 @@ public class BigDecimalMath {
 		double errR = Math.abs(y.ulp().doubleValue() / 2.)
 				+ Math.abs(x.ulp().doubleValue() / 2.);
 		MathContext mc = new MathContext(err2prec(resul.doubleValue(), errR));
-		System.out.println("round: " + resul.toPlainString() + "[" + BigDecimal.ZERO.compareTo(resul.round(MathContext.DECIMAL128)) + "]");
 		return resul.round(mc);
 	} /* subtractRound */
 

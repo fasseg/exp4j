@@ -144,6 +144,6 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(new BigDecimal("0.327194696796152244173344085267620606064301406893759791590056"), result);
+		assertEquals(new BigDecimal("0.3271946967961522441733440852676206"), result);
 	}
 }

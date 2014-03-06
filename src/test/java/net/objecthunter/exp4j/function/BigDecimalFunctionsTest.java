@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
@@ -12,15 +13,18 @@ import org.junit.Test;
 
 public class BigDecimalFunctionsTest {
 	private static MathContext mc = MathContext.DECIMAL128;
-	private static MathContext mcp2 = new MathContext(mc.getPrecision() + 2, mc.getRoundingMode());
+	private static MathContext mcp2 = new MathContext(mc.getPrecision() + 12,
+			mc.getRoundingMode());
 
 	@Test
 	public void testSin1() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2));
-		System.out.println(tmp.round(mc).toPlainString());
-		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
+		assertEquals(
+				-1,
+				BigDecimal.ZERO.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
@@ -28,36 +32,38 @@ public class BigDecimalFunctionsTest {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = sine.apply(BigDecimal.ZERO);
-		assertEquals(BigDecimal.ZERO, tmp);
+		assertEquals(
+				-1,
+				BigDecimal.ZERO.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
 	public void testSin3() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc));
-		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2).divide(
+				new BigDecimal(2)));
+		assertEquals(
+				-1,
+				BigDecimal.ONE.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
 	public void testSin4() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc).divide(
-				new BigDecimal(2)));
-		assertEquals(0,BigDecimal.ONE.compareTo(tmp));
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2)
+				.divide(new BigDecimal(2)).multiply(new BigDecimal(3)));
+		assertEquals(
+				-1,
+				BigDecimal.ONE.negate().subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
 	public void testSin5() throws Exception {
-		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
-				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc).divide(new BigDecimal(2)).multiply(new BigDecimal(3)));
-		assertEquals(0, BigDecimal.ONE.negate().compareTo(tmp));
-	}
-
-	@Test
-	public void testSin6() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal oneThird = BigDecimal.ONE.divide(new BigDecimal(3,
@@ -114,8 +120,11 @@ public class BigDecimalFunctionsTest {
 	public void testCos1() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc));
-		assertEquals(0, BigDecimal.ONE.negate().compareTo(tmp));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2));
+		assertEquals(
+				-1,
+				BigDecimal.ONE.negate().subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
@@ -130,16 +139,24 @@ public class BigDecimalFunctionsTest {
 	public void testCos3() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(new BigDecimal(2)));
-		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2).divide(
+				new BigDecimal(2)));
+		assertEquals(
+				-1,
+				BigDecimal.ZERO.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
 	public void testCos4() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(new BigDecimal(2), mc).multiply(new BigDecimal(3), mc));
-		assertEquals(0, BigDecimal.ZERO.compareTo(tmp));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2)
+				.divide(new BigDecimal(2), mcp2).multiply(new BigDecimal(3), mcp2));
+		assertEquals(
+				-1,
+				BigDecimal.ZERO.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test
@@ -150,9 +167,11 @@ public class BigDecimalFunctionsTest {
 				mc), mc);
 		BigDecimal tmp = cos.apply(oneThird);
 		System.out.println(tmp);
-		assertEquals(0,
+		assertEquals(
+				-1,
 				new BigDecimal("0.9449569463147376643882840076758806")
-						.compareTo(tmp));
+						.subtract(tmp).abs()
+						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
 	}
 
 	@Test(expected = ArithmeticException.class)

@@ -2,6 +2,7 @@ package net.objecthunter.exp4j.operator;
 
 import java.math.BigDecimal;
 
+import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.complex.ComplexNumberMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
@@ -115,11 +116,7 @@ public class Operators {
 		};
 		builtinBigDecimal[INDEX_POWER] = new Operator<BigDecimal>("^", 2 , true, PRECEDENCE_POWER) {
 			public BigDecimal apply(BigDecimal ... args) {
-				int exponent = args[1].intValue();
-				if (! new BigDecimal(exponent).equals(args[1])) {
-					throw new IllegalArgumentException("Only integer powers are supported in BigDecimal mode");
-				}
-				return args[0].pow(exponent);
+				return BigDecimalMath.pow(args[0], args[1]);
 			}
 		};
 		builtinDouble[INDEX_MODULO] = new Operator<Double>("%", 2, true,

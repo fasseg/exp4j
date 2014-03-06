@@ -31,7 +31,6 @@ public class Functions {
 	private static final Function<Double>[] builtinDouble = new Function[18];
 	private static final Function<ComplexNumber>[] builtinComplex = new Function[18];
 	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[18];
-	private static final MathContext defaultCtx = MathContext.DECIMAL128;
 
 	
 	static {
@@ -154,22 +153,22 @@ public class Functions {
 
 		builtinBigDecimal[INDEX_SIN]= new Function<BigDecimal> ("sin") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sin(args[0]).round(defaultCtx);
+				return BigDecimalMath.sin(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_COS]= new Function<BigDecimal> ("cos") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cos(args[0]).round(defaultCtx);
+				return BigDecimalMath.cos(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_TAN]= new Function<BigDecimal> ("tan") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tan(args[0]).round(defaultCtx);
+				return BigDecimalMath.tan(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_LOG]= new Function<BigDecimal> ("log") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.log(args[0]).round(defaultCtx);
+				return BigDecimalMath.log(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_LOG1P]= new Function<BigDecimal> ("log1p") {
@@ -184,22 +183,22 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_ACOS]= new Function<BigDecimal> ("acos") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.acos(args[0]).round(defaultCtx);
+				return BigDecimalMath.acos(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_ASIN]= new Function<BigDecimal> ("asin") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.asin(args[0]).round(defaultCtx);
+				return BigDecimalMath.asin(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_ATAN]= new Function<BigDecimal> ("atan") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.atan(args[0]).round(defaultCtx);
+				return BigDecimalMath.atan(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_CBRT]= new Function<BigDecimal> ("cbrt") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cbrt(args[0]).round(defaultCtx);
+				return BigDecimalMath.cbrt(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_FLOOR]= new Function<BigDecimal> ("floor") {
@@ -209,7 +208,7 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_SINH]= new Function<BigDecimal> ("sinh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sinh(args[0]).round(defaultCtx);
+				return BigDecimalMath.sinh(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_SQRT]= new Function<BigDecimal> ("sqrt") {
@@ -219,12 +218,12 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_TANH]= new Function<BigDecimal> ("tanh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tanh(args[0]).round(defaultCtx);
+				return BigDecimalMath.tanh(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_COSH]= new Function<BigDecimal> ("cosh") {
 			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cosh(args[0]).round(defaultCtx);
+				return BigDecimalMath.cosh(args[0]);
 			}
 		};
 		builtinBigDecimal[INDEX_CEIL]= new Function<BigDecimal> ("ceil") {
@@ -234,12 +233,24 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_MAX]= new Function<BigDecimal> ("max",0) {
 			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
+				BigDecimal max = args[0];
+				for (int i = 1; i < args.length; i++) {
+					if (max.compareTo(args[i]) < 1) {
+						max = args[i];
+					}
+				}
+				return max;
 			}
 		};
 		builtinBigDecimal[INDEX_MIN]= new Function<BigDecimal> ("min",0) {
 			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
+				BigDecimal min = args[0];
+				for (int i = 1; i < args.length; i++) {
+					if (min.compareTo(args[i]) == 1) {
+						min = args[i];
+					}
+				}
+				return min;
 			}
 		};
 
