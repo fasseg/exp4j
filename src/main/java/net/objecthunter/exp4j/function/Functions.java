@@ -178,7 +178,7 @@ public class Functions {
 		};
 		builtinBigDecimal[INDEX_ABS]= new Function<BigDecimal> ("abs") {
 			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
+				return args[0].abs();
 			}
 		};
 		builtinBigDecimal[INDEX_ACOS]= new Function<BigDecimal> ("acos") {
@@ -256,17 +256,17 @@ public class Functions {
 
 		builtinComplex[INDEX_SIN] = new Function<ComplexNumber> ("sin") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.sin(args[0]);
 			}
 		};
 		builtinComplex[INDEX_COS] = new Function<ComplexNumber> ("cos") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.cos(args[0]);
 			}
 		};
 		builtinComplex[INDEX_TAN] = new Function<ComplexNumber> ("tan") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.tan(args[0]);
 			}
 		};
 
@@ -277,75 +277,75 @@ public class Functions {
 		};
 		builtinComplex[INDEX_LOG1P] = new Function<ComplexNumber> ("log1p") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.log1p(args[0]);
 			}
 		};
 		builtinComplex[INDEX_ASIN] = new Function<ComplexNumber> ("asin") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.asin(args[0]);
 			}
 		};
 		builtinComplex[INDEX_ABS] = new Function<ComplexNumber> ("abs") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return new ComplexNumber(ComplexNumberMath.mod(args[0]), 0d);
 			}
 		};
 		builtinComplex[INDEX_ACOS] = new Function<ComplexNumber> ("acos") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.acos(args[0]);
 			}
 		};
 		builtinComplex[INDEX_ATAN] = new Function<ComplexNumber> ("atan") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.atan(args[0]);
 			}
 		};
 		builtinComplex[INDEX_CBRT] = new Function<ComplexNumber> ("cbrt") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.cbrt(args[0]);
 			}
 		};
 		builtinComplex[INDEX_FLOOR] = new Function<ComplexNumber> ("floor") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.floor(args[0]);
 			}
 		};
 
 		builtinComplex[INDEX_SINH] = new Function<ComplexNumber> ("sinh") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.sinh(args[0]);
 			}
 		};
 
 		builtinComplex[INDEX_SQRT] = new Function<ComplexNumber> ("sqrt") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.sqrt(args[0]);
 			}
 		};
 		builtinComplex[INDEX_TANH] = new Function<ComplexNumber> ("tanh") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.tanh(args[0]);
 			}
 		};
 		builtinComplex[INDEX_COSH] = new Function<ComplexNumber> ("cosh") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.cosh(args[0]);
 			}
 		};
 		builtinComplex[INDEX_CEIL] = new Function<ComplexNumber> ("ceil") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				return ComplexNumberMath.ceil(args[0]);
 			}
 		};
 		builtinComplex[INDEX_MAX] = new Function<ComplexNumber> ("max") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				throw new IllegalArgumentException("Complex numbers are not well ordered. So max() is not implemented");
 			}
 		};
 
 		builtinComplex[INDEX_MIN] = new Function<ComplexNumber> ("min") {
 			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Not yet implemented");
+				throw new IllegalArgumentException("Complex numbers are not well ordered. So min() is not implemented");
 			}
 		};
 	}
