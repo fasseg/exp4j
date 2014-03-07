@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.expression.BigDecimalExpression;
+import net.objecthunter.exp4j.expression.ComplexExpression;
 import net.objecthunter.exp4j.expression.DoubleExpression;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 
@@ -21,6 +23,7 @@ public class PerformanceTest {
 	static final DecimalFormat format = new DecimalFormat("#.##");
 	static double resultDoubleExp4j;
 	static double resultBigDecimalExp4j;
+	static double resultComplexExp4j;
 	static double resultJava;
 
 	@Test
@@ -60,7 +63,28 @@ public class PerformanceTest {
 			count++;
 		}
 		resultBigDecimalExp4j = count;
-		System.out.println("exp4j BigDecimal:\t\t\t"
+		System.out.println("exp4j BigDecimal:\t\t"
+				+ format.format((double) count / 1000d) + "k calculations in "
+				+ timeout + " ms");
+	}
+
+	@Test
+	public void testExp4jComplexPerformance() throws Exception {
+		final String expr = "log(x) - y * (sqrt(x^cos(y)))";
+		final ComplexExpression res = new ExpressionBuilder(expr)
+				.variables(new String[] { "x", "y" })
+				.buildComplex();
+		final long start = System.currentTimeMillis();
+		final Random rnd = new Random();
+		int count = 0;
+		while (System.currentTimeMillis() - start <= timeout) {
+			res.setVariable("x", new ComplexNumber(rnd.nextDouble(), rnd.nextDouble()))
+					.setVariable("y", new ComplexNumber(rnd.nextDouble(), rnd.nextDouble()))
+					.evaluate();
+			count++;
+		}
+		resultComplexExp4j = count;
+		System.out.println("exp4j Complex:\t\t\t"
 				+ format.format((double) count / 1000d) + "k calculations in "
 				+ timeout + " ms");
 	}
@@ -77,7 +101,7 @@ public class PerformanceTest {
 			count++;
 		}
 		resultJava = count;
-		System.out.println("Java Math:\t\t"
+		System.out.println("Java Math:\t\t\t"
 				+ format.format((double) count / 1000d) + "k calculations in "
 				+ timeout + " ms");
 	}
@@ -86,18 +110,10 @@ public class PerformanceTest {
 	public static void printResultIfAny() {
 		if (resultDoubleExp4j > 0 && resultJava > 0) {
 			System.out
-					.println("Ratio Java to exp4j Double:\t"
+					.println("Ratio exp4j Double to Java:\t"
 							+ format.format((double) resultJava
 									/ (double) resultDoubleExp4j));
-			System.out.println("Percent of Java:\t" + format.format(100
+			System.out.println("Perc. exp4j Double of Java:\t" + format.format(100
 					* (double) resultDoubleExp4j / (double) resultJava) + " %");
-		}
-		if (resultBigDecimalExp4j > 0 && resultJava > 0) {
-			System.out
-					.println("Ratio Java to exp4j BigDecimal:\t"
-							+ format.format((double) resultJava
-									/ (double) resultBigDecimalExp4j));
-			System.out.println("Percent of Java:\t" + format.format(100
-					* (double) resultBigDecimalExp4j / (double) resultJava) + " %");
 		}
 	}}

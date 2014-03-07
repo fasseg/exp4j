@@ -69,7 +69,6 @@ public class BigDecimalFunctionsTest {
 		BigDecimal oneThird = BigDecimal.ONE.divide(new BigDecimal(3,
 				mc), mc);
 		BigDecimal tmp = sine.apply(oneThird);
-		System.out.println(tmp);
 		assertEquals(0,
 				new BigDecimal("0.32719469679615224417334408526762060")
 						.compareTo(tmp));
@@ -166,7 +165,6 @@ public class BigDecimalFunctionsTest {
 		BigDecimal oneThird = BigDecimal.ONE.divide(new BigDecimal(3,
 				mc), mc);
 		BigDecimal tmp = cos.apply(oneThird);
-		System.out.println(tmp);
 		assertEquals(
 				-1,
 				new BigDecimal("0.9449569463147376643882840076758806")
