@@ -153,8 +153,6 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		System.out.println(result.toPlainString());
-		System.out.println(result.precision() + ":" + + result.scale());
 		assertEquals(0,new BigDecimal(512).compareTo(result));
 	}
 	@Test
@@ -163,8 +161,6 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		System.out.println(result.toPlainString());
-		System.out.println(result.precision() + ":" + + result.scale());
 		assertEquals(0,new BigDecimal("512").compareTo(result));
 	}
 	@Test

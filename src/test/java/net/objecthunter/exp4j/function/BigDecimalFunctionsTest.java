@@ -20,11 +20,7 @@ public class BigDecimalFunctionsTest {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc));
-		System.out.println(tmp);
-		assertEquals(
-				-1,
-				BigDecimal.ZERO.subtract(tmp).abs()
-						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
+		assertEquals(0,BigDecimal.ZERO.compareTo(tmp));
 	}
 
 	@Test
@@ -120,10 +116,7 @@ public class BigDecimalFunctionsTest {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc));
-		assertEquals(
-				-1,
-				BigDecimal.ONE.negate().subtract(tmp).abs()
-						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
+		assertEquals(0,BigDecimal.ONE.negate().compareTo(tmp));
 	}
 
 	@Test
@@ -140,10 +133,7 @@ public class BigDecimalFunctionsTest {
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(
 				new BigDecimal(2)));
-		assertEquals(
-				-1,
-				BigDecimal.ZERO.subtract(tmp).abs()
-						.compareTo(new BigDecimal("1e-" + mc.getPrecision())));
+		assertEquals(0,BigDecimal.ZERO.compareTo(tmp));
 	}
 
 	@Test
