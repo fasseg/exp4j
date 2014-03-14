@@ -73,9 +73,9 @@ public class ShuntingYardBigDecimalTest {
 		List<Token> tokens = sy.transformRpn("sin(1+2)",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		assertEquals(Token.NUMBER, tokens.get(0).getType());
-		assertEquals(BigDecimal.ONE, (BigDecimal) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(0,BigDecimal.ONE.compareTo((BigDecimal) ((NumberToken) tokens.get(0)).getValue()));
 		assertEquals(Token.NUMBER, tokens.get(1).getType());
-		assertEquals(new BigDecimal(2), (BigDecimal) ((NumberToken) tokens.get(1)).getValue());
+		assertEquals(0, new BigDecimal(2).compareTo((BigDecimal) ((NumberToken) tokens.get(1)).getValue()));
 		assertEquals(Token.OPERATOR, tokens.get(2).getType());
 		assertEquals("+", ((OperatorToken) tokens.get(2)).getOperator()
 				.getSymbol());
@@ -100,9 +100,9 @@ public class ShuntingYardBigDecimalTest {
 		List<Token> tokens = sy.transformRpn("3#2",
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		assertEquals(Token.NUMBER, tokens.get(0).getType());
-		assertEquals(new BigDecimal(3), (BigDecimal) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(0, new BigDecimal(3).compareTo((BigDecimal) ((NumberToken) tokens.get(0)).getValue()));
 		assertEquals(Token.NUMBER, tokens.get(1).getType());
-		assertEquals(new BigDecimal(2), (BigDecimal) ((NumberToken) tokens.get(1)).getValue());
+		assertEquals(0, new BigDecimal(2).compareTo((BigDecimal) ((NumberToken) tokens.get(1)).getValue()));
 		assertEquals(Token.OPERATOR, tokens.get(2).getType());
 		assertEquals("#", ((OperatorToken) tokens.get(2)).getOperator()
 				.getSymbol());
@@ -120,10 +120,10 @@ public class ShuntingYardBigDecimalTest {
 				ExpressionBuilder.MODE_BIGDECIMAL);
 		assertEquals(Token.NUMBER, tokens.get(0).getType());
 		assertTrue(((NumberToken) tokens.get(0)).getValue().getClass() == BigDecimal.class);
-		assertEquals(BigDecimal.ONE, (BigDecimal) ((NumberToken) tokens.get(0)).getValue());
+		assertEquals(0, BigDecimal.ONE.compareTo((BigDecimal) ((NumberToken) tokens.get(0)).getValue()));
 		assertEquals(Token.NUMBER, tokens.get(1).getType());
 		assertTrue(((NumberToken) tokens.get(1)).getValue().getClass() == BigDecimal.class);
-		assertEquals(BigDecimal.ONE.add(BigDecimal.ONE), (BigDecimal) ((NumberToken) tokens.get(1)).getValue());
+		assertEquals(0, BigDecimal.ONE.add(BigDecimal.ONE).compareTo((BigDecimal) ((NumberToken) tokens.get(1)).getValue()));
 		assertEquals(Token.OPERATOR, tokens.get(2).getType());
 		assertEquals("+", ((OperatorToken) tokens.get(2)).getOperator()
 				.getSymbol());

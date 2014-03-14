@@ -27,10 +27,11 @@ public class Functions {
 	public static final int INDEX_COSH = 15;
 	public static final int INDEX_MAX = 16;
 	public static final int INDEX_MIN = 17;
+	public static final int INDEX_POW = 18;
 	
-	private static final Function<Double>[] builtinDouble = new Function[18];
-	private static final Function<ComplexNumber>[] builtinComplex = new Function[18];
-	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[18];
+	private static final Function<Double>[] builtinDouble = new Function[19];
+	private static final Function<ComplexNumber>[] builtinComplex = new Function[19];
+	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[19];
 
 	
 	static {
@@ -150,6 +151,12 @@ public class Functions {
 				return min;
 			}
 		};
+		builtinDouble[INDEX_POW] = new Function<Double>("pow",2) {
+			@Override
+			public Double apply(Double... args) {
+				return Math.pow(args[0], args[1]);
+			}
+		};
 
 		builtinBigDecimal[INDEX_SIN]= new Function<BigDecimal> ("sin") {
 			public BigDecimal apply(BigDecimal ... args) {
@@ -253,6 +260,15 @@ public class Functions {
 				return min;
 			}
 		};
+		builtinBigDecimal[INDEX_POW] = new Function<BigDecimal>("pow",2) {
+			@Override
+			public BigDecimal apply(BigDecimal... args) {
+				if (args[1].compareTo(new BigDecimal(args[1].toBigInteger())) == 0) {
+					return BigDecimalMath.powRound(args[0],args[1].toBigInteger());
+				}
+				return BigDecimalMath.pow(args[0], args[1]);
+			}
+		};
 
 		builtinComplex[INDEX_SIN] = new Function<ComplexNumber> ("sin") {
 			public ComplexNumber apply(ComplexNumber ... args) {
@@ -348,6 +364,11 @@ public class Functions {
 				throw new IllegalArgumentException("Complex numbers are not well ordered. So min() is not implemented");
 			}
 		};
+		builtinComplex[INDEX_POW] = new Function<ComplexNumber> ("pow",2) {
+			public ComplexNumber apply(ComplexNumber ... args) {
+				return ComplexNumberMath.power(args[0], args[1]);
+			}
+		};
 	}
 
 	public static char[] getAllowedFunctionCharacters() {
@@ -416,6 +437,8 @@ public class Functions {
 			return funcs[INDEX_SQRT];
 		case "cbrt":
 			return funcs[INDEX_CBRT];
+		case "pow":
+			return funcs[INDEX_POW];
 			default:
 				return null;
 		}

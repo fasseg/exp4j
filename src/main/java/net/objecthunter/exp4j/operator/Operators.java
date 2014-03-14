@@ -116,6 +116,9 @@ public class Operators {
 		};
 		builtinBigDecimal[INDEX_POWER] = new Operator<BigDecimal>("^", 2 , true, PRECEDENCE_POWER) {
 			public BigDecimal apply(BigDecimal ... args) {
+				if (args[1].compareTo(new BigDecimal(args[1].toBigInteger())) == 0) {
+					return BigDecimalMath.powRound(args[0],args[1].toBigInteger());
+				}
 				return BigDecimalMath.pow(args[0], args[1]);
 			}
 		};

@@ -6,6 +6,7 @@ import static java.lang.Math.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
@@ -18,7 +19,7 @@ public class ExpressionBuilderBigDecimalTest {
 		String exp = "2+3";
 		BigDecimal result = new ExpressionBuilder(exp).buildBigDecimal()
 				.evaluate();
-		assertEquals(new BigDecimal(5), result);
+		assertEquals(0, new BigDecimal(5).compareTo(result));
 	}
 
 	@Test
@@ -26,7 +27,7 @@ public class ExpressionBuilderBigDecimalTest {
 		String exp = "sin(0)";
 		BigDecimal result = new ExpressionBuilder(exp).buildBigDecimal()
 				.evaluate();
-		assertEquals(BigDecimal.ZERO, result);
+		assertEquals(0,BigDecimal.ZERO.compareTo(result));
 	}
 
 	@Test
@@ -39,7 +40,7 @@ public class ExpressionBuilderBigDecimalTest {
 						return args[0].add(args[1]);
 					}
 				}).buildBigDecimal().evaluate();
-		assertEquals(new BigDecimal(2), result);
+		assertEquals(0, new BigDecimal(2).compareTo(result));
 	}
 
 	@Test
@@ -56,7 +57,7 @@ public class ExpressionBuilderBigDecimalTest {
 						return result;
 					}
 				}).buildBigDecimal().evaluate();
-		assertEquals(new BigDecimal(55), result);
+		assertEquals(0,new BigDecimal(55).compareTo(result));
 	}
 
 	@Test
@@ -73,7 +74,7 @@ public class ExpressionBuilderBigDecimalTest {
 				.operator(op)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(new BigDecimal(4), result);
+		assertEquals(0,new BigDecimal(4).compareTo(result));
 	}
 
 	@Test
@@ -84,7 +85,7 @@ public class ExpressionBuilderBigDecimalTest {
 			@Override
 			public BigDecimal apply(BigDecimal... args) {
 				int operand = args[0].intValue();
-				if (!args[0].equals(new BigDecimal(operand))) {
+				if (new BigDecimal(operand).compareTo(args[0]) != 0) {
 					throw new IllegalArgumentException(
 							"Factorial can only be calculated from an integer. maybe impleent the Gamma function");
 				}
@@ -99,7 +100,7 @@ public class ExpressionBuilderBigDecimalTest {
 				.operator(op)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(new BigDecimal(39916800), result);
+		assertEquals(0,new BigDecimal(39916800).compareTo(result));
 	}
 
 	@Test
@@ -111,7 +112,7 @@ public class ExpressionBuilderBigDecimalTest {
 				.buildBigDecimal()
 				.evaluate();
 		BigDecimal should = third.add(third, ctx);
-		assertEquals(should, result);
+		assertEquals(0,should.compareTo(result));
 		assertEquals(ctx.getPrecision() + 2, result.toString().length());
 	}
 	@Test
@@ -122,7 +123,7 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(third, result);
+		assertEquals(0,third.compareTo(result));
 		assertEquals(ctx.getPrecision() + 2, result.toString().length());
 	}
 	@Test
@@ -133,7 +134,7 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(BigDecimal.TEN, result);
+		assertEquals(0,BigDecimal.TEN.compareTo(result));
 	}
 
 	@Test
@@ -144,6 +145,33 @@ public class ExpressionBuilderBigDecimalTest {
 		BigDecimal result = new ExpressionBuilder(exp)
 				.buildBigDecimal()
 				.evaluate();
-		assertEquals(new BigDecimal("0.3271946967961522441733440852676206"), result);
+		assertEquals(0,new BigDecimal("0.3271946967961522441733440852676206").compareTo(result));
+	}
+	@Test
+	public void testExpression11() throws Exception {
+		String exp = "pow(2,9)";
+		BigDecimal result = new ExpressionBuilder(exp)
+				.buildBigDecimal()
+				.evaluate();
+		System.out.println(result.toPlainString());
+		System.out.println(result.precision() + ":" + + result.scale());
+		assertEquals(0,new BigDecimal(512).compareTo(result));
+	}
+	@Test
+	public void testExpression12() throws Exception {
+		String exp = "2^9";
+		BigDecimal result = new ExpressionBuilder(exp)
+				.buildBigDecimal()
+				.evaluate();
+		System.out.println(result.toPlainString());
+		System.out.println(result.precision() + ":" + + result.scale());
+		assertEquals(0,new BigDecimal("512").compareTo(result));
+	}
+	@Test
+	public void testExpression13() throws Exception {
+		String exp = "2^45999";
+		BigDecimal result = new ExpressionBuilder(exp)
+				.buildBigDecimal()
+				.evaluate();
 	}
 }

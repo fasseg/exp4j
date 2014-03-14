@@ -13,14 +13,14 @@ import org.junit.Test;
 
 public class BigDecimalFunctionsTest {
 	private static MathContext mc = MathContext.DECIMAL128;
-	private static MathContext mcp2 = new MathContext(mc.getPrecision() + 12,
-			mc.getRoundingMode());
+	//private static MathContext mcp2 = new MathContext(mc.getPrecision() + 12,mc.getRoundingMode());
 
 	@Test
 	public void testSin1() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2));
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc));
+		System.out.println(tmp);
 		assertEquals(
 				-1,
 				BigDecimal.ZERO.subtract(tmp).abs()
@@ -42,7 +42,7 @@ public class BigDecimalFunctionsTest {
 	public void testSin3() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2).divide(
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc).divide(
 				new BigDecimal(2)));
 		assertEquals(
 				-1,
@@ -54,7 +54,7 @@ public class BigDecimalFunctionsTest {
 	public void testSin4() throws Exception {
 		Function<BigDecimal> sine = Functions.getBuiltinFunction("sin",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mcp2)
+		BigDecimal tmp = sine.apply(BigDecimalMath.pi(mc)
 				.divide(new BigDecimal(2)).multiply(new BigDecimal(3)));
 		assertEquals(
 				-1,
@@ -119,7 +119,7 @@ public class BigDecimalFunctionsTest {
 	public void testCos1() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc));
 		assertEquals(
 				-1,
 				BigDecimal.ONE.negate().subtract(tmp).abs()
@@ -138,7 +138,7 @@ public class BigDecimalFunctionsTest {
 	public void testCos3() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2).divide(
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc).divide(
 				new BigDecimal(2)));
 		assertEquals(
 				-1,
@@ -150,8 +150,8 @@ public class BigDecimalFunctionsTest {
 	public void testCos4() throws Exception {
 		Function<BigDecimal> cos = Functions.getBuiltinFunction("cos",
 				ExpressionBuilder.MODE_BIGDECIMAL);
-		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mcp2)
-				.divide(new BigDecimal(2), mcp2).multiply(new BigDecimal(3), mcp2));
+		BigDecimal tmp = cos.apply(BigDecimalMath.pi(mc)
+				.divide(new BigDecimal(2), mc).multiply(new BigDecimal(3), mc));
 		assertEquals(
 				-1,
 				BigDecimal.ZERO.subtract(tmp).abs()

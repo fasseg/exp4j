@@ -1,8 +1,10 @@
 package net.objecthunter.exp4j.tokenizer;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Map;
 
+import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
 import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
@@ -20,6 +22,7 @@ import net.objecthunter.exp4j.tokens.Token;
 import net.objecthunter.exp4j.tokens.VariableToken;
 
 public class Tokenizer {
+
 
 	private final char[] data;
 
@@ -271,13 +274,13 @@ public class Tokenizer {
 			case Token.NUMBER :
 				switch (mode) {
 					case ExpressionBuilder.MODE_DOUBLE :
-						return new NumberToken(
+						return new NumberToken<Double>(
 								Double.parseDouble(this.currentValue));
 					case ExpressionBuilder.MODE_BIGDECIMAL :
-						return new NumberToken(
-								new BigDecimal(this.currentValue));
+						BigDecimal tmp = new BigDecimal(this.currentValue);
+						return new NumberToken<BigDecimal>(BigDecimalMath.scalePrec(tmp, MathContext.DECIMAL128));
 					case ExpressionBuilder.MODE_COMPLEX :
-						return new NumberToken(ComplexNumber.parseComplex(this.currentValue));
+						return new NumberToken<ComplexNumber>(ComplexNumber.parseComplex(this.currentValue));
 				}
 			case Token.PARANTHESES_RIGHT :
 				return new RightParanthesesToken();

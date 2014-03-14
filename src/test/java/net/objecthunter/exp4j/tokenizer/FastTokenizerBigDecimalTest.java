@@ -309,6 +309,21 @@ public class FastTokenizerBigDecimalTest {
 	}
 
 	@Test
+	public void testTokenization14() throws Exception {
+		String expression = "2^9";
+		Tokenizer tok = new Tokenizer(expression,
+				ExpressionBuilder.MODE_BIGDECIMAL);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.NUMBER);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.OPERATOR);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.NUMBER);
+		tok.nextToken();
+		assertTrue(tok.getType() == Token.EOF);
+	}
+
+	@Test
 	public void testCustomOperator1() throws Exception {
 		Map<String, Operator> customOperators = getCustomOperatorMap(new String[]{"!"});
 		String expression = "1!";

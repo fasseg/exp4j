@@ -742,4 +742,3 @@ public class Rational implements Cloneable, Comparable<Rational>
                 }
         } /* Rational.normalize */
 } /* Rational */
-
