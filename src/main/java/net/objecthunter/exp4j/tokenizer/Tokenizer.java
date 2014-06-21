@@ -1,27 +1,16 @@
 package net.objecthunter.exp4j.tokenizer;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Map;
-
-import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
-import net.objecthunter.exp4j.complex.ComplexNumber;
 import net.objecthunter.exp4j.exception.UnparseableExpressionException;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
-import net.objecthunter.exp4j.tokens.ArgumentSeparatorToken;
-import net.objecthunter.exp4j.tokens.FunctionToken;
-import net.objecthunter.exp4j.tokens.LeftParanthesesToken;
-import net.objecthunter.exp4j.tokens.NumberToken;
-import net.objecthunter.exp4j.tokens.OperatorToken;
-import net.objecthunter.exp4j.tokens.RightParanthesesToken;
-import net.objecthunter.exp4j.tokens.Token;
-import net.objecthunter.exp4j.tokens.VariableToken;
+import net.objecthunter.exp4j.tokens.*;
 
-public class Tokenizer {
+import java.util.Map;
+
+public class Tokenizer<T> {
 
 
 	private final char[] data;
@@ -38,14 +27,14 @@ public class Tokenizer {
 
 	private final Map<String, Function> customFunctions;
 
-	private final Map<String, Double> variables;
+	private final Map<String, T> variables;
 
 	private final StringBuilder valBuilder = new StringBuilder();
 
 	private final int mode;
 
 	public Tokenizer(final char[] data, final int mode,
-			final Map<String, Double> variables,
+			final Map<String, T> variables,
 			final Map<String, Function> customFunctions,
 			final Map<String, Operator> customOperators) {
 		super();
@@ -58,7 +47,7 @@ public class Tokenizer {
 	}
 
 	public Tokenizer(final String expression, final int mode,
-			final Map<String, Double> variables,
+			final Map<String, T> variables,
 			final Map<String, Function> customFunctions,
 			final Map<String, Operator> customOperators) {
 		this(expression.toCharArray(), mode, variables, customFunctions,
@@ -70,12 +59,12 @@ public class Tokenizer {
 	}
 
 	public Tokenizer(final String expression, final int mode,
-			final Map<String, Double> variables) {
+			final Map<String, T> variables) {
 		this(expression.toCharArray(), mode, variables, null, null);
 	}
 
 	public Tokenizer(final String expression, final int mode,
-			final Map<String, Double> variables,
+			final Map<String, T> variables,
 			final Map<String, Function> customFunctions) {
 		this(expression.toCharArray(), mode, variables, customFunctions, null);
 	}
@@ -101,7 +90,7 @@ public class Tokenizer {
 		} while (Character.isWhitespace(ch));
 
 		// try parse a number from the stream
-		if (Character.isDigit(ch) || ch == '.' || (mode == ExpressionBuilder.MODE_COMPLEX && ch == 'i')) {
+		if (Character.isDigit(ch) || ch == '.') {
 			valBuilder.append(ch);
 			// read all chars into value and set the type to number
 			this.currentType = Token.NUMBER;
@@ -112,7 +101,7 @@ public class Tokenizer {
 					break;
 				} else {
 					ch = data[offset];
-					if (Character.isDigit(ch) || ch == '.'|| (mode == ExpressionBuilder.MODE_COMPLEX && ch == 'i')) {
+					if (Character.isDigit(ch) || ch == '.') {
 						valBuilder.append(ch);
 						this.index = ++offset;
 					} else {
@@ -276,11 +265,8 @@ public class Tokenizer {
 					case ExpressionBuilder.MODE_DOUBLE :
 						return new NumberToken<Double>(
 								Double.parseDouble(this.currentValue));
-					case ExpressionBuilder.MODE_BIGDECIMAL :
-						BigDecimal tmp = new BigDecimal(this.currentValue);
-						return new NumberToken<BigDecimal>(BigDecimalMath.scalePrec(tmp, MathContext.DECIMAL128));
-					case ExpressionBuilder.MODE_COMPLEX :
-						return new NumberToken<ComplexNumber>(ComplexNumber.parseComplex(this.currentValue));
+                    default:
+                        throw new IllegalArgumentException("Mode " + mode + " is not available");
 				}
 			case Token.PARANTHESES_RIGHT :
 				return new RightParanthesesToken();

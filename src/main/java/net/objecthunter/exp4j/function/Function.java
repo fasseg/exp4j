@@ -3,8 +3,8 @@ package net.objecthunter.exp4j.function;
 import java.math.MathContext;
 
 public abstract class Function<T> {
-	private final String name;
-	private final int argc;
+	protected final String name;
+	protected final int argc;
 
 	public Function(final String name, final int argc) {
 		super();

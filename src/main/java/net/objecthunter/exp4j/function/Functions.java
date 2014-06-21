@@ -1,11 +1,5 @@
 package net.objecthunter.exp4j.function;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
-import net.objecthunter.exp4j.bigdecimal.BigDecimalMath;
-import net.objecthunter.exp4j.complex.ComplexNumber;
-import net.objecthunter.exp4j.complex.ComplexNumberMath;
 import net.objecthunter.exp4j.expression.ExpressionBuilder;
 
 public class Functions {
@@ -30,346 +24,132 @@ public class Functions {
 	public static final int INDEX_POW = 18;
 	
 	private static final Function<Double>[] builtinDouble = new Function[19];
-	private static final Function<ComplexNumber>[] builtinComplex = new Function[19];
-	private static final Function<BigDecimal>[] builtinBigDecimal = new Function[19];
 
-	
 	static {
-		builtinDouble[INDEX_SIN] = new Function<Double>("sin") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.sin(args[0]);
-			}
-		};
-		builtinDouble[INDEX_COS] = new Function<Double>("cos") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.cos(args[0]);
-			}
-		};
-		builtinDouble[INDEX_TAN] = new Function<Double>("tan") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.tan(args[0]);
-			}
-		};
-		builtinDouble[INDEX_LOG] = new Function<Double>("log") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.log(args[0]);
-			}
-		};
-		builtinDouble[INDEX_LOG1P] = new Function<Double>("log1p") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.log1p(args[0]);
-			}
-		};
-		builtinDouble[INDEX_ABS] = new Function<Double>("abs") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.abs(args[0]);
-			}
-		};
-		builtinDouble[INDEX_ACOS] = new Function<Double>("acos") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.acos(args[0]);
-			}
-		};
-		builtinDouble[INDEX_ASIN] = new Function<Double>("asin") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.asin(args[0]);
-			}
-		};
-		builtinDouble[INDEX_ATAN] = new Function<Double>("atan") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.atan(args[0]);
-			}
-		};
-		builtinDouble[INDEX_CBRT] = new Function<Double>("cbrt") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.cbrt(args[0]);
-			}
-		};
-		builtinDouble[INDEX_FLOOR] = new Function<Double>("floor") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.floor(args[0]);
-			}
-		};
-		builtinDouble[INDEX_SINH] = new Function<Double>("sinh") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.sinh(args[0]);
-			}
-		};
-		builtinDouble[INDEX_SQRT] = new Function<Double>("sqrt") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.sqrt(args[0]);
-			}
-		};
-		builtinDouble[INDEX_TANH] = new Function<Double>("tanh") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.tanh(args[0]);
-			}
-		};
-		builtinDouble[INDEX_COSH] = new Function<Double>("cosh") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.cosh(args[0]);
-			}
-		};
-		builtinDouble[INDEX_CEIL] = new Function<Double>("ceil") {
-			@Override
-			public Double apply(Double... args) {
-				return Math.ceil(args[0]);
-			}
-		};
-		builtinDouble[INDEX_MAX] = new Function<Double>("max",0) {
-			@Override
-			public Double apply(Double... args) {
-				double max = Double.MIN_VALUE;
-				for (double arg: args) {
-					max = (arg > max) ? arg : max;
-				}
-				return max;
-			}
-		};
-		builtinDouble[INDEX_MIN] = new Function<Double>("min",0) {
-			@Override
-			public Double apply(Double... args) {
-				double min = Double.MAX_VALUE;
-				for (double arg: args) {
-					min = (arg < min) ? arg : min;
-				}
-				return min;
-			}
-		};
-		builtinDouble[INDEX_POW] = new Function<Double>("pow",2) {
-			@Override
-			public Double apply(Double... args) {
-				return Math.pow(args[0], args[1]);
-			}
-		};
+        builtinDouble[INDEX_SIN] = new Function<Double>("sin") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.sin(args[0]);
+            }
+        };
+        builtinDouble[INDEX_COS] = new Function<Double>("cos") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.cos(args[0]);
+            }
+        };
+        builtinDouble[INDEX_TAN] = new Function<Double>("tan") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.tan(args[0]);
+            }
+        };
+        builtinDouble[INDEX_LOG] = new Function<Double>("log") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.log(args[0]);
+            }
+        };
+        builtinDouble[INDEX_LOG1P] = new Function<Double>("log1p") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.log1p(args[0]);
+            }
+        };
+        builtinDouble[INDEX_ABS] = new Function<Double>("abs") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.abs(args[0]);
+            }
+        };
+        builtinDouble[INDEX_ACOS] = new Function<Double>("acos") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.acos(args[0]);
+            }
+        };
+        builtinDouble[INDEX_ASIN] = new Function<Double>("asin") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.asin(args[0]);
+            }
+        };
+        builtinDouble[INDEX_ATAN] = new Function<Double>("atan") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.atan(args[0]);
+            }
+        };
+        builtinDouble[INDEX_CBRT] = new Function<Double>("cbrt") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.cbrt(args[0]);
+            }
+        };
+        builtinDouble[INDEX_FLOOR] = new Function<Double>("floor") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.floor(args[0]);
+            }
+        };
+        builtinDouble[INDEX_SINH] = new Function<Double>("sinh") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.sinh(args[0]);
+            }
+        };
+        builtinDouble[INDEX_SQRT] = new Function<Double>("sqrt") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.sqrt(args[0]);
+            }
+        };
+        builtinDouble[INDEX_TANH] = new Function<Double>("tanh") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.tanh(args[0]);
+            }
+        };
+        builtinDouble[INDEX_COSH] = new Function<Double>("cosh") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.cosh(args[0]);
+            }
+        };
+        builtinDouble[INDEX_CEIL] = new Function<Double>("ceil") {
+            @Override
+            public Double apply(Double... args) {
+                return Math.ceil(args[0]);
+            }
+        };
+        builtinDouble[INDEX_MAX] = new Function<Double>("max", 0) {
+            @Override
+            public Double apply(Double... args) {
+                double max = Double.MIN_VALUE;
+                for (double arg : args) {
+                    max = (arg > max) ? arg : max;
+                }
+                return max;
+            }
+        };
+        builtinDouble[INDEX_MIN] = new Function<Double>("min", 0) {
+            @Override
+            public Double apply(Double... args) {
+                double min = Double.MAX_VALUE;
+                for (double arg : args) {
+                    min = (arg < min) ? arg : min;
+                }
+                return min;
+            }
+        };
+        builtinDouble[INDEX_POW] = new Function<Double>("pow", 2) {
+            @Override
+            public Double apply(Double... args) {
+                return Math.pow(args[0], args[1]);
+            }
+        };
 
-		builtinBigDecimal[INDEX_SIN]= new Function<BigDecimal> ("sin") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sin(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_COS]= new Function<BigDecimal> ("cos") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cos(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_TAN]= new Function<BigDecimal> ("tan") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tan(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_LOG]= new Function<BigDecimal> ("log") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.log(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_LOG1P]= new Function<BigDecimal> ("log1p") {
-			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
-			}
-		};
-		builtinBigDecimal[INDEX_ABS]= new Function<BigDecimal> ("abs") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return args[0].abs();
-			}
-		};
-		builtinBigDecimal[INDEX_ACOS]= new Function<BigDecimal> ("acos") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.acos(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_ASIN]= new Function<BigDecimal> ("asin") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.asin(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_ATAN]= new Function<BigDecimal> ("atan") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.atan(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_CBRT]= new Function<BigDecimal> ("cbrt") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cbrt(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_FLOOR]= new Function<BigDecimal> ("floor") {
-			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
-			}
-		};
-		builtinBigDecimal[INDEX_SINH]= new Function<BigDecimal> ("sinh") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sinh(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_SQRT]= new Function<BigDecimal> ("sqrt") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.sqrt(args[0], MathContext.DECIMAL128);
-			}
-		};
-		builtinBigDecimal[INDEX_TANH]= new Function<BigDecimal> ("tanh") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.tanh(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_COSH]= new Function<BigDecimal> ("cosh") {
-			public BigDecimal apply(BigDecimal ... args) {
-				return BigDecimalMath.cosh(args[0]);
-			}
-		};
-		builtinBigDecimal[INDEX_CEIL]= new Function<BigDecimal> ("ceil") {
-			public BigDecimal apply(BigDecimal ... args) {
-				throw new RuntimeException("Not yet implemented");
-			}
-		};
-		builtinBigDecimal[INDEX_MAX]= new Function<BigDecimal> ("max",0) {
-			public BigDecimal apply(BigDecimal ... args) {
-				BigDecimal max = args[0];
-				for (int i = 1; i < args.length; i++) {
-					if (max.compareTo(args[i]) < 1) {
-						max = args[i];
-					}
-				}
-				return max;
-			}
-		};
-		builtinBigDecimal[INDEX_MIN]= new Function<BigDecimal> ("min",0) {
-			public BigDecimal apply(BigDecimal ... args) {
-				BigDecimal min = args[0];
-				for (int i = 1; i < args.length; i++) {
-					if (min.compareTo(args[i]) == 1) {
-						min = args[i];
-					}
-				}
-				return min;
-			}
-		};
-		builtinBigDecimal[INDEX_POW] = new Function<BigDecimal>("pow",2) {
-			@Override
-			public BigDecimal apply(BigDecimal... args) {
-				if (args[1].compareTo(new BigDecimal(args[1].toBigInteger())) == 0) {
-					return BigDecimalMath.powRound(args[0],args[1].toBigInteger());
-				}
-				return BigDecimalMath.pow(args[0], args[1]);
-			}
-		};
-
-		builtinComplex[INDEX_SIN] = new Function<ComplexNumber> ("sin") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.sin(args[0]);
-			}
-		};
-		builtinComplex[INDEX_COS] = new Function<ComplexNumber> ("cos") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.cos(args[0]);
-			}
-		};
-		builtinComplex[INDEX_TAN] = new Function<ComplexNumber> ("tan") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.tan(args[0]);
-			}
-		};
-
-		builtinComplex[INDEX_LOG] = new Function<ComplexNumber> ("log") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.log(args[0]);
-			}
-		};
-		builtinComplex[INDEX_LOG1P] = new Function<ComplexNumber> ("log1p") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.log1p(args[0]);
-			}
-		};
-		builtinComplex[INDEX_ASIN] = new Function<ComplexNumber> ("asin") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.asin(args[0]);
-			}
-		};
-		builtinComplex[INDEX_ABS] = new Function<ComplexNumber> ("abs") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return new ComplexNumber(ComplexNumberMath.mod(args[0]), 0d);
-			}
-		};
-		builtinComplex[INDEX_ACOS] = new Function<ComplexNumber> ("acos") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.acos(args[0]);
-			}
-		};
-		builtinComplex[INDEX_ATAN] = new Function<ComplexNumber> ("atan") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.atan(args[0]);
-			}
-		};
-		builtinComplex[INDEX_CBRT] = new Function<ComplexNumber> ("cbrt") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.cbrt(args[0]);
-			}
-		};
-		builtinComplex[INDEX_FLOOR] = new Function<ComplexNumber> ("floor") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.floor(args[0]);
-			}
-		};
-
-		builtinComplex[INDEX_SINH] = new Function<ComplexNumber> ("sinh") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.sinh(args[0]);
-			}
-		};
-
-		builtinComplex[INDEX_SQRT] = new Function<ComplexNumber> ("sqrt") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.sqrt(args[0]);
-			}
-		};
-		builtinComplex[INDEX_TANH] = new Function<ComplexNumber> ("tanh") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.tanh(args[0]);
-			}
-		};
-		builtinComplex[INDEX_COSH] = new Function<ComplexNumber> ("cosh") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.cosh(args[0]);
-			}
-		};
-		builtinComplex[INDEX_CEIL] = new Function<ComplexNumber> ("ceil") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.ceil(args[0]);
-			}
-		};
-		builtinComplex[INDEX_MAX] = new Function<ComplexNumber> ("max") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Complex numbers are not well ordered. So max() is not implemented");
-			}
-		};
-
-		builtinComplex[INDEX_MIN] = new Function<ComplexNumber> ("min") {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				throw new IllegalArgumentException("Complex numbers are not well ordered. So min() is not implemented");
-			}
-		};
-		builtinComplex[INDEX_POW] = new Function<ComplexNumber> ("pow",2) {
-			public ComplexNumber apply(ComplexNumber ... args) {
-				return ComplexNumberMath.power(args[0], args[1]);
-			}
-		};
-	}
+    }
 
 	public static char[] getAllowedFunctionCharacters() {
 		char[] chars = new char[53];
@@ -389,12 +169,6 @@ public class Functions {
 		switch(mode) {
 			case ExpressionBuilder.MODE_DOUBLE:
 				funcs = builtinDouble;
-				break;
-			case ExpressionBuilder.MODE_COMPLEX:
-				funcs = builtinComplex;
-				break;
-			case ExpressionBuilder.MODE_BIGDECIMAL:
-				funcs = builtinBigDecimal;
 				break;
 				default:
 					throw new IllegalArgumentException("Mode " + mode + " is not available");
