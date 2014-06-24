@@ -27,10 +27,6 @@ public abstract class Operators {
 
     private static final Operator[] builtinOperators = new Operator[8];
 
-    private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
-            '%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
-            '='};
-
     static {
         builtinOperators[INDEX_ADDITION]= new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
             @Override
@@ -107,15 +103,6 @@ public abstract class Operators {
             default:
                 return null;
         }
-    }
-
-    public static boolean isAllowedOperatorChar(char ch) {
-        for (char allowed: ALLOWED_OPERATOR_CHARS) {
-            if (ch == allowed) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

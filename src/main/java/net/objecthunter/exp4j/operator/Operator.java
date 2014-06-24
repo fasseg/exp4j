@@ -25,10 +25,14 @@ public abstract class Operator {
     public static final int PRECEDENCE_UNARY_MINUS = 20000;
     public static final int PRECEDENCE_UNARY_PLUS = PRECEDENCE_UNARY_MINUS;
 
-    private final int numArgs;
-    private final boolean leftAssociative;
-    private final String symbol;
-    private final int precedence;
+    private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
+            '%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
+            '='};
+
+    protected final int numArgs;
+    protected final boolean leftAssociative;
+    protected final String symbol;
+    protected final int precedence;
 
     public Operator(String symbol, int numberOfArguments, boolean leftAssociative,
                     int precedence) {
@@ -37,6 +41,15 @@ public abstract class Operator {
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
         this.precedence = precedence;
+    }
+
+    public static boolean isAllowedOperatorChar(char ch) {
+        for (char allowed: ALLOWED_OPERATOR_CHARS) {
+            if (ch == allowed) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isLeftAssociative() {

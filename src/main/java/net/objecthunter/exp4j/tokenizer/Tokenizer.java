@@ -41,7 +41,7 @@ public class Tokenizer {
         char ch = expression[pos];
         if (isNumeric(ch)) {
             return parseNumberToken(ch);
-        } else if (Operators.isAllowedOperatorChar(ch)) {
+        } else if (Operator.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
         }
         throw new TokenizerException("Unable to parse char " + ch + " [" + pos + "]");
@@ -58,7 +58,7 @@ public class Tokenizer {
             return lastToken;
         }
 
-        while (!isEndOfExpression(offset + len) && Operators.isAllowedOperatorChar(expression[offset + len])) {
+        while (!isEndOfExpression(offset + len) && Operator.isAllowedOperatorChar(expression[offset + len])) {
             final Operator tmp = getOperator(expression, offset, len + 1);
             if (tmp == null) {
                 break;
