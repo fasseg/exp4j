@@ -1,61 +1,93 @@
 package net.objecthunter.exp4j.tokenizer;
 
-import  org.junit.Test;
+import net.objecthunter.exp4j.operator.Operator;
+import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class TokenizerTest {
 
     @Test
-    public void testNextToken1() throws Exception {
+    public void testTokenization1() throws Exception {
         final Tokenizer tokenizer = new Tokenizer("1.222331");
         Token tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_NUMBER);
-        NumberToken nt = (NumberToken) tok;
-        assertEquals(1.222331d, nt.getValue(), 0d);
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(1.222331d, ((NumberToken) tok).getValue(), 0d);
     }
 
     @Test
-    public void testNextToken2() throws Exception {
+    public void testTokenization2() throws Exception {
         final Tokenizer tokenizer = new Tokenizer(".222331");
         Token tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_NUMBER);
-        NumberToken nt = (NumberToken) tok;
-        assertEquals(0.222331d, nt.getValue(), 0d);
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(0.222331d, ((NumberToken) tok).getValue(), 0d);
     }
 
     @Test
-    public void testNextToken3() throws Exception {
+    public void testTokenization3() throws Exception {
         final Tokenizer tokenizer = new Tokenizer("3e2");
         Token tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_NUMBER);
-        NumberToken nt = (NumberToken) tok;
-        assertEquals(300d, nt.getValue(), 0d);
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(300d, ((NumberToken) tok).getValue(), 0d);
     }
 
     @Test
-    public void testNextToken4() throws Exception {
+    public void testTokenization4() throws Exception {
         final Tokenizer tokenizer = new Tokenizer("3+1");
+
         assertTrue(tokenizer.hasNext());
         Token tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_NUMBER);
-        NumberToken nt = (NumberToken) tok;
-        assertEquals(3d, nt.getValue(), 0d);
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(3d, ((NumberToken) tok).getValue(), 0d);
 
         assertTrue(tokenizer.hasNext());
         tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_OPERATOR);
-        OperatorToken ot = (OperatorToken) tok;
-        assertEquals("+", ot.getOperator().getSymbol());
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals("+", ((OperatorToken) tok).getOperator().getSymbol());
 
         assertTrue(tokenizer.hasNext());
         tok = tokenizer.nextToken();
-        assertTrue(tok.getType() == Token.TOKEN_NUMBER);
-        nt = (NumberToken) tok;
-        assertEquals(1d, nt.getValue(), 0d);
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(1d, ((NumberToken) tok).getValue(), 0d);
+        assertFalse(tokenizer.hasNext());
+    }
+
+    @Test
+    public void testTokenization5() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("+3");
+
+        assertTrue(tokenizer.hasNext());
+        Token tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("+", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_PLUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(3d, ((NumberToken) tok).getValue(), 0d);
+
+        assertFalse(tokenizer.hasNext());
+    }
+
+    @Test
+    public void testTokenization6() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("-3");
+
+        assertTrue(tokenizer.hasNext());
+        Token tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("-", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_MINUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(3d, ((NumberToken) tok).getValue(), 0d);
+
         assertFalse(tokenizer.hasNext());
     }
 }

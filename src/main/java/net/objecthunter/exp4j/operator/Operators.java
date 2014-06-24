@@ -15,9 +15,6 @@
 */
 package net.objecthunter.exp4j.operator;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class Operators {
     public static final int INDEX_ADDITION = 0;
     public static final int INDEX_SUBTRACTION = 1;
@@ -26,8 +23,9 @@ public abstract class Operators {
     public static final int INDEX_POWER = 4;
     public static final int INDEX_MODULO = 5;
     public static final int INDEX_UNARYMINUS = 6;
+    public static final int INDEX_UNARYPLUS = 7;
 
-    private static final Operator[] builtinOperators = new Operator[7];
+    private static final Operator[] builtinOperators = new Operator[8];
 
     private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',
             '%', '^', '!', '#', '§', '$', '&', ';', ':', '~', '<', '>', '|',
@@ -46,10 +44,16 @@ public abstract class Operators {
                 return args[0] - args[1];
             }
         };
-        builtinOperators[INDEX_UNARYMINUS]= new Operator("-", 1, true, Operator.PRECEDENCE_UNARY_MINUS_PLUS) {
+        builtinOperators[INDEX_UNARYMINUS]= new Operator("-", 1, true, Operator.PRECEDENCE_UNARY_MINUS) {
             @Override
             public double apply(final double... args) {
                 return -args[0];
+            }
+        };
+        builtinOperators[INDEX_UNARYPLUS]= new Operator("+", 1, true, Operator.PRECEDENCE_UNARY_PLUS) {
+            @Override
+            public double apply(final double... args) {
+                return args[0];
             }
         };
         builtinOperators[INDEX_MUTLIPLICATION]= new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
@@ -81,7 +85,11 @@ public abstract class Operators {
     public static Operator getBuiltinOperator(final char symbol, final int numArguments) {
         switch(symbol) {
             case '+':
-                return builtinOperators[INDEX_ADDITION];
+                if (numArguments != 1) {
+                    return builtinOperators[INDEX_ADDITION];
+                }else{
+                    return builtinOperators[INDEX_UNARYPLUS];
+                }
             case '-':
                 if (numArguments != 1) {
                     return builtinOperators[INDEX_SUBTRACTION];

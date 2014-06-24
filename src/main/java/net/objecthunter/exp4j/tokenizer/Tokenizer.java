@@ -22,6 +22,7 @@ public class Tokenizer {
     private final char[] expression;
     private final int expressionLength;
     private int pos = 0;
+    private Token lastToken;
 
     public Tokenizer(char[] expression) {
         this.expression = expression;
@@ -40,7 +41,7 @@ public class Tokenizer {
         char ch = expression[pos];
         if (isNumeric(ch)) {
             return parseNumberToken(ch);
-        }else  if (Operators.isAllowedOperatorChar(ch)) {
+        } else if (Operators.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
         }
         throw new TokenizerException("Unable to parse char " + ch + " [" + pos + "]");
@@ -49,49 +50,59 @@ public class Tokenizer {
     private Token parseOperatorToken(char firstChar) {
         final int offset = this.pos;
         int len = 1;
+
         this.pos++;
+
         if (isEndOfExpression(offset)) {
-            return new OperatorToken(getOperator(firstChar));
+            lastToken = new OperatorToken(getOperator(firstChar));
+            return lastToken;
         }
+
         while (!isEndOfExpression(offset + len) && Operators.isAllowedOperatorChar(expression[offset + len])) {
             len++;
             this.pos++;
         }
-        return new OperatorToken(getOperator(expression, offset, len));
+
+        lastToken = new OperatorToken(getOperator(expression, offset, len));
+        return lastToken;
     }
 
     private Operator getOperator(char[] expression, int offset, int len) {
         Operator op = null;
+        final int argc =  (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
         if (len == 1) {
-            op = Operators.getBuiltinOperator(expression[offset], 2);
+            op = Operators.getBuiltinOperator(expression[offset], argc);
         }
         return op;
     }
 
     private Operator getOperator(char firstChar) {
-        Operator op = Operators.getBuiltinOperator(firstChar, 2);
+        final int argc =  (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+        Operator op = Operators.getBuiltinOperator(firstChar, argc);
         if (op != null) {
             return op;
         }
         return null;
     }
 
-    private NumberToken parseNumberToken(final char firstChar) {
+    private Token parseNumberToken(final char firstChar) {
         final int offset = this.pos;
         int len = 1;
         this.pos++;
         if (isEndOfExpression(offset)) {
-            return new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
+            lastToken = new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
+            return lastToken;
         }
         while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len])) {
             len++;
             this.pos++;
         }
-        return new NumberToken(expression, offset, len);
+        lastToken = new NumberToken(expression, offset, len);
+        return lastToken;
     }
 
     private boolean isNumeric(char ch) {
-        return Character.isDigit(ch) || ch == '.' || ch =='e';
+        return Character.isDigit(ch) || ch == '.' || ch == 'e';
     }
 
     private boolean isEndOfExpression(int offset) {
