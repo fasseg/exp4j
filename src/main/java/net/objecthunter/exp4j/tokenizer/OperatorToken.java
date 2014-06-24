@@ -15,19 +15,17 @@
 */
 package net.objecthunter.exp4j.tokenizer;
 
-public final class NumberToken extends Token {
-    private final double value;
+import net.objecthunter.exp4j.operator.Operator;
 
-    public NumberToken(double value) {
-        super(TOKEN_NUMBER);
-        this.value = value;
+public class OperatorToken extends Token{
+    private final Operator operator;
+
+    public OperatorToken(Operator op) {
+        super(Token.TOKEN_OPERATOR);
+        this.operator = op;
     }
 
-    NumberToken(final char[] expression, final int offset, final int len) {
-        this(Double.parseDouble(String.valueOf(expression, offset, len)));
-    }
-
-    public double getValue() {
-        return value;
+    public Operator getOperator() {
+        return operator;
     }
 }
