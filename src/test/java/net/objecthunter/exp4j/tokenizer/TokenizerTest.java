@@ -90,4 +90,57 @@ public class TokenizerTest {
 
         assertFalse(tokenizer.hasNext());
     }
+    @Test
+    public void testTokenization7() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("---++-3");
+
+        assertTrue(tokenizer.hasNext());
+        Token tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("-", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_MINUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("-", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_MINUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("-", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_MINUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("+", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_PLUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("+", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_PLUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
+        assertEquals(1, ((OperatorToken) tok).getOperator().getNumArgs());
+        assertEquals("-", ((OperatorToken) tok).getOperator().getSymbol());
+        assertEquals(Operator.PRECEDENCE_UNARY_MINUS, ((OperatorToken) tok).getOperator().getPrecedence());
+
+        assertTrue(tokenizer.hasNext());
+        tok = tokenizer.nextToken();
+        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
+        assertEquals(3d, ((NumberToken) tok).getValue(), 0d);
+
+        assertFalse(tokenizer.hasNext());
+    }
 }

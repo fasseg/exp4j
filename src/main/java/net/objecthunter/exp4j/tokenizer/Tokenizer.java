@@ -50,20 +50,26 @@ public class Tokenizer {
     private Token parseOperatorToken(char firstChar) {
         final int offset = this.pos;
         int len = 1;
-
-        this.pos++;
+        Operator lastValid = getOperator(firstChar);
 
         if (isEndOfExpression(offset)) {
+            this.pos++;
             lastToken = new OperatorToken(getOperator(firstChar));
             return lastToken;
         }
 
         while (!isEndOfExpression(offset + len) && Operators.isAllowedOperatorChar(expression[offset + len])) {
-            len++;
-            this.pos++;
+            final Operator tmp = getOperator(expression, offset, len + 1);
+            if (tmp == null) {
+                break;
+            }else {
+                lastValid = tmp;
+                len++;
+            }
         }
 
-        lastToken = new OperatorToken(getOperator(expression, offset, len));
+        pos += len;
+        lastToken = new OperatorToken(lastValid);
         return lastToken;
     }
 
@@ -89,7 +95,7 @@ public class Tokenizer {
         final int offset = this.pos;
         int len = 1;
         this.pos++;
-        if (isEndOfExpression(offset)) {
+        if (isEndOfExpression(offset + len)) {
             lastToken = new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
             return lastToken;
         }
@@ -106,6 +112,6 @@ public class Tokenizer {
     }
 
     private boolean isEndOfExpression(int offset) {
-        return this.expressionLength == offset;
+        return this.expressionLength <= offset;
     }
 }
