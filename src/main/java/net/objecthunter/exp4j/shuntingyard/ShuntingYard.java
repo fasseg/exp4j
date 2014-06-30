@@ -15,7 +15,7 @@ import java.util.Stack;
  * Created by ruckus on 30.06.14.
  */
 public class ShuntingYard {
-    public static Token[] convertToRPN(String expression) throws Exception {
+    public static Token[] convertToRPN(String expression) throws Exp4jException {
         final Stack<Token> stack = new Stack<>();
         final List<Token> output = new ArrayList<>();
 

@@ -29,6 +29,10 @@ public abstract class Function {
         this.numArguments = 1;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getNumArguments() {
         return numArguments;
     }

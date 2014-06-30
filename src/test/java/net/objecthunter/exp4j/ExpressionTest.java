@@ -13,12 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License. 
 */
-package net.objecthunter.exp4j.expression;
+package net.objecthunter.exp4j;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operators;
-import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
 import net.objecthunter.exp4j.tokenizer.FunctionToken;
 import net.objecthunter.exp4j.tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;

@@ -23,12 +23,12 @@ public class Expression {
     private final Token[] tokens;
     private final Map<String, Double> variables;
 
-    public Expression(final Token[] tokens) {
+    Expression(final Token[] tokens) {
         this.tokens = tokens;
         this.variables = new HashMap<>();
     }
 
-    public Expression(final Token[] tokens, Map<String, Double> variables) {
+    Expression(final Token[] tokens, Map<String, Double> variables) {
         this.tokens = tokens;
         this.variables = variables;
     }
