@@ -2,11 +2,15 @@ package net.objecthunter.exp4j.tokenizer;
 
 import net.objecthunter.exp4j.operator.Operator;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 
 
 public class TokenizerTest {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenizerTest.class);
 
     @Test
     public void testTokenization1() throws Exception {
@@ -314,6 +318,67 @@ public class TokenizerTest {
         assertParanthesesToken(tokenizer.nextToken(), false);
 
         assertFalse(tokenizer.hasNext());
+    }
+
+    @Test
+    public void testTokenization17() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("2 * x + -log(3)");
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 2d);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "x");
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "+", 2, Operator.PRECEDENCE_ADDITION);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "-", 1, Operator.PRECEDENCE_UNARY_MINUS);
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "log", 1);
+
+        assertTrue(tokenizer.hasNext());
+        assertParanthesesToken(tokenizer.nextToken(), true);
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 3d);
+
+        assertTrue(tokenizer.hasNext());
+        assertParanthesesToken(tokenizer.nextToken(), false);
+
+        assertFalse(tokenizer.hasNext());
+    }
+
+    @Test
+    public void testTokenizerPerformance() throws Exception{
+        final String expression = "cos(x)*14-((log(x)*3.445) / 17.8889) +x -sqrt(2+x) - x^(3-log(x))";
+
+        // warmup
+        Tokenizer tokenizer = new Tokenizer(expression);
+        while (tokenizer.hasNext()) {
+            tokenizer.nextToken();
+        }
+
+        // 100 tokenizations
+        tokenizer = new Tokenizer(expression);
+        final long time = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            while (tokenizer.hasNext()) {
+                tokenizer.nextToken();
+            }
+        }
+        final long duration = System.currentTimeMillis() - time;
+        log.info("+------------------------------+");
+        log.info("| Tokenizer performance result |");
+        log.info("+------------------------------+-------------------------------------------------");
+        log.info("| Expression: {}" , expression);
+        log.info("| Finished 100,000 tokenizations in\t{} ms", duration);
+        log.info("+--------------------------------------------------------------------------------");
     }
 
     private static void assertVariableToken(Token token, String name) {

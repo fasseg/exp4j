@@ -41,6 +41,10 @@ public class Tokenizer {
 
     public Token nextToken() throws TokenizerException {
         char ch = expression[pos];
+        int val = (int) ch;
+        while (Character.isWhitespace(ch)) {
+            ch = expression[++pos];
+        }
         if (isNumeric(ch)) {
             return parseNumberToken(ch);
         } else if (isOpenParantheses(ch)) {
@@ -54,7 +58,7 @@ public class Tokenizer {
             return parseFunctionOrVariable();
 
         }
-        throw new TokenizerException("Unable to parse char " + ch + " [" + pos + "]");
+        throw new TokenizerException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
     private Token parseParantheses(final boolean open) {
