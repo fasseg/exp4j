@@ -33,7 +33,7 @@ public abstract class Function {
         return numArguments;
     }
 
-    abstract double apply(double ... args);
+    public abstract double apply(double ... args);
 
     public static char[] getAllowedFunctionCharacters() {
         char[] chars = new char[53];
