@@ -61,13 +61,13 @@ public class ShuntingYard {
                 default:
                     throw new Exp4jException("Unknown Token type encountered. This should not happen");
             }
-            while (!stack.empty()) {
-                Token t = stack.pop();
-                if (t.getType() == Token.TOKEN_PARANTHESES_CLOSE || t.getType() == Token.TOKEN_PARANTHESES_OPEN) {
-                    throw new Exp4jException("Mistmatched parantheses detected. Please check the expression");
-                } else {
-                    output.add(t);
-                }
+        }
+        while (!stack.empty()) {
+            Token t = stack.pop();
+            if (t.getType() == Token.TOKEN_PARANTHESES_CLOSE || t.getType() == Token.TOKEN_PARANTHESES_OPEN) {
+                throw new Exp4jException("Mistmatched parantheses detected. Please check the expression");
+            } else {
+                output.add(t);
             }
         }
         return (Token[]) output.toArray(new Token[output.size()]);
