@@ -47,6 +47,8 @@ public class Tokenizer {
         }
         if (isNumeric(ch)) {
             return parseNumberToken(ch);
+        } else if (isArgumentSeparator(ch)) {
+            return parseArumentSeparatorToken(ch);
         } else if (isOpenParantheses(ch)) {
             return parseParantheses(true);
         } else if (isCloseParantheses(ch)) {
@@ -61,11 +63,21 @@ public class Tokenizer {
         throw new TokenizerException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
+    private Token parseArumentSeparatorToken(char ch) {
+        this.pos++;
+        this.lastToken = new ArgumentSeparatorToken();
+        return lastToken;
+    }
+
+    private boolean isArgumentSeparator(char ch) {
+        return ch == ',';
+    }
+
     private Token parseParantheses(final boolean open) {
         if (open) {
-            this.lastToken = ParanthesesToken.openParantheses();
+            this.lastToken = new OpenParanthesesToken();
         } else {
-            this.lastToken = ParanthesesToken.closeParantheses();
+            this.lastToken = new CloseParanthesesToken();
         }
         this.pos++;
         return lastToken;

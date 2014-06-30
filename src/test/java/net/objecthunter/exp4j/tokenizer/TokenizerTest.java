@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
-
+import static net.objecthunter.exp4j.TestUtil.*;
 
 public class TokenizerTest {
 
@@ -203,13 +203,13 @@ public class TokenizerTest {
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), true);
+        assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 1d);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), false);
+        assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
     }
@@ -244,13 +244,13 @@ public class TokenizerTest {
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), true);
+        assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 3d);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), false);
+        assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
     }
@@ -275,13 +275,13 @@ public class TokenizerTest {
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), true);
+        assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 3d);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), false);
+        assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
     }
@@ -309,13 +309,13 @@ public class TokenizerTest {
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), true);
+        assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 3d);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), false);
+        assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
     }
@@ -343,19 +343,54 @@ public class TokenizerTest {
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), true);
+        assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 3d);
 
         assertTrue(tokenizer.hasNext());
-        assertParanthesesToken(tokenizer.nextToken(), false);
+        assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
     }
 
     @Test
-    public void testTokenizerPerformance() throws Exception{
+    public void testTokenization18() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("min(2,3,4)");
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "min", 0);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 2d);
+
+        assertTrue(tokenizer.hasNext());
+        assertSeparatorToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 3d);
+
+        assertTrue(tokenizer.hasNext());
+        assertSeparatorToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 4d);
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertFalse(tokenizer.hasNext());
+    }
+
+    private static void assertSeparatorToken(Token token) {
+        assertEquals(Token.TOKEN_SEPARATOR, token.getType());
+    }
+
+    @Test
+    public void testTokenizerPerformance() throws Exception {
         final String expression = "cos(x)*14-((log(x)*3.445) / 17.8889) +x -sqrt(2+x) - x^(3-log(x))";
 
         // warmup
@@ -376,37 +411,8 @@ public class TokenizerTest {
         log.info("+------------------------------+");
         log.info("| Tokenizer performance result |");
         log.info("+------------------------------+-------------------------------------------------");
-        log.info("| Expression: {}" , expression);
+        log.info("| Expression: {}", expression);
         log.info("| Finished 100,000 tokenizations in\t{} ms", duration);
         log.info("+--------------------------------------------------------------------------------");
     }
-
-    private static void assertVariableToken(Token token, String name) {
-        assertEquals(Token.TOKEN_VARIABLE, token.getType());
-        assertEquals(name, ((VariableToken) token).getName());
-    }
-
-    private static void assertParanthesesToken(Token token, boolean b) {
-        assertEquals(Token.TOKEN_PARANTHESES, token.getType());
-        assertEquals(b, ((ParanthesesToken) token).isOpen());
-    }
-
-    private static void assertFunctionToken(Token token, String log, int i) {
-        assertEquals(token.getType(), Token.TOKEN_FUNCTION);
-        FunctionToken f = (FunctionToken) token;
-        assertEquals(1, f.getFunction().getNumArguments());
-    }
-
-    private static void assertOperatorToken(Token tok, String symbol, int numArgs, int precedence) {
-        assertEquals(tok.getType(), Token.TOKEN_OPERATOR);
-        assertEquals(numArgs, ((OperatorToken) tok).getOperator().getNumArgs());
-        assertEquals(symbol, ((OperatorToken) tok).getOperator().getSymbol());
-        assertEquals(precedence, ((OperatorToken) tok).getOperator().getPrecedence());
-    }
-
-    private static void assertNumberToken(Token tok, double v) {
-        assertEquals(tok.getType(), Token.TOKEN_NUMBER);
-        assertEquals(v, ((NumberToken) tok).getValue(), 0d);
-    }
-
 }
