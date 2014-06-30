@@ -29,6 +29,10 @@ public abstract class Function {
         this.numArguments = 1;
     }
 
+    public int getNumArguments() {
+        return numArguments;
+    }
+
     abstract double apply(double ... args);
 
     public static char[] getAllowedFunctionCharacters() {

@@ -19,6 +19,8 @@ public abstract class Token {
     public static int TOKEN_NUMBER = 1;
     public static int TOKEN_OPERATOR = 2;
     public static int TOKEN_FUNCTION = 3;
+    public static int TOKEN_PARANTHESES = 4;
+    public static int TOKEN_VARIABLE = 5;
     protected final int type;
 
     protected Token(int type) {
@@ -28,4 +30,5 @@ public abstract class Token {
     public int getType() {
         return type;
     }
+
 }

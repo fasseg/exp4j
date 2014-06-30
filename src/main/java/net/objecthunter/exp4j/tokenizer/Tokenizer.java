@@ -15,6 +15,8 @@
 */
 package net.objecthunter.exp4j.tokenizer;
 
+import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
 
@@ -41,10 +43,63 @@ public class Tokenizer {
         char ch = expression[pos];
         if (isNumeric(ch)) {
             return parseNumberToken(ch);
+        } else if (isOpenParantheses(ch)) {
+            return parseParantheses(true);
+        } else if (isCloseParantheses(ch)) {
+            return parseParantheses(false);
         } else if (Operator.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
+        } else if (Character.isAlphabetic(ch) || ch == '_') {
+            // parse the name which can be a variable or a function
+            return parseFunctionOrVariable();
+
         }
         throw new TokenizerException("Unable to parse char " + ch + " [" + pos + "]");
+    }
+
+    private Token parseParantheses(final boolean open) {
+        if (open) {
+            this.lastToken = ParanthesesToken.openParantheses();
+        } else {
+            this.lastToken = ParanthesesToken.closeParantheses();
+        }
+        this.pos++;
+        return lastToken;
+    }
+
+    private boolean isOpenParantheses(char ch) {
+        return ch == '(' || ch == '{' || ch == '[';
+    }
+
+    private boolean isCloseParantheses(char ch) {
+        return ch == ')' || ch == '}' || ch == ']';
+    }
+
+    private Token parseFunctionOrVariable() {
+        final String name = parseName();
+        final Function f = Functions.getBuiltinFunction(name);
+        if (f != null) {
+            this.lastToken = new FunctionToken(f);
+            return lastToken;
+        } else {
+            // TODO return variable
+            this.lastToken = new VariableToken(name);
+            return lastToken;
+        }
+    }
+
+    private String parseName() {
+        // parse the name of a function or a variable
+        final int offset = this.pos;
+        int len = 1;
+        if (isEndOfExpression(offset)) {
+            this.pos++;
+        }
+        while (!isEndOfExpression(offset + len) && Character.isAlphabetic(expression[offset + len])) {
+            len++;
+        }
+        pos += len;
+        return new String(expression, offset, len);
     }
 
     private Token parseOperatorToken(char firstChar) {
@@ -62,7 +117,7 @@ public class Tokenizer {
             final Operator tmp = getOperator(expression, offset, len + 1);
             if (tmp == null) {
                 break;
-            }else {
+            } else {
                 lastValid = tmp;
                 len++;
             }
@@ -75,7 +130,7 @@ public class Tokenizer {
 
     private Operator getOperator(char[] expression, int offset, int len) {
         Operator op = null;
-        final int argc =  (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+        final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
         if (len == 1) {
             op = Operators.getBuiltinOperator(expression[offset], argc);
         }
@@ -83,7 +138,7 @@ public class Tokenizer {
     }
 
     private Operator getOperator(char firstChar) {
-        final int argc =  (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+        final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
         Operator op = Operators.getBuiltinOperator(firstChar, argc);
         if (op != null) {
             return op;

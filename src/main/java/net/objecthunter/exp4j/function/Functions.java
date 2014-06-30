@@ -163,7 +163,7 @@ public class Functions {
         };
     }
 
-    public static Function getBuiltinFunction(final String name, final int mode) {
+    public static Function getBuiltinFunction(final String name) {
 
         switch(name) {
             case "sin":
