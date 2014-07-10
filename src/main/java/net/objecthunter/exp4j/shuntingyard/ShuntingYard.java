@@ -60,7 +60,7 @@ public class ShuntingYard {
                     output.add(stack.pop());
                 }
                 stack.pop();
-                if (stack.peek().getType() == Token.TOKEN_FUNCTION) {
+                if (!stack.isEmpty() && stack.peek().getType() == Token.TOKEN_FUNCTION) {
                     output.add(stack.pop());
                 }
                 break;

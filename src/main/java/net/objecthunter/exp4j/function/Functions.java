@@ -35,8 +35,10 @@ public class Functions {
     public static final int INDEX_MAX = 16;
     public static final int INDEX_MIN = 17;
     public static final int INDEX_POW = 18;
+    public static final int INDEX_EXP = 19;
+    public static final int INDEX_EXPM1 = 20;
 
-    private static final Function[] builtinFunctions = new Function[19];
+    private static final Function[] builtinFunctions = new Function[21];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -141,6 +143,18 @@ public class Functions {
                 return Math.pow(args[0], args[1]);
             }
         };
+        builtinFunctions[INDEX_EXP] = new Function("exp", 1) {
+            @Override
+            public double apply(double... args) {
+                return Math.exp(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_EXPM1] = new Function("expm1", 1) {
+            @Override
+            public double apply(double... args) {
+                return Math.expm1(args[0]);
+            }
+        };
     }
 
     public static Function getBuiltinFunction(final String name) {
@@ -184,6 +198,10 @@ public class Functions {
                 return builtinFunctions[INDEX_CBRT];
             case "pow":
                 return builtinFunctions[INDEX_POW];
+            case "exp":
+                return builtinFunctions[INDEX_EXP];
+            case "expm1":
+                return builtinFunctions[INDEX_EXPM1];
             default:
                 return null;
         }

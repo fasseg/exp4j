@@ -55,7 +55,7 @@ public class Tokenizer {
         while (Character.isWhitespace(ch)) {
             ch = expression[++pos];
         }
-        if (isNumeric(ch, false)) {
+        if (Character.isDigit(ch) || ch == '.') {
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
             return parseArumentSeparatorToken(ch);
