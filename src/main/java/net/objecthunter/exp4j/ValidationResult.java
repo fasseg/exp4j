@@ -33,4 +33,6 @@ public class ValidationResult {
     public List<String> getErrors() {
         return errors;
     }
+
+    public static ValidationResult SUCCESS = new ValidationResult(true, null);
 }

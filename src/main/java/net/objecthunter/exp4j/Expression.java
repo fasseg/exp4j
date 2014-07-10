@@ -1,26 +1,29 @@
 /* 
-* Copyright 2014 Frank Asseg
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. 
-*/
-package net.objecthunter.exp4j;
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
 
-import net.objecthunter.exp4j.tokenizer.*;
+package net.objecthunter.exp4j;
 
 import java.util.*;
 
+import net.objecthunter.exp4j.tokenizer.*;
+
 public class Expression {
+
     private final Token[] tokens;
+
     private final Map<String, Double> variables;
 
     Expression(final Token[] tokens) {
@@ -43,6 +46,18 @@ public class Expression {
         return this;
     }
 
+    public ValidationResult validate() {
+        final List<String> errors = new ArrayList<>(0);
+        for (Token t : this.tokens) {
+            if (t.getType() == Token.TOKEN_VARIABLE) {
+                final String var =((VariableToken) t).getName(); 
+                if (!variables.containsKey(var)) {
+                    errors.add("The variable '" + var + "' has not been set");
+                }
+            }
+        }
+        return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
+    }
 
     public double evaluate() throws Exp4jException {
         final Stack<Double> output = new Stack<>();
@@ -63,7 +78,7 @@ public class Expression {
                     double leftArg = output.pop();
                     output.push(op.getOperator().apply(leftArg, rightArg));
                 } else if (op.getOperator().getNumArgs() == 1) {
-					/* pop the operand and push the result of the operation */
+                    /* pop the operand and push the result of the operation */
                     double arg = output.pop();
                     output.push(op.getOperator().apply(arg));
                 }
@@ -72,9 +87,9 @@ public class Expression {
                 if (output.size() < func.getFunction().getNumArguments()) {
                     throw new RuntimeException("Invalid number of arguments available");
                 }
-				/* collect the arguments from the stack */
+                /* collect the arguments from the stack */
                 double[] args = new double[func.getFunction().getNumArguments()];
-                for (int j=0;j< func.getFunction().getNumArguments();j++) {
+                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
                     args[j] = output.pop();
                 }
                 output.push(func.getFunction().apply(args));
@@ -84,18 +99,5 @@ public class Expression {
             throw new Exp4jException("Invalid number of items on the output queue. This should not happen");
         }
         return output.pop();
-    }
-
-    public ValidationResult validate() throws Exp4jException {
-        final List<String> errors = new ArrayList<>();
-        for (Token t : tokens) {
-            if (t.getType() == Token.TOKEN_VARIABLE) {
-                final String name = ((VariableToken) t).getName();
-                if (!this.variables.containsKey(name)) {
-                    errors.add("Variable '" + name + "' has not been set to a concrete value");
-                }
-            }
-        }
-        return new ValidationResult(errors.size() == 0, errors);
     }
 }

@@ -18,6 +18,8 @@ package net.objecthunter.exp4j;
 
 import static java.lang.Math.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -124,5 +126,29 @@ public class ExpressionBuilderTest {
 
         double expected = 6d;
         assertEquals(expected, result, 0d);
+    }
+    @Test
+    public void testExpressionBuilder7() throws Exception {
+        ValidationResult res = new ExpressionBuilder("x")
+                .build()
+                .validate();
+        assertFalse(res.isValid());
+        assertEquals(res.getErrors().size(),1);
+    }
+    @Test
+    public void testExpressionBuilder8() throws Exception {
+        ValidationResult res = new ExpressionBuilder("x*y*z")
+                .build()
+                .validate();
+        assertFalse(res.isValid());
+        assertEquals(res.getErrors().size(),3);
+    }
+    @Test
+    public void testExpressionBuilder9() throws Exception {
+        ValidationResult res = new ExpressionBuilder("x")
+                .build()
+                .variable("x",1d)
+                .validate();
+        assertTrue(res.isValid());
     }
 }
