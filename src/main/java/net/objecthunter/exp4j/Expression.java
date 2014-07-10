@@ -67,7 +67,6 @@ public class Expression {
                     double arg = output.pop();
                     output.push(op.getOperator().apply(arg));
                 }
-
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
                 if (output.size() < func.getFunction().getNumArguments()) {
@@ -75,7 +74,7 @@ public class Expression {
                 }
 				/* collect the arguments from the stack */
                 double[] args = new double[func.getFunction().getNumArguments()];
-                for (int j = func.getFunction().getNumArguments() - 1; j >= 0; j--) {
+                for (int j=0;j< func.getFunction().getNumArguments();j++) {
                     args[j] = output.pop();
                 }
                 output.push(func.getFunction().apply(args));

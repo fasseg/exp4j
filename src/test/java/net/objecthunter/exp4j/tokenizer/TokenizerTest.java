@@ -1,5 +1,6 @@
 package net.objecthunter.exp4j.tokenizer;
 
+import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -356,28 +357,59 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization18() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("min(2,3,4)");
+        final Function log2 = new Function("log2") {
+            @Override
+            public double apply(double... args) {
+                return Math.log(args[0]) / Math.log(2d);
+            }
+        };
+
+        final Tokenizer tokenizer = new Tokenizer("log2(4)", log2);
 
         assertTrue(tokenizer.hasNext());
-        assertFunctionToken(tokenizer.nextToken(), "min", 0);
+        assertFunctionToken(tokenizer.nextToken(), "log2", 1);
 
         assertTrue(tokenizer.hasNext());
         assertOpenParanthesesToken(tokenizer.nextToken());
 
         assertTrue(tokenizer.hasNext());
-        assertNumberToken(tokenizer.nextToken(), 2d);
-
-        assertTrue(tokenizer.hasNext());
-        assertSeparatorToken(tokenizer.nextToken());
-
-        assertTrue(tokenizer.hasNext());
-        assertNumberToken(tokenizer.nextToken(), 3d);
-
-        assertTrue(tokenizer.hasNext());
-        assertSeparatorToken(tokenizer.nextToken());
-
-        assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 4d);
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertFalse(tokenizer.hasNext());
+    }
+
+    @Test
+    public void testTokenization19() throws Exception {
+        Function avg = new Function("avg", 2) {
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg: args) {
+                    sum += arg;
+                }
+                return sum/args.length;
+            }
+        };
+
+        final Tokenizer tokenizer = new Tokenizer("avg(1,2)", avg);
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "avg", 2);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 1d);
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionSeparatorToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 2d);
 
         assertTrue(tokenizer.hasNext());
         assertCloseParanthesesToken(tokenizer.nextToken());

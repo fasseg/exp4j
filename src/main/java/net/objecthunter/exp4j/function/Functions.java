@@ -135,26 +135,6 @@ public class Functions {
                 return Math.ceil(args[0]);
             }
         };
-        builtinFunctions[INDEX_MAX] = new Function("max", 0) {
-            @Override
-            public double apply(double... args) {
-                double max = Double.MIN_VALUE;
-                for (double arg : args) {
-                    max = (arg > max) ? arg : max;
-                }
-                return max;
-            }
-        };
-        builtinFunctions[INDEX_MIN] = new Function("min", 0) {
-            @Override
-            public double apply(double... args) {
-                double min = Double.MAX_VALUE;
-                for (double arg : args) {
-                    min = (arg < min) ? arg : min;
-                }
-                return min;
-            }
-        };
         builtinFunctions[INDEX_POW] = new Function("pow", 2) {
             @Override
             public double apply(double... args) {

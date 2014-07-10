@@ -40,4 +40,8 @@ public abstract class TestUtil {
         assertEquals(tok.getType(), Token.TOKEN_NUMBER);
         Assert.assertEquals(v, ((NumberToken) tok).getValue(), 0d);
     }
+
+    public static void assertFunctionSeparatorToken(Token t) {
+        assertEquals(t.getType(), Token.TOKEN_SEPARATOR);
+    }
 }

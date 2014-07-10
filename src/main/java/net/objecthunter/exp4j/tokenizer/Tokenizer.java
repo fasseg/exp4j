@@ -1,19 +1,23 @@
 /* 
-* Copyright 2014 Frank Asseg
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. 
-*/
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
+
 package net.objecthunter.exp4j.tokenizer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
@@ -21,14 +25,40 @@ import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
 
 public class Tokenizer {
+
     private final char[] expression;
+
     private final int expressionLength;
+
+    private final Map<String, Function> userFunctions;
+
     private int pos = 0;
+
     private Token lastToken;
 
     public Tokenizer(char[] expression) {
         this.expression = expression;
         this.expressionLength = expression.length;
+        this.userFunctions = new HashMap<>(0);
+    }
+
+    public Tokenizer(char[] expression, Map<String, Function> userFunctions) {
+        this.expression = expression;
+        this.expressionLength = expression.length;
+        this.userFunctions = userFunctions;
+    }
+
+    public Tokenizer(char[] expression, Function... userFunctions) {
+        this.expression = expression;
+        this.expressionLength = expression.length;
+        if (userFunctions == null) {
+            this.userFunctions = new HashMap<>(0);
+        } else {
+            this.userFunctions = new HashMap<>(userFunctions.length);
+            for (Function f : userFunctions) {
+                this.userFunctions.put(f.getName(), f);
+            }
+        }
     }
 
     public boolean hasNext() {
@@ -37,6 +67,10 @@ public class Tokenizer {
 
     public Tokenizer(String expression) {
         this(expression.toCharArray());
+    }
+
+    public Tokenizer(String expression, Function... userFunctions) {
+        this(expression.toCharArray(), userFunctions);
     }
 
     public Token nextToken() throws TokenizerException {
@@ -93,7 +127,7 @@ public class Tokenizer {
 
     private Token parseFunctionOrVariable() {
         final String name = parseName();
-        final Function f = Functions.getBuiltinFunction(name);
+        final Function f = getFunction(name);
         if (f != null) {
             this.lastToken = new FunctionToken(f);
             return lastToken;
@@ -104,6 +138,14 @@ public class Tokenizer {
         }
     }
 
+    private Function getFunction(String name) {
+        Function f = this.userFunctions.get(name);
+        if (f == null) {
+            f = Functions.getBuiltinFunction(name);
+        }
+        return f;
+    }
+
     private String parseName() {
         // parse the name of a function or a variable
         final int offset = this.pos;
@@ -111,7 +153,10 @@ public class Tokenizer {
         if (isEndOfExpression(offset)) {
             this.pos++;
         }
-        while (!isEndOfExpression(offset + len) && Character.isAlphabetic(expression[offset + len])) {
+        while (!isEndOfExpression(offset + len) &&
+                (Character.isAlphabetic(expression[offset + len]) ||
+                        Character.isDigit(expression[offset + len]) ||
+                expression[offset + len] == '_')) {
             len++;
         }
         pos += len;

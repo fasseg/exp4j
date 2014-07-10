@@ -15,7 +15,7 @@
 */
 package net.objecthunter.exp4j;
 
-import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.function.Function;
 import org.junit.Test;
 
 import static java.lang.Math.*;
@@ -48,7 +48,45 @@ public class ExpressionBuilderTest {
                 .variable("x", x)
                 .evaluate();
 
-        double expected = sin(x)-log(3*x/4);
-                assertEquals(expected, result, 0d);
+        double expected = sin(x) - log(3 * x / 4);
+        assertEquals(expected, result, 0d);
+    }
+
+    @Test
+    public void testExpressionBuilder4() throws Exception {
+        Function log2 = new Function("log2", 1) {
+            @Override
+            public double apply(double... args) {
+                return Math.log(args[0]) / Math.log(2);
+            }
+        };
+        double result = new ExpressionBuilder("log2(4)")
+                .function(log2)
+                .build()
+                .evaluate();
+
+        double expected = 2;
+        assertEquals(expected, result, 0d);
+    }
+
+    @Test
+    public void testExpressionBuilder5() throws Exception {
+        Function avg = new Function("avg", 4) {
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg: args) {
+                    sum += arg;
+                }
+                return sum/args.length;
+            }
+        };
+        double result = new ExpressionBuilder("avg(1,2,3,4)")
+                .function(avg)
+                .build()
+                .evaluate();
+
+        double expected = 2.5d;
+        assertEquals(expected, result, 0d);
     }
 }

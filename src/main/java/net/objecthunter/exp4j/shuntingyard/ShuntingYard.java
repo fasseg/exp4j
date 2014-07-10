@@ -1,6 +1,7 @@
 package net.objecthunter.exp4j.shuntingyard;
 
 import net.objecthunter.exp4j.Exp4jException;
+import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.OpenParanthesesToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
@@ -9,17 +10,18 @@ import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
  * Created by ruckus on 30.06.14.
  */
 public class ShuntingYard {
-    public static Token[] convertToRPN(String expression) throws Exp4jException {
+    public static Token[] convertToRPN(String expression, Function[] userFunctions) throws Exp4jException {
         final Stack<Token> stack = new Stack<>();
         final List<Token> output = new ArrayList<>();
 
-        final Tokenizer tokenizer = new Tokenizer(expression);
+        final Tokenizer tokenizer = new Tokenizer(expression, userFunctions);
         while (tokenizer.hasNext()) {
             Token token = tokenizer.nextToken();
             switch (token.getType()) {
