@@ -44,10 +44,10 @@ public class ShuntingYard {
                     OperatorToken o1 = (OperatorToken) token;
                     OperatorToken o2 = (OperatorToken) stack.peek();
                     if ((o1.getOperator().isLeftAssociative() && o1.getOperator().getPrecedence() <= o2.getOperator()
-                            .getPrecedence())
-                            ||
-                            (o1.getOperator().getPrecedence() < o2.getOperator().getPrecedence())) {
+                            .getPrecedence()) || (o1.getOperator().getPrecedence() < o2.getOperator().getPrecedence())) {
                         output.add(stack.pop());
+                    }else {
+                        break;
                     }
                 }
                 stack.push(token);

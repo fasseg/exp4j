@@ -61,6 +61,9 @@ public abstract class Operators {
         builtinOperators[INDEX_DIVISION]= new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {
             @Override
             public double apply(final double... args) {
+                if (args[1] == 0d) {
+                    throw new ArithmeticException("Division by zero!");
+                }
                 return args[0] / args[1];
             }
         };
@@ -73,6 +76,9 @@ public abstract class Operators {
         builtinOperators[INDEX_MODULO]= new Operator("%", 2, true, Operator.PRECEDENCE_MODULO) {
             @Override
             public double apply(final double... args) {
+                if (args[1] == 0d) {
+                    throw new ArithmeticException("Division by zero!");
+                }
                 return args[0] % args[1];
             }
         };

@@ -174,4 +174,35 @@ public class ExpressionBuilderTest {
                 .evaluate();
         assertEquals(11.1d,result, 0d);
     }
+
+    @Test
+    public void testExpressionBuilder13() throws Exception {
+        double result = new ExpressionBuilder("-3^2")
+                .build()
+                .evaluate();
+        assertEquals(9d,result, 0d);
+    }
+
+    @Test
+    public void testExpressionBuilder14() throws Exception {
+        double result = new ExpressionBuilder("-(3^2)")
+                .build()
+                .evaluate();
+        assertEquals(-9d,result, 0d);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void testExpressionBuilder15() throws Exception {
+        double result = new ExpressionBuilder("-3/0")
+                .build()
+                .evaluate();
+    }
+    @Test
+    public void testExpressionBuilder16() throws Exception {
+        double result = new ExpressionBuilder("log(x) - y * (sqrt(x^cos(y)))")
+                .build()
+                .variable("x", 1d)
+                .variable("y", 2d)
+                .evaluate();
+    }
 }

@@ -448,34 +448,68 @@ public class TokenizerTest {
         assertFalse(tokenizer.hasNext());
     }
 
-    private static void assertSeparatorToken(Token token) {
-        assertEquals(Token.TOKEN_SEPARATOR, token.getType());
+    @Test
+    public void testTokenization21() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("log(x) - y * (sqrt(x^cos(y)))".toCharArray(), null, null);
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "log", 1);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "x");
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "-", 2, Operator.PRECEDENCE_SUBTRACTION);
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "y");
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "sqrt", 1);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "x");
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "^", 2, Operator.PRECEDENCE_POWER);
+
+        assertTrue(tokenizer.hasNext());
+        assertFunctionToken(tokenizer.nextToken(), "cos", 1);
+
+        assertTrue(tokenizer.hasNext());
+        assertOpenParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "y");
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertTrue(tokenizer.hasNext());
+        assertCloseParanthesesToken(tokenizer.nextToken());
+
+        assertFalse(tokenizer.hasNext());
     }
 
-    @Test
-    public void testTokenizerPerformance() throws Exception {
-        final String expression = "cos(x)*14-((log(x)*3.445) / 17.8889) +x -sqrt(2+x) - x^(3-log(x))";
-
-        // warmup
-        Tokenizer tokenizer = new Tokenizer(expression.toCharArray(), null, null);
-        while (tokenizer.hasNext()) {
-            tokenizer.nextToken();
-        }
-
-        // 100 tokenizations
-        tokenizer = new Tokenizer(expression.toCharArray(), null, null);
-        final long time = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
-            while (tokenizer.hasNext()) {
-                tokenizer.nextToken();
-            }
-        }
-        final long duration = System.currentTimeMillis() - time;
-        log.info("+------------------------------+");
-        log.info("| Tokenizer performance result |");
-        log.info("+------------------------------+-------------------------------------------------");
-        log.info("| Expression: {}", expression);
-        log.info("| Finished 100,000 tokenizations in\t{} ms", duration);
-        log.info("+--------------------------------------------------------------------------------");
+    private static void assertSeparatorToken(Token token) {
+        assertEquals(Token.TOKEN_SEPARATOR, token.getType());
     }
 }
