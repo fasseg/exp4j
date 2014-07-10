@@ -1103,7 +1103,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression42() throws Exception {
         String expr = "7.2973525698e-3";
-        double expected = 7.2973525698d * Math.pow(10, -3);
+        double expected = 7.2973525698e-3d;
         Expression e = new ExpressionBuilder(expr).build();
         assertTrue(expected == e.evaluate());
     }
@@ -1111,34 +1111,29 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression43() throws Exception {
         String expr = "6.02214E23";
-        double expected = 6.02214d * Math.pow(10, 23);
+        double expected = 6.02214e23d;
         Expression e = new ExpressionBuilder(expr).build();
-        assertTrue(expected == e.evaluate());
+        double result = e.evaluate();
+        assertTrue(expected == result);
     }
 
     @Test
     public void testExpression44() throws Exception {
         String expr = "6.02214E23";
-        double expected = 6.02214d * Math.pow(10, 23);
+        double expected = 6.02214e23d;
         Expression e = new ExpressionBuilder(expr).build();
         assertTrue(expected == e.evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = NumberFormatException.class)
     public void testExpression45() throws Exception {
         String expr = "6.02214E2E3";
         new ExpressionBuilder(expr).build();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = NumberFormatException.class)
     public void testExpression46() throws Exception {
         String expr = "6.02214e2E3";
-        new ExpressionBuilder(expr).build();
-    }
-
-    @Test(expected = Exp4jException.class)
-    public void testExpression47() throws Exception {
-        String expr = "6.02214y3";
         new ExpressionBuilder(expr).build();
     }
 
@@ -1183,7 +1178,7 @@ public class ExpressionBuilderTest {
     @Test(expected = Exp4jException.class)
     public void testExpression53() throws Exception {
         String expr = "14 * 2x";
-        Expression e = new ExpressionBuilder(expr).build();
+        new ExpressionBuilder(expr).build().evaluate();
     }
 
     @Test(expected = Exp4jException.class)

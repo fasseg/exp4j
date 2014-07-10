@@ -37,10 +37,10 @@ public class Tokenizer {
 
     private Token lastToken;
 
-    public Tokenizer(final char[] expression, final Map<String, Function> userFunctions,
+    public Tokenizer(String expression, final Map<String, Function> userFunctions,
             final Map<String, Operator> userOperators) {
-        this.expression = expression;
-        this.expressionLength = expression.length;
+        this.expression = expression.trim().toCharArray();
+        this.expressionLength = this.expression.length;
         this.userFunctions = userFunctions;
         this.userOperators = userOperators;
     }
@@ -174,7 +174,7 @@ public class Tokenizer {
             op = this.userOperators.get(String.valueOf(expression, offset, len));
         }
         if (op == null && len == 1) {
-            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR || lastToken.getType() == Token.TOKEN_PARANTHESES_OPEN) ? 1 : 2;
             op = Operators.getBuiltinOperator(expression[offset], argc);
         }
         return op;
@@ -186,7 +186,7 @@ public class Tokenizer {
             op = this.userOperators.get(String.valueOf(firstChar));
         }
         if (op == null) {
-            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR || lastToken.getType() == Token.TOKEN_PARANTHESES_OPEN) ? 1 : 2;
             op = Operators.getBuiltinOperator(firstChar, argc);
         }
         return op;
@@ -200,7 +200,7 @@ public class Tokenizer {
             lastToken = new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
             return lastToken;
         }
-        while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len], expression[offset + len - 1] == 'e')) {
+        while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len], expression[offset + len - 1] == 'e' || expression[offset + len - 1] == 'E')) {
             len++;
             this.pos++;
         }
@@ -209,7 +209,7 @@ public class Tokenizer {
     }
 
     private boolean isNumeric(char ch, boolean lastCharE) {
-        return Character.isDigit(ch) || ch == '.' || ch == 'e' || (lastCharE && (ch == '-' || ch == '+'));
+        return Character.isDigit(ch) || ch == '.' || ch == 'e' || ch == 'E' || (lastCharE && (ch == '-' || ch == '+'));
     }
 
     private boolean isEndOfExpression(int offset) {
