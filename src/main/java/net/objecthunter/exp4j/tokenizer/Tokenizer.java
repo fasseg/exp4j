@@ -16,7 +16,6 @@
 
 package net.objecthunter.exp4j.tokenizer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.objecthunter.exp4j.function.Function;
@@ -32,45 +31,22 @@ public class Tokenizer {
 
     private final Map<String, Function> userFunctions;
 
+    private final Map<String, Operator> userOperators;
+
     private int pos = 0;
 
     private Token lastToken;
 
-    public Tokenizer(char[] expression) {
-        this.expression = expression;
-        this.expressionLength = expression.length;
-        this.userFunctions = new HashMap<>(0);
-    }
-
-    public Tokenizer(char[] expression, Map<String, Function> userFunctions) {
+    public Tokenizer(final char[] expression, final Map<String, Function> userFunctions,
+            final Map<String, Operator> userOperators) {
         this.expression = expression;
         this.expressionLength = expression.length;
         this.userFunctions = userFunctions;
-    }
-
-    public Tokenizer(char[] expression, Function... userFunctions) {
-        this.expression = expression;
-        this.expressionLength = expression.length;
-        if (userFunctions == null) {
-            this.userFunctions = new HashMap<>(0);
-        } else {
-            this.userFunctions = new HashMap<>(userFunctions.length);
-            for (Function f : userFunctions) {
-                this.userFunctions.put(f.getName(), f);
-            }
-        }
+        this.userOperators = userOperators;
     }
 
     public boolean hasNext() {
         return this.expression.length > pos;
-    }
-
-    public Tokenizer(String expression) {
-        this(expression.toCharArray());
-    }
-
-    public Tokenizer(String expression, Function... userFunctions) {
-        this(expression.toCharArray(), userFunctions);
     }
 
     public Token nextToken() throws TokenizerException {
@@ -139,7 +115,10 @@ public class Tokenizer {
     }
 
     private Function getFunction(String name) {
-        Function f = this.userFunctions.get(name);
+        Function f = null;
+        if (this.userFunctions != null) {
+            f = this.userFunctions.get(name);
+        }
         if (f == null) {
             f = Functions.getBuiltinFunction(name);
         }
@@ -191,20 +170,26 @@ public class Tokenizer {
 
     private Operator getOperator(char[] expression, int offset, int len) {
         Operator op = null;
-        final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
-        if (len == 1) {
+        if (this.userOperators != null) {
+            op = this.userOperators.get(String.valueOf(expression, offset, len));
+        }
+        if (op == null && len == 1) {
+            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
             op = Operators.getBuiltinOperator(expression[offset], argc);
         }
         return op;
     }
 
     private Operator getOperator(char firstChar) {
-        final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
-        Operator op = Operators.getBuiltinOperator(firstChar, argc);
-        if (op != null) {
-            return op;
+        Operator op = null;
+        if (this.userOperators != null) {
+            op = this.userOperators.get(String.valueOf(firstChar));
         }
-        return null;
+        if (op == null) {
+            final int argc = (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR) ? 1 : 2;
+            op = Operators.getBuiltinOperator(firstChar, argc);
+        }
+        return op;
     }
 
     private Token parseNumberToken(final char firstChar) {

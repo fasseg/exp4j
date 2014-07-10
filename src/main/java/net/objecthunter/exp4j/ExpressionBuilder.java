@@ -16,7 +16,9 @@
 
 package net.objecthunter.exp4j;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -28,27 +30,32 @@ public class ExpressionBuilder {
 
     private final String expression;
 
-    private final List<Function> userFunctions = new ArrayList<>(4);
+    private final Map<String, Function> userFunctions;
 
     private final Map<String, Operator> userOperators;
 
     public ExpressionBuilder(@NotNull String expression) {
         this.expression = expression;
         this.userOperators = new HashMap<>(4);
+        this.userFunctions = new HashMap<>(4);
     }
 
     public ExpressionBuilder function(Function function) {
-        this.userFunctions.add(function);
+        this.userFunctions.put(function.getName(), function);
         return this;
     }
 
     public ExpressionBuilder functions(Function... functions) {
-        Collections.addAll(this.userFunctions, functions);
+        for (Function f : functions) {
+            this.userFunctions.put(f.getName(), f);
+        }
         return this;
     }
 
     public ExpressionBuilder functions(List<Function> functions) {
-        this.userFunctions.addAll(functions);
+        for (Function f : functions) {
+            this.userFunctions.put(f.getName(), f);
+        }
         return this;
     }
 
@@ -75,8 +82,7 @@ public class ExpressionBuilder {
         if (expression.isEmpty()) {
             throw new Exp4jException("The expression can not be empty");
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, (Function[]) this.userFunctions
-                .toArray(new Function[this.userFunctions.size()])));
+        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators));
     }
 
 }
