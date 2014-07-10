@@ -151,4 +151,27 @@ public class ExpressionBuilderTest {
                 .validate();
         assertTrue(res.isValid());
     }
+    @Test
+    public void testExpressionBuilder10() throws Exception {
+        double result = new ExpressionBuilder("1e1")
+                .build()
+                .evaluate();
+        assertEquals(10d,result, 0d);
+    }
+
+    @Test
+    public void testExpressionBuilder11() throws Exception {
+        double result = new ExpressionBuilder("1.11e-1")
+                .build()
+                .evaluate();
+        assertEquals(0.111d,result, 0d);
+    }
+
+    @Test
+    public void testExpressionBuilder12() throws Exception {
+        double result = new ExpressionBuilder("1.11e+1")
+                .build()
+                .evaluate();
+        assertEquals(11.1d,result, 0d);
+    }
 }

@@ -55,7 +55,7 @@ public class Tokenizer {
         while (Character.isWhitespace(ch)) {
             ch = expression[++pos];
         }
-        if (isNumeric(ch)) {
+        if (isNumeric(ch, false)) {
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
             return parseArumentSeparatorToken(ch);
@@ -200,7 +200,7 @@ public class Tokenizer {
             lastToken = new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
             return lastToken;
         }
-        while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len])) {
+        while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len], expression[offset + len - 1] == 'e')) {
             len++;
             this.pos++;
         }
@@ -208,8 +208,8 @@ public class Tokenizer {
         return lastToken;
     }
 
-    private boolean isNumeric(char ch) {
-        return Character.isDigit(ch) || ch == '.' || ch == 'e';
+    private boolean isNumeric(char ch, boolean lastCharE) {
+        return Character.isDigit(ch) || ch == '.' || ch == 'e' || (lastCharE && (ch == '-' || ch == '+'));
     }
 
     private boolean isEndOfExpression(int offset) {
