@@ -360,7 +360,7 @@ public class ExpressionBuilderTest {
             }
         };
         Expression e =
-                new ExpressionBuilder("power(x,y)").function(custom1).build().variable("x", 1d).variable("y", 4d);
+                new ExpressionBuilder("power(x,y)").function(custom1).build().variable("x", 2d).variable("y", 4d);
         assertTrue(Math.pow(2, 4) == e.evaluate());
     }
 
@@ -505,7 +505,7 @@ public class ExpressionBuilderTest {
         };
         ExpressionBuilder b = new ExpressionBuilder("power(2,3)").function(minFunction);
         double calculated = b.build().evaluate();
-        assertTrue(calculated == Math.pow(2, 3));
+        assertEquals(Math.pow(2, 3), calculated, 0d);
     }
 
     // thanks to Narendra Harmwal who noticed that getArgumentCount was not
@@ -681,7 +681,7 @@ public class ExpressionBuilderTest {
         assertTrue(1d == e.evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidOperator1() throws Exception {
         Operator fail = new Operator("2", 2, true, 1) {
 
@@ -693,7 +693,7 @@ public class ExpressionBuilderTest {
         new ExpressionBuilder("1").operator(fail).build();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidFunction1() throws Exception {
         Function func = new Function("1gd") {
 
@@ -704,7 +704,7 @@ public class ExpressionBuilderTest {
         };
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidFunction2() throws Exception {
         Function func = new Function("+1gd") {
 
@@ -791,7 +791,7 @@ public class ExpressionBuilderTest {
         assertTrue(result == Math.log(Math.sin(varX)));
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSameName() throws Exception {
         Function custom = new Function("bar") {
 
@@ -801,10 +801,11 @@ public class ExpressionBuilderTest {
             }
         };
         double varBar = 1.3d;
-        Expression e = new ExpressionBuilder("f(bar)=bar(bar)")
+        Expression e = new ExpressionBuilder("bar(bar)")
                 .function(custom).build().variable("bar",varBar);
-        double result = e.evaluate();
-        assertTrue(result == varBar / 2);
+        ValidationResult res = e.validate();
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
     }
 
     @Test(expected = Exp4jException.class)
@@ -1010,7 +1011,7 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = Exception.class)
     public void testVarname1() throws Exception {
         String expr = "12.23 * foo.bar";
         Expression e = new ExpressionBuilder(expr)
@@ -1175,30 +1176,37 @@ public class ExpressionBuilderTest {
         double result = e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test
     public void testExpression53() throws Exception {
         String expr = "14 * 2x";
-        new ExpressionBuilder(expr).build().evaluate();
+        Expression exp = new ExpressionBuilder(expr).build();
+        exp.variable("x",1.5d);
+        assertTrue(exp.validate().isValid());
+        assertEquals(14d*2d*1.5d, exp.evaluate(), 0d);
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test
     public void testExpression54() throws Exception {
         String expr = "2 ((-(x)))";
         Expression e = new ExpressionBuilder(expr).build();
+        e.variable("x",1.5d);
+        assertEquals(-3d, e.evaluate(), 0d);
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test
     public void testExpression55() throws Exception {
         String expr = "2 sin(x)";
         Expression e = new ExpressionBuilder(expr).build();
+        e.variable("x",2d);
         assertTrue(Math.sin(2d) * 2 == e.evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test
     public void testExpression56() throws Exception {
         String expr = "2 sin(3x)";
         Expression e = new ExpressionBuilder(expr).build();
-        assertTrue(Math.sin(6d) * 2 == e.evaluate());
+        e.variable("x",2d);
+        assertTrue(Math.sin(6d) * 2d == e.evaluate());
     }
 
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
@@ -1285,21 +1293,6 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.evaluate());
     }
 
-    // test for https://www.objecthunter.net/jira/browse/EXP-19
-    // thanks go out to Yunior Peralta for the report
-    @Test
-    public void testCharacterPositionInException1() throws Exception {
-        String expr;
-        expr = "2 + sn(4)";
-        try {
-            Expression e = new ExpressionBuilder(expr).build();
-            fail("Expression was parsed but should throw an Exception");
-        } catch (Exp4jException e) {
-            String expected = "Unable to parse character 's' at position 5 in expression '2 + sn(4)'";
-            assertEquals(expected, e.getMessage());
-        }
-    }
-
     @Test
     public void testExpression5() throws Exception {
         String expr;
@@ -1368,8 +1361,10 @@ public class ExpressionBuilderTest {
     @Test(expected = Exp4jException.class)
     public void testFailUnknownFunction3() throws Exception {
         String expr;
-        expr = "f(cos) = cos(cos)";
-        new ExpressionBuilder(expr).build().evaluate();
+        expr = "tcos(1)";
+        Expression exp = new ExpressionBuilder(expr).build();
+        double result = exp.evaluate();
+        System.out.println(result);
     }
 
     @Test
@@ -1721,6 +1716,6 @@ public class ExpressionBuilderTest {
         expr = "x * pi";
         expected = x * pi;
         Expression e = new ExpressionBuilder(expr).build();
-        assertTrue(expected == e.variable("x", pi).evaluate());
+        assertTrue(expected == e.variable("x", x).variable("pi", pi).evaluate());
     }
 }

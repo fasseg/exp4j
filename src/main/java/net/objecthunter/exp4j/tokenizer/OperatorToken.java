@@ -22,6 +22,9 @@ public class OperatorToken extends Token{
 
     public OperatorToken(Operator op) {
         super(Token.TOKEN_OPERATOR);
+        if (op == null) {
+            throw new IllegalArgumentException("Operator is unknown for token.");
+        }
         this.operator = op;
     }
 

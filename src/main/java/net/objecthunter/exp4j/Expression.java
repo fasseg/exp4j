@@ -26,31 +26,53 @@ public class Expression {
 
     private final Map<String, Double> variables;
 
+    private final Set<String> userFunctionNames;
+
+
     Expression(final Token[] tokens) {
         this.tokens = tokens;
-        this.variables = new HashMap<>();
+        this.variables = new HashMap<>(4);
+        this.userFunctionNames = Collections.<String>emptySet();
     }
 
-    Expression(final Token[] tokens, Map<String, Double> variables) {
+    Expression(final Token[] tokens, Set<String> userFunctionNames) {
         this.tokens = tokens;
-        this.variables = variables;
+        this.variables = new HashMap<>(4);
+        this.userFunctionNames = userFunctionNames;
     }
 
     public Expression variable(final String name, final double value) {
+        this.checkVariableName(name);
         this.variables.put(name, value);
         return this;
     }
 
+    private void checkVariableName(String name) {
+        if (this.userFunctionNames.contains(name)) {
+            throw new IllegalArgumentException("The variable name '" + name + "' is invalid. Since there exists a function with the same name");
+        }
+        if (!Character.isAlphabetic(name.charAt(0)) && name.charAt(0) != '_') {
+            throw new IllegalArgumentException("The variable name '" + name + " is invalid. Name must start with a letter or an underscore");
+        }
+        for (char ch : name.substring(1).toCharArray()) {
+            if (!Character.isAlphabetic(ch) && !Character.isDigit(ch) && ch != '_') {
+                throw new IllegalArgumentException("The variable name '" + name + " is invalid. Name must only contain letters, numbers or the underscore");
+            }
+        }
+    }
+
     public Expression variables(Map<String, Double> variables) {
-        this.variables.putAll(variables);
+        for (Map.Entry<String, Double> v : variables.entrySet()) {
+            this.variable(v.getKey(), v.getValue());
+        }
         return this;
     }
 
     public ValidationResult validate() {
         final List<String> errors = new ArrayList<>(0);
-        for (Token t : this.tokens) {
+        for (final Token t : this.tokens) {
             if (t.getType() == Token.TOKEN_VARIABLE) {
-                final String var =((VariableToken) t).getName(); 
+                final String var = ((VariableToken) t).getName();
                 if (!variables.containsKey(var)) {
                     errors.add("The variable '" + var + "' has not been set");
                 }
@@ -66,7 +88,12 @@ public class Expression {
             if (t.getType() == Token.TOKEN_NUMBER) {
                 output.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
-                output.push(this.variables.get(((VariableToken) t).getName()));
+                final String name = ((VariableToken) t).getName();
+                final Double value = this.variables.get(name);
+                if (value == null) {
+                    throw new Exp4jException("No value has been set for the variable '" + name + "'.");
+                }
+                output.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
                 OperatorToken op = (OperatorToken) t;
                 if (output.size() < op.getOperator().getNumArgs()) {
@@ -92,12 +119,22 @@ public class Expression {
                 for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
                     args[j] = output.pop();
                 }
-                output.push(func.getFunction().apply(args));
+                output.push(func.getFunction().apply(this.reverseInPlace(args)));
             }
         }
         if (output.size() > 1) {
             throw new Exp4jException("Invalid number of items on the output queue. This should not happen");
         }
         return output.pop();
+    }
+
+    private double[] reverseInPlace(double[] args) {
+        int len = args.length;
+        for (int i=0; i< len/2;i++) {
+            double tmp = args[i];
+            args[i] = args[len - i - 1];
+            args[len -i -1] = tmp;
+        }
+        return args;
     }
 }

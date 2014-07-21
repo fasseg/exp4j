@@ -1,9 +1,10 @@
 package net.objecthunter.exp4j;
 
-import net.objecthunter.exp4j.tokenizer.*;
-import org.junit.Assert;
-
 import static org.junit.Assert.assertEquals;
+
+import net.objecthunter.exp4j.tokenizer.*;
+
+import org.junit.Assert;
 
 /**
  * Created by ruckus on 30.06.14.

@@ -15,16 +15,16 @@
 */
 package net.objecthunter.exp4j;
 
-import net.objecthunter.exp4j.Expression;
+import static org.junit.Assert.assertEquals;
+
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.FunctionToken;
 import net.objecthunter.exp4j.tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.Token;
-import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class ExpressionTest {

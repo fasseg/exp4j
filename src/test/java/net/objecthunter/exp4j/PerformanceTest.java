@@ -15,12 +15,13 @@
 */
 package net.objecthunter.exp4j;
 
-import org.junit.Test;
+import java.util.Formatter;
+import java.util.Random;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import java.util.Formatter;
-import java.util.Random;
+
+import org.junit.Test;
 
 public class PerformanceTest {
 

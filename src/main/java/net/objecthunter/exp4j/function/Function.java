@@ -33,6 +33,12 @@ public abstract class Function {
     }
 
     public Function(String name) {
+        if (name == null || name.trim().isEmpty())  {
+            throw new IllegalArgumentException("Function name can not be empty");
+        }
+        if (!Character.isAlphabetic(name.charAt(0)) && name.charAt(0) != '_') {
+            throw new IllegalArgumentException("Function name is invalid. Name has to start with a letter or an underscore");
+        }
         this.name = name;
         this.numArguments = 1;
     }

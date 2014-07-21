@@ -4,15 +4,15 @@ package net.objecthunter.exp4j.tokenizer;
 import static net.objecthunter.exp4j.TestUtil.*;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TokenizerTest {
 

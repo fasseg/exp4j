@@ -24,8 +24,6 @@ import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
 
-import com.sun.istack.internal.NotNull;
-
 public class ExpressionBuilder {
 
     private final String expression;
@@ -34,7 +32,10 @@ public class ExpressionBuilder {
 
     private final Map<String, Operator> userOperators;
 
-    public ExpressionBuilder(@NotNull String expression) {
+    public ExpressionBuilder(String expression) {
+        if (expression == null || expression.trim().isEmpty()) {
+            throw new IllegalArgumentException("Expression can not be empty");
+        }
         this.expression = expression;
         this.userOperators = new HashMap<>(4);
         this.userFunctions = new HashMap<>(4);
@@ -60,20 +61,30 @@ public class ExpressionBuilder {
     }
 
     public ExpressionBuilder operator(Operator operator) {
+        this.checkOperatorSymbol(operator);
         this.userOperators.put(operator.getSymbol(), operator);
         return this;
     }
 
+    private void checkOperatorSymbol(Operator op) {
+        String name = op.getSymbol();
+        for (char ch : name.toCharArray()) {
+            if (!Operator.isAllowedOperatorChar(ch)) {
+                throw new IllegalArgumentException("The operator symbol '" + name + "' is invalid");
+            }
+        }
+    }
+
     public ExpressionBuilder operator(Operator... operators) {
         for (Operator o : operators) {
-            this.userOperators.put(o.getSymbol(), o);
+            this.operator(o);
         }
         return this;
     }
 
     public ExpressionBuilder operator(List<Operator> operators) {
         for (Operator o : operators) {
-            this.userOperators.put(o.getSymbol(), o);
+            this.operator(o);
         }
         return this;
     }
@@ -82,7 +93,8 @@ public class ExpressionBuilder {
         if (expression.isEmpty()) {
             throw new Exp4jException("The expression can not be empty");
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators));
+        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators),
+                this.userFunctions.keySet());
     }
 
 }
