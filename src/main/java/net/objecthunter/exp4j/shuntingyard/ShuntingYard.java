@@ -71,7 +71,7 @@ public class ShuntingYard {
         while (!stack.empty()) {
             Token t = stack.pop();
             if (t.getType() == Token.TOKEN_PARANTHESES_CLOSE || t.getType() == Token.TOKEN_PARANTHESES_OPEN) {
-                throw new Exp4jException("Mistmatched parantheses detected. Please check the expression");
+                throw new Exp4jException("Mismatched parentheses detected. Please check the expression");
             } else {
                 output.add(t);
             }

@@ -22,7 +22,7 @@ public abstract class Operator {
     public static final int PRECEDENCE_DIVISION = PRECEDENCE_MULTIPLICATION;
     public static final int PRECEDENCE_MODULO = PRECEDENCE_DIVISION;
     public static final int PRECEDENCE_POWER = 10000;
-    public static final int PRECEDENCE_UNARY_MINUS = 20000;
+    public static final int PRECEDENCE_UNARY_MINUS = 5000;
     public static final int PRECEDENCE_UNARY_PLUS = PRECEDENCE_UNARY_MINUS;
 
     private static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/',

@@ -182,15 +182,15 @@ public class ExpressionBuilderTest {
         double result = new ExpressionBuilder("-3^2")
                 .build()
                 .evaluate();
-        assertEquals(9d, result, 0d);
+        assertEquals(-9d, result, 0d);
     }
 
     @Test
     public void testExpressionBuilder14() throws Exception {
-        double result = new ExpressionBuilder("-(3^2)")
+        double result = new ExpressionBuilder("(-3)^2")
                 .build()
                 .evaluate();
-        assertEquals(-9d, result, 0d);
+        assertEquals(9d, result, 0d);
     }
 
     @Test(expected = ArithmeticException.class)
@@ -588,7 +588,7 @@ public class ExpressionBuilderTest {
             }
         };
         Expression e = new ExpressionBuilder("2^2!").operator(factorial).build();
-        assertTrue(4d == e.evaluate());
+        assertEquals(4d,e.evaluate(),0d);
         e = new ExpressionBuilder("2!^2").operator(factorial).build();
         assertTrue(4d == e.evaluate());
         e = new ExpressionBuilder("-(3!)^-1").operator(factorial).build();
@@ -823,6 +823,18 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testUnaryMinusPowerPrecedence() throws Exception {
+        Expression e = new ExpressionBuilder("-1^2").build();
+        assertEquals(-1d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testUnaryMinus() throws Exception {
+        Expression e = new ExpressionBuilder("-1").build();
+        assertEquals(-1d, e.evaluate(), 0d);
+    }
+
+    @Test
     public void testExpression1() throws Exception {
         String expr;
         double expected;
@@ -942,7 +954,23 @@ public class ExpressionBuilderTest {
         double x = 1.334d;
         double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
         Expression e = new ExpressionBuilder(expr).build().variable("x",x);
-        assertTrue(expected == e.evaluate());
+        assertEquals(expected ,e.evaluate(),0d);
+    }
+
+    @Test
+    public void testExpressionPower() throws Exception {
+        String expr = "2^-2";
+        double expected = Math.pow(2, -2);
+        Expression e = new ExpressionBuilder(expr).build();
+        assertEquals(expected ,e.evaluate(),0d);
+    }
+
+    @Test
+    public void testExpressionMultiplication() throws Exception {
+        String expr = "2*-2";
+        double expected = -4d;
+        Expression e = new ExpressionBuilder(expr).build();
+        assertEquals(expected ,e.evaluate(),0d);
     }
 
     @Test
@@ -1207,6 +1235,25 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder(expr).build();
         e.variable("x",2d);
         assertTrue(Math.sin(6d) * 2d == e.evaluate());
+    }
+
+    @Test
+    public void testDocumentationExample1() throws Exception {
+        Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+                .build()
+                .variable("x", 2.3)
+                .variable("y", 3.14);
+        double result = e.evaluate();
+        double expected = 3* Math.sin(3.14d) -2d / (2.3d - 2d);
+        assertEquals(expected, result, 0d);
+    }
+
+    @Test
+    public void testDocumentationExample2() throws Exception {
+        String expr = "7.2973525698e-3";
+        double expected = Double.parseDouble(expr);
+        Expression e = new ExpressionBuilder(expr).build();
+        assertEquals(expected, e.evaluate(),0d);
     }
 
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
