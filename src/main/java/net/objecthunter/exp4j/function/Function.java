@@ -1,0 +1,96 @@
+/* 
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
+package net.objecthunter.exp4j.function;
+
+/**
+ * A class representing a Function which can be used in an expression
+ */
+public abstract class Function {
+
+    protected final String name;
+
+    protected final int numArguments;
+
+    /**
+     * Create a new Function with a given name and number of arguments
+     * @param name the name of the Function
+     * @param numArguments the number of arguments the function takes
+     */
+    public Function(String name, int numArguments) {
+        this.name = name;
+        if (numArguments < 1) {
+            throw new IllegalArgumentException("The number of function arguments can not be less than 1 for '" +
+                    name + "'");
+        }
+        this.numArguments = numArguments;
+
+    }
+
+    /**
+     * Create a new Function with a given name that takes a single argument
+     * @param name the name of the Function
+     */
+    public Function(String name) {
+        if (name == null || name.trim().isEmpty())  {
+            throw new IllegalArgumentException("Function name can not be empty");
+        }
+        if (!Character.isAlphabetic(name.charAt(0)) && name.charAt(0) != '_') {
+            throw new IllegalArgumentException("Function name is invalid. Name has to start with a letter or an underscore");
+        }
+        this.name = name;
+        this.numArguments = 1;
+    }
+
+    /**
+     * Get the name of the Function
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Get the number of arguments for this function
+     * @return the number of arguments
+     */
+    public int getNumArguments() {
+        return numArguments;
+    }
+
+    /**
+     * Method that does the actual calculation of the function value given the arguments
+     * @param args the set of arguments used for calculating the function
+     * @return the result of the function evaluation
+     */
+    public abstract double apply(double... args);
+
+    /**
+     * Get the set of characters which are allowed for use in Function names.
+     * @return the set of characters allowed
+     */
+    public static char[] getAllowedFunctionCharacters() {
+        char[] chars = new char[53];
+        int count = 0;
+        for (int i = 65; i < 91; i++) {
+            chars[count++] = (char) i;
+        }
+        for (int i = 97; i < 123; i++) {
+            chars[count++] = (char) i;
+        }
+        chars[count] = '_';
+        return chars;
+    }
+}

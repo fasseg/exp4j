@@ -45,7 +45,12 @@
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-25</action>
         </release>
         <release version="0.3.11" description="Bugfix release">
-            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
+	    <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
+	</release>
+        <release version="0.4.0-ALPHA-1" description="Rewrite">
+            <action dev="fas" type="add">New Tokenizer</action>
+            <action dev="fas" type="add">New Shunting Yard</action>
+            <action dev="fas" type="add">New API</action>
         </release>
 	</body>
 </document>

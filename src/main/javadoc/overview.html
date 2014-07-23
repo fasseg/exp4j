@@ -4,93 +4,96 @@
     <TITLE>exp4j</TITLE>
   </HEAD>
   <BODY>
-  	<h2>Using the ExpressionBuilder and the Calculable interface</h2>
-  	<b>Evaluate an expression</b>
+  <h2>Using the ExpressionBuilder and the Expression API</h2>
+  <b>Evaluate an expression</b>
   	<pre>
-  		Calculable calc = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)").withVariable("x", varX).withVariable("y", varY).build()
-  		double result1=calc.calculate();
-  	</pre>
-  	you can also change variables values after building by invoking <code>Calculable.setVariable(String varName,double value)</code>,
-  	but one has to make sure that the variable names are passed into the ExpressionBuilder using at
-  	least ExpressionBuilder.withVariableNames(String...). If variables are used in the expression without setting at least their names,
-  	an UnparseableExpressionException will be thrown.
+        Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+                .build()
+                .variable("x", 2.3)
+                .variable("y", 3.14);
+        double result = e.evaluate();
+    </pre>
+  <b>Using custom functions</b><br/>
+  <p>you can extend the abstract class Function in order to use custom functions in expressions. You only have to implement the
+  apply(double ... args) method.</p>
   	<pre>
-  		Calculable calc = new ExpressionBuilder("x * y - 2").withVariableNames("x","y").build();
-  		calc.setVariable("x",1);
-  		calc.setVariable("x",2);
-  		assertTrue(calc.calculate()==0);
-  	</pre>
-  	
-  	<b>Using custom functions</b><br/>
-  	you can extend the abstract class CustomFunction in order to use custom functions in expressions. You only have to implement the 
-  	applyFunction(double value) method.
-  	<pre>
-		CustomFunction fooFunc = new CustomFunction("foo") {
-			public double applyFunction(double value) {
-				return value*Math.E;
-			}
-		};
-		double varX=12d;
-  		Calculable calc = new ExpressionBuilder("foo(x)").withCustomFunction(fooFunc).withVariable("x",varX).build();
-  		assertTrue(calc.calculate() == Math.E * varX);
-  	</pre> 
-
-  	<b>Using custom operators</b><br/>
-  	you can extend the abstract class CustomOperator in order to use your own operators in expressions. You only have to implement the 
-  	applyOperation(double value) method. CustomOperator's constructor takes four arguments: 
-  	<ul>
-  		<li>the operator's symbols as a String</li>
-  		<li>whether the operator is left associative as a boolean</li>
-  		<li> the precedence of the operator as an int</li>
-  		<li>the number of operands for the operation</li>
-  	</ul>
-  	<pre>
-       CustomOperator greaterEq = new CustomOperator("&gt;=", true, 4, 2) {
-            double applyOperation(double[] values) {
-            	if (values[0] >= values[1]){
-            		return 1d;
-            	}else{
-            		return 0d;
-            	}
+        Function log2 = new Function("log2", 1) {
+            &#64;Override
+            public double apply(double... args) {
+                return Math.log(args[0]) / Math.log(2);
             }
         };
-        Calculable calc = new ExpressionBuilder("1>=2").withOperation(greaterEq).build();
-        assertTrue(0d == calc.calculate());
-  	</pre> 
+        double result = new ExpressionBuilder("log2(4)")
+                .function(log2)
+                .build()
+                .evaluate();
+        double expected = 2;
+        assertEquals(expected, result, 0d);
+  	</pre>
+  <b>Using custom operators</b><br/>
+  <p>you can extend the abstract class Operator in order to use your own operators in expressions. You only have to implement the
+  apply(double ... value) method. The Operator's constructor takes four arguments:</p>
+  <ul>
+      <li>the operator's symbols as a String</li>
+      <li>the number of operands for the operation</li>
+      <li>whether the operator is left associative as a boolean</li>
+      <li>the precedence of the operator as an int</li>
+  </ul>
+  	<pre>
+    Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        &#64;Override
+        public double apply(double... args) {
+            final int arg = (int) args[0];
+            if ((double) arg != args[0]) {
+                throw new IllegalArgumentException("Operand for factorial has to be an integer");
+            }
+            if (arg < 0) {
+                throw new IllegalArgumentException("The operand of the factorial can not be less than zero");
+            }
+            double result = 1;
+            for (int i = 1; i <= arg; i++) {
+                result *= i;
+            }
+            return result;
+        }
+    };
+    double result = new ExpressionBuilder("3!")
+            .operator(factorial)
+            .build()
+            .evaluate();
 
-	 <b>Operators and functions</b><br/><br/>
-	 
-	 the following operators are supported:
-	 
-	 <ul>
-	 <li>Addition: '2 + 2'</li>
-	 <li>Subtraction: '2 - 2'</li>
-	 <li>Multiplication: '2 * 2'</li>
-	 <li>Division: '2 / 2'</li>
-	 <li>Exponential: '2 ^ 2'</li>
-	 <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
-	 <li>Modulo: '2 % 2'</li>
-	 </ul>
-	 
-	 the following functions are supported:
-	 
-	 <ul>
-	 <li>abs: absolute value</li>
-	 <li>acos: arc cosine</li>
-	 <li>asin: arc sine</li>
-	 <li>atan: arc tangent</li>
-	 <li>cbrt: cubic root</li>
-	 <li>ceil: nearest upper integer</li>
-	 <li>cos: cosine</li>
-	 <li>cosh: hyperbolic cosine</li>
-	 <li>exp: euler's number raised to the power (e^x)</li>
-	 <li>floor: nearest lower integer</li>
-	 <li>log: logarithmus naturalis (base e)</li>
-	 <li>sin: sine</li>
-	 <li>sinh: hyperbolic sine</li>
-	 <li>sqrt: square root</li>
-	 <li>tan: tangent</li>
-	 <li>tanh: hyperbolic tangent</li>
-	 </ul><br/><br/>
+    double expected = 6d;
+    assertEquals(expected, result, 0d);
+  	</pre>
+  <b>Operators and functions</b><br/><br/>
+  <p>the following operators are supported:</p>
+  <ul>
+      <li>Addition: '2 + 2'</li>
+      <li>Subtraction: '2 - 2'</li>
+      <li>Multiplication: '2 * 2'</li>
+      <li>Division: '2 / 2'</li>
+      <li>Exponential: '2 ^ 2'</li>
+      <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
+      <li>Modulo: '2 % 2'</li>
+  </ul>
+  <p>the following functions are supported:</p>
+  <ul>
+      <li>abs: absolute value</li>
+      <li>acos: arc cosine</li>
+      <li>asin: arc sine</li>
+      <li>atan: arc tangent</li>
+      <li>cbrt: cubic root</li>
+      <li>ceil: nearest upper integer</li>
+      <li>cos: cosine</li>
+      <li>cosh: hyperbolic cosine</li>
+      <li>exp: euler's number raised to the power (e^x)</li>
+      <li>floor: nearest lower integer</li>
+      <li>log: logarithmus naturalis (base e)</li>
+      <li>sin: sine</li>
+      <li>sinh: hyperbolic sine</li>
+      <li>sqrt: square root</li>
+      <li>tan: tangent</li>
+      <li>tanh: hyperbolic tangent</li>
+  </ul><br/><br/>
   </BODY>
 </HTML>
