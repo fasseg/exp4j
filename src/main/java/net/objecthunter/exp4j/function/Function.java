@@ -13,15 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-
 package net.objecthunter.exp4j.function;
 
+/**
+ * A class representing a Function which can be used in an expression
+ */
 public abstract class Function {
 
     protected final String name;
 
     protected final int numArguments;
 
+    /**
+     * Create a new Function with a given name and number of arguments
+     * @param name the name of the Function
+     * @param numArguments the number of arguments the function takes
+     */
     public Function(String name, int numArguments) {
         this.name = name;
         if (numArguments < 1) {
@@ -32,6 +39,10 @@ public abstract class Function {
 
     }
 
+    /**
+     * Create a new Function with a given name that takes a single argument
+     * @param name the name of the Function
+     */
     public Function(String name) {
         if (name == null || name.trim().isEmpty())  {
             throw new IllegalArgumentException("Function name can not be empty");
@@ -43,16 +54,33 @@ public abstract class Function {
         this.numArguments = 1;
     }
 
+    /**
+     * Get the name of the Function
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the number of arguments for this function
+     * @return the number of arguments
+     */
     public int getNumArguments() {
         return numArguments;
     }
 
+    /**
+     * Method that does the actual calculation of the function value given the arguments
+     * @param args the set of arguments used for calculating the function
+     * @return the result of the function evaluation
+     */
     public abstract double apply(double... args);
 
+    /**
+     * Get the set of characters which are allowed for use in Function names.
+     * @return the set of characters allowed
+     */
     public static char[] getAllowedFunctionCharacters() {
         char[] chars = new char[53];
         int count = 0;

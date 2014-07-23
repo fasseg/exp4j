@@ -12,12 +12,20 @@ About
   exp4j is capable of evaluating expressions and functions in the real domain. It's a small (40KB) library without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
   exp4j comes with a standard set of built-in functions and operators. Additionally users are able to create custom operations and functions.
 
-** Version 0.4.0:
-	As of Version 0.4.0 exp4j has been completely rewritten and a lot of API changes have been introduced. Please don't hate me for that ;). {{{http://www.objecthunter.net/exp4j/v0.3.11}The old version is still available}. Im currently planning to supply a legacy-pack with wrappers for the old API, but I'm not sure that it is feasible.
-	The rewrite was IMHO necessary to accommodate various features (e.g. implicit multiplication) and first of all: Improved performance.
-	Exp4j now only takes a 4 times as long as plain Java math to evaluate a simple expression on my local machine.
+* Version 0.4.0 API Changes
 
-* Evaluate a simple expression:
+	As of Version 0.4.0 exp4j has been completely rewritten and a lot of API changes have been introduced. Please don't hate me ;). {{{http://www.objecthunter.net/exp4j/v0.3.11}The old version is still available}}. Im currently planning to supply a legacy-pack with wrappers for the old API, but I'm not sure that it is feasible.
+	The rewrite was IMHO necessary to accommodate various features (e.g. implicit multiplication) and first of all: Improved performance.
+
+* Usage
+
+** Evaluating an expression
+
+    In order to evaluate an expression. The <<<ExpressionBuilder>>> class can be used to create an <<<Expression>>> object which is capable of evaluation. Custom functions and custom operators can be set via calls to <<<ExpressionBuilder.function()>>> and <<<ExpressionBuilder.operator()>>>. Any given variables can be set on the <<<Expression>>> object returned by <<<ExpressionBuilder.build()>>> via calls to <<<Expression.variable()>>>
+
+*** Example 1:
+
+    Evaluate a simple expression
 
 +--
 Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
@@ -27,23 +35,31 @@ Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
 double result = e.evaluate();
 +--
 
-* Variable declaration
+** Variable declaration
 
-	Variable names must start with a letter or the underscore (_) and can only include letters, digits or underscores.
+	Variable names must start with a letter or the underscore <<<_>>> and can only include letters, digits or underscores.
 	
 	the following are valid variable names:
-	 * varX
-	 * _x1
-	 * _var_X_1
-	 while for e.g. 1_var_x is not as it does not start with a letter or a underscore.
 
-* Scientific notation
+	 * <<<varX>>>
 
-	Since version 0.3.5 it is possible to use scientific notation for numbers (see http://en.wikipedia.org/wiki/Scientific_notation).
-	The number is split into a significand/mantissa (y) and exponent (x) of the form 'yEx' which is evaluated as 'y * 10^x'.
-	Be aware that 'e/E' is no operator and therefore an expression like "1.1e-(x*2)" can not be evaluated. 
-	An example using the Fine-structure constant 'α=7.2973525698  * 10^−3':
-	 
+	 * <<<_x1>>>
+
+	 * <<<_var_X_1>>>
+
+	 while <<<1_var_x>>> is not as it does not start with a letter or a underscore.
+
+** Scientific notation
+
+	Since version 0.3.5 it is possible to use scientific notation for numbers {{{http://en.wikipedia.org/wiki/Scientific_notation}see wikipedia}}.
+	The number is split into a significand/mantissa <<<y>>> and exponent <<<x>>> of the form <<<yEx>>> which is evaluated as <<<y * 10^x>>>.
+	Be aware that 'e/E' is no operator but part of a number and therefore an expression like <<<1.1e-(x*2)>>> can not be evaluated.
+	An example using the Fine-structure constant <<<α=7.2973525698  * 10^−3>>>:
+
+*** Example 2
+
+    Use scientific notation in an expression
+
 +--
 String expr = "7.2973525698e-3";
 double expected = Double.parseDouble(expr);
@@ -51,12 +67,15 @@ Expression e = new ExpressionBuilder(expr).build();
 assertEquals(expected, e.evaluate(),0d);
 +--
 
-* Custom functions
+** Custom functions
 
   	you can extend the abstract class Function in order to use custom functions in expressions. you only have to implement the
-  	applyFunction(double[] values) method. 
+  	<<<apply(double... args)>>> method. In the following example a function for the logarithm to the base 2 is created and used in a following expression.
 
-In the following example a function for the logarithm to the base 2 is created and used in a following expression.
+*** Example 3
+
+    A custom log to base 2 function
+
 +--
 Function log2 = new Function("log2", 1) {
 
@@ -74,9 +93,13 @@ double expected = 2;
 assertEquals(expected, result, 0d);
 +--
 
-	you can also define multi argument functions like max(a,b,c) via the constructor Function(String name, int argc), with argc being the argument count.
+	you can also define multi argument functions like <<<avg(a,b,c,d)>>> via the constructor <<<Function(String name, int argc)>>>, with <<<argc>>> being the argument count.
 	The following example uses a custom function which returns the average of four values.
-	
+
+*** Example 4
+
+    A custom average function taking 4 arguments:
+
 +--
 Function avg = new Function("avg", 4) {
 
@@ -96,24 +119,27 @@ double result = new ExpressionBuilder("avg(1,2,3,4)")
 
 double expected = 2.5d;
 assertEquals(expected, result, 0d);
++--
 
-+--  	
+** Custom operators
 
-* Custom operators
-
-	you can extend the abstract class CustomOperator in order to declare custom operators for use in expressions, with the symbol being one of 
-	!,#,§,$,&,;,:,~,\<,\>,|,=. Be aware that adding a CustomOperator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the '+' operator.
-	The Constructor of a CustomOperator takes up to 4 arguments:
+	you can extend the abstract class <<<Operator>>> in order to declare custom operators for use in expressions, with the symbol being one of
+	<<<!,#,§,$,&,;,:,~,\<,\>,|,=.>>>. Be aware that adding a Operator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the <<<+>>> operator.
+	The constructor of an Operator takes up to 4 arguments:
 	
- * the symbol used for this operation (one of !,#,§,$,&,;,:,~,\<,\>,|,=)
+ * the symbol used for this operation (one of <<<!,#,§,$,&,;,:,~,\<,\>,|,=>>>)
  
  * if the operation is left associative
  
  * the precedence of the operation
  
- * the number of operands the operator has (1 or 2) 
+ * the number of operands the operator has (<<<1 or 2>>>)
 
-In the following example an Operator is created to calculate the factorial of a number.
+
+*** Example 5
+
+    Create a custom operator for calculating the factorial
+
 +--
 Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
 
@@ -144,87 +170,91 @@ assertEquals(expected, result, 0d);
 
 +--
 
-* Built-in operators
+** Built-in operators
 	 
 	 
- * Addition: '2 + 2'
+ * Addition: <<<2 + 2>>>
  
- * Subtraction: '2 - 2'
+ * Subtraction: <<<2 - 2>>>
  
- * Multiplication: '2 * 2'
+ * Multiplication: <<<2 * 2>>>
  
- * Division: '2 / 2'
+ * Division:  <<<2 / 2>>>
  
- * Exponentation: '2 ^ 2'
+ * Exponentation: <<<2 ^ 2>>>
  
- * Unary Minus,Plus (Sign Operators): '+2 - (-2)'
+ * Unary Minus,Plus (Sign Operators): <<<+2 - (-2)>>>
  
- * Modulo: '2 % 2'
+ * Modulo: <<<2 % 2>>>
  
 
-* Precedence of unary minus and power operators
+** Precedence of unary minus and power operators
 
-	The precedence of the unary minus operator is lower than the precedence of the power operator. This means that an expression like "-1^2" is evaluated as "-(1^2)" not "(-1)^2"
+	The precedence of the unary minus operator is lower than the precedence of the power operator. This means that an expression like <<<-1^2>>> is evaluated as <<<-(1^2)>>> not as <<<(-1)^2>>>.
 
 
-* Division by zero in operations and functions
+** Division by zero in operations and functions
 	
-	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing CustomOperator or CustomFunction involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
-	The following example from the exp4j sources shows how to check for such a condition.
+	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing Operator or Function involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
 	
-+--
+*** Example 6
 
-		CustomOperator mod = new CustomOperator("%", true, 3) {
-			@Override
-			protected double applyOperation(double[] values) {
-				if (values[1] == 0d){
-					throw new ArithmeticException("Division by zero!");
-				}
-				return values[0] % values[1];
-			}
-		};
-
+    Throw an Arithmetic exception when a division by zero is attempted
 
 +--
+Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
+    @Override
+    public double apply(final double... args) {
+        if (args[0] == 0d) {
+            throw new ArithmeticException("Division by zero!");
+        }
+        return 1d / args[0];
+    }
+};
+Expression e = new ExpressionBuilder("0$").operator(reciprocal).build();
+e.evaluate(); // <- this call will throw an ArithmeticException
++--
 
 	 
-* Built-in functions
+** Built-in functions
 	 
 	 
- * abs: absolute value
+ * <<<abs>>>: absolute value
  
- * acos: arc cosine
+ * <<<acos>>>: arc cosine
  
- * asin: arc sine
+ * <<<asin>>>: arc sine
  
- * atan: arc tangent
+ * <<<atan>>>: arc tangent
  
- * cbrt: cubic root
+ * <<<cbrt>>>: cubic root
  
- * ceil: nearest upper integer
+ * <<<ceil>>>: nearest upper integer
  
- * cos: cosine
+ * <<<cos>>>: cosine
  
- * cosh: hyperbolic cosine
+ * <<<cosh>>>: hyperbolic cosine
  
- * exp: euler's number raised to the power (e^x)
+ * <<<exp>>>: euler's number raised to the power (e^x)
  
- * floor: nearest lower integer
+ * <<<floor>>>: nearest lower integer
  
- * log: logarithmus naturalis (base e)
+ * <<<log>>>: logarithmus naturalis (base e)
  
- * sin: sine
+ * <<<sin>>>: sine
  
- * sinh: hyperbolic sine
+ * <<<sinh>>>: hyperbolic sine
  
- * sqrt: square root
+ * <<<sqrt>>>: square root
  
- * tan: tangent
+ * <<<tan>>>: tangent
  
- * tanh: hyperbolic tangent
+ * <<<tanh>>>: hyperbolic tangent
  
 
 * API changes
+
+ * Version 0.4.0: New Expression/ExpressionBuilder API due to rewrite
 
  * Version 0.3.2: choice for unary minus precedence via System property
 
@@ -245,7 +275,7 @@ assertEquals(expected, result, 0d);
 
 * Links
  
- * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro}}
+ * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro for Version 0.3.x}}
  
  * {{{http://objecthunter.congrace.de/tinybo/blog/articles/94}exp4j update 0.2.x}}
  

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-
 package net.objecthunter.exp4j.tokenizer;
 
 import java.util.Map;
@@ -49,7 +48,7 @@ public class Tokenizer {
         return this.expression.length > pos;
     }
 
-    public Token nextToken() throws TokenizerException {
+    public Token nextToken(){
         char ch = expression[pos];
         int val = (int) ch;
         while (Character.isWhitespace(ch)) {
@@ -82,7 +81,7 @@ public class Tokenizer {
             return parseFunctionOrVariable();
 
         }
-        throw new TokenizerException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
+        throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
     private Token parseArumentSeparatorToken(char ch) {

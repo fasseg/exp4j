@@ -15,9 +15,16 @@
 */
 package net.objecthunter.exp4j.tokenizer;
 
+/**
+ * Represents a number in the expression
+ */
 public final class NumberToken extends Token {
     private final double value;
 
+    /**
+     * Create a new instance
+     * @param value the value of the number
+     */
     public NumberToken(double value) {
         super(TOKEN_NUMBER);
         this.value = value;
@@ -27,6 +34,10 @@ public final class NumberToken extends Token {
         this(Double.parseDouble(String.valueOf(expression, offset, len)));
     }
 
+    /**
+     * Get the value of the number
+     * @return the value
+     */
     public double getValue() {
         return value;
     }

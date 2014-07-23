@@ -24,6 +24,9 @@ import net.objecthunter.exp4j.operator.Operator;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ExpressionBuilderTest {
 
     @Test
@@ -587,10 +590,10 @@ public class ExpressionBuilderTest {
                 return result;
             }
         };
-        Expression e = new ExpressionBuilder("2^2!").operator(factorial).build();
-        assertEquals(4d,e.evaluate(),0d);
-        e = new ExpressionBuilder("2!^2").operator(factorial).build();
-        assertTrue(4d == e.evaluate());
+        Expression e = new ExpressionBuilder("2^3!").operator(factorial).build();
+        assertEquals(64d, e.evaluate(), 0d);
+        e = new ExpressionBuilder("3!^2").operator(factorial).build();
+        assertTrue(36d == e.evaluate());
         e = new ExpressionBuilder("-(3!)^-1").operator(factorial).build();
         double actual = e.evaluate();
         assertEquals(Math.pow(-6d, -1), actual, 0d);
@@ -717,14 +720,14 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testExpressionBuilder01() throws Exception {
-        Expression e = new ExpressionBuilder("7*x + 3*y").build().variable("x",1).variable("y",2);
+        Expression e = new ExpressionBuilder("7*x + 3*y").build().variable("x", 1).variable("y", 2);
         double result = e.evaluate();
         assertTrue(result == 13d);
     }
 
     @Test
     public void testExpressionBuilder02() throws Exception {
-        Expression e = new ExpressionBuilder("7*x + 3*y").build().variable("x",1).variable("y",2);
+        Expression e = new ExpressionBuilder("7*x + 3*y").build().variable("x", 1).variable("y", 2);
         double result = e.evaluate();
         assertTrue(result == 13d);
     }
@@ -733,7 +736,8 @@ public class ExpressionBuilderTest {
     public void testExpressionBuilder03() throws Exception {
         double varX = 1.3d;
         double varY = 4.22d;
-        Expression e = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").build().variable("x",varX).variable("y",varY);
+        Expression e =
+                new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").build().variable("x", varX).variable("y", varY);
         double result = e.evaluate();
         assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
     }
@@ -742,7 +746,8 @@ public class ExpressionBuilderTest {
     public void testExpressionBuilder04() throws Exception {
         double varX = 1.3d;
         double varY = 4.22d;
-        Expression e = new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").build().variable("x",varX).variable("y",varY);
+        Expression e =
+                new ExpressionBuilder("7*x + 3*y - log(y/x*12)^y").build().variable("x", varX).variable("y", varY);
         double result = e.evaluate();
         assertTrue(result == 7 * varX + 3 * varY - Math.pow(Math.log(varY / varX * 12), varY));
         varX = 1.79854d;
@@ -757,7 +762,7 @@ public class ExpressionBuilderTest {
     public void testExpressionBuilder05() throws Exception {
         double varX = 1.3d;
         double varY = 4.22d;
-        Expression e = new ExpressionBuilder("3*y").build().variable("x",varX).variable("y",varY);
+        Expression e = new ExpressionBuilder("3*y").build().variable("x", varX).variable("y", varY);
         double result = e.evaluate();
         assertTrue(result == 3 * varY);
     }
@@ -778,7 +783,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpressionBuilder07() throws Exception {
         double varX = 1.3d;
-        Expression e = new ExpressionBuilder("log(sin(x))").build().variable("x",varX);
+        Expression e = new ExpressionBuilder("log(sin(x))").build().variable("x", varX);
         double result = e.evaluate();
         assertTrue(result == Math.log(Math.sin(varX)));
     }
@@ -786,7 +791,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpressionBuilder08() throws Exception {
         double varX = 1.3d;
-        Expression e = new ExpressionBuilder("log(sin(x))").build().variable("x",varX);
+        Expression e = new ExpressionBuilder("log(sin(x))").build().variable("x", varX);
         double result = e.evaluate();
         assertTrue(result == Math.log(Math.sin(varX)));
     }
@@ -802,23 +807,23 @@ public class ExpressionBuilderTest {
         };
         double varBar = 1.3d;
         Expression e = new ExpressionBuilder("bar(bar)")
-                .function(custom).build().variable("bar",varBar);
+                .function(custom).build().variable("bar", varBar);
         ValidationResult res = e.validate();
         assertFalse(res.isValid());
-        assertEquals(1,res.getErrors().size());
+        assertEquals(1, res.getErrors().size());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidFunction() throws Exception {
         double varY = 4.22d;
         Expression e = new ExpressionBuilder("3*invalid_function(y)").build().variable("y", varY);
         e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testMissingVar() throws Exception {
         double varY = 4.22d;
-        Expression e = new ExpressionBuilder("3*y*z").build().variable("y",varY);
+        Expression e = new ExpressionBuilder("3*y*z").build().variable("y", varY);
         e.evaluate();
     }
 
@@ -860,7 +865,7 @@ public class ExpressionBuilderTest {
         double y = 2d;
         String expr = "log(x) ^ sin(y)";
         double expected = Math.pow(Math.log(x), Math.sin(y));
-        Expression e = new ExpressionBuilder(expr).build().variable("x",x).variable("y",y);
+        Expression e = new ExpressionBuilder(expr).build().variable("x", x).variable("y", y);
         assertTrue(expected == e.evaluate());
     }
 
@@ -910,7 +915,7 @@ public class ExpressionBuilderTest {
         double x = Math.E;
         double y = Math.PI;
         double expected = x * x - 2 * y;
-        Expression e = new ExpressionBuilder(expr).build().variable("x",x).variable("y",y);
+        Expression e = new ExpressionBuilder(expr).build().variable("x", x).variable("y", y);
         assertTrue(expected == e.evaluate());
     }
 
@@ -953,8 +958,8 @@ public class ExpressionBuilderTest {
         String expr = "-2 *33.34/log(x)^-2 + 14 *6";
         double x = 1.334d;
         double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
-        Expression e = new ExpressionBuilder(expr).build().variable("x",x);
-        assertEquals(expected ,e.evaluate(),0d);
+        Expression e = new ExpressionBuilder(expr).build().variable("x", x);
+        assertEquals(expected, e.evaluate(), 0d);
     }
 
     @Test
@@ -962,7 +967,7 @@ public class ExpressionBuilderTest {
         String expr = "2^-2";
         double expected = Math.pow(2, -2);
         Expression e = new ExpressionBuilder(expr).build();
-        assertEquals(expected ,e.evaluate(),0d);
+        assertEquals(expected, e.evaluate(), 0d);
     }
 
     @Test
@@ -970,7 +975,7 @@ public class ExpressionBuilderTest {
         String expr = "2*-2";
         double expected = -4d;
         Expression e = new ExpressionBuilder(expr).build();
-        assertEquals(expected ,e.evaluate(),0d);
+        assertEquals(expected, e.evaluate(), 0d);
     }
 
     @Test
@@ -978,7 +983,7 @@ public class ExpressionBuilderTest {
         String expr = "-2 *33.34/log(x)^-2 + 14 *6";
         double x = 1.334d;
         double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
-        Expression e = new ExpressionBuilder(expr).build().variable("x",x);
+        Expression e = new ExpressionBuilder(expr).build().variable("x", x);
         assertTrue(expected == e.evaluate());
     }
 
@@ -987,7 +992,7 @@ public class ExpressionBuilderTest {
         String expr = "-2 *33.34/(log(foo)^-2 + 14 *6) - sin(foo)";
         double x = 1.334d;
         double expected = -2 * 33.34 / (Math.pow(Math.log(x), -2) + 14 * 6) - Math.sin(x);
-        Expression e = new ExpressionBuilder(expr).build().variable("foo",x);
+        Expression e = new ExpressionBuilder(expr).build().variable("foo", x);
         assertTrue(expected == e.evaluate());
     }
 
@@ -1048,12 +1053,61 @@ public class ExpressionBuilderTest {
         assertTrue(12.23 == e.evaluate());
     }
 
-    public void testVarname2() throws Exception {
-        String expr = "12.23 * foo.bar";
+    @Test(expected = IllegalArgumentException.class)
+    public void testMisplacedSeparator() throws Exception {
+        String expr = "12.23 * ,foo";
         Expression e = new ExpressionBuilder(expr)
                 .build()
-                .variable("_foo", 1d);
+                .variable(",foo", 1d);
         assertTrue(12.23 == e.evaluate());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidVarname() throws Exception {
+        String expr = "12.23 * @foo";
+        Expression e = new ExpressionBuilder(expr)
+                .build()
+                .variable("@foo", 1d);
+        assertTrue(12.23 == e.evaluate());
+    }
+
+    @Test
+    public void testVarMap() throws Exception {
+        String expr = "12.23 * foo - bar";
+        Map<String, Double> variables = new HashMap<>();
+        variables.put("foo", 2d);
+        variables.put("bar", 3.3d);
+        Expression e = new ExpressionBuilder(expr)
+                .build()
+                .variables(variables);
+        assertTrue(12.23d * 2d - 3.3d == e.evaluate());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidNumberofArguments1() throws Exception {
+        String expr = "log(2,2)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        e.evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidNumberofArguments2() throws Exception {
+        Function avg = new Function("avg", 4) {
+
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg : args) {
+                    sum += arg;
+                }
+                return sum / args.length;
+            }
+        };
+        String expr = "avg(2,2)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        e.evaluate();
     }
 
     @Test
@@ -1088,7 +1142,7 @@ public class ExpressionBuilderTest {
         String expr = "-2 *33.34/log(y_2x)^-2 + 14 *6";
         double x = 1.334d;
         double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
-        Expression e = new ExpressionBuilder(expr).build().variable("y_2x",x);
+        Expression e = new ExpressionBuilder(expr).build().variable("y_2x", x);
         assertTrue(expected == e.evaluate());
     }
 
@@ -1097,7 +1151,7 @@ public class ExpressionBuilderTest {
         String expr = "-2 *33.34/log(_y)^-2 + 14 *6";
         double x = 1.334d;
         double expected = -2 * 33.34 / Math.pow(Math.log(x), -2) + 14 * 6;
-        Expression e = new ExpressionBuilder(expr).build().variable("_y",x);
+        Expression e = new ExpressionBuilder(expr).build().variable("_y", x);
         assertTrue(expected == e.evaluate());
     }
 
@@ -1108,6 +1162,7 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder(expr).build();
         assertTrue(expected == e.evaluate());
     }
+
     @Test
     public void testExpression40() throws Exception {
         String expr = "1e1";
@@ -1124,10 +1179,8 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.evaluate());
     }
 
-    /**
+    /*
      * Added tests for expressions with scientific notation see http://jira.congrace.de/jira/browse/EXP-17
-     * 
-     * @throws Exception
      */
     @Test
     public void testExpression42() throws Exception {
@@ -1169,35 +1222,35 @@ public class ExpressionBuilderTest {
     // tests for EXP-20: No exception is thrown for unmatched parenthesis in
     // build
     // Thanks go out to maheshkurmi for reporting
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExpression48() throws Exception {
         String expr = "(1*2";
         Expression e = new ExpressionBuilder(expr).build();
         double result = e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExpression49() throws Exception {
         String expr = "{1*2";
         Expression e = new ExpressionBuilder(expr).build();
         double result = e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExpression50() throws Exception {
         String expr = "[1*2";
         Expression e = new ExpressionBuilder(expr).build();
         double result = e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExpression51() throws Exception {
         String expr = "(1*{2+[3}";
         Expression e = new ExpressionBuilder(expr).build();
         double result = e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testExpression52() throws Exception {
         String expr = "(1*(2+(3";
         Expression e = new ExpressionBuilder(expr).build();
@@ -1208,16 +1261,16 @@ public class ExpressionBuilderTest {
     public void testExpression53() throws Exception {
         String expr = "14 * 2x";
         Expression exp = new ExpressionBuilder(expr).build();
-        exp.variable("x",1.5d);
+        exp.variable("x", 1.5d);
         assertTrue(exp.validate().isValid());
-        assertEquals(14d*2d*1.5d, exp.evaluate(), 0d);
+        assertEquals(14d * 2d * 1.5d, exp.evaluate(), 0d);
     }
 
     @Test
     public void testExpression54() throws Exception {
         String expr = "2 ((-(x)))";
         Expression e = new ExpressionBuilder(expr).build();
-        e.variable("x",1.5d);
+        e.variable("x", 1.5d);
         assertEquals(-3d, e.evaluate(), 0d);
     }
 
@@ -1225,7 +1278,7 @@ public class ExpressionBuilderTest {
     public void testExpression55() throws Exception {
         String expr = "2 sin(x)";
         Expression e = new ExpressionBuilder(expr).build();
-        e.variable("x",2d);
+        e.variable("x", 2d);
         assertTrue(Math.sin(2d) * 2 == e.evaluate());
     }
 
@@ -1233,7 +1286,7 @@ public class ExpressionBuilderTest {
     public void testExpression56() throws Exception {
         String expr = "2 sin(3x)";
         Expression e = new ExpressionBuilder(expr).build();
-        e.variable("x",2d);
+        e.variable("x", 2d);
         assertTrue(Math.sin(6d) * 2d == e.evaluate());
     }
 
@@ -1244,7 +1297,7 @@ public class ExpressionBuilderTest {
                 .variable("x", 2.3)
                 .variable("y", 3.14);
         double result = e.evaluate();
-        double expected = 3* Math.sin(3.14d) -2d / (2.3d - 2d);
+        double expected = 3 * Math.sin(3.14d) - 2d / (2.3d - 2d);
         assertEquals(expected, result, 0d);
     }
 
@@ -1253,7 +1306,22 @@ public class ExpressionBuilderTest {
         String expr = "7.2973525698e-3";
         double expected = Double.parseDouble(expr);
         Expression e = new ExpressionBuilder(expr).build();
-        assertEquals(expected, e.evaluate(),0d);
+        assertEquals(expected, e.evaluate(), 0d);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void testDocumentationExample3() throws Exception {
+        Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
+
+            @Override
+            public double apply(final double... args) {
+                if (args[0] == 0d) {
+                    throw new ArithmeticException("Division by zero!");
+                }
+                return 1d / args[0];
+            }
+        };
+        new ExpressionBuilder("0$").operator(reciprocal).build().evaluate();
     }
 
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
@@ -1390,7 +1458,7 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testFailUnknownFunction1() throws Exception {
         String expr;
         expr = "lig(1)";
@@ -1398,14 +1466,14 @@ public class ExpressionBuilderTest {
         e.evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testFailUnknownFunction2() throws Exception {
         String expr;
         expr = "galength(1)";
         new ExpressionBuilder(expr).build().evaluate();
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testFailUnknownFunction3() throws Exception {
         String expr;
         expr = "tcos(1)";
@@ -1502,7 +1570,7 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder(expr).build();
         for (double x = -10; x < 10; x = x + 0.5d) {
             expected = Math.cbrt(x);
-            assertTrue(expected == e.variable("x",x).evaluate());
+            assertTrue(expected == e.variable("x", x).evaluate());
         }
     }
 
@@ -1696,7 +1764,7 @@ public class ExpressionBuilderTest {
         expr = "ceil(x) + 1 / y * abs(1.4)";
         expected = Math.ceil(x) + 1 / y * Math.abs(1.4);
         Expression e = new ExpressionBuilder(expr).build();
-        assertTrue(expected == e.variable("x", x).variable("y",y).evaluate());
+        assertTrue(expected == e.variable("x", x).variable("y", y).evaluate());
     }
 
     @Test
@@ -1732,7 +1800,7 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.variable("x", x).evaluate());
     }
 
-    @Test(expected = Exp4jException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testPostfixInvalidVariableName() throws Exception {
         String expr;
         double expected;

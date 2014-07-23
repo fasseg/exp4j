@@ -17,11 +17,11 @@
     <url>http://www.objecthunter.net/exp4j</url>
     <issueManagement>
         <url>https://github.com/fasseg/exp4j/issues</url>
-        <system>Jira</system>
+        <system>Github</system>
     </issueManagement>
     <mailingLists>
         <mailingList>
-            <name>exp4j google group</name>
+            <name>exp4j Google Group</name>
             <archive>https://groups.google.com/forum/#!forum/exp4j</archive>
         </mailingList>
     </mailingLists>
@@ -64,6 +64,53 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.3.1</version>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>summary</report>
+                                        <report>project-team</report>
+                                        <report>issue-tracking</report>
+                                        <report>license</report>
+                                        <report>scm</report>
+                                        <report>mailing-list</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.9.1</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-changes-plugin</artifactId>
+                            <version>2.10</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>cobertura-maven-plugin</artifactId>
+                            <version>2.6</version>
+                            <configuration>
+                                <formats>
+                                    <format>html</format>
+                                </formats>
+                                <encoding>${project.build.sourceEncoding}</encoding>
+                            </configuration>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

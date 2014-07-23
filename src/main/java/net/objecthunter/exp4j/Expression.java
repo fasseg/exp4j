@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-
 package net.objecthunter.exp4j;
 
 import java.util.*;
@@ -51,14 +50,6 @@ public class Expression {
         if (this.userFunctionNames.contains(name)) {
             throw new IllegalArgumentException("The variable name '" + name + "' is invalid. Since there exists a function with the same name");
         }
-        if (!Character.isAlphabetic(name.charAt(0)) && name.charAt(0) != '_') {
-            throw new IllegalArgumentException("The variable name '" + name + " is invalid. Name must start with a letter or an underscore");
-        }
-        for (char ch : name.substring(1).toCharArray()) {
-            if (!Character.isAlphabetic(ch) && !Character.isDigit(ch) && ch != '_') {
-                throw new IllegalArgumentException("The variable name '" + name + " is invalid. Name must only contain letters, numbers or the underscore");
-            }
-        }
     }
 
     public Expression variables(Map<String, Double> variables) {
@@ -81,7 +72,7 @@ public class Expression {
         return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
     }
 
-    public double evaluate() throws Exp4jException {
+    public double evaluate(){
         final Stack<Double> output = new Stack<>();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
@@ -91,20 +82,20 @@ public class Expression {
                 final String name = ((VariableToken) t).getName();
                 final Double value = this.variables.get(name);
                 if (value == null) {
-                    throw new Exp4jException("No value has been set for the variable '" + name + "'.");
+                    throw new IllegalArgumentException("No value has been set for the variable '" + name + "'.");
                 }
                 output.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
                 OperatorToken op = (OperatorToken) t;
-                if (output.size() < op.getOperator().getNumArgs()) {
-                    throw new RuntimeException("Invalid number of operands available");
+                if (output.size() < op.getOperator().getNumOperands()) {
+                    throw new IllegalArgumentException("Invalid number of operands available");
                 }
-                if (op.getOperator().getNumArgs() == 2) {
+                if (op.getOperator().getNumOperands() == 2) {
                     /* pop the operands and push the result of the operation */
                     double rightArg = output.pop();
                     double leftArg = output.pop();
                     output.push(op.getOperator().apply(leftArg, rightArg));
-                } else if (op.getOperator().getNumArgs() == 1) {
+                } else if (op.getOperator().getNumOperands() == 1) {
                     /* pop the operand and push the result of the operation */
                     double arg = output.pop();
                     output.push(op.getOperator().apply(arg));
@@ -112,7 +103,7 @@ public class Expression {
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
                 if (output.size() < func.getFunction().getNumArguments()) {
-                    throw new RuntimeException("Invalid number of arguments available");
+                    throw new IllegalArgumentException("Invalid number of arguments available");
                 }
                 /* collect the arguments from the stack */
                 double[] args = new double[func.getFunction().getNumArguments()];
@@ -123,7 +114,7 @@ public class Expression {
             }
         }
         if (output.size() > 1) {
-            throw new Exp4jException("Invalid number of items on the output queue. This should not happen");
+            throw new IllegalArgumentException("Invalid number of items on the output queue. Might be caused by an invalid number of arguments for a function.");
         }
         return output.pop();
     }
