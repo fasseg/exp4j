@@ -15,9 +15,19 @@
         <tag>HEAD</tag>
     </scm>
     <distributionManagement>
+        <snapshotRepository>
+            <id>central-snapshots</id>
+            <uniqueVersion>false</uniqueVersion>
+            <name>snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <layout>default</layout>
+        </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>central-releases</id>
+            <uniqueVersion>false</uniqueVersion>
+            <name>releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <layout>default</layout>
         </repository>
         <downloadUrl>http://www.objecthunter.net/exp4j</downloadUrl>
         <site>
