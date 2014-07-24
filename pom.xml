@@ -16,10 +16,18 @@
     </scm>
     <distributionManagement>
         <repository>
-            <id>sonatype-oss</id>
-            <name>Maven Central Release</name>
-            <url>http://oss.sonatype.org/nexus/content/repositories/releases/</url>
+            <uniqueVersion>false</uniqueVersion>
+            <id>central-releases</id>
+            <name>releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <layout>default</layout>
         </repository>
+        <downloadUrl>http://www.objecthunter.net/</downloadUrl>
+        <site>
+            <id>objecthunter.net</id>
+            <name>objecthunter.net</name>
+            <url>scpexe://lintilla.objecthunter.net/opt/www/exp4j</url>
+        </site>
     </distributionManagement>
     <url>http://www.objecthunter.net/exp4j</url>
     <issueManagement>
