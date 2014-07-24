@@ -12,17 +12,18 @@
         <connection>scm:git:http://github.com/fasseg/exp4j.git</connection>
         <developerConnection>scm:git:https://github.com/fasseg/exp4j.git</developerConnection>
         <url>https://github.com/fasseg/exp4j</url>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
     </scm>
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>central-releases</id>
-            <name>releases</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <layout>default</layout>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <downloadUrl>http://www.objecthunter.net/</downloadUrl>
+        <downloadUrl>http://www.objecthunter.net/exp4j</downloadUrl>
         <site>
             <id>objecthunter.net</id>
             <name>objecthunter.net</name>
