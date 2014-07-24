@@ -40,8 +40,10 @@ public class Functions {
     private static final int INDEX_POW = 18;
     private static final int INDEX_EXP = 19;
     private static final int INDEX_EXPM1 = 20;
+    private static final int INDEX_LOG10 = 21;
+    private static final int INDEX_LOG2 = 22;
 
-    private static final Function[] builtinFunctions = new Function[21];
+    private static final Function[] builtinFunctions = new Function[23];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -66,6 +68,18 @@ public class Functions {
             @Override
             public double apply(double... args) {
                 return Math.log(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_LOG2] = new Function("log2") {
+            @Override
+            public double apply(double... args) {
+                return Math.log(args[0]) / Math.log(2d);
+            }
+        };
+        builtinFunctions[INDEX_LOG10] = new Function("log10") {
+            @Override
+            public double apply(double... args) {
+                return Math.log10(args[0]);
             }
         };
         builtinFunctions[INDEX_LOG1P] = new Function("log1p") {
@@ -190,6 +204,10 @@ public class Functions {
                 return builtinFunctions[INDEX_ABS];
             case "log":
                 return builtinFunctions[INDEX_LOG];
+            case "log10":
+                return builtinFunctions[INDEX_LOG10];
+            case "log2":
+                return builtinFunctions[INDEX_LOG2];
             case "log1p":
                 return builtinFunctions[INDEX_LOG1P];
             case "ceil":

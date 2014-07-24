@@ -157,6 +157,19 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testValidationDocExample() throws Exception {
+        Expression e = new ExpressionBuilder("x")
+                .build();
+        ValidationResult res = e.validate();
+        assertFalse(res.isValid());
+        assertEquals(1, res.getErrors().size());
+
+        e.variable("x",1d);
+        res = e.validate();
+        assertTrue(res.isValid());
+    }
+
+    @Test
     public void testExpressionBuilder10() throws Exception {
         double result = new ExpressionBuilder("1e1")
                 .build()
@@ -1367,6 +1380,20 @@ public class ExpressionBuilderTest {
                 .build()
                 .variable("x", Math.E);
         assertTrue(Math.E * 1.0 * Math.pow(10, 5) + 5 == e.evaluate());
+    }
+
+    @Test
+    public void testExpression63() throws Exception {
+        Expression e = new ExpressionBuilder("log10(5)")
+                .build();
+        assertEquals(Math.log10(5), e.evaluate(),0d);
+    }
+
+    @Test
+    public void testExpression64() throws Exception {
+        Expression e = new ExpressionBuilder("log2(5)")
+                .build();
+        assertEquals(Math.log(5)/Math.log(2), e.evaluate(),0d);
     }
 
     // thanks go out to Janny for providing the tests and the bug report

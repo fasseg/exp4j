@@ -8,9 +8,9 @@ Frank Asseg
 
 Download exp4j ${project.version}
 
-  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}.jar}Binary Jar}}\
-  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-javadoc.jar}Javadoc}}\
-  exp4j ${project.version} {{{http://projects.congrace.de/exp4j/exp4j-${project.version}-sources.jar}Sources}}
+  exp4j ${project.version} {{{http://www.objecthunter.net/exp4j/exp4j-${project.version}.jar}Binary Jar}}\
+  exp4j ${project.version} {{{http://www.objecthunter.net/exp4j/exp4j-${project.version}-javadoc.jar}Javadoc}}\
+  exp4j ${project.version} {{{http://www.objecthunter.net/exp4j/exp4j-${project.version}-sources.jar}Sources}}
 
 Using Apache Maven
 
@@ -18,7 +18,7 @@ Using Apache Maven
 
 +--
 <dependency>
-	<groupId>de.congrace</groupId>
+	<groupId>net.objecthunter</groupId>
 	<artifactId>exp4j</artifactId>
 	<version>${project.version}</version>
 </dependency>

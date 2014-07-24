@@ -7,17 +7,37 @@
 	------
 
 
-About
+Introduction
 
   exp4j is capable of evaluating expressions and functions in the real domain. It's a small (40KB) library without any external dependencies, that implements {{{http://en.wikipedia.org/wiki/Shunting-yard_algorithm}Dijkstra's Shunting Yard Algorithm}}.
-  exp4j comes with a standard set of built-in functions and operators. Additionally users are able to create custom operations and functions.
+  exp4j comes with a standard set of built-in functions and operators. Additionally users are able to create custom operators and functions.
 
 * Version 0.4.0 API Changes
 
 	As of Version 0.4.0 exp4j has been completely rewritten and a lot of API changes have been introduced. Please don't hate me ;). {{{http://www.objecthunter.net/exp4j/v0.3.11}The old version is still available}}. Im currently planning to supply a legacy-pack with wrappers for the old API, but I'm not sure that it is feasible.
 	The rewrite was IMHO necessary to accommodate various features (e.g. implicit multiplication) and first of all: Improved performance.
 
+* Version 0.3.11
+
+    The former version of exp4j is available {{{http://www.objecthunter.net/exp4j/v0.3.11}here}}
+
+* Examples
+
+    The examples are mostly taken from the test class {{{https://github.com/fasseg/exp4j/blob/master/src/test/java/net/objecthunter/exp4j/ExpressionBuilderTest.java}ExpressionBuilderTest}} and use {{{https://github.com/junit-team/junit/wiki/Assertions}JUnit's assertXXX()}} methods to check for correct results.
+
 * Usage
+
+** Apache Maven
+
+    In order to include exp4j as a dependency using Apache Maven you can the following dependency decalration can be used
+
++--
+<dependency>
+    <groupId>net.objecthunter</groupId>
+    <artifactId>exp4j</artifactId>
+    <version>${project.version}</version>
+</dependency>
++--
 
 ** Evaluating an expression
 
@@ -241,6 +261,10 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  
  * <<<log>>>: logarithmus naturalis (base e)
  
+ * <<<log10>>>: logarithm (base 10)
+
+ * <<<log2>>>: logarithm (base 2)
+
  * <<<sin>>>: sine
  
  * <<<sinh>>>: hyperbolic sine
@@ -250,11 +274,36 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<tan>>>: tangent
  
  * <<<tanh>>>: hyperbolic tangent
- 
+
+
+** Validation of expression
+
+    Since version 0.4.0 exp4j has an added feature to validate expressions. Users can call <<<Expression.validate()>>> for some generic checks on the expression. E.g. A check if all variables have been set.
+
+*** Example 7
+
+    Validate an expression
+
++--
+Expression e = new ExpressionBuilder("x")
+        .build();
+
+ValidationResult res = e.validate();
+assertFalse(res.isValid());
+assertEquals(1, res.getErrors().size());
+
+e.variable("x",1d);
+res = e.validate();
+assertTrue(res.isValid());
++--
+
+** Error handling
+
+    The former versions of exp4j came with a set of Exceptions which had to be caught by the user, since this was often an unnecessary hassle, exp4j as of Version 0.4.0 only throws <<<RuntimeExceptions>>> and foremost <<<IllegalArgumentExceptions>>> from the standard Java API.
 
 * API changes
 
- * Version 0.4.0: New Expression/ExpressionBuilder API due to rewrite
+ * Version 0.4.0: New Expression/ExpressionBuilder API
 
  * Version 0.3.2: choice for unary minus precedence via System property
 
