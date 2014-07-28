@@ -1553,6 +1553,18 @@ public class ExpressionBuilderTest {
         assertEquals(expected, result, 0d);
     }
 
+    @Test
+    public void testDocumentationExample5() throws Exception {
+        double result = new ExpressionBuilder("2cos(xy)")
+                .variables("x","y")
+                .build()
+                .setVariable("x", 0.5d)
+                .setVariable("y", 0.25d)
+                .evaluate();
+        assertEquals(2d * cos(0.5d * 0.25d), result, 0d);
+    }
+
+
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
     // https://www.objecthunter.net/jira/browse/EXP-22
     @Test(expected = ArithmeticException.class)

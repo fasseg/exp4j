@@ -25,9 +25,7 @@ Introduction
 
     The examples are mostly taken from the test class {{{https://github.com/fasseg/exp4j/blob/master/src/test/java/net/objecthunter/exp4j/ExpressionBuilderTest.java}ExpressionBuilderTest}} and use {{{https://github.com/junit-team/junit/wiki/Assertions}JUnit's assertXXX()}} methods to check for correct results.
 
-* Usage
-
-** Apache Maven
+* Apache Maven
 
     In order to include exp4j as a dependency using Apache Maven you can the following dependency decalration can be used
 
@@ -38,6 +36,9 @@ Introduction
     <version>${project.version}</version>
 </dependency>
 +--
+
+* Usage
+
 
 ** Evaluating an expression
 
@@ -69,6 +70,25 @@ double result = e.evaluate();
 	 * <<<_var_X_1>>>
 
 	 while <<<1_var_x>>> is not as it does not start with a letter or a underscore.
+
+** Implicit multiplication
+
+	 Since v0.4.0 exp4j does support implicit multiplication. Therefore an expression like <<<2cos(yx)>>> will be interpreted as <<<2*cos(y*x)>>>
+
+*** Example 3
+
+	 Using implicit muliplication
+
++---
+double result = new ExpressionBuilder("2cos(xy)")
+        .variables("x","y")
+        .build()
+        .setVariable("x", 0.5d)
+        .setVariable("y", 0.25d)
+        .evaluate();
+assertEquals(2d * Math.cos(0.5d * 0.25d), result, 0d);
++---
+
 
 ** Scientific notation
 
