@@ -15,10 +15,7 @@
  */
 package net.objecthunter.exp4j.shuntingyard;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -39,11 +36,11 @@ public class ShuntingYard {
      * @return a {@link net.objecthunter.exp4j.tokenizer.Token} array containing the result
      */
     public static Token[] convertToRPN(final String expression, final Map<String, Function> userFunctions,
-            final Map<String, Operator> userOperators){
+            final Map<String, Operator> userOperators, final Set<String> variableNames){
         final Stack<Token> stack = new Stack<>();
         final List<Token> output = new ArrayList<>();
 
-        final Tokenizer tokenizer = new Tokenizer(expression, userFunctions, userOperators);
+        final Tokenizer tokenizer = new Tokenizer(expression, userFunctions, userOperators, variableNames);
         while (tokenizer.hasNext()) {
             Token token = tokenizer.nextToken();
             switch (token.getType()) {

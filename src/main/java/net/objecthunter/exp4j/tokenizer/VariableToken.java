@@ -16,13 +16,13 @@
 package net.objecthunter.exp4j.tokenizer;
 
 /**
- * represents a variable used in an expression
+ * represents a setVariable used in an expression
  */
 public class VariableToken extends Token {
     private final String name;
 
     /**
-     * Get the name of the variable
+     * Get the name of the setVariable
      * @return the name
      */
     public String getName() {
@@ -31,7 +31,7 @@ public class VariableToken extends Token {
 
     /**
      * Create a new instance
-     * @param name the name of the variable
+     * @param name the name of the setVariable
      */
     public VariableToken(String name) {
         super(TOKEN_VARIABLE);

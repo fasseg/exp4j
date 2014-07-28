@@ -40,7 +40,7 @@ public class Expression {
         this.userFunctionNames = userFunctionNames;
     }
 
-    public Expression variable(final String name, final double value) {
+    public Expression setVariable(final String name, final double value) {
         this.checkVariableName(name);
         this.variables.put(name, value);
         return this;
@@ -48,13 +48,13 @@ public class Expression {
 
     private void checkVariableName(String name) {
         if (this.userFunctionNames.contains(name)) {
-            throw new IllegalArgumentException("The variable name '" + name + "' is invalid. Since there exists a function with the same name");
+            throw new IllegalArgumentException("The setVariable name '" + name + "' is invalid. Since there exists a function with the same name");
         }
     }
 
-    public Expression variables(Map<String, Double> variables) {
+    public Expression setVariables(Map<String, Double> variables) {
         for (Map.Entry<String, Double> v : variables.entrySet()) {
-            this.variable(v.getKey(), v.getValue());
+            this.setVariable(v.getKey(), v.getValue());
         }
         return this;
     }
@@ -65,7 +65,7 @@ public class Expression {
             if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String var = ((VariableToken) t).getName();
                 if (!variables.containsKey(var)) {
-                    errors.add("The variable '" + var + "' has not been set");
+                    errors.add("The setVariable '" + var + "' has not been set");
                 }
             }
         }
@@ -82,7 +82,7 @@ public class Expression {
                 final String name = ((VariableToken) t).getName();
                 final Double value = this.variables.get(name);
                 if (value == null) {
-                    throw new IllegalArgumentException("No value has been set for the variable '" + name + "'.");
+                    throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
                 output.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {

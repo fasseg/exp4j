@@ -16,6 +16,7 @@
 package net.objecthunter.exp4j.tokenizer;
 
 import java.util.Map;
+import java.util.Set;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
@@ -32,16 +33,19 @@ public class Tokenizer {
 
     private final Map<String, Operator> userOperators;
 
+    private final Set<String> variableNames;
+
     private int pos = 0;
 
     private Token lastToken;
 
     public Tokenizer(String expression, final Map<String, Function> userFunctions,
-            final Map<String, Operator> userOperators) {
+            final Map<String, Operator> userOperators, final Set<String> variableNames) {
         this.expression = expression.trim().toCharArray();
         this.expressionLength = this.expression.length;
         this.userFunctions = userFunctions;
         this.userOperators = userOperators;
+        this.variableNames = variableNames;
     }
 
     public boolean hasNext() {
@@ -70,7 +74,7 @@ public class Tokenizer {
         } else if (Operator.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
         } else if (Character.isAlphabetic(ch) || ch == '_') {
-            // parse the name which can be a variable or a function
+            // parse the name which can be a setVariable or a function
             if (lastToken != null &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
                 // insert an implicit multiplication token
@@ -112,16 +116,36 @@ public class Tokenizer {
     }
 
     private Token parseFunctionOrVariable() {
-        final String name = parseName();
-        final Function f = getFunction(name);
-        if (f != null) {
-            this.lastToken = new FunctionToken(f);
-            return lastToken;
-        } else {
-            // TODO return variable
-            this.lastToken = new VariableToken(name);
-            return lastToken;
+        final int offset = this.pos;
+        int lastValidLen = 1;
+        Token lastValidToken = null;
+        int len = 1;
+        if (isEndOfExpression(offset)) {
+            this.pos++;
         }
+        while (!isEndOfExpression(offset + len - 1) &&
+                (Character.isAlphabetic(expression[offset + len - 1]) ||
+                        Character.isDigit(expression[offset + len - 1]) ||
+                        expression[offset + len - 1] == '_')) {
+            String name = new String(expression, offset, len);
+            if (variableNames != null && variableNames.contains(name)) {
+                lastValidLen = len;
+                lastValidToken = new VariableToken(name);
+            } else {
+                final Function f = getFunction(name);
+                if (f != null) {
+                    lastValidLen = len;
+                    lastValidToken = new FunctionToken(f);
+                }
+            }
+            len++;
+        }
+        if (lastValidToken == null) {
+            throw new IllegalArgumentException("Unable to parse setVariable or function starting at pos " + pos + " in expression '" + new String(expression) + "'");
+        }
+        pos += lastValidLen;
+        lastToken = lastValidToken;
+        return lastToken;
     }
 
     private Function getFunction(String name) {
@@ -136,7 +160,7 @@ public class Tokenizer {
     }
 
     private String parseName() {
-        // parse the name of a function or a variable
+        // parse the name of a function or a setVariable
         final int offset = this.pos;
         int len = 1;
         if (isEndOfExpression(offset)) {
@@ -205,6 +229,12 @@ public class Tokenizer {
                         expression[offset + len - 1] == 'E')) {
             len++;
             this.pos++;
+        }
+        // check if the e is at the end
+        if (expression[offset + len - 1] == 'e' || expression[offset + len - 1] == 'E') {
+            // since the e is at the end it's not part of the number and a rollback is necessary
+            len--;
+            pos--;
         }
         lastToken = new NumberToken(expression, offset, len);
         return lastToken;

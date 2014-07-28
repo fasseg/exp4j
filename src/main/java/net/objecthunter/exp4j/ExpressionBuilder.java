@@ -16,9 +16,7 @@
 
 package net.objecthunter.exp4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -36,6 +34,8 @@ public class ExpressionBuilder {
 
     private final Map<String, Operator> userOperators;
 
+    private final Set<String> variableNames;
+
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
      * @param expression the expression to be parsed
@@ -47,6 +47,7 @@ public class ExpressionBuilder {
         this.expression = expression;
         this.userOperators = new HashMap<>(4);
         this.userFunctions = new HashMap<>(4);
+        this.variableNames = new HashSet<>(4);
     }
 
     /**
@@ -80,6 +81,21 @@ public class ExpressionBuilder {
         for (Function f : functions) {
             this.userFunctions.put(f.getName(), f);
         }
+        return this;
+    }
+
+    public ExpressionBuilder variables(Set<String> variableNames) {
+        this.variableNames.addAll(variableNames);
+        return this;
+    }
+
+    public ExpressionBuilder variables(String ... variableNames) {
+        Collections.addAll(this.variableNames, variableNames);
+        return this;
+    }
+
+    public ExpressionBuilder variable(String variableName) {
+        this.variableNames.add(variableName);
         return this;
     }
 
@@ -135,7 +151,7 @@ public class ExpressionBuilder {
         if (expression.isEmpty()) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators),
+        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
                 this.userFunctions.keySet());
     }
 

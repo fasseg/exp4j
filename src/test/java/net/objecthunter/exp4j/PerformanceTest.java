@@ -58,16 +58,17 @@ public class PerformanceTest {
     }
 
     private int benchDouble() {
-        Expression expression = new ExpressionBuilder(EXPRESSION).build();
-
+        final Expression expression = new ExpressionBuilder(EXPRESSION)
+                .variables("x", "y")
+                .build();
         double val;
         Random rnd = new Random();
         long timeout = BENCH_TIME;
         long time = System.currentTimeMillis() + (1000 * timeout);
         int count = 0;
         while (time > System.currentTimeMillis()) {
-            expression.variable("x", rnd.nextDouble());
-            expression.variable("y", rnd.nextDouble());
+            expression.setVariable("x", rnd.nextDouble());
+            expression.setVariable("y", rnd.nextDouble());
             val = expression.evaluate();
             count++;
         }
