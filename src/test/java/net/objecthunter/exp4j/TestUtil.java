@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package net.objecthunter.exp4j;
 
 import static org.junit.Assert.assertEquals;
@@ -22,6 +23,7 @@ import net.objecthunter.exp4j.tokenizer.*;
 import org.junit.Assert;
 
 public abstract class TestUtil {
+
     public static void assertVariableToken(Token token, String name) {
         assertEquals(Token.TOKEN_VARIABLE, token.getType());
         Assert.assertEquals(name, ((VariableToken) token).getName());
@@ -35,10 +37,11 @@ public abstract class TestUtil {
         assertEquals(Token.TOKEN_PARENTHESES_CLOSE, token.getType());
     }
 
-    public static void assertFunctionToken(Token token, int i) {
+    public static void assertFunctionToken(Token token, String name, int i) {
         assertEquals(token.getType(), Token.TOKEN_FUNCTION);
         FunctionToken f = (FunctionToken) token;
         assertEquals(i, f.getFunction().getNumArguments());
+        assertEquals(name, f.getFunction().getName());
     }
 
     public static void assertOperatorToken(Token tok, String symbol, int numArgs, int precedence) {
