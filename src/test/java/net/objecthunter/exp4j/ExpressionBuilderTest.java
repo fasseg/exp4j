@@ -1633,6 +1633,153 @@ public class ExpressionBuilderTest {
         assertEquals(2 * Math.E * Math.sin(Math.PI/2d), e.evaluate(), 0d);
     }
 
+    @Test
+    public void testExpression68() throws Exception {
+        Expression e = new ExpressionBuilder("2x")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(2 * Math.E, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression69() throws Exception {
+        Expression e = new ExpressionBuilder("2x2")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(4 * Math.E, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression70() throws Exception {
+        Expression e = new ExpressionBuilder("2xx")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(2 * Math.E * Math.E, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression71() throws Exception {
+        Expression e = new ExpressionBuilder("x2x")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(2 * Math.E * Math.E, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression72() throws Exception {
+        Expression e = new ExpressionBuilder("2cos(x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(2 * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression73() throws Exception {
+        Expression e = new ExpressionBuilder("cos(x)2")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(2 * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression74() throws Exception {
+        Expression e = new ExpressionBuilder("cos(x)(-2)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(-2d * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression75() throws Exception {
+        Expression e = new ExpressionBuilder("(-2)cos(x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(-2d * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression76() throws Exception {
+        Expression e = new ExpressionBuilder("(-x)cos(x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(-E * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression77() throws Exception {
+        Expression e = new ExpressionBuilder("(-xx)cos(x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(-E * E * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression78() throws Exception {
+        Expression e = new ExpressionBuilder("(xx)cos(x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(E * E * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression79() throws Exception {
+        Expression e = new ExpressionBuilder("cos(x)(xx)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(E * E * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression80() throws Exception {
+        Expression e = new ExpressionBuilder("cos(x)(xy)")
+                .variables("x","y")
+                .build()
+                .setVariable("x", Math.E)
+                .setVariable("y", Math.sqrt(2));
+        assertEquals(sqrt(2) * E * Math.cos(Math.E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression81() throws Exception {
+        Expression e = new ExpressionBuilder("cos(xy)")
+                .variables("x","y")
+                .build()
+                .setVariable("x", Math.E)
+                .setVariable("y", Math.sqrt(2));
+        assertEquals(cos(sqrt(2) * E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression82() throws Exception {
+        Expression e = new ExpressionBuilder("cos(2x)")
+                .variables("x")
+                .build()
+                .setVariable("x", Math.E);
+        assertEquals(cos(2 * E), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression83() throws Exception {
+        Expression e = new ExpressionBuilder("cos(xlog(xy))")
+                .variables("x","y")
+                .build()
+                .setVariable("x", Math.E)
+                .setVariable("y", Math.sqrt(2));
+        assertEquals(cos(E * log(E*sqrt(2))), e.evaluate(), 0d);
+    }
+
     // thanks go out to Janny for providing the tests and the bug report
     @Test
     public void testUnaryMinusInParenthesisSpace() throws Exception {
