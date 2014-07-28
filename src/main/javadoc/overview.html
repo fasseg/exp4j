@@ -8,26 +8,27 @@
   <b>Evaluate an expression</b>
   	<pre>
         Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+                .variables("x", "y")
                 .build()
-                .variable("x", 2.3)
-                .variable("y", 3.14);
+                .setVariable("x", 2.3)
+                .setVariable("y", 3.14);
         double result = e.evaluate();
     </pre>
   <b>Using custom functions</b><br/>
   <p>you can extend the abstract class Function in order to use custom functions in expressions. You only have to implement the
-  apply(double ... args) method.</p>
+  apply(double ... args) method. The following example shows the implementation of a function that calculates the logarithm to an arbitrary base using the identity log<sub>b</sub>(x) = ln(x)/ln(b)</p>
   	<pre>
-        Function log2 = new Function("log2", 1) {
+        Function logb = new Function("logb", 2) {
             &#64;Override
             public double apply(double... args) {
-                return Math.log(args[0]) / Math.log(2);
+                return Math.log(args[0]) / Math.log(args[1]);
             }
         };
-        double result = new ExpressionBuilder("log2(4)")
-                .function(log2)
+        double result = new ExpressionBuilder("logb(8, 2)")
+                .function(logb)
                 .build()
                 .evaluate();
-        double expected = 2;
+        double expected = 3;
         assertEquals(expected, result, 0d);
   	</pre>
   <b>Using custom operators</b><br/>
@@ -89,6 +90,8 @@
       <li>exp: euler's number raised to the power (e^x)</li>
       <li>floor: nearest lower integer</li>
       <li>log: logarithmus naturalis (base e)</li>
+      <li>log2: logarithm to base 2</li>
+      <li>log10: logarithm to base 10</li>
       <li>sin: sine</li>
       <li>sinh: hyperbolic sine</li>
       <li>sqrt: square root</li>

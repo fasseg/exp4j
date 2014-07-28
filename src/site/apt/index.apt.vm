@@ -49,9 +49,10 @@ Introduction
 
 +--
 Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
+        .variables("x", "y")
         .build()
-        .variable("x", 2.3)
-        .variable("y", 3.14);
+        .setVariable("x", 2.3)
+        .setVariable("y", 3.14);
 double result = e.evaluate();
 +--
 
@@ -94,22 +95,20 @@ assertEquals(expected, e.evaluate(),0d);
 
 *** Example 3
 
-    A custom log to base 2 function
+    A custom function calculating the logarithm to an arbitrary base using the identity <log(value, base) = ln(value)/ln(base)>
 
 +--
-Function log2 = new Function("log2", 1) {
-
+Function logb = new Function("logb", 2) {
     @Override
     public double apply(double... args) {
-        return Math.log(args[0]) / Math.log(2);
+        return Math.log(args[0]) / Math.log(args[1]);
     }
 };
-double result = new ExpressionBuilder("log2(4)")
-        .function(log2)
+double result = new ExpressionBuilder("logb(8, 2)")
+        .function(logb)
         .build()
         .evaluate();
-
-double expected = 2;
+double expected = 3;
 assertEquals(expected, result, 0d);
 +--
 

@@ -1537,6 +1537,22 @@ public class ExpressionBuilderTest {
                 .build().evaluate();
     }
 
+    @Test
+    public void testDocumentationExample4() throws Exception {
+        Function logb = new Function("logb", 2) {
+            @Override
+            public double apply(double... args) {
+                return Math.log(args[0]) / Math.log(args[1]);
+            }
+        };
+        double result = new ExpressionBuilder("logb(8, 2)")
+                .function(logb)
+                .build()
+                .evaluate();
+        double expected = 3;
+        assertEquals(expected, result, 0d);
+    }
+
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
     // https://www.objecthunter.net/jira/browse/EXP-22
     @Test(expected = ArithmeticException.class)
@@ -1630,7 +1646,7 @@ public class ExpressionBuilderTest {
                 .setVariable("e", Math.E)
                 .setVariable("pi", Math.PI);
 
-        assertEquals(2 * Math.E * Math.sin(Math.PI/2d), e.evaluate(), 0d);
+        assertEquals(2 * Math.E * Math.sin(Math.PI / 2d), e.evaluate(), 0d);
     }
 
     @Test
@@ -1744,7 +1760,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression80() throws Exception {
         Expression e = new ExpressionBuilder("cos(x)(xy)")
-                .variables("x","y")
+                .variables("x", "y")
                 .build()
                 .setVariable("x", Math.E)
                 .setVariable("y", Math.sqrt(2));
@@ -1754,7 +1770,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression81() throws Exception {
         Expression e = new ExpressionBuilder("cos(xy)")
-                .variables("x","y")
+                .variables("x", "y")
                 .build()
                 .setVariable("x", Math.E)
                 .setVariable("y", Math.sqrt(2));
@@ -1773,11 +1789,20 @@ public class ExpressionBuilderTest {
     @Test
     public void testExpression83() throws Exception {
         Expression e = new ExpressionBuilder("cos(xlog(xy))")
-                .variables("x","y")
+                .variables("x", "y")
                 .build()
                 .setVariable("x", Math.E)
                 .setVariable("y", Math.sqrt(2));
-        assertEquals(cos(E * log(E*sqrt(2))), e.evaluate(), 0d);
+        assertEquals(cos(E * log(E * sqrt(2))), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testExpression84() throws Exception {
+        Expression e = new ExpressionBuilder("3x_1")
+                .variables("x_1")
+                .build()
+                .setVariable("x_1", Math.E);
+        assertEquals(3d * E, e.evaluate(), 0d);
     }
 
     // thanks go out to Janny for providing the tests and the bug report
@@ -2225,7 +2250,7 @@ public class ExpressionBuilderTest {
         expr = "ceil(x) + 1 / y * abs(1.4)";
         expected = Math.ceil(x) + 1 / y * Math.abs(1.4);
         Expression e = new ExpressionBuilder(expr)
-                .variables("x","y")
+                .variables("x", "y")
                 .build();
         assertTrue(expected == e.setVariable("x", x)
                 .setVariable("y", y).evaluate());
