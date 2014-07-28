@@ -21,10 +21,6 @@ import net.objecthunter.exp4j.tokenizer.*;
 
 import org.junit.Assert;
 
-/**
- * Created by ruckus on 30.06.14.
- */
-
 public abstract class TestUtil {
     public static void assertVariableToken(Token token, String name) {
         assertEquals(Token.TOKEN_VARIABLE, token.getType());

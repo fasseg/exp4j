@@ -25,9 +25,6 @@ import net.objecthunter.exp4j.tokenizer.Token;
 
 import org.junit.Test;
 
-/**
- * Created by ruckus on 30.06.14.
- */
 public class ShuntingYardTest {
 
     @Test

@@ -18,12 +18,12 @@ package net.objecthunter.exp4j.tokenizer;
 /**
  * represents closed parentheses
  */
-public class CloseParanthesesToken extends Token {
+class CloseParanthesesToken extends Token {
 
     /**
      * Creare a new instance
      */
-    public CloseParanthesesToken() {
+    CloseParanthesesToken() {
         super(Token.TOKEN_PARANTHESES_CLOSE);
     }
 }

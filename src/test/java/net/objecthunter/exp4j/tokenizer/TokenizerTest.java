@@ -30,8 +30,6 @@ import org.slf4j.LoggerFactory;
 
 public class TokenizerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(TokenizerTest.class);
-
     @Test
     public void testTokenization1() throws Exception {
         final Tokenizer tokenizer = new Tokenizer("1.222331",null, null);
@@ -552,9 +550,5 @@ public class TokenizerTest {
         assertCloseParanthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
-    }
-
-    private static void assertSeparatorToken(Token token) {
-        assertEquals(Token.TOKEN_SEPARATOR, token.getType());
     }
 }

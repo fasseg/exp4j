@@ -29,7 +29,7 @@ public abstract class Token {
 
     protected final int type;
 
-    protected Token(int type) {
+    Token(int type) {
         this.type = type;
     }
 

@@ -53,5 +53,5 @@ public class ValidationResult {
     /**
      * A static class representing a successful validation result
      */
-    public static ValidationResult SUCCESS = new ValidationResult(true, null);
+    public static final ValidationResult SUCCESS = new ValidationResult(true, null);
 }

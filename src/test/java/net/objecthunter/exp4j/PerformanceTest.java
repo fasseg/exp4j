@@ -25,8 +25,8 @@ import org.junit.Test;
 
 public class PerformanceTest {
 
-    public static long BENCH_TIME = 2l;
-    public static String EXPRESSION = "log(x) - y * (sqrt(x^cos(y)))";
+    private static final long BENCH_TIME = 2l;
+    private static final String EXPRESSION = "log(x) - y * (sqrt(x^cos(y)))";
 
     @Test
     public void testBenches() throws Exception {
@@ -57,7 +57,7 @@ public class PerformanceTest {
         System.out.print(sb.toString());
     }
 
-    private int benchDouble() throws Exception {
+    private int benchDouble() {
         Expression expression = new ExpressionBuilder(EXPRESSION).build();
 
         double val;
@@ -75,7 +75,7 @@ public class PerformanceTest {
         return count;
     }
 
-    private int benchJavaMath() throws Exception {
+    private int benchJavaMath() {
         long timeout = BENCH_TIME;
         long time = System.currentTimeMillis() + (1000 * timeout);
         double x, y, val, rate;

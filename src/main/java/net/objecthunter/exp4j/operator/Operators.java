@@ -16,14 +16,14 @@
 package net.objecthunter.exp4j.operator;
 
 public abstract class Operators {
-    public static final int INDEX_ADDITION = 0;
-    public static final int INDEX_SUBTRACTION = 1;
-    public static final int INDEX_MUTLIPLICATION = 2;
-    public static final int INDEX_DIVISION = 3;
-    public static final int INDEX_POWER = 4;
-    public static final int INDEX_MODULO = 5;
-    public static final int INDEX_UNARYMINUS = 6;
-    public static final int INDEX_UNARYPLUS = 7;
+    private static final int INDEX_ADDITION = 0;
+    private static final int INDEX_SUBTRACTION = 1;
+    private static final int INDEX_MUTLIPLICATION = 2;
+    private static final int INDEX_DIVISION = 3;
+    private static final int INDEX_POWER = 4;
+    private static final int INDEX_MODULO = 5;
+    private static final int INDEX_UNARYMINUS = 6;
+    private static final int INDEX_UNARYPLUS = 7;
 
     private static final Operator[] builtinOperators = new Operator[8];
 
