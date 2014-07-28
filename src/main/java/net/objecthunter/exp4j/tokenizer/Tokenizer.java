@@ -58,12 +58,24 @@ public class Tokenizer {
             ch = expression[++pos];
         }
         if (Character.isDigit(ch) || ch == '.') {
+            if (lastToken != null &&
+                    (lastToken.getType() != Token.TOKEN_OPERATOR
+                            && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
+                            && lastToken.getType() != Token.TOKEN_FUNCTION
+                            && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                // insert an implicit multiplication token
+                lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
+                return lastToken;
+            }
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
             return parseArgumentSeparatorToken(ch);
         } else if (isOpenParentheses(ch)) {
             if (lastToken != null &&
-                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN && lastToken.getType() != Token.TOKEN_FUNCTION && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                    (lastToken.getType() != Token.TOKEN_OPERATOR
+                            && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
+                            && lastToken.getType() != Token.TOKEN_FUNCTION
+                            && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
                 // insert an implicit multiplication token
                 lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
                 return lastToken;
@@ -76,7 +88,10 @@ public class Tokenizer {
         } else if (Character.isAlphabetic(ch) || ch == '_') {
             // parse the name which can be a setVariable or a function
             if (lastToken != null &&
-                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                    (lastToken.getType() != Token.TOKEN_OPERATOR
+                            && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
+                            && lastToken.getType() != Token.TOKEN_FUNCTION
+                            && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
                 // insert an implicit multiplication token
                 lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
                 return lastToken;

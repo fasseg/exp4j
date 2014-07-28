@@ -1612,7 +1612,7 @@ public class ExpressionBuilderTest {
         assertEquals(2d, e.evaluate(), 0d);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testExpression66() throws Exception {
         Expression e = new ExpressionBuilder("log(e)2")
                 .variables("e")
