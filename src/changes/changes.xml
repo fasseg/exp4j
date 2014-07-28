@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
 	<properties>
 		<title />
-		<author email="frank.asseg@congrace.de">frank asseg</author>
+		<author email="frank.asseg@objecthunter.net">frank asseg</author>
 	</properties>
 	<body>
 		<release version="0.2.1" description="added ExpressionBuilder API">
@@ -15,8 +15,8 @@
 			<action dev="fas" type="fix">exp4j now checks if the variable names clash with a custom function name</action>
 		</release>
 		<release version="0.2.3" description="fixed bug">
-			<action dev="fas" type="add">marked PostfixExpression.frominfix() as deprecated. ExpresionBuilder is now the recommended way to use exp4j</action>
-			<action dev="fas" type="fix">fixed docu typo</action>
+			<action dev="fas" type="add">marked PostfixExpression.fromInfix() as deprecated. ExpressionBuilder is now the recommended way to use exp4j</action>
+			<action dev="fas" type="fix">fixed doc typo</action>
 		</release>
 		<release version="0.2.5" description="added multi argument functions feature">
 			<action dev="fas" type="fix">added check for custom function names</action>

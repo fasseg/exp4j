@@ -27,15 +27,15 @@ public abstract class TestUtil {
         Assert.assertEquals(name, ((VariableToken) token).getName());
     }
 
-    public static void assertOpenParanthesesToken(Token token) {
-        assertEquals(Token.TOKEN_PARANTHESES_OPEN, token.getType());
+    public static void assertOpenParenthesesToken(Token token) {
+        assertEquals(Token.TOKEN_PARENTHESES_OPEN, token.getType());
     }
 
-    public static void assertCloseParanthesesToken(Token token) {
-        assertEquals(Token.TOKEN_PARANTHESES_CLOSE, token.getType());
+    public static void assertCloseParenthesesToken(Token token) {
+        assertEquals(Token.TOKEN_PARENTHESES_CLOSE, token.getType());
     }
 
-    public static void assertFunctionToken(Token token, String log, int i) {
+    public static void assertFunctionToken(Token token, int i) {
         assertEquals(token.getType(), Token.TOKEN_FUNCTION);
         FunctionToken f = (FunctionToken) token;
         assertEquals(i, f.getFunction().getNumArguments());

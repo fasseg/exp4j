@@ -50,30 +50,29 @@ public class Tokenizer {
 
     public Token nextToken(){
         char ch = expression[pos];
-        int val = (int) ch;
         while (Character.isWhitespace(ch)) {
             ch = expression[++pos];
         }
         if (Character.isDigit(ch) || ch == '.') {
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
-            return parseArumentSeparatorToken(ch);
-        } else if (isOpenParantheses(ch)) {
+            return parseArgumentSeparatorToken(ch);
+        } else if (isOpenParentheses(ch)) {
             if (lastToken != null &&
-                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARANTHESES_OPEN && lastToken.getType() != Token.TOKEN_FUNCTION && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN && lastToken.getType() != Token.TOKEN_FUNCTION && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
                 // insert an implicit multiplication token
                 lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
                 return lastToken;
             }
-            return parseParantheses(true);
-        } else if (isCloseParantheses(ch)) {
-            return parseParantheses(false);
+            return parseParentheses(true);
+        } else if (isCloseParentheses(ch)) {
+            return parseParentheses(false);
         } else if (Operator.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
         } else if (Character.isAlphabetic(ch) || ch == '_') {
             // parse the name which can be a variable or a function
             if (lastToken != null &&
-                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARANTHESES_OPEN && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                    (lastToken.getType() != Token.TOKEN_OPERATOR && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
                 // insert an implicit multiplication token
                 lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
                 return lastToken;
@@ -84,7 +83,7 @@ public class Tokenizer {
         throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
-    private Token parseArumentSeparatorToken(char ch) {
+    private Token parseArgumentSeparatorToken(char ch) {
         this.pos++;
         this.lastToken = new ArgumentSeparatorToken();
         return lastToken;
@@ -94,21 +93,21 @@ public class Tokenizer {
         return ch == ',';
     }
 
-    private Token parseParantheses(final boolean open) {
+    private Token parseParentheses(final boolean open) {
         if (open) {
-            this.lastToken = new OpenParanthesesToken();
+            this.lastToken = new OpenParenthesesToken();
         } else {
-            this.lastToken = new CloseParanthesesToken();
+            this.lastToken = new CloseParenthesesToken();
         }
         this.pos++;
         return lastToken;
     }
 
-    private boolean isOpenParantheses(char ch) {
+    private boolean isOpenParentheses(char ch) {
         return ch == '(' || ch == '{' || ch == '[';
     }
 
-    private boolean isCloseParantheses(char ch) {
+    private boolean isCloseParentheses(char ch) {
         return ch == ')' || ch == '}' || ch == ']';
     }
 
@@ -186,7 +185,7 @@ public class Tokenizer {
         }
         if (op == null && symbol.length() == 1) {
             final int argc =
-                    (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR || lastToken.getType() == Token.TOKEN_PARANTHESES_OPEN)
+                    (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR || lastToken.getType() == Token.TOKEN_PARENTHESES_OPEN)
                             ? 1 : 2;
             op = Operators.getBuiltinOperator(symbol.charAt(0), argc);
         }

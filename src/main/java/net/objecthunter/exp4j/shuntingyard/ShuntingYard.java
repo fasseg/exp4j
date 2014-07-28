@@ -55,10 +55,10 @@ public class ShuntingYard {
                 stack.add(token);
                 break;
             case Token.TOKEN_SEPARATOR:
-                while (!stack.empty() && stack.peek().getType() != Token.TOKEN_PARANTHESES_OPEN) {
+                while (!stack.empty() && stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
                     output.add(stack.pop());
                 }
-                if (stack.empty() || stack.peek().getType() != Token.TOKEN_PARANTHESES_OPEN) {
+                if (stack.empty() || stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
                     throw new IllegalArgumentException("Misplaced function separator ',' or mismatched parentheses");
                 }
                 break;
@@ -77,11 +77,11 @@ public class ShuntingYard {
                 }
                 stack.push(token);
                 break;
-            case Token.TOKEN_PARANTHESES_OPEN:
+            case Token.TOKEN_PARENTHESES_OPEN:
                 stack.push(token);
                 break;
-            case Token.TOKEN_PARANTHESES_CLOSE:
-                while (stack.peek().getType() != Token.TOKEN_PARANTHESES_OPEN) {
+            case Token.TOKEN_PARENTHESES_CLOSE:
+                while (stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
                     output.add(stack.pop());
                 }
                 stack.pop();
@@ -95,7 +95,7 @@ public class ShuntingYard {
         }
         while (!stack.empty()) {
             Token t = stack.pop();
-            if (t.getType() == Token.TOKEN_PARANTHESES_CLOSE || t.getType() == Token.TOKEN_PARANTHESES_OPEN) {
+            if (t.getType() == Token.TOKEN_PARENTHESES_CLOSE || t.getType() == Token.TOKEN_PARENTHESES_OPEN) {
                 throw new IllegalArgumentException("Mismatched parentheses detected. Please check the expression");
             } else {
                 output.add(t);

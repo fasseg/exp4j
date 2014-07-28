@@ -26,7 +26,7 @@ public class ValidationResult {
 
     /**
      * Create a new instance
-     * @param valid Wether the validation of the expression was successful
+     * @param valid Whether the validation of the expression was successful
      * @param errors The list of errors returned if the validation was unsuccessful
      */
     public ValidationResult(boolean valid, List<String> errors) {
