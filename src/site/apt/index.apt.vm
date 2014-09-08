@@ -59,7 +59,7 @@ double result = e.evaluate();
 
 ** Evaluating an expression asynchronously
 
-    For evaluating expressions asynchronously the user only has to supply a <<java.util.concurrent.ExecutorService>>.
+    For evaluating expressions asynchronously the user only has to supply a <<<java.util.concurrent.ExecutorService>>>.
 
 *** Example 2:
 
