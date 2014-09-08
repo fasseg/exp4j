@@ -52,5 +52,8 @@
             <action dev="fas" type="add">New Shunting Yard</action>
             <action dev="fas" type="add">New API</action>
         </release>
+        <release version="0.4.1-ALPHA-1" description="Feature release">
+            <action dev="fas" type="add">New Future API</action>
+        </release>
 	</body>
 </document>
