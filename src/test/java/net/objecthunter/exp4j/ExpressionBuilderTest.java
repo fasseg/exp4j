@@ -1817,6 +1817,15 @@ public class ExpressionBuilderTest {
         assertEquals(3d * E, e.evaluate(), 0d);
     }
 
+    @Test
+    public void testExpression85() throws Exception {
+        Expression e = new ExpressionBuilder("1/2x")
+                .variables("x")
+                .build()
+                .setVariable("x", 6);
+        assertEquals(3d, e.evaluate(), 0d);
+    }
+
     // thanks go out to Janny for providing the tests and the bug report
     @Test
     public void testUnaryMinusInParenthesisSpace() throws Exception {
