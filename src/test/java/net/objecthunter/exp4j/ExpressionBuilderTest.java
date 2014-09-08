@@ -21,6 +21,9 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
@@ -1513,7 +1516,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testDocumentationExample2() throws Exception {
+    public void testDocumentationExample3() throws Exception {
         String expr = "7.2973525698e-3";
         double expected = Double.parseDouble(expr);
         Expression e = new ExpressionBuilder(expr)
@@ -1522,7 +1525,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test(expected = ArithmeticException.class)
-    public void testDocumentationExample3() throws Exception {
+    public void testDocumentationExample4() throws Exception {
         Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
 
             @Override
@@ -1538,7 +1541,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testDocumentationExample4() throws Exception {
+    public void testDocumentationExample5() throws Exception {
         Function logb = new Function("logb", 2) {
             @Override
             public double apply(double... args) {
@@ -1554,7 +1557,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testDocumentationExample5() throws Exception {
+    public void testDocumentationExample6() throws Exception {
         double result = new ExpressionBuilder("2cos(xy)")
                 .variables("x","y")
                 .build()
@@ -1562,6 +1565,19 @@ public class ExpressionBuilderTest {
                 .setVariable("y", 0.25d)
                 .evaluate();
         assertEquals(2d * cos(0.5d * 0.25d), result, 0d);
+    }
+
+    @Test
+    public void testDocumentationExample2() throws Exception {
+        ExecutorService exec = Executors.newFixedThreadPool(1);
+        Expression e = new ExpressionBuilder("3log(y)/(x+1)")
+                .variables("x", "y")
+                .build()
+                .setVariable("x", 2.3)
+                .setVariable("y", 3.14);
+        Future<Double> result = e.evaluateAsync(exec);
+        double expected = 3 * Math.log(3.14d)/(3.3);
+        assertEquals(expected, result.get(), 0d);
     }
 
 

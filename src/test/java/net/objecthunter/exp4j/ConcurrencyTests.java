@@ -31,7 +31,7 @@ public class ConcurrencyTests {
     @Test
     public void testFutureEvaluation() throws Exception {
         ExecutorService exec = Executors.newFixedThreadPool(10);
-        int numTests = 100000;
+        int numTests = 10000;
         double[] correct1 = new double[numTests];
         Future[] results1 = new Future[numTests];
 
@@ -56,6 +56,7 @@ public class ConcurrencyTests {
                     .setVariable("n", i)
                     .evaluateAsync(exec);
         }
+
         for (int i = 0; i< numTests;i++) {
             assertEquals(correct1[i], (double) results1[i].get(), 0d);
             assertEquals(correct2[i], (double) results2[i].get(), 0d);
