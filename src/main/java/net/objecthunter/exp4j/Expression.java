@@ -16,6 +16,7 @@
 package net.objecthunter.exp4j;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import net.objecthunter.exp4j.tokenizer.*;
 
@@ -70,6 +71,15 @@ public class Expression {
             }
         }
         return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
+    }
+
+    public Future<Double> evaluateAsync(ExecutorService executor) {
+        return executor.submit(new Callable<Double>() {
+            @Override
+            public Double call() throws Exception {
+                return evaluate();
+            }
+        });
     }
 
     public double evaluate(){
