@@ -35,15 +35,13 @@ public class Functions {
     private static final int INDEX_SQRT = 13;
     private static final int INDEX_TANH = 14;
     private static final int INDEX_COSH = 15;
-    private static final int INDEX_MAX = 16;
-    private static final int INDEX_MIN = 17;
-    private static final int INDEX_POW = 18;
-    private static final int INDEX_EXP = 19;
-    private static final int INDEX_EXPM1 = 20;
-    private static final int INDEX_LOG10 = 21;
-    private static final int INDEX_LOG2 = 22;
+    private static final int INDEX_POW = 16;
+    private static final int INDEX_EXP = 17;
+    private static final int INDEX_EXPM1 = 18;
+    private static final int INDEX_LOG10 = 19;
+    private static final int INDEX_LOG2 = 20;
 
-    private static final Function[] builtinFunctions = new Function[23];
+    private static final Function[] builtinFunctions = new Function[21];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -214,10 +212,6 @@ public class Functions {
                 return builtinFunctions[INDEX_CEIL];
             case "floor":
                 return builtinFunctions[INDEX_FLOOR];
-            case "max":
-                return builtinFunctions[INDEX_MAX];
-            case "min":
-                return builtinFunctions[INDEX_MIN];
             case "sqrt":
                 return builtinFunctions[INDEX_SQRT];
             case "cbrt":

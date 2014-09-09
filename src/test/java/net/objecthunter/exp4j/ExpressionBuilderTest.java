@@ -1976,6 +1976,24 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testFunction23() throws Exception {
+        String expr;
+        expr = "log1p(1)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(log1p(1d), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testFunction24() throws Exception {
+        String expr;
+        expr = "pow(3,3)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(27d, e.evaluate(), 0d);
+    }
+
+    @Test
     public void testPostfix1() throws Exception {
         String expr;
         double expected;

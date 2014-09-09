@@ -30,28 +30,25 @@ public abstract class Function {
      * @param numArguments the number of arguments the function takes
      */
     public Function(String name, int numArguments) {
-        this.name = name;
-        if (numArguments < 1) {
-            throw new IllegalArgumentException("The number of function arguments can not be less than 1 for '" +
+        if (numArguments < 0) {
+            throw new IllegalArgumentException("The number of function arguments can not be less than 0 for '" +
                     name + "'");
         }
+        if (!isValidFunctionName(name)) {
+            throw new IllegalArgumentException("The function name '" + name  +"' is invalid");
+        }
+        this.name = name;
         this.numArguments = numArguments;
 
     }
+
 
     /**
      * Create a new Function with a given name that takes a single argument
      * @param name the name of the Function
      */
     public Function(String name) {
-        if (name == null || name.trim().isEmpty())  {
-            throw new IllegalArgumentException("Function name can not be empty");
-        }
-        if (!Character.isAlphabetic(name.charAt(0)) && name.charAt(0) != '_') {
-            throw new IllegalArgumentException("Function name is invalid. Name has to start with a letter or an underscore");
-        }
-        this.name = name;
-        this.numArguments = 1;
+        this(name, 1);
     }
 
     /**
@@ -92,5 +89,39 @@ public abstract class Function {
         }
         chars[count] = '_';
         return chars;
+    }
+
+    public static boolean isValidFunctionName(final String name) {
+        if (name == null)  {
+            return false;
+        }
+
+        final int size = name.length();
+
+        if (size == 0) {
+            return false;
+        }
+
+        for (int i=0;i< size;i++) {
+            final char c = name.charAt(i);
+            if (c == 95) {
+                continue;
+            }
+            if (c > 47 && c < 58) {
+                if (i == 0) {
+                    return false;
+                }else {
+                    continue;
+                }
+            }
+            if (c > 96 && c < 123) {
+                continue;
+            }
+            if (c > 64 && c < 91) {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }
