@@ -85,7 +85,7 @@ public class Expression {
                 case Token.TOKEN_FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
                     if (func.getNumArguments() > count) {
-                        errors.add("Not enought arguments for '" + func.getName() + "'");
+                        errors.add("Not enough arguments for '" + func.getName() + "'");
                     }
                     break;
                 case Token.TOKEN_OPERATOR:
