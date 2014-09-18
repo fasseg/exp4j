@@ -75,6 +75,13 @@ public class Expression {
                 }
             }
         }
+
+        /* Check if the number of operands, functions and operators match.
+           The idea is to increment a counter for operands and decrease it for operators.
+           When a function occurs the number of available arguments has to be greater
+           than or equals to the function's expected number of arguments.
+           The count has to be larger than 1 at all times and exactly 1 after all tokens
+           have been processed */
         int count = 0;
         for (Token tok : this.tokens) {
             switch (tok.getType()) {
