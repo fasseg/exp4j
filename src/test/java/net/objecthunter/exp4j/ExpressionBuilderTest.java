@@ -235,6 +235,39 @@ public class ExpressionBuilderTest {
                 .evaluate();
     }
 
+    @Test
+    public void testExpressionBuilder17() throws Exception {
+        Expression e = new ExpressionBuilder("x-y*")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
+    @Test
+    public void testExpressionBuilder18() throws Exception {
+        Expression e = new ExpressionBuilder("log(x) - y *")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
+    @Test
+    public void testExpressionBuilder19() throws Exception {
+        Expression e = new ExpressionBuilder("x - y *")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
     /* legacy tests from earlier exp4j versions */
 
     @Test

@@ -18,6 +18,8 @@ package net.objecthunter.exp4j;
 import java.util.*;
 import java.util.concurrent.*;
 
+import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.*;
 
 public class Expression {
@@ -60,17 +62,53 @@ public class Expression {
         return this;
     }
 
-    public ValidationResult validate() {
+    public ValidationResult validate(boolean checkVariablesSet) {
         final List<String> errors = new ArrayList<>(0);
-        for (final Token t : this.tokens) {
-            if (t.getType() == Token.TOKEN_VARIABLE) {
-                final String var = ((VariableToken) t).getName();
-                if (!variables.containsKey(var)) {
-                    errors.add("The setVariable '" + var + "' has not been set");
+        if (checkVariablesSet) {
+            /* check that all vars have a value set */
+            for (final Token t : this.tokens) {
+                if (t.getType() == Token.TOKEN_VARIABLE) {
+                    final String var = ((VariableToken) t).getName();
+                    if (!variables.containsKey(var)) {
+                        errors.add("The setVariable '" + var + "' has not been set");
+                    }
                 }
             }
         }
+        int count = 0;
+        for (Token tok : this.tokens) {
+            switch (tok.getType()) {
+                case Token.TOKEN_NUMBER:
+                case Token.TOKEN_VARIABLE:
+                    count++;
+                    break;
+                case Token.TOKEN_FUNCTION:
+                    final Function func = ((FunctionToken) tok).getFunction();
+                    if (func.getNumArguments() > count) {
+                        errors.add("Not enought arguments for '" + func.getName() + "'");
+                    }
+                    break;
+                case Token.TOKEN_OPERATOR:
+                    Operator op = ((OperatorToken) tok).getOperator();
+                    if (op.getNumOperands() == 2) {
+                        count--;
+                    }
+                    break;
+            }
+            if (count < 1) {
+                errors.add("Too many operators");
+                return new ValidationResult(false, errors);
+            }
+        }
+        if (count > 1) {
+            errors.add("Too many operands");
+        }
         return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
+
+    }
+
+    public ValidationResult validate() {
+        return validate(true);
     }
 
     public Future<Double> evaluateAsync(ExecutorService executor) {
@@ -82,7 +120,7 @@ public class Expression {
         });
     }
 
-    public double evaluate(){
+    public double evaluate() {
         final Stack<Double> output = new Stack<>();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
@@ -131,10 +169,10 @@ public class Expression {
 
     private double[] reverseInPlace(double[] args) {
         int len = args.length;
-        for (int i=0; i< len/2;i++) {
+        for (int i = 0; i < len / 2; i++) {
             double tmp = args[i];
             args[i] = args[len - i - 1];
-            args[len -i -1] = tmp;
+            args[len - i - 1] = tmp;
         }
         return args;
     }
