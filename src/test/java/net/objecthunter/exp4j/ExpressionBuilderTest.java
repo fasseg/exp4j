@@ -235,6 +235,39 @@ public class ExpressionBuilderTest {
                 .evaluate();
     }
 
+    @Test
+    public void testExpressionBuilder17() throws Exception {
+        Expression e = new ExpressionBuilder("x-y*")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
+    @Test
+    public void testExpressionBuilder18() throws Exception {
+        Expression e = new ExpressionBuilder("log(x) - y *")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
+    @Test
+    public void testExpressionBuilder19() throws Exception {
+        Expression e = new ExpressionBuilder("x - y *")
+                .variables("x", "y")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertFalse(res.isValid());
+        assertEquals(1,res.getErrors().size());
+        assertEquals("Too many operators", res.getErrors().get(0));
+    }
+
     /* legacy tests from earlier exp4j versions */
 
     @Test
@@ -1568,6 +1601,33 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testDocumentationExample7() throws Exception {
+        Expression e = new ExpressionBuilder("x")
+                .variable("x")
+                .build();
+
+        ValidationResult res = e.validate();
+        assertFalse(res.isValid());
+        assertEquals(1, res.getErrors().size());
+
+        e.setVariable("x",1d);
+        res = e.validate();
+        assertTrue(res.isValid());
+    }
+
+    @Test
+    public void testDocumentationExample8() throws Exception {
+        Expression e = new ExpressionBuilder("x")
+                .variable("x")
+                .build();
+
+        ValidationResult res = e.validate(false);
+        assertTrue(res.isValid());
+        assertNull(res.getErrors());
+
+    }
+
+    @Test
     public void testDocumentationExample2() throws Exception {
         ExecutorService exec = Executors.newFixedThreadPool(1);
         Expression e = new ExpressionBuilder("3log(y)/(x+1)")
@@ -1973,6 +2033,24 @@ public class ExpressionBuilderTest {
                 .build()
                 .setVariable("cos_1", 1d);
         assertTrue(e.evaluate() == Math.cos(1d));
+    }
+
+    @Test
+    public void testFunction23() throws Exception {
+        String expr;
+        expr = "log1p(1)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(log1p(1d), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testFunction24() throws Exception {
+        String expr;
+        expr = "pow(3,3)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(27d, e.evaluate(), 0d);
     }
 
     @Test
