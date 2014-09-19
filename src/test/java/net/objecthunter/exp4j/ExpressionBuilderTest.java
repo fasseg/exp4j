@@ -1601,6 +1601,33 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testDocumentationExample7() throws Exception {
+        Expression e = new ExpressionBuilder("x")
+                .variable("x")
+                .build();
+
+        ValidationResult res = e.validate();
+        assertFalse(res.isValid());
+        assertEquals(1, res.getErrors().size());
+
+        e.setVariable("x",1d);
+        res = e.validate();
+        assertTrue(res.isValid());
+    }
+
+    @Test
+    public void testDocumentationExample8() throws Exception {
+        Expression e = new ExpressionBuilder("x")
+                .variable("x")
+                .build();
+
+        ValidationResult res = e.validate(false);
+        assertTrue(res.isValid());
+        assertNull(res.getErrors());
+
+    }
+
+    @Test
     public void testDocumentationExample2() throws Exception {
         ExecutorService exec = Executors.newFixedThreadPool(1);
         Expression e = new ExpressionBuilder("3log(y)/(x+1)")

@@ -317,7 +317,9 @@ e.evaluate(); // <- this call will throw an ArithmeticException
 
 ** Validation of expression
 
-    Since version 0.4.0 exp4j has an added feature to validate expressions. Users can call <<<Expression.validate()>>> for some generic checks on the expression. E.g. A check if all variables have been set.
+    Since version 0.4.0 exp4j has an added feature to validate expressions. Users can call <<<Expression.validate()>>> to perform a relatively fast validation.
+    The validate method also accepts a boolean argument, indicating if a check for empty variables should be performed.
+
 
 *** Example 7
 
@@ -325,15 +327,30 @@ e.evaluate(); // <- this call will throw an ArithmeticException
 
 +--
 Expression e = new ExpressionBuilder("x")
+        .variable("x")
         .build();
 
 ValidationResult res = e.validate();
 assertFalse(res.isValid());
 assertEquals(1, res.getErrors().size());
 
-e.variable("x",1d);
+e.setVariable("x",1d);
 res = e.validate();
 assertTrue(res.isValid());
++--
+
+*** Example 8
+
+    Validate an before variables have been set, i.e. skip the check if all variables have been set.
+
++--
+Expression e = new ExpressionBuilder("x")
+        .variable("x")
+        .build();
+
+ValidationResult res = e.validate(false);
+assertTrue(res.isValid());
+assertNull(res.getErrors());
 +--
 
 ** Error handling
