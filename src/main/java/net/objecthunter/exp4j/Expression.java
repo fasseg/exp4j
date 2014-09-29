@@ -157,12 +157,20 @@ public class Expression {
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
+
+                if (func.getFunction().getNumArguments() > func.getPassedArgumentCount()) {
+                    throw new IllegalArgumentException("Function " + func.getFunction().getName() +
+                            " requires at least " + func.getFunction().getNumArguments() +
+                            " arguments (" + func.getPassedArgumentCount() + " passed)");
+                }
+
                 if (output.size() < func.getFunction().getNumArguments()) {
                     throw new IllegalArgumentException("Invalid number of arguments available");
                 }
+
                 /* collect the arguments from the stack */
-                double[] args = new double[func.getFunction().getNumArguments()];
-                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
+                double[] args = new double[func.getPassedArgumentCount()];
+                for (int j = 0; j < func.getPassedArgumentCount(); j++) {
                     args[j] = output.pop();
                 }
                 output.push(func.getFunction().apply(this.reverseInPlace(args)));

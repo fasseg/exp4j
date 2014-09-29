@@ -84,7 +84,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testExpressionBuilder5() throws Exception {
-        Function avg = new Function("avg", 4) {
+        Function avg = new Function("custom_avg", 4) {
 
             @Override
             public double apply(double... args) {
@@ -95,7 +95,7 @@ public class ExpressionBuilderTest {
                 return sum / args.length;
             }
         };
-        double result = new ExpressionBuilder("avg(1,2,3,4)")
+        double result = new ExpressionBuilder("custom_avg(1,2,3,4)")
                 .function(avg)
                 .build()
                 .evaluate();
@@ -1299,15 +1299,7 @@ public class ExpressionBuilderTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidNumberofArguments1() throws Exception {
-        String expr = "log(2,2)";
-        Expression e = new ExpressionBuilder(expr)
-                .build();
-        e.evaluate();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidNumberofArguments2() throws Exception {
-        Function avg = new Function("avg", 4) {
+        Function avg = new Function("custom_avg", 4) {
 
             @Override
             public double apply(double... args) {
@@ -1318,7 +1310,7 @@ public class ExpressionBuilderTest {
                 return sum / args.length;
             }
         };
-        String expr = "avg(2,2)";
+        String expr = "custom_avg(2,2)";
         Expression e = new ExpressionBuilder(expr)
                 .build();
         e.evaluate();
@@ -2051,6 +2043,33 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder(expr)
                 .build();
         assertEquals(27d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testFunction25() throws Exception {
+        String expr;
+        expr = "avg(1,2,3,4,5,6,7,8,9,10)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(5.5d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testFunction26() throws Exception {
+        String expr;
+        expr = "sum(1,2,3,4,5,6,7,8,9,10)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(55d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testFunction27() throws Exception {
+        String expr;
+        expr = "sum(4,2,3,avg(5,3),avg(20,4,6)*5,sum(2,4,5,6,2))+avg(2,7)";
+        Expression e = new ExpressionBuilder(expr)
+                .build();
+        assertEquals(86.5d, e.evaluate(), 0d);
     }
 
     @Test
