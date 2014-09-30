@@ -341,7 +341,7 @@ assertTrue(res.isValid());
 
 *** Example 8
 
-    Validate an before variables have been set, i.e. skip the check if all variables have been set.
+    Validate an expression before variables have been set, i.e. skip checking if all variables have been set.
 
 +--
 Expression e = new ExpressionBuilder("x")
