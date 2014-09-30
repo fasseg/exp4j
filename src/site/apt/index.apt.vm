@@ -391,6 +391,8 @@ assertNull(res.getErrors());
  * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
  
  * {{{http://simplesassim.wordpress.com/?s=exp4j}Fernando Ribeiro}} blogged about exp4j
+
+ * {{{https://github.com/vavrecan/exp4php} Marek's php port}} of exp4j
   
 
 * References
