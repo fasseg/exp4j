@@ -1902,6 +1902,13 @@ public class ExpressionBuilderTest {
         assertEquals(3d, e.evaluate(), 0d);
     }
 
+    // thanks got out to David Sills
+    @Test(expected=IllegalArgumentException.class)
+    public void testSpaceBetweenNumbers() throws Exception {
+        Expression e = new ExpressionBuilder("1 1")
+                .build();
+    }
+
     // thanks go out to Janny for providing the tests and the bug report
     @Test
     public void testUnaryMinusInParenthesisSpace() throws Exception {

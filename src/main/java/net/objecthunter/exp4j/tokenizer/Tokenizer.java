@@ -58,14 +58,17 @@ public class Tokenizer {
             ch = expression[++pos];
         }
         if (Character.isDigit(ch) || ch == '.') {
-            if (lastToken != null &&
-                    (lastToken.getType() != Token.TOKEN_OPERATOR
-                            && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
-                            && lastToken.getType() != Token.TOKEN_FUNCTION
-                            && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
-                // insert an implicit multiplication token
-                lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
-                return lastToken;
+            if (lastToken != null) {
+                if (lastToken.getType() == Token.TOKEN_NUMBER) {
+                    throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
+                } else if ((lastToken.getType() != Token.TOKEN_OPERATOR
+                        && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
+                        && lastToken.getType() != Token.TOKEN_FUNCTION
+                        && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
+                    // insert an implicit multiplication token
+                    lastToken = new OperatorToken(Operators.getBuiltinOperator('*', 2));
+                    return lastToken;
+                }
             }
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
