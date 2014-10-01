@@ -40,8 +40,10 @@ public class Functions {
     private static final int INDEX_EXPM1 = 18;
     private static final int INDEX_LOG10 = 19;
     private static final int INDEX_LOG2 = 20;
+    private static final int INDEX_AVG = 21;
+    private static final int INDEX_SUM = 22;
 
-    private static final Function[] builtinFunctions = new Function[21];
+    private static final Function[] builtinFunctions = new Function[23];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -170,6 +172,22 @@ public class Functions {
                 return Math.expm1(args[0]);
             }
         };
+        builtinFunctions[INDEX_AVG] = new Function("avg") {
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg : args) sum += arg;
+                return sum / args.length;
+            }
+        };
+        builtinFunctions[INDEX_SUM] = new Function("sum") {
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg : args) sum += arg;
+                return sum;
+            }
+        };
     }
 
     /**
@@ -222,6 +240,10 @@ public class Functions {
                 return builtinFunctions[INDEX_EXP];
             case "expm1":
                 return builtinFunctions[INDEX_EXPM1];
+            case "avg":
+                return builtinFunctions[INDEX_AVG];
+            case "sum":
+                return builtinFunctions[INDEX_SUM];
             default:
                 return null;
         }
