@@ -33,7 +33,7 @@
         <site>
             <id>objecthunter.net</id>
             <name>objecthunter.net</name>
-            <url>scp://trillian.objecthunter.net/srv/http/exp4j</url>
+            <url>scpexe://trillian.objecthunter.net/srv/http/exp4j</url>
         </site>
     </distributionManagement>
     <url>http://www.objecthunter.net/exp4j</url>
