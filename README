@@ -1,7 +1,5 @@
 exp4j
 -----
+exp4j is a mathematical expression evaluator for the Java programming language. It is a simple-to-use and small library (~40kb) without any external dependencies.
 
-exp4j math expression evaluator for the Java programming language, capable of evaluating simple mathematical expressions.
-exp4j is a simple-to-use small library (~40kb) without any external dependencies.
-
-check out http://www.objecthunter.net/exp4j/
+Check out http://www.objecthunter.net/exp4j/ for documentation and examples
