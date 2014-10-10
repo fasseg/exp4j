@@ -1287,7 +1287,7 @@ public class ExpressionBuilderTest {
     @Test
     public void testVarMap() throws Exception {
         String expr = "12.23 * foo - bar";
-        Map<String, Double> variables = new HashMap<>();
+        Map<String, Double> variables = new HashMap<String, Double>();
         variables.put("foo", 2d);
         variables.put("bar", 3.3d);
         Expression e = new ExpressionBuilder(expr)

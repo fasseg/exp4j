@@ -179,51 +179,50 @@ public class Functions {
      */
     public static Function getBuiltinFunction(final String name) {
 
-        switch(name) {
-            case "sin":
-                return builtinFunctions[INDEX_SIN];
-            case "cos":
-                return builtinFunctions[INDEX_COS];
-            case "tan":
-                return builtinFunctions[INDEX_TAN];
-            case "asin":
-                return builtinFunctions[INDEX_ASIN];
-            case "acos":
-                return builtinFunctions[INDEX_ACOS];
-            case "atan":
-                return builtinFunctions[INDEX_ATAN];
-            case "sinh":
-                return builtinFunctions[INDEX_SINH];
-            case "cosh":
-                return builtinFunctions[INDEX_COSH];
-            case "tanh":
-                return builtinFunctions[INDEX_TANH];
-            case "abs":
-                return builtinFunctions[INDEX_ABS];
-            case "log":
-                return builtinFunctions[INDEX_LOG];
-            case "log10":
-                return builtinFunctions[INDEX_LOG10];
-            case "log2":
-                return builtinFunctions[INDEX_LOG2];
-            case "log1p":
-                return builtinFunctions[INDEX_LOG1P];
-            case "ceil":
-                return builtinFunctions[INDEX_CEIL];
-            case "floor":
-                return builtinFunctions[INDEX_FLOOR];
-            case "sqrt":
-                return builtinFunctions[INDEX_SQRT];
-            case "cbrt":
-                return builtinFunctions[INDEX_CBRT];
-            case "pow":
-                return builtinFunctions[INDEX_POW];
-            case "exp":
-                return builtinFunctions[INDEX_EXP];
-            case "expm1":
-                return builtinFunctions[INDEX_EXPM1];
-            default:
-                return null;
+        if (name.equals("sin")) {
+            return builtinFunctions[INDEX_SIN];
+        } else if (name.equals("cos")) {
+            return builtinFunctions[INDEX_COS];
+        } else if (name.equals("tan")) {
+            return builtinFunctions[INDEX_TAN];
+        } else if (name.equals("asin")) {
+            return builtinFunctions[INDEX_ASIN];
+        } else if (name.equals("acos")) {
+            return builtinFunctions[INDEX_ACOS];
+        } else if (name.equals("atan")) {
+            return builtinFunctions[INDEX_ATAN];
+        } else if (name.equals("sinh")) {
+            return builtinFunctions[INDEX_SINH];
+        } else if (name.equals("cosh")) {
+            return builtinFunctions[INDEX_COSH];
+        } else if (name.equals("tanh")) {
+            return builtinFunctions[INDEX_TANH];
+        } else if (name.equals("abs")) {
+            return builtinFunctions[INDEX_ABS];
+        } else if (name.equals("log")) {
+            return builtinFunctions[INDEX_LOG];
+        } else if (name.equals("log10")) {
+            return builtinFunctions[INDEX_LOG10];
+        } else if (name.equals("log2")) {
+            return builtinFunctions[INDEX_LOG2];
+        } else if (name.equals("log1p")) {
+            return builtinFunctions[INDEX_LOG1P];
+        } else if (name.equals("ceil")) {
+            return builtinFunctions[INDEX_CEIL];
+        } else if (name.equals("floor")) {
+            return builtinFunctions[INDEX_FLOOR];
+        } else if (name.equals("sqrt")) {
+            return builtinFunctions[INDEX_SQRT];
+        } else if (name.equals("cbrt")) {
+            return builtinFunctions[INDEX_CBRT];
+        } else if (name.equals("pow")) {
+            return builtinFunctions[INDEX_POW];
+        } else if (name.equals("exp")) {
+            return builtinFunctions[INDEX_EXP];
+        } else if (name.equals("expm1")) {
+            return builtinFunctions[INDEX_EXPM1];
+        } else {
+            return null;
         }
     }
 

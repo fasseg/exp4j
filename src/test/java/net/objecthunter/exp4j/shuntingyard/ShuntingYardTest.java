@@ -41,7 +41,7 @@ public class ShuntingYardTest {
     @Test
     public void testShuntingYard2() throws Exception {
         String expression = "3*x";
-        Token[] tokens = ShuntingYard.convertToRPN(expression, null, null, new HashSet<>(Arrays.asList("x")));
+        Token[] tokens = ShuntingYard.convertToRPN(expression, null, null, new HashSet<String>(Arrays.asList("x")));
         assertNumberToken(tokens[0], 3d);
         assertVariableToken(tokens[1], "x");
         assertOperatorToken(tokens[2], "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
@@ -107,7 +107,7 @@ public class ShuntingYardTest {
                 return result;
             }
         };
-        Map<String, Operator> userOperators = new HashMap<>();
+        Map<String, Operator> userOperators = new HashMap<String, Operator>();
         userOperators.put("!", factorial);
         Token[] tokens = ShuntingYard.convertToRPN(expression, null, userOperators, null);
         assertNumberToken(tokens[0], 2d);
@@ -138,7 +138,7 @@ public class ShuntingYardTest {
                 return 1d / args[0];
             }
         };
-        Map<String, Operator> userOperators = new HashMap<>();
+        Map<String, Operator> userOperators = new HashMap<String, Operator>();
         userOperators.put("$", reciprocal);
         Token[] tokens = ShuntingYard.convertToRPN("1$", null, userOperators, null);
         assertNumberToken(tokens[0], 1d);

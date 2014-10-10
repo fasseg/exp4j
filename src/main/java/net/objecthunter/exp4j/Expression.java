@@ -33,13 +33,13 @@ public class Expression {
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
-        this.variables = new HashMap<>(4);
+        this.variables = new HashMap<String, Double>(4);
         this.userFunctionNames = Collections.<String>emptySet();
     }
 
     Expression(final Token[] tokens, Set<String> userFunctionNames) {
         this.tokens = tokens;
-        this.variables = new HashMap<>(4);
+        this.variables = new HashMap<String, Double>(4);
         this.userFunctionNames = userFunctionNames;
     }
 
@@ -63,7 +63,7 @@ public class Expression {
     }
 
     public ValidationResult validate(boolean checkVariablesSet) {
-        final List<String> errors = new ArrayList<>(0);
+        final List<String> errors = new ArrayList<String>(0);
         if (checkVariablesSet) {
             /* check that all vars have a value set */
             for (final Token t : this.tokens) {
@@ -128,7 +128,7 @@ public class Expression {
     }
 
     public double evaluate() {
-        final Stack<Double> output = new Stack<>();
+        final Stack<Double> output = new Stack<Double>();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
             if (t.getType() == Token.TOKEN_NUMBER) {

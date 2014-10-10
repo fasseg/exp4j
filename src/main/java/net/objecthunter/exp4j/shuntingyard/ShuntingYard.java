@@ -33,12 +33,13 @@ public class ShuntingYard {
      * @param expression the expression to convert
      * @param userFunctions the custom functions used
      * @param userOperators the custom operators used
+     * @param variableNames the variable names used in the expression
      * @return a {@link net.objecthunter.exp4j.tokenizer.Token} array containing the result
      */
     public static Token[] convertToRPN(final String expression, final Map<String, Function> userFunctions,
             final Map<String, Operator> userOperators, final Set<String> variableNames){
-        final Stack<Token> stack = new Stack<>();
-        final List<Token> output = new ArrayList<>();
+        final Stack<Token> stack = new Stack<Token>();
+        final List<Token> output = new ArrayList<Token>();
 
         final Tokenizer tokenizer = new Tokenizer(expression, userFunctions, userOperators, variableNames);
         while (tokenizer.hasNext()) {

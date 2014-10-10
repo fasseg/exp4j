@@ -233,7 +233,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization13() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("x",null, null, new HashSet<>(Arrays.asList("x")));
+        final Tokenizer tokenizer = new Tokenizer("x",null, null, new HashSet<String>(Arrays.asList("x")));
 
         assertTrue(tokenizer.hasNext());
         assertVariableToken(tokenizer.nextToken(), "x");
@@ -243,7 +243,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization14() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("2*x-log(3)",null, null, new HashSet<>(Arrays.asList("x")));
+        final Tokenizer tokenizer = new Tokenizer("2*x-log(3)",null, null, new HashSet<String>(Arrays.asList("x")));
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 2d);
@@ -274,7 +274,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization15() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("2*xlog+log(3)",null, null, new HashSet<>(Arrays.asList("xlog")));
+        final Tokenizer tokenizer = new Tokenizer("2*xlog+log(3)",null, null, new HashSet<String>(Arrays.asList("xlog")));
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 2d);
@@ -305,7 +305,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization16() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("2*x+-log(3)",null, null, new HashSet<>(Arrays.asList("x")));
+        final Tokenizer tokenizer = new Tokenizer("2*x+-log(3)",null, null, new HashSet<String>(Arrays.asList("x")));
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 2d);
@@ -339,7 +339,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization17() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("2 * x + -log(3)",null, null, new HashSet<>(Arrays.asList("x")));
+        final Tokenizer tokenizer = new Tokenizer("2 * x + -log(3)",null, null, new HashSet<String>(Arrays.asList("x")));
 
         assertTrue(tokenizer.hasNext());
         assertNumberToken(tokenizer.nextToken(), 2d);
@@ -381,7 +381,7 @@ public class TokenizerTest {
             }
         };
 
-        Map<String, Function> funcs = new HashMap<>(1);
+        Map<String, Function> funcs = new HashMap<String, Function>(1);
         funcs.put(log2.getName(), log2);
         final Tokenizer tokenizer = new Tokenizer("log2(4)", funcs, null, null);
 
@@ -413,7 +413,7 @@ public class TokenizerTest {
                 return sum / args.length;
             }
         };
-        Map<String, Function> funcs = new HashMap<>(1);
+        Map<String, Function> funcs = new HashMap<String, Function>(1);
         funcs.put(avg.getName(), avg);
         final Tokenizer tokenizer = new Tokenizer("avg(1,2)", funcs, null, null);
 
@@ -446,7 +446,7 @@ public class TokenizerTest {
                 return 0d;
             }
         };
-        Map<String, Operator> operators = new HashMap<>(1);
+        Map<String, Operator> operators = new HashMap<String, Operator>(1);
         operators.put(factorial.getSymbol(), factorial);
 
         final Tokenizer tokenizer = new Tokenizer("2!", null, operators, null);
@@ -462,7 +462,7 @@ public class TokenizerTest {
 
     @Test
     public void testTokenization21() throws Exception {
-        final Tokenizer tokenizer = new Tokenizer("log(x) - y * (sqrt(x^cos(y)))", null, null, new HashSet<>(Arrays.asList("x", "y")));
+        final Tokenizer tokenizer = new Tokenizer("log(x) - y * (sqrt(x^cos(y)))", null, null, new HashSet<String>(Arrays.asList("x", "y")));
 
         assertTrue(tokenizer.hasNext());
         assertFunctionToken(tokenizer.nextToken(), "log", 1);
