@@ -88,7 +88,7 @@ public class Tokenizer {
             return parseParentheses(false);
         } else if (Operator.isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
-        } else if (Character.isAlphabetic(ch) || ch == '_') {
+        } else if (isAlphabetic(ch) || ch == '_') {
             // parse the name which can be a setVariable or a function
             if (lastToken != null &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
@@ -142,7 +142,7 @@ public class Tokenizer {
             this.pos++;
         }
         while (!isEndOfExpression(offset + len - 1) &&
-                (Character.isAlphabetic(expression[offset + len - 1]) ||
+                (isAlphabetic(expression[offset + len - 1]) ||
                         Character.isDigit(expression[offset + len - 1]) ||
                         expression[offset + len - 1] == '_')) {
             String name = new String(expression, offset, len);
@@ -185,7 +185,7 @@ public class Tokenizer {
             this.pos++;
         }
         while (!isEndOfExpression(offset + len) &&
-                (Character.isAlphabetic(expression[offset + len]) ||
+                (isAlphabetic(expression[offset + len]) ||
                         Character.isDigit(expression[offset + len]) ||
                 expression[offset + len] == '_')) {
             len++;
@@ -258,9 +258,14 @@ public class Tokenizer {
         return lastToken;
     }
 
-    private boolean isNumeric(char ch, boolean lastCharE) {
+    private static boolean isNumeric(char ch, boolean lastCharE) {
         return Character.isDigit(ch) || ch == '.' || ch == 'e' || ch == 'E' ||
                 (lastCharE && (ch == '-' || ch == '+'));
+    }
+
+    public static boolean isAlphabetic(int codePoint) {
+        return ((codePoint > 64 && codePoint < 91) ||
+                (codePoint > 96 && codePoint < 123));
     }
 
     private boolean isEndOfExpression(int offset) {
