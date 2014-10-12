@@ -3,7 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/function/Functions.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/operator/Operators.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/ArgumentSeparatorToken.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/CloseParenthesesToken.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/Expression.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/Tokenizer.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/operator/Operator.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/Token.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/VariableToken.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/FunctionToken.java</file>
             <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/Expr4Main.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/tokenizer/NumberToken.java</file>
+            <file>file:/home/leo/Escritorio/code/exp4j/netbeans/exp4j-netbeans-project/src/net/objecthunter/exp4j/shuntingyard/ShuntingYard.java</file>
         </group>
     </open-files>
 </project-private>
