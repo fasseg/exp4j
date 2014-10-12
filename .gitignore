@@ -4,3 +4,5 @@ target/
 *.log
 !.gitignore
 dependency-reduced-pom.xml
+/netbeans/exp4j-netbeans-project/build/
+/netbeans/exp4j-netbeans-project/dist/
