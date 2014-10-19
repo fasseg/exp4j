@@ -268,6 +268,14 @@ public class ExpressionBuilderTest {
         assertEquals("Too many operators", res.getErrors().get(0));
     }
 
+    @Test
+    public void testExpressionBuilder20() throws Exception {
+        Expression e = new ExpressionBuilder("sum(1,2,3,4,5,6)")
+                .build();
+        ValidationResult res = e.validate(false);
+        assertTrue(res.isValid());
+    }
+
     /* legacy tests from earlier exp4j versions */
 
     @Test
