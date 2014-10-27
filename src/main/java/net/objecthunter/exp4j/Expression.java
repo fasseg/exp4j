@@ -91,9 +91,13 @@ public class Expression {
                     break;
                 case Token.TOKEN_FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
+
                     if (func.getNumArguments() > count) {
                         errors.add("Not enough arguments for '" + func.getName() + "'");
                     }
+
+                    int passedArguments = ((FunctionToken) tok).getPassedArgumentCount();
+                    count -= passedArguments - 1;
                     break;
                 case Token.TOKEN_OPERATOR:
                     Operator op = ((OperatorToken) tok).getOperator();
@@ -103,12 +107,12 @@ public class Expression {
                     break;
             }
             if (count < 1) {
-                errors.add("Too many operators");
+                errors.add("Too many operators" + count);
                 return new ValidationResult(false, errors);
             }
         }
         if (count > 1) {
-            errors.add("Too many operands");
+            errors.add("Too many operands" + count);
         }
         return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
 
