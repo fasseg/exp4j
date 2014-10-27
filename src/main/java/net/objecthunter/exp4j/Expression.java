@@ -107,12 +107,12 @@ public class Expression {
                     break;
             }
             if (count < 1) {
-                errors.add("Too many operators" + count);
+                errors.add("Too many operators");
                 return new ValidationResult(false, errors);
             }
         }
         if (count > 1) {
-            errors.add("Too many operands" + count);
+            errors.add("Too many operands");
         }
         return errors.size() == 0 ? ValidationResult.SUCCESS : new ValidationResult(false, errors);
 
