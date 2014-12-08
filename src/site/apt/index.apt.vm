@@ -6,6 +6,7 @@
 	2014
 	------
 
+%{toc|fromDepth=1|toDepth=2}
 
 Introduction
 
@@ -37,14 +38,14 @@ Introduction
 </dependency>
 +--
 
-* Usage
+Usage
 
 
-** Evaluating an expression
+* Evaluating an expression
 
     In order to evaluate an expression. The <<<ExpressionBuilder>>> class can be used to create an <<<Expression>>> object which is capable of evaluation. Custom functions and custom operators can be set via calls to <<<ExpressionBuilder.function()>>> and <<<ExpressionBuilder.operator()>>>. Any given variables can be set on the <<<Expression>>> object returned by <<<ExpressionBuilder.build()>>> via calls to <<<Expression.variable()>>>
 
-*** Example 1:
+** Example 1:
 
     Evaluate a simple expression
 
@@ -57,11 +58,11 @@ Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
 double result = e.evaluate();
 +--
 
-** Evaluating an expression asynchronously
+* Evaluating an expression asynchronously
 
     For evaluating expressions asynchronously the user only has to supply a <<<java.util.concurrent.ExecutorService>>>.
 
-*** Example 2:
+** Example 2:
 
     Evaluate a simple expression asynchronously
 
@@ -77,7 +78,7 @@ double result = future.get();
 +--
 
 
-** Variable declaration
+* Variable declaration
 
 	Variable names must start with a letter or the underscore <<<_>>> and can only include letters, digits or underscores.
 	
@@ -91,11 +92,11 @@ double result = future.get();
 
 	 while <<<1_var_x>>> is not as it does not start with a letter or a underscore.
 
-** Implicit multiplication
+* Implicit multiplication
 
 	 Since v0.4.0 exp4j does support implicit multiplication. Therefore an expression like <<<2cos(yx)>>> will be interpreted as <<<2*cos(y*x)>>>
 
-*** Example 3
+** Example 3
 
 	 Using implicit muliplication
 
@@ -110,14 +111,14 @@ assertEquals(2d * Math.cos(0.5d * 0.25d), result, 0d);
 +---
 
 
-** Scientific notation
+* Scientific notation
 
 	Since version 0.3.5 it is possible to use scientific notation for numbers {{{http://en.wikipedia.org/wiki/Scientific_notation}see wikipedia}}.
 	The number is split into a significand/mantissa <<<y>>> and exponent <<<x>>> of the form <<<yEx>>> which is evaluated as <<<y * 10^x>>>.
 	Be aware that 'e/E' is no operator but part of a number and therefore an expression like <<<1.1e-(x*2)>>> can not be evaluated.
 	An example using the Fine-structure constant <<<α=7.2973525698  * 10^−3>>>:
 
-*** Example 2
+** Example 2
 
     Use scientific notation in an expression
 
@@ -128,12 +129,12 @@ Expression e = new ExpressionBuilder(expr).build();
 assertEquals(expected, e.evaluate(),0d);
 +--
 
-** Custom functions
+* Custom functions
 
   	you can extend the abstract class Function in order to use custom functions in expressions. you only have to implement the
   	<<<apply(double... args)>>> method. In the following example a function for the logarithm to the base 2 is created and used in a following expression.
 
-*** Example 3
+** Example 3
 
     A custom function calculating the logarithm to an arbitrary base using the identity <log(value, base) = ln(value)/ln(base)>
 
@@ -155,7 +156,7 @@ assertEquals(expected, result, 0d);
 	you can also define multi argument functions like <<<avg(a,b,c,d)>>> via the constructor <<<Function(String name, int argc)>>>, with <<<argc>>> being the argument count.
 	The following example uses a custom function which returns the average of four values.
 
-*** Example 4
+** Example 4
 
     A custom average function taking 4 arguments:
 
@@ -180,7 +181,7 @@ double expected = 2.5d;
 assertEquals(expected, result, 0d);
 +--
 
-** Custom operators
+* Custom operators
 
 	you can extend the abstract class <<<Operator>>> in order to declare custom operators for use in expressions, with the symbol being a String consisting of
 	<<<!,#,§,$,&,;,:,~,\<,\>,|,=.>>>. Be aware that adding a Operator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the <<<+>>> operator.
@@ -195,7 +196,7 @@ assertEquals(expected, result, 0d);
  * the number of operands the operator has (<<<1 or 2>>>)
 
 
-*** Example 5
+** Example 5
 
     Create a custom operator for calculating the factorial
 
@@ -229,7 +230,7 @@ assertEquals(expected, result, 0d);
 
 +--
 
-*** Example 6
+** Example 6
 
     Create a custom operator logical operator that returns 1 if the first argument is greater or equals than the second argument, and otherwise it returns 0.
 
@@ -274,16 +275,16 @@ public void testOperators3() throws Exception {
  * Modulo: <<<2 % 2>>>
  
 
-** Precedence of unary minus and power operators
+* Precedence of unary minus and power operators
 
 	The precedence of the unary minus operator is lower than the precedence of the power operator. This means that an expression like <<<-1^2>>> is evaluated as <<<-(1^2)>>> not as <<<(-1)^2>>>.
 
 
-** Division by zero in operations and functions
+* Division by zero in operations and functions
 	
 	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing Operator or Function involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
 	
-*** Example 7
+** Example 7
 
     Throw an Arithmetic exception when a division by zero is attempted
 
@@ -302,7 +303,7 @@ e.evaluate(); // <- this call will throw an ArithmeticException
 +--
 
 	 
-** Built-in functions
+* Built-in functions
 	 
 	 
  * <<<abs>>>: absolute value
@@ -342,13 +343,13 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<tanh>>>: hyperbolic tangent
 
 
-** Validation of expression
+* Validation of expression
 
     Since version 0.4.0 exp4j has an added feature to validate expressions. Users can call <<<Expression.validate()>>> to perform a relatively fast validation.
     The validate method also accepts a boolean argument, indicating if a check for empty variables should be performed.
 
 
-*** Example 8
+** Example 8
 
     Validate an expression
 
@@ -366,7 +367,7 @@ res = e.validate();
 assertTrue(res.isValid());
 +--
 
-*** Example 9
+** Example 9
 
     Validate an expression before variables have been set, i.e. skip checking if all variables have been set.
 
@@ -380,11 +381,17 @@ assertTrue(res.isValid());
 assertNull(res.getErrors());
 +--
 
-** Error handling
+* Error handling
 
     The former versions of exp4j came with a set of Exceptions which had to be caught by the user, since this was often an unnecessary hassle, exp4j as of Version 0.4.0 only throws <<<RuntimeExceptions>>> and foremost <<<IllegalArgumentExceptions>>> from the standard Java API.
 
+Tag Library
+
+    Thanks to Leo there is a Tag Library available at https://github.com/leogtzr/exp4j_tld. This enables users to use exp4j directly in JSP pages.
+
 * API changes
+
+ * Version 0.4.3: Unicode names support added
 
  * Version 0.4.1: Future API introduced
 
@@ -407,7 +414,7 @@ assertNull(res.getErrors());
  * Version 0.2.0: the ExpressionBuilder/Calculable API has been added
  
 
-* Links
+Links
  
  * {{{http://objecthunter.congrace.de/tinybo/blog/articles/86}exp4j intro for Version 0.3.x}}
  
@@ -420,9 +427,11 @@ assertNull(res.getErrors());
  * {{{http://simplesassim.wordpress.com/?s=exp4j}Fernando Ribeiro}} blogged about exp4j
 
  * {{{https://github.com/vavrecan/exp4php} Marek's php port}} of exp4j
+
+ * {{{https://github.com/leogtzr/exp4j_tld} Leo's Tag Library}} for exp4j
   
 
-* References
+References
  
  * {{{http://nilgiri.net/twiki/bin/view/Nilgiri/}Nilgiri}} MUD uses exp4j
  

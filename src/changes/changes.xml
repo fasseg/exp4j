@@ -1,43 +1,51 @@
 <document xmlns="http://maven.apache.org/changes/1.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
-	<properties>
-		<title />
-		<author email="frank.asseg@objecthunter.net">frank asseg</author>
-	</properties>
-	<body>
-		<release version="0.2.1" description="added ExpressionBuilder API">
-			<action dev="fas" type="add">added ExpressionBuilder API</action>
-			<action dev="fas" type="add">added Calculable Interface</action>
-			<action dev="fas" type="fix">refactored for better visibility</action>
-		</release>
-		<release version="0.2.2" description="fixed bug">
-			<action dev="fas" type="fix">exp4j now checks if the variable names clash with a custom function name</action>
-		</release>
-		<release version="0.2.3" description="fixed bug">
-			<action dev="fas" type="add">marked PostfixExpression.fromInfix() as deprecated. ExpressionBuilder is now the recommended way to use exp4j</action>
-			<action dev="fas" type="fix">fixed doc typo</action>
-		</release>
-		<release version="0.2.5" description="added multi argument functions feature">
-			<action dev="fas" type="fix">added check for custom function names</action>
-			<action dev="fas" type="add">added InvalidCustomFunctionNameException</action>
-			<action dev="fas" type="add">added references to site</action>
-			<action dev="fas" type="add">added multivariable custom function handling</action>
-		</release>
-		<release version="0.3.0" description="added custom operators">
-			<action dev="fas" type="add">added CustomOperator to exp4j. see http://jira.congrace.de/jira/browse/EXP-1</action>
-		</release>
-		<release version="0.3.5" description="Feature and bug fix release">
-			<action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-17</action>
-			<action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-18</action>
-			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-21</action>
-			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-19</action>
-			<action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-20</action>
-		</release>
-		<release version="0.3.6" description="Bugfix release">
-			<action dev="fas" type="fix">added check for Division by zero in divsion operations: https://www.objecthunter.net/jira/browse/EXP-22</action>
-			<action dev="fas" type="fix">added exception when using empty expressions: https://www.objecthunter.net/jira/browse/EXP-23</action>
-		</release>
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+    <properties>
+        <title/>
+        <author email="frank.asseg@objecthunter.net">frank asseg</author>
+    </properties>
+    <body>
+        <release version="0.2.1" description="added ExpressionBuilder API">
+            <action dev="fas" type="add">added ExpressionBuilder API</action>
+            <action dev="fas" type="add">added Calculable Interface</action>
+            <action dev="fas" type="fix">refactored for better visibility</action>
+        </release>
+        <release version="0.2.2" description="fixed bug">
+            <action dev="fas" type="fix">exp4j now checks if the variable names clash with a custom function name
+            </action>
+        </release>
+        <release version="0.2.3" description="fixed bug">
+            <action dev="fas" type="add">marked PostfixExpression.fromInfix() as deprecated. ExpressionBuilder is now
+                the recommended way to use exp4j
+            </action>
+            <action dev="fas" type="fix">fixed doc typo</action>
+        </release>
+        <release version="0.2.5" description="added multi argument functions feature">
+            <action dev="fas" type="fix">added check for custom function names</action>
+            <action dev="fas" type="add">added InvalidCustomFunctionNameException</action>
+            <action dev="fas" type="add">added references to site</action>
+            <action dev="fas" type="add">added multivariable custom function handling</action>
+        </release>
+        <release version="0.3.0" description="added custom operators">
+            <action dev="fas" type="add">added CustomOperator to exp4j. see http://jira.congrace.de/jira/browse/EXP-1
+            </action>
+        </release>
+        <release version="0.3.5" description="Feature and bug fix release">
+            <action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-17</action>
+            <action dev="fas" type="add">added feature https://www.objecthunter.net/jira/browse/EXP-18</action>
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-21</action>
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-19</action>
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-20</action>
+        </release>
+        <release version="0.3.6" description="Bugfix release">
+            <action dev="fas" type="fix">added check for Division by zero in divsion operations:
+                https://www.objecthunter.net/jira/browse/EXP-22
+            </action>
+            <action dev="fas" type="fix">added exception when using empty expressions:
+                https://www.objecthunter.net/jira/browse/EXP-23
+            </action>
+        </release>
         <release version="0.3.9" description="Bugfix release">
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-24</action>
         </release>
@@ -45,8 +53,8 @@
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-25</action>
         </release>
         <release version="0.3.11" description="Bugfix release">
-	    <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
-	</release>
+            <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
+        </release>
         <release version="0.4.0-ALPHA-1" description="Rewrite">
             <action dev="fas" type="add">New Tokenizer</action>
             <action dev="fas" type="add">New Shunting Yard</action>
@@ -55,5 +63,8 @@
         <release version="0.4.1-ALPHA-1" description="Feature release">
             <action dev="fas" type="add">New Future API</action>
         </release>
-	</body>
+        <release version="0.4.3" description="Feature release">
+            <action dev="fas" type="add">Unicode names support in variables and functions</action>
+        </release>
+    </body>
 </document>
