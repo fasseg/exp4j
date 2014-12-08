@@ -2512,4 +2512,4 @@ public class ExpressionBuilderTest {
                 .setVariable("ε",E);
         assertEquals(3*log(PI*E*6), e.evaluate(), 0d);
     }
- dev    ex  }
+ }

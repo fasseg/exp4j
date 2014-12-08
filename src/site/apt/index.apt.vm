@@ -182,11 +182,11 @@ assertEquals(expected, result, 0d);
 
 ** Custom operators
 
-	you can extend the abstract class <<<Operator>>> in order to declare custom operators for use in expressions, with the symbol being one of
+	you can extend the abstract class <<<Operator>>> in order to declare custom operators for use in expressions, with the symbol being a String consisting of
 	<<<!,#,§,$,&,;,:,~,\<,\>,|,=.>>>. Be aware that adding a Operator with a used symbol overwrites any existing operators including the builtin ones. So it's possible to overwrite e.g. the <<<+>>> operator.
 	The constructor of an Operator takes up to 4 arguments:
 	
- * the symbol used for this operation (one of <<<!,#,§,$,&,;,:,~,\<,\>,|,=>>>)
+ * the symbol used for this operation (A String consisting of <<<!,#,§,$,&,;,:,~,\<,\>,|,=>>>)
  
  * if the operation is left associative
  
@@ -229,6 +229,33 @@ assertEquals(expected, result, 0d);
 
 +--
 
+*** Example 6
+
+    Create a custom operator logical operator that returns 1 if the first argument is greater or equals than the second argument, and otherwise it returns 0.
+
++--
+@Test
+public void testOperators3() throws Exception {
+    Operator gteq = new Operator(">=", 2, true, Operator.PRECEDENCE_ADDITION - 1) {
+
+        @Override
+        public double apply(double[] values) {
+            if (values[0] >= values[1]) {
+                return 1d;
+            } else {
+                return 0d;
+            }
+        }
+    };
+
+    Expression e = new ExpressionBuilder("1>=2").operator(gteq)
+            .build();
+    assertTrue(0d == e.evaluate());
+    Expression e = new ExpressionBuilder("2>=1").operator(gteq)
+            .build();
+    assertTrue(1d == e.evaluate());
++--
+
 ** Built-in operators
 	 
 	 
@@ -256,7 +283,7 @@ assertEquals(expected, result, 0d);
 	
 	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing Operator or Function involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
 	
-*** Example 6
+*** Example 7
 
     Throw an Arithmetic exception when a division by zero is attempted
 
@@ -321,7 +348,7 @@ e.evaluate(); // <- this call will throw an ArithmeticException
     The validate method also accepts a boolean argument, indicating if a check for empty variables should be performed.
 
 
-*** Example 7
+*** Example 8
 
     Validate an expression
 
@@ -339,7 +366,7 @@ res = e.validate();
 assertTrue(res.isValid());
 +--
 
-*** Example 8
+*** Example 9
 
     Validate an expression before variables have been set, i.e. skip checking if all variables have been set.
 
