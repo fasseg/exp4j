@@ -177,23 +177,6 @@ public class Tokenizer {
         return f;
     }
 
-    private String parseName() {
-        // parse the name of a function or a setVariable
-        final int offset = this.pos;
-        int len = 1;
-        if (isEndOfExpression(offset)) {
-            this.pos++;
-        }
-        while (!isEndOfExpression(offset + len) &&
-                (isAlphabetic(expression[offset + len]) ||
-                        Character.isDigit(expression[offset + len]) ||
-                expression[offset + len] == '_')) {
-            len++;
-        }
-        pos += len;
-        return new String(expression, offset, len);
-    }
-
     private Token parseOperatorToken(char firstChar) {
         final int offset = this.pos;
         int len = 1;
@@ -264,8 +247,7 @@ public class Tokenizer {
     }
 
     public static boolean isAlphabetic(int codePoint) {
-        return ((codePoint > 64 && codePoint < 91) ||
-                (codePoint > 96 && codePoint < 123));
+        return Character.isLetter(codePoint);
     }
 
     private boolean isEndOfExpression(int offset) {

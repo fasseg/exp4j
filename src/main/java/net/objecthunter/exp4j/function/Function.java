@@ -104,20 +104,9 @@ public abstract class Function {
 
         for (int i=0;i< size;i++) {
             final char c = name.charAt(i);
-            if (c == 95) {
+            if (Character.isLetter(c) || c == '_') {
                 continue;
-            }
-            if (c > 47 && c < 58) {
-                if (i == 0) {
-                    return false;
-                }else {
-                    continue;
-                }
-            }
-            if (c > 96 && c < 123) {
-                continue;
-            }
-            if (c > 64 && c < 91) {
+            } else if (Character.isDigit(c) && i > 0) {
                 continue;
             }
             return false;

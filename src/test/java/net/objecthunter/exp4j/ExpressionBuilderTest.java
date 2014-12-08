@@ -2457,4 +2457,59 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.setVariable("x", x)
                 .setVariable("pi", pi).evaluate());
     }
-}
+
+    @Test
+    public void testUnicodeVariable1() throws Exception {
+        Expression e = new ExpressionBuilder("λ")
+                .variable("λ")
+                .build()
+                .setVariable("λ",E);
+        assertEquals(E, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testUnicodeVariable2() throws Exception {
+        Expression e = new ExpressionBuilder("log(3ε+1)")
+                .variable("ε")
+                .build()
+                .setVariable("ε",E);
+        assertEquals(log(3*E+1), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testUnicodeVariable3() throws Exception {
+        Function log = new Function("λωγ", 1) {
+
+            @Override
+            public double apply(double... args) {
+                return log(args[0]);
+            }
+        };
+
+        Expression e = new ExpressionBuilder("λωγ(π)")
+                .variable("π")
+                .function(log)
+                .build()
+                .setVariable("π",PI);
+        assertEquals(log(PI), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testUnicodeVariable4() throws Exception {
+        Function log = new Function("λ_ωγ", 1) {
+
+            @Override
+            public double apply(double... args) {
+                return log(args[0]);
+            }
+        };
+
+        Expression e = new ExpressionBuilder("3λ_ωγ(πε6)")
+                .variables("π", "ε")
+                .function(log)
+                .build()
+                .setVariable("π",PI)
+                .setVariable("ε",E);
+        assertEquals(3*log(PI*E*6), e.evaluate(), 0d);
+    }
+ }
