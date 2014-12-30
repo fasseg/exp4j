@@ -2512,4 +2512,21 @@ public class ExpressionBuilderTest {
                 .setVariable("ε",E);
         assertEquals(3*log(PI*E*6), e.evaluate(), 0d);
     }
+
+    // thanks go out to vandanagopal for reporting the issue
+    // https://github.com/fasseg/exp4j/issues/23
+    @Test
+    public void testSecondArgumentNegative() throws Exception {
+        Function round = new Function("MULTIPLY", 2) {
+            @Override
+            public double apply(double... args) {
+                return Math.round(args[0] * args[1]);
+            }
+        };
+        double result = new ExpressionBuilder("MULTIPLY(2,-1)")
+                .function(round)
+                .build()
+                .evaluate();
+        assertEquals(-2d, result, 0d);
+    }
  }

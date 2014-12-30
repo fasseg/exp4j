@@ -210,7 +210,10 @@ public class Tokenizer {
         }
         if (op == null && symbol.length() == 1) {
             final int argc =
-                    (lastToken == null || lastToken.getType() == Token.TOKEN_OPERATOR || lastToken.getType() == Token.TOKEN_PARENTHESES_OPEN)
+                    (lastToken == null ||
+                    lastToken.getType() == Token.TOKEN_OPERATOR ||
+                    lastToken.getType() == Token.TOKEN_PARENTHESES_OPEN ||
+                    lastToken.getType() == Token.TOKEN_SEPARATOR)
                             ? 1 : 2;
             op = Operators.getBuiltinOperator(symbol.charAt(0), argc);
         }
