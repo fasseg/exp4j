@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package net.objecthunter.exp4j.shuntingyard;
+package net.objecthunter.exp4j;
 
 import java.util.EmptyStackException;
+
+import net.objecthunter.exp4j.ArrayStack;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

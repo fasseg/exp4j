@@ -20,7 +20,6 @@ import java.util.concurrent.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
-import net.objecthunter.exp4j.shuntingyard.ArrayStack;
 import net.objecthunter.exp4j.tokenizer.*;
 
 public class Expression {

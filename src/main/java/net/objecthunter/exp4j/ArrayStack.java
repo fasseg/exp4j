@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.objecthunter.exp4j.shuntingyard;
+
+package net.objecthunter.exp4j;
 
 import java.util.EmptyStackException;
 
@@ -22,28 +23,29 @@ import java.util.EmptyStackException;
  *
  * @author Federico Vera <dktcoding [at] gmail>
  */
-public class ArrayStack {
+class ArrayStack {
+
     private double[] data;
+
     private int idx;
 
-    public ArrayStack() {
+    ArrayStack() {
         this(5);
     }
 
-    public ArrayStack(int initialCapacity) {
+    ArrayStack(int initialCapacity) {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException(
-                    "Stack's capacity must be positive"
-            );
+                    "Stack's capacity must be positive");
         }
 
         data = new double[initialCapacity];
-        idx  = -1;
+        idx = -1;
     }
 
-    public void push(double value) {
+    void push(double value) {
         if (idx + 1 == data.length) {
-            double[] temp = new double[(int)(data.length * 1.2) + 1];
+            double[] temp = new double[(int) (data.length * 1.2) + 1];
             System.arraycopy(data, 0, temp, 0, data.length);
             data = temp;
         }
@@ -51,26 +53,25 @@ public class ArrayStack {
         data[++idx] = value;
     }
 
-    public double peek() {
+    double peek() {
         if (idx == -1) {
             throw new EmptyStackException();
         }
         return data[idx];
     }
 
-    public double pop() {
+    double pop() {
         if (idx == -1) {
             throw new EmptyStackException();
         }
         return data[idx--];
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return idx == -1;
     }
 
-    public int size() {
+    int size() {
         return idx + 1;
     }
-
 }
