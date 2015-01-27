@@ -60,6 +60,16 @@
             <timezone>+1</timezone>
         </developer>
     </developers>
+    <contributors>
+        <contributor>
+            <name>Frederico Vera</name>
+            <email>dktcoding@gmail.com</email>
+            <url>https://plus.google.com/+FedericoVera</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
+    </contributors>
 
     <dependencies>
         <dependency>
