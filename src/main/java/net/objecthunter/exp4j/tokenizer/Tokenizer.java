@@ -159,7 +159,7 @@ public class Tokenizer {
             len++;
         }
         if (lastValidToken == null) {
-            throw new IllegalArgumentException("Unable to parse setVariable or function starting at pos " + pos + " in expression '" + new String(expression) + "'");
+            throw new IllegalArgumentException("Unable to parse variable or function starting at pos " + pos + " in expression '" + new String(expression) + "'");
         }
         pos += lastValidLen;
         lastToken = lastValidToken;

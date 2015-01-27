@@ -36,6 +36,8 @@ public class ExpressionBuilder {
 
     private final Set<String> variableNames;
 
+    private Expression cachedExpression;
+
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
      * @param expression the expression to be parsed
@@ -148,11 +150,16 @@ public class ExpressionBuilder {
      * @return an {@link Expression} instance which can be used to evaluate the result of the expression
      */
     public Expression build() {
+        if (cachedExpression != null) {
+            return cachedExpression;
+        }
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
+        final Expression e = new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
                 this.userFunctions.keySet());
+        cachedExpression = e;
+        return e;
     }
 
 }

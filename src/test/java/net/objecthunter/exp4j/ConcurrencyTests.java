@@ -24,6 +24,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.log;
+import static java.lang.Math.sin;
 import static org.junit.Assert.assertEquals;
 
 public class ConcurrencyTests {
@@ -38,18 +41,21 @@ public class ConcurrencyTests {
         double[] correct2 = new double[numTests];
         Future[] results2 = new Future[numTests];
 
+        ExpressionBuilder[] builders = new ExpressionBuilder[2];
+                builders[0] = new ExpressionBuilder("sin(2pi/(n+1))")
+                                .variables("pi", "n");
+                builders[1] = new ExpressionBuilder("log(epi(n+1))")
+                                .variables("pi", "n", "e");
+
         for (int i = 0; i < numTests;i++) {
-            correct1[i] = Math.sin(2*Math.PI/(i+1));
-            results1[i] = new ExpressionBuilder("sin(2pi/(n+1))")
-                    .variables("pi", "n")
-                    .build()
+            correct1[i] = sin(2 * Math.PI / (i + 1));
+            results1[i] = builders[0].build()
                     .setVariable("pi",Math.PI)
                     .setVariable("n", i)
                     .evaluateAsync(exec);
 
-            correct2[i] = Math.log(Math.E * Math.PI * (i+1));
-            results2[i] = new ExpressionBuilder("log(epi(n+1))")
-                    .variables("pi", "n", "e")
+            correct2[i] = log(Math.E * Math.PI * (i + 1));
+            results2[i] = builders[1]
                     .build()
                     .setVariable("pi",Math.PI)
                     .setVariable("e", Math.E)
