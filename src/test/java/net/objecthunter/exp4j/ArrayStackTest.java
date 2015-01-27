@@ -15,16 +15,17 @@
  */
 package net.objecthunter.exp4j;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.EmptyStackException;
 
-import net.objecthunter.exp4j.ArrayStack;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  *
- * @author Federico Vera <dktcoding [at] gmail>
+ * @author Federico Vera (dktcoding [at] gmail)
  */
 public class ArrayStackTest {
 

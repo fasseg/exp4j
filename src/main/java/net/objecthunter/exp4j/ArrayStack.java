@@ -21,7 +21,7 @@ import java.util.EmptyStackException;
 /**
  * Simple double stack using a double array as data storage
  *
- * @author Federico Vera <dktcoding [at] gmail>
+ * @author Federico Vera (dktcoding [at] gmail)
  */
 class ArrayStack {
 
