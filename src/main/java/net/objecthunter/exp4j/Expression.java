@@ -20,6 +20,7 @@ import java.util.concurrent.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
+import net.objecthunter.exp4j.shuntingyard.ArrayStack;
 import net.objecthunter.exp4j.tokenizer.*;
 
 public class Expression {
@@ -128,7 +129,7 @@ public class Expression {
     }
 
     public double evaluate() {
-        final Stack<Double> output = new Stack<Double>();
+        final ArrayStack output = new ArrayStack();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
             if (t.getType() == Token.TOKEN_NUMBER) {
