@@ -2529,4 +2529,25 @@ public class ExpressionBuilderTest {
                 .evaluate();
         assertEquals(-2d, result, 0d);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSameVariableAndBuiltinFunctionName() {
+        Expression e = new ExpressionBuilder("log10(log10)")
+                .variables("log10")
+                .build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSameVariableAndUserFunctionName() {
+        Expression e = new ExpressionBuilder("2*tr+tr(2)")
+                .variables("tr")
+                .function(new Function("tr") {
+
+                    @Override
+                    public double apply(double... args) {
+                        return 0;
+                    }
+                })
+                .build();
+    }
  }
