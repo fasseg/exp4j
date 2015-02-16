@@ -19,6 +19,7 @@ package net.objecthunter.exp4j;
 import java.util.*;
 
 import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
 
@@ -150,6 +151,12 @@ public class ExpressionBuilder {
     public Expression build() {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
+        }
+        /* Check if there are duplicate vars/functions */
+        for (String var : variableNames) {
+            if (Functions.getBuiltinFunction(var) != null || userFunctions.containsKey(var)) {
+                throw new IllegalArgumentException("A variable can not have the same name as a function [" + var + "]");
+            }
         }
         return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
                 this.userFunctions.keySet());
