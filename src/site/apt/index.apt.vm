@@ -302,6 +302,24 @@ Expression e = new ExpressionBuilder("0$").operator(reciprocal).build();
 e.evaluate(); // <- this call will throw an ArithmeticException
 +--
 
+* Optimization
+
+    exp4j can try to optimize a given expression for faster evaluation by simplifying constant operations. An expression "2+2-sin(x)" can be simplified to "4-sin(x)". The resulting contraction of the expression is beneficial to the evaluation, but does introduce an additional sweep over the input and therefore increases space and time complexity of the algorithm.
+    Users are advised to only use optimization in a scenario where expressions are highly likely to contain a constant operation and repeated evaluation of the same expression takes place.
+
+** Example 8
+
+    Optimization of an expression before evaluation
+
++--
+Expression e = new ExpressionBuilder("2+2-sin(x)")
+        .optimize(true) // let's exp4j contract 2+2-sin(x) to 4-sin(x)
+        .variable("x")
+        .build();
+for (int i = 0; i < 1000; i++) {
+    assertEquals(4d-Math.sin(i), e.setVariable("x", i).evaluate(), 0);
+}
++--
 	 
 * Built-in functions
 	 
@@ -349,7 +367,7 @@ e.evaluate(); // <- this call will throw an ArithmeticException
     The validate method also accepts a boolean argument, indicating if a check for empty variables should be performed.
 
 
-** Example 8
+** Example 9
 
     Validate an expression
 
@@ -367,7 +385,7 @@ res = e.validate();
 assertTrue(res.isValid());
 +--
 
-** Example 9
+** Example 10
 
     Validate an expression before variables have been set, i.e. skip checking if all variables have been set.
 
@@ -387,9 +405,11 @@ assertNull(res.getErrors());
 
 Tag Library
 
-    Thanks to Leo there is a Tag Library available at https://github.com/leogtzr/exp4j_tld. This enables users to use exp4j directly in JSP pages.
+    Thanks to Leo there is a Tag Library available at {{{https://github.com/leogtzr/exp4j_tld}leogtzr/exp4j_tld}}. This enables users to use exp4j directly in JSP pages.
 
 * API changes
+
+ * Version 0.4.5: Added optimize() method to ExpressionBuilder
 
  * Version 0.4.3: Unicode names support added
 

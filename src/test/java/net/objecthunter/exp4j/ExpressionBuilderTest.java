@@ -1628,6 +1628,17 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testDocumentationExample9() throws Exception {
+        Expression e = new ExpressionBuilder("2+2-sin(x)")
+                .optimize(true)
+                .variable("x")
+                .build();
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(4d-Math.sin(i), e.setVariable("x", i).evaluate(), 0);
+        }
+    }
+
+    @Test
     public void testDocumentationExample2() throws Exception {
         ExecutorService exec = Executors.newFixedThreadPool(1);
         Expression e = new ExpressionBuilder("3log(y)/(x+1)")
@@ -2529,4 +2540,82 @@ public class ExpressionBuilderTest {
                 .evaluate();
         assertEquals(-2d, result, 0d);
     }
- }
+
+    @Test
+    public void testOptimization1() throws Exception {
+        Expression e = new ExpressionBuilder("2")
+                .optimize(true)
+                .build();
+        assertEquals(2d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization2() throws Exception {
+        Expression e = new ExpressionBuilder("2+2")
+                .optimize(true)
+                .build();
+        assertEquals(4d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization3() throws Exception {
+        Expression e = new ExpressionBuilder("(2*3)")
+                .optimize(true)
+                .build();
+        assertEquals(6d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization4() throws Exception {
+        Expression e = new ExpressionBuilder("sin(2*3)")
+                .optimize(true)
+                .build();
+        assertEquals(sin(6d), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization5() throws Exception {
+        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+
+            @Override
+            public double apply(double... args) {
+                final int arg = (int) args[0];
+                if ((double) arg != args[0]) {
+                    throw new IllegalArgumentException("Operand for factorial has to be an integer");
+                }
+                if (arg < 0) {
+                    throw new IllegalArgumentException("The operand of the factorial can not be less than zero");
+                }
+                double result = 1;
+                for (int i = 1; i <= arg; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+        };
+
+        Expression e = new ExpressionBuilder("sin(2+3!)")
+                .operator(factorial)
+                .optimize(true)
+                .build();
+        assertEquals(sin(8d), e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization6() throws Exception {
+        Expression e = new ExpressionBuilder("sin(2+3) * 2+ log(3-1) / (2+3) * 4^2")
+                .optimize(true)
+                .build();
+        assertEquals(sin(5d) * 2 + log(2) / 5 * 16, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testOptimization7() throws Exception {
+        Expression e = new ExpressionBuilder("2+2v")
+                .optimize(true)
+                .variable("v")
+                .build();
+        e.setVariable("v", 3);
+        assertEquals(8d, e.evaluate(), 0d);
+    }
+}

@@ -20,7 +20,9 @@ import java.util.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
+import net.objecthunter.exp4j.optimizer.Optimizer;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
+import net.objecthunter.exp4j.tokenizer.Token;
 
 /**
  * Factory class for {@link Expression} instances. This class is the main API entrypoint. Users should create new
@@ -35,6 +37,8 @@ public class ExpressionBuilder {
     private final Map<String, Operator> userOperators;
 
     private final Set<String> variableNames;
+
+    private boolean optimize;
 
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
@@ -144,6 +148,30 @@ public class ExpressionBuilder {
     }
 
     /**
+     * Set if the expression should be optimized before evaluation. Operations on non variables can be optimized away
+     * before evaluation takes place, since e.g.  {@code sin(2+2)} can be simplified to {@code sin(4)}.
+     *
+     * <br><br><strong>WARNING</strong>: Optimizing an expression increases the time complexity of the algorithm. This is *only* beneficial if
+     * the expression contains operations on plain numbers.
+     *
+     * <br><br>
+     * <pre>
+     *     {@code Expression e = new ExpressionBuilder("log(2*3+4^2)")
+     *              .optimize(true) // internally this turns the expression into log(22)
+     *              .build();
+     *     }
+     * </pre>
+     *
+     *
+     * @param enabled set to true if optimization should take place, false otherwise
+     * @return an {@link Expression} instance which can be used to evaluate the result of the expression
+     */
+    public ExpressionBuilder optimize(boolean enabled) {
+        this.optimize = enabled;
+        return this;
+    }
+
+    /**
      * Build the {@link Expression} instance using the custom operators and functions set.
      * @return an {@link Expression} instance which can be used to evaluate the result of the expression
      */
@@ -151,7 +179,13 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
+        /* Tokenize the expression and have the tokens ordered for RPN operations by the shunting yard */
+        Token[] tokens = ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators,
+                this.variableNames);
+        if (optimize) {
+            tokens = new Optimizer(true).optimize(tokens);
+        }
+        return new Expression(tokens,
                 this.userFunctions.keySet());
     }
 
