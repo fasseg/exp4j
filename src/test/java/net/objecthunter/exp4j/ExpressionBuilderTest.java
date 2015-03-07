@@ -2423,10 +2423,10 @@ public class ExpressionBuilderTest {
         double expected;
         double x = 4.5334332d;
         double log = Math.PI;
-        expr = "x * pi";
+        expr = "x * pi2";
         expected = x * log;
         Expression e = new ExpressionBuilder(expr)
-                .variables("x", "pi")
+                .variables("x", "pi2")
                 .build();
         assertTrue(expected == e.setVariable("x", x)
                 .setVariable("log", log).evaluate());

@@ -151,8 +151,19 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
+
+        // Set default numeric constants:
+        setNumericalConstants();        
+
         return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
                 this.userFunctions.keySet());
+    }
+
+    private void setNumericalConstants() {
+        variableNames.add("e");
+        variableNames.add("π");
+        variableNames.add("pi");
+        variableNames.add("φ");
     }
 
 }
