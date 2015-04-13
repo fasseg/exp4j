@@ -143,7 +143,7 @@ public class Expression {
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
                 OperatorToken op = (OperatorToken) t;
                 if (output.size() < op.getOperator().getNumOperands()) {
-                    throw new IllegalArgumentException("Invalid number of operands available");
+                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getOperator().getSymbol() + "' operator");
                 }
                 if (op.getOperator().getNumOperands() == 2) {
                     /* pop the operands and push the result of the operation */
@@ -158,7 +158,7 @@ public class Expression {
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
                 if (output.size() < func.getFunction().getNumArguments()) {
-                    throw new IllegalArgumentException("Invalid number of arguments available");
+                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
                 }
                 /* collect the arguments from the stack */
                 double[] args = new double[func.getFunction().getNumArguments()];
