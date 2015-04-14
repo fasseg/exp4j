@@ -41,6 +41,10 @@ public class Expression {
         this.tokens = tokens;
         this.variables = new HashMap<String, Double>(4);
         this.userFunctionNames = userFunctionNames;
+
+        // Set default numeric constants:
+        setNumericalConstants();
+
     }
 
     public Expression setVariable(final String name, final double value) {
@@ -187,4 +191,12 @@ public class Expression {
         }
         return args;
     }
+
+    private void setNumericalConstants() {
+        variables.put("e", Math.E);
+        variables.put("π", Math.PI);
+        variables.put("pi", Math.PI);
+        variables.put("φ", 1.61803398874);
+    }
+
 }
