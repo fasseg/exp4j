@@ -69,6 +69,14 @@
                 <role>developer</role>
             </roles>
         </contributor>
+        <contributor>
+            <name>Bartosz Firyn</name>
+            <email></email>
+            <url></url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
     </contributors>
 
     <dependencies>
