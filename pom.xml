@@ -70,6 +70,14 @@
             </roles>
         </contributor>
         <contributor>
+            <name>Leo Gutiérrez Ramírez</name>
+            <url>https://github.com/leogtzr</url>
+            <email></email>
+            <roles>
+                <role>developer</role>
+            </roles>         
+        </contributor>
+        <contributor>
             <name>Bartosz Firyn</name>
             <url>https://github.com/sarxos</url>
             <roles>
