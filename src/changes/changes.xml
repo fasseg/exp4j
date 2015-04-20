@@ -66,5 +66,9 @@
         <release version="0.4.3" description="Feature release">
             <action dev="fas" type="add">Unicode names support in variables and functions</action>
         </release>
+        <release version="0.4.5" description="Feature release">
+            <action dev="fas" type="add">Added check for same function and variable name</action>
+            <action dev="Bartosz" type="add">Added validation for number of function arguments</action>
+        </release>
     </body>
 </document>
