@@ -37,6 +37,8 @@ public class ExpressionBuilder {
 
     private final Set<String> variableNames;
 
+    private boolean implicitMultiplication = true;
+
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
      * @param expression the expression to be parsed
@@ -85,18 +87,38 @@ public class ExpressionBuilder {
         return this;
     }
 
+    /**
+     * Declare variable names used in the expression
+     * @param variableNames the variables used in the expression
+     * @return the ExpressionBuilder instance
+     */
     public ExpressionBuilder variables(Set<String> variableNames) {
         this.variableNames.addAll(variableNames);
         return this;
     }
 
+    /**
+     * Declare variable names used in the expression
+     * @param variableNames the variables used in the expression
+     * @return the ExpressionBuilder instance
+     */
     public ExpressionBuilder variables(String ... variableNames) {
         Collections.addAll(this.variableNames, variableNames);
         return this;
     }
 
+    /**
+     * Declare a variable used in the expression
+     * @param variableName the variable used in the expression
+     * @return the ExpressionBuilder instance
+     */
     public ExpressionBuilder variable(String variableName) {
         this.variableNames.add(variableName);
+        return this;
+    }
+
+    public ExpressionBuilder implicitMultiplication(boolean enabled) {
+        this.implicitMultiplication = enabled;
         return this;
     }
 
@@ -158,8 +180,8 @@ public class ExpressionBuilder {
                 throw new IllegalArgumentException("A variable can not have the same name as a function [" + var + "]");
             }
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
-                this.userFunctions.keySet());
+        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators,
+                this.variableNames, this.implicitMultiplication), this.userFunctions.keySet());
     }
 
 }

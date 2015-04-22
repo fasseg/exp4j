@@ -2463,7 +2463,7 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("λ")
                 .variable("λ")
                 .build()
-                .setVariable("λ",E);
+                .setVariable("λ", E);
         assertEquals(E, e.evaluate(), 0d);
     }
 
@@ -2490,7 +2490,7 @@ public class ExpressionBuilderTest {
                 .variable("π")
                 .function(log)
                 .build()
-                .setVariable("π",PI);
+                .setVariable("π", PI);
         assertEquals(log(PI), e.evaluate(), 0d);
     }
 
@@ -2508,9 +2508,18 @@ public class ExpressionBuilderTest {
                 .variables("π", "ε")
                 .function(log)
                 .build()
-                .setVariable("π",PI)
-                .setVariable("ε",E);
+                .setVariable("π", PI)
+                .setVariable("ε", E);
         assertEquals(3*log(PI*E*6), e.evaluate(), 0d);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testImplicitMulitplicationOff() throws Exception {
+        Expression e = new ExpressionBuilder("var_12")
+                .variable("var_1")
+                .implicitMultiplication(false)
+                .build();
+        e.evaluate();
     }
 
     // thanks go out to vandanagopal for reporting the issue
