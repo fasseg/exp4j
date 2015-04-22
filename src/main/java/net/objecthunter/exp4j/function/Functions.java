@@ -40,6 +40,7 @@ public class Functions {
     private static final int INDEX_EXPM1 = 18;
     private static final int INDEX_LOG10 = 19;
     private static final int INDEX_LOG2 = 20;
+    private static final int INDEX_SGN = 21;
 
     private static final Function[] builtinFunctions = new Function[21];
 
@@ -170,6 +171,17 @@ public class Functions {
                 return Math.expm1(args[0]);
             }
         };
+        builtinFunctions[INDEX_SGN] = new Function("sgn", 1) {
+            @Override
+            public double apply(double... args) {
+                if (args[0] > 0)
+                    return 1;
+                else if (args[0] < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        };
     }
 
     /**
@@ -221,6 +233,8 @@ public class Functions {
             return builtinFunctions[INDEX_EXP];
         } else if (name.equals("expm1")) {
             return builtinFunctions[INDEX_EXPM1];
+        } else if (name.equals("sgn")) {
+            return builtinFunctions[INDEX_SGN];
         } else {
             return null;
         }
