@@ -174,12 +174,13 @@ public class Functions {
         builtinFunctions[INDEX_SGN] = new Function("sgn", 1) {
             @Override
             public double apply(double... args) {
-                if (args[0] > 0)
+                if (args[0] > 0) {
                     return 1;
-                else if (args[0] < 0)
+                }else if (args[0] < 0) {
                     return -1;
-                else
+                }else {
                     return 0;
+                }
             }
         };
     }
