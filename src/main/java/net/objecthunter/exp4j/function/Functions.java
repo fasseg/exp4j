@@ -176,9 +176,9 @@ public class Functions {
             public double apply(double... args) {
                 if (args[0] > 0) {
                     return 1;
-                }else if (args[0] < 0) {
+                } else if (args[0] < 0) {
                     return -1;
-                }else {
+                } else {
                     return 0;
                 }
             }
