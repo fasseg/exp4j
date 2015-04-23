@@ -2472,8 +2472,8 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("log(3ε+1)")
                 .variable("ε")
                 .build()
-                .setVariable("ε",E);
-        assertEquals(log(3*E+1), e.evaluate(), 0d);
+                .setVariable("ε", E);
+        assertEquals(log(3 * E + 1), e.evaluate(), 0d);
     }
 
     @Test
@@ -2514,12 +2514,76 @@ public class ExpressionBuilderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testImplicitMulitplicationOff() throws Exception {
+    public void testImplicitMulitplicationOffNumber() throws Exception {
         Expression e = new ExpressionBuilder("var_12")
                 .variable("var_1")
                 .implicitMultiplication(false)
                 .build();
         e.evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testImplicitMulitplicationOffVariable() throws Exception {
+        Expression e = new ExpressionBuilder("var_1var_1")
+                .variable("var_1")
+                .implicitMultiplication(false)
+                .build();
+        e.evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testImplicitMulitplicationOffParantheses() throws Exception {
+        Expression e = new ExpressionBuilder("var_1(2)")
+                .variable("var_1")
+                .implicitMultiplication(false)
+                .build();
+        e.evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testImplicitMulitplicationOffFunction() throws Exception {
+        Expression e = new ExpressionBuilder("var_1log(2)")
+                .variable("var_1")
+                .implicitMultiplication(false)
+                .build()
+                .setVariable("var_1", 2);
+        e.evaluate();
+    }
+
+    @Test
+    public void testImplicitMulitplicationOnNumber() throws Exception {
+        Expression e = new ExpressionBuilder("var_12")
+                .variable("var_1")
+                .build()
+                .setVariable("var_1", 2);
+        assertEquals(4d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testImplicitMulitplicationOnVariable() throws Exception {
+        Expression e = new ExpressionBuilder("var_1var_1")
+                .variable("var_1")
+                .build()
+                .setVariable("var_1",2);
+        assertEquals(4d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testImplicitMulitplicationOnParantheses() throws Exception {
+        Expression e = new ExpressionBuilder("var_1(2)")
+                .variable("var_1")
+                .build()
+                .setVariable("var_1",2);
+        assertEquals(4d, e.evaluate(), 0d);
+    }
+
+    @Test
+    public void testImplicitMulitplicationOnFunction() throws Exception {
+        Expression e = new ExpressionBuilder("var_1log(2)")
+                .variable("var_1")
+                .build()
+                .setVariable("var_1",2);
+        assertEquals(2*log(2), e.evaluate(), 0d);
     }
 
     // thanks go out to vandanagopal for reporting the issue

@@ -88,7 +88,7 @@ public class Tokenizer {
         } else if (isArgumentSeparator(ch)) {
             return parseArgumentSeparatorToken(ch);
         } else if (isOpenParentheses(ch)) {
-            if (lastToken != null &&
+            if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
                             && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
                             && lastToken.getType() != Token.TOKEN_FUNCTION
@@ -104,7 +104,7 @@ public class Tokenizer {
             return parseOperatorToken(ch);
         } else if (isAlphabetic(ch) || ch == '_') {
             // parse the name which can be a setVariable or a function
-            if (lastToken != null &&
+            if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
                             && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
                             && lastToken.getType() != Token.TOKEN_FUNCTION
