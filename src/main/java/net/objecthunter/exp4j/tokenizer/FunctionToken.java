@@ -19,10 +19,18 @@ import net.objecthunter.exp4j.function.Function;
 
 public class FunctionToken extends Token{
     private final Function function;
+    private int functionArgumentsCount;
     public FunctionToken(final Function function) {
         super(Token.TOKEN_FUNCTION);
         this.function = function;
+        this.functionArgumentsCount = 1;
     }
+
+    public void incArgument(){
+        functionArgumentsCount++;
+    }
+
+    public int getArgumentCount() {return functionArgumentsCount;}
 
     public Function getFunction() {
         return function;

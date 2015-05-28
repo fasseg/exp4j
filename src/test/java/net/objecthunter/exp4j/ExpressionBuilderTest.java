@@ -467,7 +467,7 @@ public class ExpressionBuilderTest {
             @Override
             public double apply(double... values) {
                 double max = values[0];
-                for (int i = 1; i < numArguments; i++) {
+                for (int i = 1; i < values.length; i++) {
                     if (values[i] > max) {
                         max = values[i];
                     }
@@ -488,7 +488,7 @@ public class ExpressionBuilderTest {
             @Override
             public double apply(double... values) {
                 double max = values[0];
-                for (int i = 1; i < numArguments; i++) {
+                for (int i = 1; i < values.length; i++) {
                     if (values[i] > max) {
                         max = values[i];
                     }
@@ -633,7 +633,7 @@ public class ExpressionBuilderTest {
             @Override
             public double apply(double... values) {
                 double max = values[0];
-                for (int i = 1; i < numArguments; i++) {
+                for (int i = 1; i < values.length; i++) {
                     if (values[i] > max) {
                         max = values[i];
                     }
@@ -644,7 +644,7 @@ public class ExpressionBuilderTest {
         ExpressionBuilder b = new ExpressionBuilder("max(1,2,3)")
                 .function(maxFunction);
         double calculated = b.build().evaluate();
-        assertTrue(maxFunction.getNumArguments() == 3);
+        assertEquals(maxFunction.getMaxNumArguments(),maxFunction.getMinNumArguments(), 3);
         assertTrue(calculated == 3);
     }
 
