@@ -162,11 +162,13 @@ public class Expression {
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
                 int functionArgs = func.getArgumentCount();
-                if (functionArgs < func.getFunction().getMinNumArguments() || functionArgs > func.getFunction().getMaxNumArguments() ) {
+                if (functionArgs < func.getFunction().getMinNumArguments() || functionArgs > func.getFunction().getMaxNumArguments() || output.isEmpty()) {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
                 }
                 /* collect the arguments from the stack */
                 double[] args = new double[functionArgs];
+
+
                 for (int j = 0; j < functionArgs ; j++) {
                     args[j] = output.pop();
                 }

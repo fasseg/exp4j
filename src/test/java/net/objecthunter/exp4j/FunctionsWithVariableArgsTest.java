@@ -66,10 +66,24 @@ public class FunctionsWithVariableArgsTest {
             }
         };
 
+        Function fakeFunction = new Function("fakeFunction", 1,1) {
+
+            @Override
+            public double apply(double... args) {
+                double min = args[0];
+                for (double arg : args) {
+                    if (arg < min)
+                        min = arg;
+                }
+                return min;
+            }
+        };
+
         variableArgsFunctions.add(min);
         variableArgsFunctions.add(max);
         variableArgsFunctions.add(avg);
         variableArgsFunctions.add(sum);
+        variableArgsFunctions.add(fakeFunction);
     }
 
     @Test
@@ -136,5 +150,44 @@ public class FunctionsWithVariableArgsTest {
         expected = 1.0d;
         assertEquals(expected, result, 0d);
 
+    }
+
+    @Test
+    public void testFunctionsWithMixedBaseFunctions() throws Exception{
+        double result,expected;
+        result = new ExpressionBuilder("max(1,2,3,4,5,6)+min(1,1,1,1,1,1,1,1)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+
+        expected = 7.0d;
+        assertEquals(expected, result, 0d);
+
+        result = new ExpressionBuilder("max(min(12,12),avg(1,2,3),3,4,5,6)+min(1,1,1,1,1,1,1,1)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+
+        expected = 13.0d;
+        assertEquals(expected, result, 0d);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFunctionWithNoArgument(){
+        double result,expected;
+        result = new ExpressionBuilder("max()")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFunctionWithNumberOfArgumentGreaterThanDefinedFunction(){
+        double result,expected;
+        result = new ExpressionBuilder("fakeFunction(1,2)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
     }
 }
