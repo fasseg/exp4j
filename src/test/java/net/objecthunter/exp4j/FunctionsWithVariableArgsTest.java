@@ -9,9 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by fre on 28/05/15.
- */
+
 public class FunctionsWithVariableArgsTest {
     List<Function> variableArgsFunctions = new LinkedList<Function>();
     @Before
@@ -66,16 +64,10 @@ public class FunctionsWithVariableArgsTest {
             }
         };
 
-        Function fakeFunction = new Function("fakeFunction", 1,1) {
-
+        Function atLeast4atMax8 = new Function("atLeast4atMax8" ,4,8) {
             @Override
             public double apply(double... args) {
-                double min = args[0];
-                for (double arg : args) {
-                    if (arg < min)
-                        min = arg;
-                }
-                return min;
+                return 0;
             }
         };
 
@@ -83,7 +75,7 @@ public class FunctionsWithVariableArgsTest {
         variableArgsFunctions.add(max);
         variableArgsFunctions.add(avg);
         variableArgsFunctions.add(sum);
-        variableArgsFunctions.add(fakeFunction);
+        variableArgsFunctions.add(atLeast4atMax8);
     }
 
     @Test
@@ -151,43 +143,45 @@ public class FunctionsWithVariableArgsTest {
         assertEquals(expected, result, 0d);
 
     }
+    @Test(expected = IllegalArgumentException.class)
+    public void testFunctionsWithVariableArgs4(){
+        new ExpressionBuilder("5 + atLeast4atMax8(1)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFunctionsWithVariableArgs5(){
+        new ExpressionBuilder("5 + atLeast4atMax8(2,3)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFunctionsWithVariableArgs6(){
+        new ExpressionBuilder("5 + atLeast4atMax8(2,3,3)")
+                .functions(variableArgsFunctions)
+                .build()
+                .evaluate();
+    }
 
     @Test
-    public void testFunctionsWithMixedBaseFunctions() throws Exception{
-        double result,expected;
-        result = new ExpressionBuilder("max(1,2,3,4,5,6)+min(1,1,1,1,1,1,1,1)")
+    public void testFunctionsWithVariableArgs7(){
+        double result = new ExpressionBuilder("5 + atLeast4atMax8(2,3,3,2,4,max(1,2,3))")
                 .functions(variableArgsFunctions)
                 .build()
                 .evaluate();
-
-        expected = 7.0d;
-        assertEquals(expected, result, 0d);
-
-        result = new ExpressionBuilder("max(min(12,12),avg(1,2,3),3,4,5,6)+min(1,1,1,1,1,1,1,1)")
-                .functions(variableArgsFunctions)
-                .build()
-                .evaluate();
-
-        expected = 13.0d;
-        assertEquals(expected, result, 0d);
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testFunctionWithNoArgument(){
-        double result,expected;
-        result = new ExpressionBuilder("max()")
-                .functions(variableArgsFunctions)
-                .build()
-                .evaluate();
+        assertEquals(5, result, 0.0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFunctionWithNumberOfArgumentGreaterThanDefinedFunction(){
-        double result,expected;
-        result = new ExpressionBuilder("fakeFunction(1,2)")
+    public void testFunctionsWithVariableArgs8(){
+        new ExpressionBuilder("5 + atLeast4atMax8(1,2,3,4,5,6,7,8,9,10)")
                 .functions(variableArgsFunctions)
                 .build()
                 .evaluate();
     }
 }
+
