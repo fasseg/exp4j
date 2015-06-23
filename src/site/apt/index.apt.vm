@@ -110,6 +110,23 @@ double result = new ExpressionBuilder("2cos(xy)")
 assertEquals(2d * Math.cos(0.5d * 0.25d), result, 0d);
 +---
 
+* Numerical constants
+
+    Since version 0.4.6 the following common constants have been added to exp4j and are bound automatically:
+    <<pi, π>> the value of π as defined in Math.PI,
+    <<e>> the value of Euler's number e,
+    <<φ>> the value of the golden ratio (1.61803398874)
+
+** Example 4
+
+    Use constants in an expression
+
++--
+String expr = "pi+π+e+φ";
+double expected = 2*Math.PI + Math.E + 1.61803398874d;
+Expression e = new ExpressionBuilder(expr).build();
+assertEquals(expected, e.evaluate(),0d);
++--
 
 * Scientific notation
 
@@ -118,7 +135,7 @@ assertEquals(2d * Math.cos(0.5d * 0.25d), result, 0d);
 	Be aware that 'e/E' is no operator but part of a number and therefore an expression like <<<1.1e-(x*2)>>> can not be evaluated.
 	An example using the Fine-structure constant <<<α=7.2973525698  * 10^−3>>>:
 
-** Example 2
+** Example 5
 
     Use scientific notation in an expression
 
@@ -134,7 +151,7 @@ assertEquals(expected, e.evaluate(),0d);
   	you can extend the abstract class Function in order to use custom functions in expressions. you only have to implement the
   	<<<apply(double... args)>>> method. In the following example a function for the logarithm to the base 2 is created and used in a following expression.
 
-** Example 3
+** Example 6
 
     A custom function calculating the logarithm to an arbitrary base using the identity <log(value, base) = ln(value)/ln(base)>
 
@@ -156,7 +173,7 @@ assertEquals(expected, result, 0d);
 	you can also define multi argument functions like <<<avg(a,b,c,d)>>> via the constructor <<<Function(String name, int argc)>>>, with <<<argc>>> being the argument count.
 	The following example uses a custom function which returns the average of four values.
 
-** Example 4
+** Example 7
 
     A custom average function taking 4 arguments:
 
@@ -196,7 +213,7 @@ assertEquals(expected, result, 0d);
  * the number of operands the operator has (<<<1 or 2>>>)
 
 
-** Example 5
+** Example 8
 
     Create a custom operator for calculating the factorial
 
@@ -230,7 +247,7 @@ assertEquals(expected, result, 0d);
 
 +--
 
-** Example 6
+** Example 9
 
     Create a custom operator logical operator that returns 1 if the first argument is greater or equals than the second argument, and otherwise it returns 0.
 
@@ -252,7 +269,7 @@ public void testOperators3() throws Exception {
     Expression e = new ExpressionBuilder("1>=2").operator(gteq)
             .build();
     assertTrue(0d == e.evaluate());
-    Expression e = new ExpressionBuilder("2>=1").operator(gteq)
+    e = new ExpressionBuilder("2>=1").operator(gteq)
             .build();
     assertTrue(1d == e.evaluate());
 +--
@@ -284,7 +301,7 @@ public void testOperators3() throws Exception {
 	
 	exp4j throws a ArithmeticException when a division by zero is attempted. When implementing Operator or Function involving divisions the implementor has to make sure that a corresponding RuntimeException is thrown.
 	
-** Example 7
+** Example 10
 
     Throw an Arithmetic exception when a division by zero is attempted
 
@@ -342,6 +359,8 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  
  * <<<tanh>>>: hyperbolic tangent
 
+ * <<<signum>>>: signum function
+
 
 * Validation of expression
 
@@ -349,7 +368,7 @@ e.evaluate(); // <- this call will throw an ArithmeticException
     The validate method also accepts a boolean argument, indicating if a check for empty variables should be performed.
 
 
-** Example 8
+** Example 11
 
     Validate an expression
 
@@ -367,7 +386,7 @@ res = e.validate();
 assertTrue(res.isValid());
 +--
 
-** Example 9
+** Example 12
 
     Validate an expression before variables have been set, i.e. skip checking if all variables have been set.
 

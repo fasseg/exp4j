@@ -152,6 +152,11 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
+        /* set the contants' varibale names */
+        variableNames.add("pi");
+        variableNames.add("π");
+        variableNames.add("e");
+        variableNames.add("φ");
         /* Check if there are duplicate vars/functions */
         for (String var : variableNames) {
             if (Functions.getBuiltinFunction(var) != null || userFunctions.containsKey(var)) {

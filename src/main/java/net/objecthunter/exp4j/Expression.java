@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.*;
 
@@ -30,16 +31,24 @@ public class Expression {
 
     private final Set<String> userFunctionNames;
 
+    private static Map<String, Double> createDefaultVariables() {
+        final Map<String, Double> vars = new HashMap<String, Double>(4);
+        vars.put("pi", Math.PI);
+        vars.put("π", Math.PI);
+        vars.put("φ", 1.61803398874d);
+        vars.put("e", Math.E);
+        return vars;
+    }
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
-        this.variables = new HashMap<String, Double>(4);
+        this.variables = createDefaultVariables();
         this.userFunctionNames = Collections.<String>emptySet();
     }
 
     Expression(final Token[] tokens, Set<String> userFunctionNames) {
         this.tokens = tokens;
-        this.variables = new HashMap<String, Double>(4);
+        this.variables = createDefaultVariables();
         this.userFunctionNames = userFunctionNames;
     }
 
@@ -50,8 +59,8 @@ public class Expression {
     }
 
     private void checkVariableName(String name) {
-        if (this.userFunctionNames.contains(name)) {
-            throw new IllegalArgumentException("The setVariable name '" + name + "' is invalid. Since there exists a function with the same name");
+        if (this.userFunctionNames.contains(name) || Functions.getBuiltinFunction(name) != null) {
+            throw new IllegalArgumentException("The variable name '" + name + "' is invalid. Since there exists a function with the same name");
         }
     }
 

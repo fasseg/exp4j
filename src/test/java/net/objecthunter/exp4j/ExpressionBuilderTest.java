@@ -1549,7 +1549,39 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testDocumentationExample2() throws Exception {
+        ExecutorService exec = Executors.newFixedThreadPool(1);
+        Expression e = new ExpressionBuilder("3log(y)/(x+1)")
+                .variables("x", "y")
+                .build()
+                .setVariable("x", 2.3)
+                .setVariable("y", 3.14);
+        Future<Double> result = e.evaluateAsync(exec);
+        double expected = 3 * Math.log(3.14d)/(3.3);
+        assertEquals(expected, result.get(), 0d);
+    }
+
+    @Test
     public void testDocumentationExample3() throws Exception {
+        double result = new ExpressionBuilder("2cos(xy)")
+                .variables("x","y")
+                .build()
+                .setVariable("x", 0.5d)
+                .setVariable("y", 0.25d)
+                .evaluate();
+        assertEquals(2d * Math.cos(0.5d * 0.25d), result, 0d);
+    }
+
+    @Test
+    public void testDocumentationExample4() throws Exception {
+        String expr = "pi+π+e+φ";
+        double expected = 2*Math.PI + Math.E + 1.61803398874d;
+        Expression e = new ExpressionBuilder(expr).build();
+        assertEquals(expected, e.evaluate(),0d);
+    }
+
+    @Test
+    public void testDocumentationExample5() throws Exception {
         String expr = "7.2973525698e-3";
         double expected = Double.parseDouble(expr);
         Expression e = new ExpressionBuilder(expr)
@@ -1557,24 +1589,9 @@ public class ExpressionBuilderTest {
         assertEquals(expected, e.evaluate(), 0d);
     }
 
-    @Test(expected = ArithmeticException.class)
-    public void testDocumentationExample4() throws Exception {
-        Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
-
-            @Override
-            public double apply(final double... args) {
-                if (args[0] == 0d) {
-                    throw new ArithmeticException("Division by zero!");
-                }
-                return 1d / args[0];
-            }
-        };
-        new ExpressionBuilder("0$").operator(reciprocal)
-                .build().evaluate();
-    }
 
     @Test
-    public void testDocumentationExample5() throws Exception {
+    public void testDocumentationExample6() throws Exception {
         Function logb = new Function("logb", 2) {
             @Override
             public double apply(double... args) {
@@ -1590,18 +1607,96 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testDocumentationExample6() throws Exception {
-        double result = new ExpressionBuilder("2cos(xy)")
-                .variables("x","y")
+    public void testDocumentationExample7() throws Exception {
+        Function avg = new Function("avg", 4) {
+
+            @Override
+            public double apply(double... args) {
+                double sum = 0;
+                for (double arg : args) {
+                    sum += arg;
+                }
+                return sum / args.length;
+            }
+        };
+        double result = new ExpressionBuilder("avg(1,2,3,4)")
+                .function(avg)
                 .build()
-                .setVariable("x", 0.5d)
-                .setVariable("y", 0.25d)
                 .evaluate();
-        assertEquals(2d * cos(0.5d * 0.25d), result, 0d);
+
+        double expected = 2.5d;
+        assertEquals(expected, result, 0d);
     }
 
     @Test
-    public void testDocumentationExample7() throws Exception {
+    public void testDocumentationExample8() throws Exception {
+        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+
+            @Override
+            public double apply(double... args) {
+                final int arg = (int) args[0];
+                if ((double) arg != args[0]) {
+                    throw new IllegalArgumentException("Operand for factorial has to be an integer");
+                }
+                if (arg < 0) {
+                    throw new IllegalArgumentException("The operand of the factorial can not be less than zero");
+                }
+                double result = 1;
+                for (int i = 1; i <= arg; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+        };
+
+        double result = new ExpressionBuilder("3!")
+                .operator(factorial)
+                .build()
+                .evaluate();
+
+        double expected = 6d;
+        assertEquals(expected, result, 0d);
+    }
+
+    @Test
+    public void testDocumentationExample9() throws Exception {
+        Operator gteq = new Operator(">=", 2, true, Operator.PRECEDENCE_ADDITION - 1) {
+
+            @Override
+            public double apply(double[] values) {
+                if (values[0] >= values[1]) {
+                    return 1d;
+                } else {
+                    return 0d;
+                }
+            }
+        };
+
+        Expression e = new ExpressionBuilder("1>=2").operator(gteq)
+                .build();
+        assertTrue(0d == e.evaluate());
+        e = new ExpressionBuilder("2>=1").operator(gteq)
+                .build();
+        assertTrue(1d == e.evaluate());
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void testDocumentationExample10() throws Exception {
+        Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
+            @Override
+            public double apply(final double... args) {
+                if (args[0] == 0d) {
+                    throw new ArithmeticException("Division by zero!");
+                }
+                return 1d / args[0];
+            }
+        };
+        Expression e = new ExpressionBuilder("0$").operator(reciprocal).build();
+        e.evaluate();
+    }
+
+    @Test
+    public void testDocumentationExample11() throws Exception {
         Expression e = new ExpressionBuilder("x")
                 .variable("x")
                 .build();
@@ -1616,7 +1711,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testDocumentationExample8() throws Exception {
+    public void testDocumentationExample12() throws Exception {
         Expression e = new ExpressionBuilder("x")
                 .variable("x")
                 .build();
@@ -1624,22 +1719,7 @@ public class ExpressionBuilderTest {
         ValidationResult res = e.validate(false);
         assertTrue(res.isValid());
         assertNull(res.getErrors());
-
     }
-
-    @Test
-    public void testDocumentationExample2() throws Exception {
-        ExecutorService exec = Executors.newFixedThreadPool(1);
-        Expression e = new ExpressionBuilder("3log(y)/(x+1)")
-                .variables("x", "y")
-                .build()
-                .setVariable("x", 2.3)
-                .setVariable("y", 3.14);
-        Future<Double> result = e.evaluateAsync(exec);
-        double expected = 3 * Math.log(3.14d)/(3.3);
-        assertEquals(expected, result.get(), 0d);
-    }
-
 
     // Thanks go out to Johan Björk for reporting the division by zero problem EXP-22
     // https://www.objecthunter.net/jira/browse/EXP-22
@@ -2508,8 +2588,8 @@ public class ExpressionBuilderTest {
                 .variables("π", "ε")
                 .function(log)
                 .build()
-                .setVariable("π",PI)
-                .setVariable("ε",E);
+                .setVariable("π", PI)
+                .setVariable("ε", E);
         assertEquals(3*log(PI*E*6), e.evaluate(), 0d);
     }
 
@@ -2542,12 +2622,38 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("2*tr+tr(2)")
                 .variables("tr")
                 .function(new Function("tr") {
-
                     @Override
                     public double apply(double... args) {
                         return 0;
                     }
                 })
                 .build();
+    }
+
+    @Test
+    public void testSignum() {
+        Expression e = new ExpressionBuilder("signum(1)")
+                .build();
+        assertEquals(1, e.evaluate(), 0d);
+
+        e = new ExpressionBuilder("signum(-1)")
+                .build();
+        assertEquals(-1, e.evaluate(), 0d);
+
+        e = new ExpressionBuilder("signum(--1)")
+                .build();
+        assertEquals(1, e.evaluate(), 0d);
+
+        e = new ExpressionBuilder("signum(+-1)")
+                .build();
+        assertEquals(-1, e.evaluate(), 0d);
+
+        e = new ExpressionBuilder("-+1")
+                .build();
+        assertEquals(-1, e.evaluate(), 0d);
+
+        e = new ExpressionBuilder("signum(-+1)")
+                .build();
+        assertEquals(-1, e.evaluate(), 0d);
     }
  }

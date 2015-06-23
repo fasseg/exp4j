@@ -171,7 +171,7 @@ public class Functions {
                 return Math.expm1(args[0]);
             }
         };
-        builtinFunctions[INDEX_SGN] = new Function("sgn", 1) {
+        builtinFunctions[INDEX_SGN] = new Function("signum", 1) {
             @Override
             public double apply(double... args) {
                 if (args[0] > 0) {
@@ -234,7 +234,7 @@ public class Functions {
             return builtinFunctions[INDEX_EXP];
         } else if (name.equals("expm1")) {
             return builtinFunctions[INDEX_EXPM1];
-        } else if (name.equals("sgn")) {
+        } else if (name.equals("signum")) {
             return builtinFunctions[INDEX_SGN];
         } else {
             return null;
