@@ -46,7 +46,7 @@ public class Expression {
      * @param existing the expression to copy
      */
     public Expression(Expression existing) {
-    	this.tokens = existing.tokens;
+    	this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
     	this.variables = new HashMap<String,Double>();
     	this.variables.putAll(existing.variables);
     	this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
