@@ -39,6 +39,18 @@ public class Expression {
         vars.put("e", Math.E);
         return vars;
     }
+    
+    /**
+     * Creates a new expression that is a copy of the existing one.
+     * 
+     * @param existing the expression to copy
+     */
+    public Expression(Expression existing) {
+    	this.tokens = existing.tokens;
+    	this.variables = new HashMap<String,Double>();
+    	this.variables.putAll(existing.variables);
+    	this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
+    }
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
