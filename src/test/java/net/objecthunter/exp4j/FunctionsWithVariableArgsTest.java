@@ -143,6 +143,15 @@ public class FunctionsWithVariableArgsTest {
         assertEquals(expected, result, 0d);
 
     }
+
+    @Test
+    public void testFunctionsWithVariableArgs3(){
+        Expression e = new ExpressionBuilder("sum(1,avg(1.11,-3.14,2.03))")
+                .functions(variableArgsFunctions)
+                .build();
+        assertEquals(1.0d, e.evaluate(), 1.0d);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testFunctionsWithVariableArgs4(){
         new ExpressionBuilder("5 + atLeast4atMax8(1)")
