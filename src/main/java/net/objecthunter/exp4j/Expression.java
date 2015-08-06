@@ -18,9 +18,8 @@ package net.objecthunter.exp4j;
 import java.util.*;
 import java.util.concurrent.*;
 
-import net.objecthunter.exp4j.function.Function;
-import net.objecthunter.exp4j.function.Functions;
-import net.objecthunter.exp4j.operator.Operator;
+import net.objecthunter.exp4j.function.*;
+import net.objecthunter.exp4j.operator.*;
 import net.objecthunter.exp4j.tokenizer.*;
 
 public class Expression {
@@ -208,4 +207,110 @@ public class Expression {
         }
         return args;
     }
+    
+    
+    public String toString() {
+    	return toString(new ArrayList<Token>(Arrays.asList(tokens)));
+	}
+    
+    private String toString(List<Token> tokens) {
+    	if(tokens.size() == 0)
+    		return "";
+    	Token token = tokens.get(tokens.size()-1);
+    	
+    	switch (token.getType()) {
+			case Token.TOKEN_OPERATOR:
+				Operator operator = ((OperatorToken) token).getOperator();
+				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), operator.getNumOperands());
+				List<Token> leftTokens = args.get(0),
+							reightTokens = args.get(1);
+				if(operator.getNumOperands() == 1 && !operator.isLeftAssociative()) {
+					leftTokens = args.get(1);
+					reightTokens = args.get(0);
+				}
+				
+				boolean	parenthesis_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
+						parenthesis_right = reightTokens.size() > 1 && reightTokens.get(reightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
+				if(parenthesis_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+					parenthesis_left = operator.getPrecedence() > ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getPrecedence() 
+							|| ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getNumOperands() == 1;
+				}
+				if(parenthesis_right  && reightTokens.get(reightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+					parenthesis_right = operator.getPrecedence() > ((OperatorToken) reightTokens.get(reightTokens.size()-1)).getOperator().getPrecedence()
+							|| ((OperatorToken) reightTokens.get(reightTokens.size()-1)).getOperator().getNumOperands() == 1;
+				}
+				
+				if(!parenthesis_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parenthesis_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
+				}
+				if(!parenthesis_right && reightTokens.size() == 1 && reightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parenthesis_right = ((NumberToken) reightTokens.get(0)).getValue() < 0;
+				}
+						
+				return (parenthesis_left?"(":"")+toString(leftTokens)+(parenthesis_left?")":"")+operator.getSymbol()+(parenthesis_right?"(":"")+toString(reightTokens)+(parenthesis_right?")":"");
+			
+			case Token.TOKEN_FUNCTION:
+				return ((FunctionToken) token).getFunction().getName()+"("+toString(tokens.subList(0, tokens.size()-1))+")";
+				
+			case Token.TOKEN_VARIABLE:
+				return ((VariableToken) token).getName();
+				
+			case Token.TOKEN_NUMBER:
+				return ""+((NumberToken) token).getValue();
+				
+			default:
+				throw new UnsupportedOperationException("The token type '"+token.getClass().getName()+"' is not supported in this function yet");
+		}
+    }
+    
+    
+    private List<List<Token>> getTokensArguments(List<Token> tokens, int numOperands) {
+    	List<List<Token>> tArgs = new ArrayList<List<Token>>(2);
+    	if(numOperands == 1) {
+    		tArgs.add(tokens);
+	        tArgs.add(new ArrayList<Token>(0));
+    	}
+    	else {
+	    	int last = 0;
+			final ArrayStack output = new ArrayStack();
+	        for (int i = 0; i < tokens.size()-1; i++) {
+	            Token t = tokens.get(i);
+	            switch (t.getType()) {
+		            case Token.TOKEN_NUMBER:
+		                output.push(((NumberToken) t).getValue());
+		                break;
+		                
+		            case Token.TOKEN_VARIABLE:
+		                output.push(1d);
+		                break;
+		                
+		            case Token.TOKEN_OPERATOR:
+		                Operator operator = ((OperatorToken) t).getOperator();
+		                if (operator.getNumOperands() == 2) 
+		                    output.push(operator.apply(output.pop(), output.pop()));
+		                else if (operator.getNumOperands() == 1) 
+		                    output.push(operator.apply(output.pop()));
+		                break;
+		                
+		            case Token.TOKEN_FUNCTION:
+		                FunctionToken func = (FunctionToken) t;
+		                double[] args = new double[func.getFunction().getNumArguments()];
+		                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
+		                    args[j] = output.pop();
+		                }
+		                output.push(func.getFunction().apply(this.reverseInPlace(args)));
+		                break;
+		        }
+	            if(output.size() == 1) {
+	            	last = i;
+	            }
+	        }
+	        
+	        tArgs.add(tokens.subList(0, last+1));
+	        tArgs.add(tokens.subList(last+1, tokens.size()));
+    	}
+    	
+    	return tArgs;
+	}
+    
 }
