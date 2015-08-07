@@ -231,31 +231,31 @@ public class Expression {
 				Operator operator = ((OperatorToken) token).getOperator();
 				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), operator.getNumOperands());
 				List<Token> leftTokens = args.get(0),
-							reightTokens = args.get(1);
+							rightTokens = args.get(1);
 				if(operator.getNumOperands() == 1 && !operator.isLeftAssociative()) {
 					leftTokens = args.get(1);
-					reightTokens = args.get(0);
+					rightTokens = args.get(0);
 				}
 				
 				boolean	parenthesis_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
-						parenthesis_right = reightTokens.size() > 1 && reightTokens.get(reightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
+						parenthesis_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
 				if(parenthesis_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
 					parenthesis_left = operator.getPrecedence() > ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getPrecedence() 
 							|| ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getNumOperands() == 1;
 				}
-				if(parenthesis_right  && reightTokens.get(reightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
-					parenthesis_right = operator.getPrecedence() > ((OperatorToken) reightTokens.get(reightTokens.size()-1)).getOperator().getPrecedence()
-							|| ((OperatorToken) reightTokens.get(reightTokens.size()-1)).getOperator().getNumOperands() == 1;
+				if(parenthesis_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+					parenthesis_right = operator.getPrecedence() > ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator().getPrecedence()
+							|| ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator().getNumOperands() == 1;
 				}
 				
 				if(!parenthesis_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
 					parenthesis_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
 				}
-				if(!parenthesis_right && reightTokens.size() == 1 && reightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
-					parenthesis_right = ((NumberToken) reightTokens.get(0)).getValue() < 0;
+				if(!parenthesis_right && rightTokens.size() == 1 && rightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parenthesis_right = ((NumberToken) rightTokens.get(0)).getValue() < 0;
 				}
 						
-				return (parenthesis_left?"(":"")+toString(leftTokens)+(parenthesis_left?")":"")+operator.getSymbol()+(parenthesis_right?"(":"")+toString(reightTokens)+(parenthesis_right?")":"");
+				return (parenthesis_left?"(":"")+toString(leftTokens)+(parenthesis_left?")":"")+operator.getSymbol()+(parenthesis_right?"(":"")+toString(rightTokens)+(parenthesis_right?")":"");
 			
 			case Token.TOKEN_FUNCTION:
 				Function function = ((FunctionToken) token).getFunction();
