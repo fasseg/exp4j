@@ -209,8 +209,16 @@ public class Expression {
     }
     
     
-    public String toString() {
-    	return toString(new ArrayList<Token>(Arrays.asList(tokens)));
+    /**
+     * Convert the <code>Expression</code> back to string expression.
+     * <p>Functions with more then one argument are not supported yet,
+     * but all built-in functions are supported (the 'pow' <code>Function</code> will be translate to '^')</p>
+     * 
+     * @return a string representation of the <code>Expression</code>.
+     * @throws UnsupportedOperationException if the <code>Expression</code> contains a function with more then one argument
+     */
+    public String toString() throws UnsupportedOperationException{
+    	return toString(Arrays.asList(tokens));
 	}
     
     private String toString(List<Token> tokens) {
@@ -250,13 +258,25 @@ public class Expression {
 				return (parenthesis_left?"(":"")+toString(leftTokens)+(parenthesis_left?")":"")+operator.getSymbol()+(parenthesis_right?"(":"")+toString(reightTokens)+(parenthesis_right?")":"");
 			
 			case Token.TOKEN_FUNCTION:
-				return ((FunctionToken) token).getFunction().getName()+"("+toString(tokens.subList(0, tokens.size()-1))+")";
+				Function function = ((FunctionToken) token).getFunction();
+				
+				if(function.getNumArguments() > 1) {
+					if(function.getName().equals("pow")) {
+						tokens.set(tokens.size()-1, new OperatorToken(Operators.getBuiltinOperator('^', 2)));
+						return toString(tokens);
+					}
+					else {
+						throw new UnsupportedOperationException("Functions with more then one argument are not supported yet");
+					}
+				}
+				
+				return function.getName()+"("+toString(tokens.subList(0, tokens.size()-1))+")";
 				
 			case Token.TOKEN_VARIABLE:
 				return ((VariableToken) token).getName();
 				
 			case Token.TOKEN_NUMBER:
-				return ""+((NumberToken) token).getValue();
+				return String.valueOf(((NumberToken) token).getValue());
 				
 			default:
 				throw new UnsupportedOperationException("The token type '"+token.getClass().getName()+"' is not supported in this function yet");
