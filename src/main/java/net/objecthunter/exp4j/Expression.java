@@ -291,37 +291,33 @@ public class Expression {
 	        tArgs.add(new ArrayList<Token>(0));
     	}
     	else {
-	    	int last = 0;
-			final ArrayStack output = new ArrayStack();
+	    	int size = 0, last = 0;
 	        for (int i = 0; i < tokens.size()-1; i++) {
 	            Token t = tokens.get(i);
 	            switch (t.getType()) {
 		            case Token.TOKEN_NUMBER:
-		                output.push(((NumberToken) t).getValue());
+		                size++;
 		                break;
 		                
 		            case Token.TOKEN_VARIABLE:
-		                output.push(1d);
+		                size++;
 		                break;
 		                
 		            case Token.TOKEN_OPERATOR:
 		                Operator operator = ((OperatorToken) t).getOperator();
 		                if (operator.getNumOperands() == 2) 
-		                    output.push(operator.apply(output.pop(), output.pop()));
-		                else if (operator.getNumOperands() == 1) 
-		                    output.push(operator.apply(output.pop()));
+		                    size --;
 		                break;
 		                
 		            case Token.TOKEN_FUNCTION:
 		                FunctionToken func = (FunctionToken) t;
-		                double[] args = new double[func.getFunction().getNumArguments()];
 		                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
-		                    args[j] = output.pop();
+		                    size--;
 		                }
-		                output.push(func.getFunction().apply(this.reverseInPlace(args)));
+		                size++;
 		                break;
 		        }
-	            if(output.size() == 1) {
+	            if(size == 1) {
 	            	last = i;
 	            }
 	        }
