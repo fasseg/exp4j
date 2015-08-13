@@ -211,14 +211,11 @@ public class Expression {
     
     /**
      * Convert the <code>Expression</code> back to string expression.
-     * <p>Functions with more then one argument are not supported yet,
-     * but all built-in functions are supported (the 'pow' <code>Function</code> will be translate to '^')</p>
      * 
      * @return a string representation of the <code>Expression</code>.
-     * @throws UnsupportedOperationException if the <code>Expression</code> contains a function with more then one argument
      */
-    public String toString() throws UnsupportedOperationException{
-    	return toString(Arrays.asList(tokens));
+    public String toString() {
+    	return toString(Arrays.asList(tokens)).replaceAll("\\(\\((-|\\+)([^\\)]+)\\)", "($1$2").replaceAll(" \\(([^\\)]+)\\)", " $1");
 	}
     
     private String toString(List<Token> tokens) {
@@ -229,23 +226,53 @@ public class Expression {
     	switch (token.getType()) {
 			case Token.TOKEN_OPERATOR:
 				Operator operator = ((OperatorToken) token).getOperator();
-				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), operator.getNumOperands());
-				List<Token> leftTokens = args.get(0),
-							rightTokens = args.get(1);
-				if(operator.getNumOperands() == 1 && !operator.isLeftAssociative()) {
-					leftTokens = args.get(1);
-					rightTokens = args.get(0);
+				List<List<Token>> operands = getTokensArguments(tokens.subList(0, tokens.size()-1), operator.getNumOperands());
+				List<Token> leftTokens,
+							rightTokens;
+				if(operator.getNumOperands() == 1) { 
+					if(operator.isLeftAssociative()) {
+						leftTokens = operands.get(0);
+						rightTokens = new ArrayList<Token>();
+					}
+					else {
+						leftTokens = new ArrayList<Token>();
+						rightTokens = operands.get(0);
+					}
+				}
+				else {
+					leftTokens = operands.get(0);
+					rightTokens = operands.get(1);
 				}
 				
 				boolean	parenthesis_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
 						parenthesis_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
 				if(parenthesis_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
-					parenthesis_left = operator.getPrecedence() > ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getPrecedence() 
-							|| ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator().getNumOperands() == 1;
+					Operator leftOperator = ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator();
+					if(leftOperator.getNumOperands() == 1 && leftOperator.getSymbol().matches("\\+|-")) {
+						parenthesis_left = true;
+					}
+					else {
+						if(leftOperator.getSymbol().matches("\\+|\\*")) {
+							parenthesis_left = operator.getPrecedence() > leftOperator.getPrecedence();
+						}
+						else {
+							parenthesis_left = operator.getPrecedence() >= leftOperator.getPrecedence();							
+						}
+					}
 				}
 				if(parenthesis_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
-					parenthesis_right = operator.getPrecedence() > ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator().getPrecedence()
-							|| ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator().getNumOperands() == 1;
+					Operator rightOperator = ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator();
+					if(rightOperator.getNumOperands() == 1 && rightOperator.getSymbol().matches("\\+|-")) {
+						parenthesis_right = true;
+					}
+					else {
+						if(operator.getSymbol().matches("\\+|\\*") && rightOperator.getSymbol().matches("\\+|\\*")) {
+							parenthesis_right = operator.getPrecedence() > rightOperator.getPrecedence();
+						}
+						else {
+							parenthesis_right = operator.getPrecedence() >= rightOperator.getPrecedence();							
+						}
+					}
 				}
 				
 				if(!parenthesis_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
@@ -260,17 +287,13 @@ public class Expression {
 			case Token.TOKEN_FUNCTION:
 				Function function = ((FunctionToken) token).getFunction();
 				
-				if(function.getNumArguments() > 1) {
-					if(function.getName().equals("pow")) {
-						tokens.set(tokens.size()-1, new OperatorToken(Operators.getBuiltinOperator('^', 2)));
-						return toString(tokens);
-					}
-					else {
-						throw new UnsupportedOperationException("Functions with more then one argument are not supported yet");
-					}
+				String stringArgs = "";
+				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), function.getNumArguments());
+				for (List<Token> argument : args) {
+					stringArgs += ", "+toString(argument);
 				}
-				
-				return function.getName()+"("+toString(tokens.subList(0, tokens.size()-1))+")";
+				stringArgs = stringArgs.substring(2);
+				return function.getName()+"("+stringArgs+")";
 				
 			case Token.TOKEN_VARIABLE:
 				return ((VariableToken) token).getName();
@@ -288,10 +311,10 @@ public class Expression {
     	List<List<Token>> tArgs = new ArrayList<List<Token>>(2);
     	if(numOperands == 1) {
     		tArgs.add(tokens);
-	        tArgs.add(new ArrayList<Token>(0));
     	}
     	else {
-	    	int size = 0, last = 0;
+	    	int size = 0;
+	    	int[] pos = new int[numOperands-1];
 	        for (int i = 0; i < tokens.size()-1; i++) {
 	            Token t = tokens.get(i);
 	            switch (t.getType()) {
@@ -317,13 +340,18 @@ public class Expression {
 		                size++;
 		                break;
 		        }
-	            if(size == 1) {
-	            	last = i;
-	            }
+	            for (int j = 0; j < pos.length; j++) {
+					if(size == j+1) {
+						pos[j] = i;
+					}
+				}
 	        }
 	        
-	        tArgs.add(tokens.subList(0, last+1));
-	        tArgs.add(tokens.subList(last+1, tokens.size()));
+	        tArgs.add(tokens.subList(0, pos[0]+1));
+	        for (int i = 1; i < pos.length; i++) {
+        		tArgs.add(tokens.subList(pos[i-1]+1, pos[i]+1));
+			}
+	        tArgs.add(tokens.subList(pos[pos.length-1]+1, tokens.size()));
     	}
     	
     	return tArgs;
