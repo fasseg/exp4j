@@ -215,7 +215,7 @@ public class Expression {
      * @return a string representation of the <code>Expression</code>.
      */
     public String toString() {
-    	return toString(Arrays.asList(tokens)).replaceAll("\\(\\((-|\\+)([^\\)]+)\\)", "($1$2").replaceAll(" \\(([^\\)]+)\\)", " $1");
+    	return toString(Arrays.asList(tokens));
 	}
     
     private String toString(List<Token> tokens) {
@@ -244,45 +244,45 @@ public class Expression {
 					rightTokens = operands.get(1);
 				}
 				
-				boolean	parenthesis_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
-						parenthesis_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
-				if(parenthesis_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+				boolean	parentheses_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
+						parentheses_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
+				if(parentheses_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
 					Operator leftOperator = ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator();
 					if(leftOperator.getNumOperands() == 1 && leftOperator.getSymbol().matches("\\+|-")) {
-						parenthesis_left = true;
+						parentheses_left = true;
 					}
 					else {
 						if(leftOperator.getSymbol().matches("\\+|\\*")) {
-							parenthesis_left = operator.getPrecedence() > leftOperator.getPrecedence();
+							parentheses_left = operator.getPrecedence() > leftOperator.getPrecedence();
 						}
 						else {
-							parenthesis_left = operator.getPrecedence() >= leftOperator.getPrecedence();							
+							parentheses_left = operator.getPrecedence() >= leftOperator.getPrecedence();							
 						}
 					}
 				}
-				if(parenthesis_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+				if(parentheses_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
 					Operator rightOperator = ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator();
 					if(rightOperator.getNumOperands() == 1 && rightOperator.getSymbol().matches("\\+|-")) {
-						parenthesis_right = true;
+						parentheses_right = true;
 					}
 					else {
 						if(operator.getSymbol().matches("\\+|\\*") && rightOperator.getSymbol().matches("\\+|\\*")) {
-							parenthesis_right = operator.getPrecedence() > rightOperator.getPrecedence();
+							parentheses_right = operator.getPrecedence() > rightOperator.getPrecedence();
 						}
 						else {
-							parenthesis_right = operator.getPrecedence() >= rightOperator.getPrecedence();							
+							parentheses_right = operator.getPrecedence() >= rightOperator.getPrecedence();							
 						}
 					}
 				}
 				
-				if(!parenthesis_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
-					parenthesis_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
+				if(!parentheses_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parentheses_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
 				}
-				if(!parenthesis_right && rightTokens.size() == 1 && rightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
-					parenthesis_right = ((NumberToken) rightTokens.get(0)).getValue() < 0;
+				if(!parentheses_right && rightTokens.size() == 1 && rightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parentheses_right = ((NumberToken) rightTokens.get(0)).getValue() < 0;
 				}
 						
-				return (parenthesis_left?"(":"")+toString(leftTokens)+(parenthesis_left?")":"")+operator.getSymbol()+(parenthesis_right?"(":"")+toString(rightTokens)+(parenthesis_right?")":"");
+				return (parentheses_left?"(":"")+toString(leftTokens)+(parentheses_left?")":"")+operator.getSymbol()+(parentheses_right?"(":"")+toString(rightTokens)+(parentheses_right?")":"");
 			
 			case Token.TOKEN_FUNCTION:
 				Function function = ((FunctionToken) token).getFunction();
