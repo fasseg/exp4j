@@ -61,6 +61,20 @@ public abstract class Function {
     }
 
     /**
+     * Get the number of arguments of a function with fixed arguments length.
+     * This function may be called only on functions with a fixed number of arguments and will throw an @UnsupportedOperationException otherwise.
+     * When using functions with variable arguments length use @getMaxNumArguments and @getMinNumArguments instead.
+     *
+     * @return the number of arguments
+     */
+    public int getNumArguments() {
+        if (minArguments != maxArguments) {
+            throw new UnsupportedOperationException("Calling getNumArgument() is not supported for var arg functions, please use getMaxNumArguments() or getMinNumArguments()");
+        }
+        return minArguments;
+    }
+
+    /**
      * Get the name of the Function
      * 
      * @return the name
