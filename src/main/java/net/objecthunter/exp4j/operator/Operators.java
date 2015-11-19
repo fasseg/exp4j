@@ -15,7 +15,7 @@
 */
 package net.objecthunter.exp4j.operator;
 
-public abstract class Operators {
+public final class Operators {
     private static final int INDEX_ADDITION = 0;
     private static final int INDEX_SUBTRACTION = 1;
     private static final int INDEX_MUTLIPLICATION = 2;
@@ -111,4 +111,12 @@ public abstract class Operators {
         }
     }
 
+    public static Operator[] getBuiltinOperators() {
+        final Operator[] copy = new Operator[builtinOperators.length];
+        System.arraycopy(builtinOperators, 0, copy, 0, builtinOperators.length);
+        return copy;
+    }
+
+    private Operators() {
+    }
 }

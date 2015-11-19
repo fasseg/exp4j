@@ -18,7 +18,7 @@ package net.objecthunter.exp4j.function;
 /**
  * Class representing the builtin functions available for use in expressions
  */
-public class Functions {
+public final class Functions {
     private static final int INDEX_SIN = 0;
     private static final int INDEX_COS = 1;
     private static final int INDEX_TAN = 2;
@@ -241,4 +241,12 @@ public class Functions {
         }
     }
 
+    public static Function[] getBuiltinFunctions() {
+        final Function[] copy = new Function[builtinFunctions.length];
+        System.arraycopy(builtinFunctions, 0, copy, 0, builtinFunctions.length);
+        return copy;
+    }
+
+    private Functions() {
+    }
 }
