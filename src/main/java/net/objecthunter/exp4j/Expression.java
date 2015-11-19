@@ -176,16 +176,12 @@ public class Expression {
                 if (output.size() < numOperands) {
                     throw new IllegalArgumentException("Invalid number of operands available for '" + operator.getSymbol() + "' operator");
                 }
-                if (numOperands == 2) {
-                    /* pop the operands and push the result of the operation */
-                    double rightArg = output.pop();
-                    double leftArg = output.pop();
-                    output.push(operator.apply(leftArg, rightArg));
-                } else if (numOperands == 1) {
-                    /* pop the operand and push the result of the operation */
-                    double arg = output.pop();
-                    output.push(operator.apply(arg));
+                /* collect the operands from the stack */
+                final double[] ops = getArray(numOperands);
+                for (int j = numOperands - 1; j >= 0; j--) {
+                    ops[j] = output.pop();
                 }
+                output.push(operator.apply(ops));
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 final FunctionToken func = (FunctionToken) t;
                 final Function function = func.getFunction();
