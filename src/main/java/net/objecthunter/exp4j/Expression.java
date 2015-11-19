@@ -33,6 +33,16 @@ public class Expression {
 
     private final Set<String> userFunctionNames;
 
+    // cached arrays, should be accessed through #getArray() method. Idea is to avoid too many array allocations when
+    // f.e. expression is evaluated in a loop
+    private final double[][] arrays = new double[4][];
+
+    {
+        for (int i = 0; i < arrays.length; i++) {
+            arrays[i] = new double[i];
+        }
+    }
+
     private static Map<String, Double> createDefaultVariables() {
         final Map<String, Double> vars = new HashMap<String, Double>(4);
         vars.put("pi", Math.PI);
@@ -48,10 +58,10 @@ public class Expression {
      * @param existing the expression to copy
      */
     public Expression(final Expression existing) {
-    	this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
-    	this.variables = new HashMap<String,Double>();
-    	this.variables.putAll(existing.variables);
-    	this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
+        this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
+        this.variables = new HashMap<String, Double>();
+        this.variables.putAll(existing.variables);
+        this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
     }
 
     Expression(final Token[] tokens) {
@@ -192,7 +202,7 @@ public class Expression {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + function.getName() + "' function");
                 }
                 /* collect the arguments from the stack */
-                double[] args = new double[numArguments];
+                final double[] args = getArray(numArguments);
                 for (int j = numArguments - 1; j >= 0; j--) {
                     args[j] = output.pop();
                 }
@@ -203,5 +213,12 @@ public class Expression {
             throw new IllegalArgumentException("Invalid number of items on the output queue. Might be caused by an invalid number of arguments for a function.");
         }
         return output.pop();
+    }
+
+    private double[] getArray(int size) {
+        if (size < arrays.length) {
+            return arrays[size];
+        }
+        return new double[size];
     }
 }
