@@ -15,13 +15,15 @@
  */
 package net.objecthunter.exp4j;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.*;
+
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class Expression {
 
@@ -182,30 +184,21 @@ public class Expression {
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
-                if (output.size() < func.getFunction().getNumArguments()) {
+                final int numArguments = func.getFunction().getNumArguments();
+                if (output.size() < numArguments) {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
                 }
                 /* collect the arguments from the stack */
-                double[] args = new double[func.getFunction().getNumArguments()];
-                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
+                double[] args = new double[numArguments];
+                for (int j = numArguments - 1; j >= 0; j--) {
                     args[j] = output.pop();
                 }
-                output.push(func.getFunction().apply(this.reverseInPlace(args)));
+                output.push(func.getFunction().apply(args));
             }
         }
         if (output.size() > 1) {
             throw new IllegalArgumentException("Invalid number of items on the output queue. Might be caused by an invalid number of arguments for a function.");
         }
         return output.pop();
-    }
-
-    private double[] reverseInPlace(double[] args) {
-        int len = args.length;
-        for (int i = 0; i < len / 2; i++) {
-            double tmp = args[i];
-            args[i] = args[len - i - 1];
-            args[len - i - 1] = tmp;
-        }
-        return args;
     }
 }
