@@ -16,8 +16,9 @@
 
 package net.objecthunter.exp4j;
 
-import static java.lang.Math.*;
-import static org.junit.Assert.*;
+import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.operator.Operator;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +26,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import net.objecthunter.exp4j.function.Function;
-import net.objecthunter.exp4j.operator.Operator;
-
-import org.junit.Test;
+import static java.lang.Math.*;
+import static org.junit.Assert.*;
 
 public class ExpressionBuilderTest {
 
@@ -283,7 +282,7 @@ public class ExpressionBuilderTest {
                 .function(custom)
                 .variables("x")
                 .build()
-                .setVariable("x", 1);
+                .setVariable("x", 1d);
         double result = e.evaluate();
         assertTrue(result == Math.PI);
     }
@@ -301,7 +300,7 @@ public class ExpressionBuilderTest {
                 .variables("x")
                 .function(custom)
                 .build()
-                .setVariable("x", 1);
+                .setVariable("x", 1d);
         double result = e.evaluate();
         assertTrue(result == Math.log(Math.log(1)));
     }
@@ -327,7 +326,7 @@ public class ExpressionBuilderTest {
                 .function(custom2)
                 .variables("x")
                 .build()
-                .setVariable("x", 1);
+                .setVariable("x", 1d);
         double result = e.evaluate();
         assertTrue(result == 1 * Math.E * Math.PI);
     }
@@ -860,8 +859,8 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("7*x + 3*y")
                 .variables("x", "y")
                 .build()
-                .setVariable("x", 1)
-                .setVariable("y", 2);
+                .setVariable("x", 1d)
+                .setVariable("y", 2d);
         double result = e.evaluate();
         assertTrue(result == 13d);
     }
@@ -871,8 +870,8 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("7*x + 3*y")
                 .variables("x", "y")
                 .build()
-                .setVariable("x", 1)
-                .setVariable("y", 2);
+                .setVariable("x", 1d)
+                .setVariable("y", 2d);
         double result = e.evaluate();
         assertTrue(result == 13d);
     }
@@ -1978,7 +1977,7 @@ public class ExpressionBuilderTest {
         Expression e = new ExpressionBuilder("1/2x")
                 .variables("x")
                 .build()
-                .setVariable("x", 6);
+                .setVariable("x", 6d);
         assertEquals(3d, e.evaluate(), 0d);
     }
 

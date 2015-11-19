@@ -70,7 +70,7 @@ public class Expression {
         this.userFunctionNames = userFunctionNames;
     }
 
-    public Expression setVariable(final String name, final double value) {
+    public Expression setVariable(final String name, final Double value) {
         this.checkVariableName(name);
         this.variables.put(name, value);
         return this;
