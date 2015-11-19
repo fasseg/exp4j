@@ -34,6 +34,8 @@ public class Expression {
 
     private final Set<String> userFunctionNames;
 
+    private final ArrayStack stack = new ArrayStack();
+
     // cached arrays, should be accessed through #getArray() method. Idea is to avoid too many array allocations when
     // f.e. expression is evaluated in a loop
     private final double[][] arrays = new double[4][];
@@ -157,50 +159,50 @@ public class Expression {
     }
 
     public double evaluate() {
-        final ArrayStack output = new ArrayStack();
+        stack.reset();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
             if (t.getType() == Token.TOKEN_NUMBER) {
-                output.push(((NumberToken) t).getValue());
+                stack.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
                 final Double value = this.variables.get(name);
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
-                output.push(value);
+                stack.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
                 final OperatorToken op = (OperatorToken) t;
                 final Operator operator = op.getOperator();
                 final int numOperands = operator.getNumOperands();
-                if (output.size() < numOperands) {
+                if (stack.size() < numOperands) {
                     throw new IllegalArgumentException("Invalid number of operands available for '" + operator.getSymbol() + "' operator");
                 }
                 /* collect the operands from the stack */
                 final double[] ops = getArray(numOperands);
                 for (int j = numOperands - 1; j >= 0; j--) {
-                    ops[j] = output.pop();
+                    ops[j] = stack.pop();
                 }
-                output.push(operator.apply(ops));
+                stack.push(operator.apply(ops));
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 final FunctionToken func = (FunctionToken) t;
                 final Function function = func.getFunction();
                 final int numArguments = function.getNumArguments();
-                if (output.size() < numArguments) {
+                if (stack.size() < numArguments) {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + function.getName() + "' function");
                 }
                 /* collect the arguments from the stack */
                 final double[] args = getArray(numArguments);
                 for (int j = numArguments - 1; j >= 0; j--) {
-                    args[j] = output.pop();
+                    args[j] = stack.pop();
                 }
-                output.push(function.apply(args));
+                stack.push(function.apply(args));
             }
         }
-        if (output.size() > 1) {
+        if (stack.size() > 1) {
             throw new IllegalArgumentException("Invalid number of items on the output queue. Might be caused by an invalid number of arguments for a function.");
         }
-        return output.pop();
+        return stack.pop();
     }
 
     private double[] getArray(int size) {

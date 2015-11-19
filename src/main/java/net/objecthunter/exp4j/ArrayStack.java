@@ -30,7 +30,7 @@ class ArrayStack {
     private int idx;
 
     ArrayStack() {
-        this(5);
+        this(10);
     }
 
     ArrayStack(int initialCapacity) {
@@ -73,5 +73,9 @@ class ArrayStack {
 
     int size() {
         return idx + 1;
+    }
+
+    public void reset() {
+        idx = -1;
     }
 }
