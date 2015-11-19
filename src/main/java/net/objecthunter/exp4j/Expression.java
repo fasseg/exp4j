@@ -15,6 +15,7 @@
  */
 package net.objecthunter.exp4j;
 
+import net.objecthunter.exp4j.constant.Constants;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
@@ -43,15 +44,6 @@ public class Expression {
         }
     }
 
-    private static Map<String, Double> createDefaultVariables() {
-        final Map<String, Double> vars = new HashMap<String, Double>(4);
-        vars.put("pi", Math.PI);
-        vars.put("π", Math.PI);
-        vars.put("φ", 1.61803398874d);
-        vars.put("e", Math.E);
-        return vars;
-    }
-    
     /**
      * Creates a new expression that is a copy of the existing one.
      * 
@@ -66,13 +58,13 @@ public class Expression {
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
-        this.variables = createDefaultVariables();
-        this.userFunctionNames = Collections.<String>emptySet();
+        this.variables = Constants.getBuiltinConstants();
+        this.userFunctionNames = Collections.emptySet();
     }
 
     Expression(final Token[] tokens, Set<String> userFunctionNames) {
         this.tokens = tokens;
-        this.variables = createDefaultVariables();
+        this.variables = Constants.getBuiltinConstants();
         this.userFunctionNames = userFunctionNames;
     }
 
