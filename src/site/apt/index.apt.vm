@@ -28,7 +28,7 @@ Introduction
 
 * Apache Maven
 
-    In order to include exp4j as a dependency using Apache Maven you can the following dependency decalration can be used
+    In order to include exp4j as a dependency using Apache Maven you can the following dependency declaration can be used
 
 +--
 <dependency>
@@ -441,8 +441,6 @@ Links
  
  * {{{http://www.javierllamas.es/index.php/en/blog/14-interprete-de-formulas-para-java.html}Javier Llamas}} blogged about exp4j
  
- * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
- 
  * {{{http://simplesassim.wordpress.com/?s=exp4j}Fernando Ribeiro}} blogged about exp4j
 
  * {{{https://github.com/vavrecan/exp4php} Marek's php port}} of exp4j
@@ -451,20 +449,32 @@ Links
   
 
 References
- 
- * {{{http://nilgiri.net/twiki/bin/view/Nilgiri/}Nilgiri}} MUD uses exp4j
+
+ * {{{https://www.cs.us.es/~marper/investigacion/astrocytes.pdf} Spiking Neural P Systems with Functional Astrocytes, Luis F. Macıas-Ramos, Mario J. Perez-Jimenez, 2012}}
+
+ * {{{http://dx.doi.org/10.12688/f1000research.6706.1} PSFC: a Pathway Signal Flow Calculator App for Cytoscape, Lilit Nersisyan et al., 2015}}
+
+ * {{{http://doktori.bibl.u-szeged.hu/2242/2/tezis-en.pdf} Validating Documents of Web-based Metalanguages Using Semantic Rules, Miklós Kálmán, 2014}}
+
+ * {{{http://www.biomedcentral.com/1471-2105/16/215} MONALISA for stochastic simulations of Petri net models of biochemical systems, Pavel Balazki et al., 2015}}
+
+ * {{{https://e-reports-ext.llnl.gov/pdf/779535.pdf} Math Parsing in the Virtual Beam Line Code, Benjamin Kraines, 2014}}
+
+ * {{{http://www.cs.ubc.ca/labs/beta/Projects/SMAC/} SMAC: Sequential Model-based Algorithm Configuration}} uses exp4j
+
+ * {{{http://netioapp.com/en/} NetIO App}} uses exp4j
+
+ * {{{https://pixhawk.org/dev/flightplot} FilghtPlot}} uses exp4j
+
+ * {{{https://venmo.com/} Venmo}} uses exp4j
  
  * {{{http://jamwiki.org}JamWiki}} a java based wiki uses exp4j
  
- * {{{http://zi-o.ro/exp4j-or-excel-like-math-for-java-building-a-calculator-02102011/}Catalin Alexandru}} blogged about exp4j
- 
  * {{{http://code.google.com/p/jcomplexity/}JComplexity}} for algortihm comparison uses exp4j
- 
- * {{{http://www.opensourceautomation.net/}free\{dom\}}} building automation framework uses exp4j
  
  * {{{http://jwork.org/jhepwork/}jHepWork}} a Multiplatform environment for scientific computation and data analysis uses exp4j
  
- * {{{http://code.google.com/p/calc3d/}cacl3d}} a 3d calculus visualisation engine uses exp4j.
+ * {{{http://code.google.com/p/calc3d/} calc3d}} a 3d calculus visualisation engine uses exp4j.
  
 
  Please {{{mailto:frank.asseg@objecthunter.net}let me know}} if you're project uses exp4j and you want it listed here
