@@ -241,6 +241,9 @@ public final class Functions {
         }
     }
 
+    /**
+     * @return an array of builtin functions
+     */
     public static Function[] getBuiltinFunctions() {
         final Function[] copy = new Function[builtinFunctions.length];
         System.arraycopy(builtinFunctions, 0, copy, 0, builtinFunctions.length);

@@ -111,6 +111,9 @@ public final class Operators {
         }
     }
 
+    /**
+     * @return an array of builtin operators
+     */
     public static Operator[] getBuiltinOperators() {
         final Operator[] copy = new Operator[builtinOperators.length];
         System.arraycopy(builtinOperators, 0, copy, 0, builtinOperators.length);
