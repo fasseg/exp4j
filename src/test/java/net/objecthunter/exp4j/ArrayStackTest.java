@@ -15,13 +15,11 @@
  */
 package net.objecthunter.exp4j;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.util.EmptyStackException;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -171,4 +169,16 @@ public class ArrayStackTest {
         assertEquals(0, stack.size());
     }
 
+    @Test
+    public void testReset() throws Exception {
+        ArrayStack stack = new ArrayStack();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        assertTrue(stack.size() == 3);
+        stack.reset();
+        assertTrue(stack.size() == 0);
+        stack.push(4);
+        assertTrue(stack.size() == 1);
+    }
 }
