@@ -16,12 +16,13 @@
 
 package net.objecthunter.exp4j;
 
-import java.util.*;
-
+import net.objecthunter.exp4j.constant.Constants;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
+
+import java.util.*;
 
 /**
  * Factory class for {@link Expression} instances. This class is the main API entrypoint. Users should create new
@@ -152,11 +153,9 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        /* set the contants' varibale names */
-        variableNames.add("pi");
-        variableNames.add("π");
-        variableNames.add("e");
-        variableNames.add("φ");
+        for (String constant : Constants.getBuiltinConstants().keySet()) {
+            variableNames.add(constant);
+        }
         /* Check if there are duplicate vars/functions */
         for (String var : variableNames) {
             if (Functions.getBuiltinFunction(var) != null || userFunctions.containsKey(var)) {
