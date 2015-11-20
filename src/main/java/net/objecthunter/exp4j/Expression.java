@@ -18,9 +18,8 @@ package net.objecthunter.exp4j;
 import java.util.*;
 import java.util.concurrent.*;
 
-import net.objecthunter.exp4j.function.Function;
-import net.objecthunter.exp4j.function.Functions;
-import net.objecthunter.exp4j.operator.Operator;
+import net.objecthunter.exp4j.function.*;
+import net.objecthunter.exp4j.operator.*;
 import net.objecthunter.exp4j.tokenizer.*;
 
 public class Expression {
@@ -208,4 +207,154 @@ public class Expression {
         }
         return args;
     }
+    
+    
+    /**
+     * Convert the <code>Expression</code> back to string expression.
+     * 
+     * @return a string representation of the <code>Expression</code>.
+     */
+    public String toString() {
+    	return toString(Arrays.asList(tokens));
+	}
+    
+    private String toString(List<Token> tokens) {
+    	if(tokens.size() == 0)
+    		return "";
+    	Token token = tokens.get(tokens.size()-1);
+    	
+    	switch (token.getType()) {
+			case Token.TOKEN_OPERATOR:
+				Operator operator = ((OperatorToken) token).getOperator();
+				List<List<Token>> operands = getTokensArguments(tokens.subList(0, tokens.size()-1), operator.getNumOperands());
+				List<Token> leftTokens,
+							rightTokens;
+				if(operator.getNumOperands() == 1) { 
+					if(operator.isLeftAssociative()) {
+						leftTokens = operands.get(0);
+						rightTokens = new ArrayList<Token>();
+					}
+					else {
+						leftTokens = new ArrayList<Token>();
+						rightTokens = operands.get(0);
+					}
+				}
+				else {
+					leftTokens = operands.get(0);
+					rightTokens = operands.get(1);
+				}
+				
+				boolean	parentheses_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
+						parentheses_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
+				if(parentheses_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+					Operator leftOperator = ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator();
+					if(leftOperator.getNumOperands() == 1 && leftOperator.getSymbol().matches("\\+|-")) {
+						parentheses_left = true;
+					}
+					else {
+						if(leftOperator.getSymbol().matches("\\+|\\*")) {
+							parentheses_left = operator.getPrecedence() > leftOperator.getPrecedence();
+						}
+						else {
+							parentheses_left = operator.getPrecedence() >= leftOperator.getPrecedence();							
+						}
+					}
+				}
+				if(parentheses_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+					Operator rightOperator = ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator();
+					if(rightOperator.getNumOperands() == 1 && rightOperator.getSymbol().matches("\\+|-")) {
+						parentheses_right = true;
+					}
+					else {
+						if(operator.getSymbol().matches("\\+|\\*") && rightOperator.getSymbol().matches("\\+|\\*")) {
+							parentheses_right = operator.getPrecedence() > rightOperator.getPrecedence();
+						}
+						else {
+							parentheses_right = operator.getPrecedence() >= rightOperator.getPrecedence();							
+						}
+					}
+				}
+				
+				if(!parentheses_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parentheses_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
+				}
+				if(!parentheses_right && rightTokens.size() == 1 && rightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+					parentheses_right = ((NumberToken) rightTokens.get(0)).getValue() < 0;
+				}
+						
+				return (parentheses_left?"(":"")+toString(leftTokens)+(parentheses_left?")":"")+operator.getSymbol()+(parentheses_right?"(":"")+toString(rightTokens)+(parentheses_right?")":"");
+			
+			case Token.TOKEN_FUNCTION:
+				Function function = ((FunctionToken) token).getFunction();
+				
+				String stringArgs = "";
+				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), function.getNumArguments());
+				for (List<Token> argument : args) {
+					stringArgs += ", "+toString(argument);
+				}
+				stringArgs = stringArgs.substring(2);
+				return function.getName()+"("+stringArgs+")";
+				
+			case Token.TOKEN_VARIABLE:
+				return ((VariableToken) token).getName();
+				
+			case Token.TOKEN_NUMBER:
+				return String.valueOf(((NumberToken) token).getValue());
+				
+			default:
+				throw new UnsupportedOperationException("The token type '"+token.getClass().getName()+"' is not supported in this function yet");
+		}
+    }
+    
+    
+    private List<List<Token>> getTokensArguments(List<Token> tokens, int numOperands) {
+    	List<List<Token>> tArgs = new ArrayList<List<Token>>(2);
+    	if(numOperands == 1) {
+    		tArgs.add(tokens);
+    	}
+    	else {
+	    	int size = 0;
+	    	int[] pos = new int[numOperands-1];
+	        for (int i = 0; i < tokens.size()-1; i++) {
+	            Token t = tokens.get(i);
+	            switch (t.getType()) {
+		            case Token.TOKEN_NUMBER:
+		                size++;
+		                break;
+		                
+		            case Token.TOKEN_VARIABLE:
+		                size++;
+		                break;
+		                
+		            case Token.TOKEN_OPERATOR:
+		                Operator operator = ((OperatorToken) t).getOperator();
+		                if (operator.getNumOperands() == 2) 
+		                    size --;
+		                break;
+		                
+		            case Token.TOKEN_FUNCTION:
+		                FunctionToken func = (FunctionToken) t;
+		                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
+		                    size--;
+		                }
+		                size++;
+		                break;
+		        }
+	            for (int j = 0; j < pos.length; j++) {
+					if(size == j+1) {
+						pos[j] = i;
+					}
+				}
+	        }
+	        
+	        tArgs.add(tokens.subList(0, pos[0]+1));
+	        for (int i = 1; i < pos.length; i++) {
+        		tArgs.add(tokens.subList(pos[i-1]+1, pos[i]+1));
+			}
+	        tArgs.add(tokens.subList(pos[pos.length-1]+1, tokens.size()));
+    	}
+    	
+    	return tArgs;
+	}
+    
 }
