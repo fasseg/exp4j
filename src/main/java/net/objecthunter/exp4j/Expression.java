@@ -30,7 +30,7 @@ public class Expression {
 
     private final Token[] tokens;
 
-    private final Map<String, Double> variables;
+    private final Map<String, VariableValue> variables = new HashMap<String, VariableValue>();
 
     private final Set<String> userFunctionNames;
 
@@ -48,36 +48,40 @@ public class Expression {
 
     /**
      * Creates a new expression that is a copy of the existing one.
-     * 
+     *
      * @param existing the expression to copy
      */
     public Expression(final Expression existing) {
         this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
-        this.variables = new HashMap<String, Double>();
-        this.variables.putAll(existing.variables);
         this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
+        this.variables.putAll(existing.variables);
     }
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
-        this.variables = Constants.getBuiltinConstants();
         this.userFunctionNames = Collections.emptySet();
+        setVariables(Constants.getBuiltinConstants());
     }
 
     Expression(final Token[] tokens, Set<String> userFunctionNames) {
         this.tokens = tokens;
-        this.variables = Constants.getBuiltinConstants();
         this.userFunctionNames = userFunctionNames;
+        setVariables(Constants.getBuiltinConstants());
     }
 
     public Expression setVariable(final String name, final double value) {
-        return setVariable(name, Double.valueOf(value));
+        this.checkVariableName(name);
+        VariableValue variableValue = this.variables.get(name);
+        if (variableValue == null) {
+            variableValue = new VariableValue();
+            this.variables.put(name, variableValue);
+        }
+        variableValue.value = value;
+        return this;
     }
 
     public Expression setVariable(final String name, final Double value) {
-        this.checkVariableName(name);
-        this.variables.put(name, value);
-        return this;
+        return setVariable(name, value.doubleValue());
     }
 
     private void checkVariableName(String name) {
@@ -122,7 +126,7 @@ public class Expression {
                     break;
                 case Token.TOKEN_FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
-                    final int argsNum = func.getNumArguments(); 
+                    final int argsNum = func.getNumArguments();
                     if (argsNum > count) {
                         errors.add("Not enough arguments for '" + func.getName() + "'");
                     }
@@ -170,11 +174,11 @@ public class Expression {
                 stack.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
-                final Double value = this.variables.get(name);
+                final VariableValue value = this.variables.get(name);
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
-                stack.push(value);
+                stack.push(value.value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
                 final OperatorToken op = (OperatorToken) t;
                 final Operator operator = op.getOperator();
@@ -214,5 +218,12 @@ public class Expression {
             return arrays[size];
         }
         return new double[size];
+    }
+
+    /**
+     * This class is used to avoid Double instantiation for doubles in {@link Expression#variables} map
+     */
+    private static class VariableValue {
+        double value;
     }
 }
