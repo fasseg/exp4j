@@ -24,7 +24,11 @@ import net.objecthunter.exp4j.tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.Token;
 
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class ExpressionTest {
@@ -47,5 +51,30 @@ public class ExpressionTest {
         };
         Expression exp = new Expression(tokens);
         assertEquals(0d, exp.evaluate(), 0d);
+    }
+
+    @Test
+    @Ignore
+    // If Expression should be threads safe this test must pass
+    public void evaluateFamily() throws Exception {
+        final Expression e = new ExpressionBuilder("sin(x)")
+                .variable("x")
+                .build();
+        Executor executor = Executors.newFixedThreadPool(100);
+        for (int i = 0 ; i < 100000; i++) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    double x = Math.random();
+                    e.setVariable("x", x);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    assertEquals(Math.sin(x), e.evaluate(), 0f);
+                }
+            });
+        }
     }
 }
