@@ -40,7 +40,7 @@ public abstract class TestUtil {
     public static void assertFunctionToken(Token token, String name, int i) {
         assertEquals(token.getType(), Token.TOKEN_FUNCTION);
         FunctionToken f = (FunctionToken) token;
-        assertEquals(i, f.getFunction().getNumArguments());
+        assertEquals(i, f.getFunction().getMaxNumArguments(), f.getFunction().getMinNumArguments());
         assertEquals(name, f.getFunction().getName());
     }
 

@@ -23,24 +23,26 @@ public abstract class Function {
 
     protected final String name;
 
-    protected final int numArguments;
+    protected final int minArguments;
+    protected final int maxArguments;
 
     /**
      * Create a new Function with a given name and number of arguments
      * 
      * @param name the name of the Function
-     * @param numArguments the number of arguments the function takes
+     * @param minArguments the number of arguments the function takes
      */
-    public Function(String name, int numArguments) {
-        if (numArguments < 0) {
-            throw new IllegalArgumentException("The number of function arguments can not be less than 0 for '" +
+    public Function(String name, int minArguments, int maxArguments) {
+        if (minArguments < 0 || minArguments > maxArguments || maxArguments > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("The number of function arguments can not be less than 0 or more than " +Integer.MAX_VALUE+" for '" +
                     name + "'");
         }
         if (!isValidFunctionName(name)) {
             throw new IllegalArgumentException("The function name '" + name + "' is invalid");
         }
         this.name = name;
-        this.numArguments = numArguments;
+        this.minArguments = minArguments;
+        this.maxArguments = maxArguments;
 
     }
 
@@ -50,7 +52,26 @@ public abstract class Function {
      * @param name the name of the Function
      */
     public Function(String name) {
-        this(name, 1);
+        this(name, 1,1);
+    }
+
+
+    public Function(String name, int numArguments) {
+        this(name, numArguments,numArguments);
+    }
+
+    /**
+     * Get the number of arguments of a function with fixed arguments length.
+     * This function may be called only on functions with a fixed number of arguments and will throw an @UnsupportedOperationException otherwise.
+     * When using functions with variable arguments length use @getMaxNumArguments and @getMinNumArguments instead.
+     *
+     * @return the number of arguments
+     */
+    public int getNumArguments() {
+        if (minArguments != maxArguments) {
+            throw new UnsupportedOperationException("Calling getNumArgument() is not supported for var arg functions, please use getMaxNumArguments() or getMinNumArguments()");
+        }
+        return minArguments;
     }
 
     /**
@@ -67,9 +88,15 @@ public abstract class Function {
      * 
      * @return the number of arguments
      */
-    public int getNumArguments() {
-        return numArguments;
+    public int getMinNumArguments() {
+        return minArguments;
     }
+
+    public int getMaxNumArguments() {
+        return maxArguments;
+    }
+
+
 
     /**
      * Method that does the actual calculation of the function value given the arguments

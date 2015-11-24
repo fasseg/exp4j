@@ -112,8 +112,8 @@ public class Expression {
                     break;
                 case Token.TOKEN_FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
-                    final int argsNum = func.getNumArguments(); 
-                    if (argsNum > count) {
+                    final int argsNum = ((FunctionToken) tok).getArgumentCount();
+                    if (func.getMinNumArguments() > argsNum || func.getMaxNumArguments() < argsNum) {
                         errors.add("Not enough arguments for '" + func.getName() + "'");
                     }
                     if (argsNum > 1) {
@@ -182,12 +182,15 @@ public class Expression {
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
-                if (output.size() < func.getFunction().getNumArguments()) {
+                int functionArgs = func.getArgumentCount();
+                if (functionArgs < func.getFunction().getMinNumArguments() || functionArgs > func.getFunction().getMaxNumArguments() || output.isEmpty()) {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
                 }
                 /* collect the arguments from the stack */
-                double[] args = new double[func.getFunction().getNumArguments()];
-                for (int j = 0; j < func.getFunction().getNumArguments(); j++) {
+                double[] args = new double[functionArgs];
+
+
+                for (int j = 0; j < functionArgs ; j++) {
                     args[j] = output.pop();
                 }
                 output.push(func.getFunction().apply(this.reverseInPlace(args)));
