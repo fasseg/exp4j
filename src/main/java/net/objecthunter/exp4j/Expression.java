@@ -66,7 +66,7 @@ public class Expression {
 
     public Expression setVariable(final String name, final double value) {
         this.checkVariableName(name);
-        this.variables.put(name, value);
+        this.variables.put(name, Double.valueOf(value));
         return this;
     }
 
