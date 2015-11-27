@@ -211,14 +211,37 @@ public class Expression {
     
     /**
      * Convert the <code>Expression</code> back to string expression.
+     * <p>Calling this function returns exactly the same result as calling <tt>{@link #toString(boolean) toString}(false)</tt>, 
+     * so it uses the '*' sign in multiplications</p>
      * 
      * @return a string representation of the <code>Expression</code>.
      */
     public String toString() {
-    	return toString(Arrays.asList(tokens));
+    	return toString(false);
 	}
     
-    private String toString(List<Token> tokens) {
+	/**
+     * Convert the <code>Expression</code> back to string expression.
+     * <p>The argument <code>implicitMultiplication</code> determines whether to use the '*' sign
+     * in the returned string expression.
+     * Every occurrence of the '*' sign will be removed, except when there is a number to the right of it.</p>
+     * 
+     * @param  implicitMultiplication
+     * 		   if <code>true</code>, removes the '*' sign in multiplications (only when it's logical)
+     * 
+     * @return a string representation of the <code>Expression</code>.
+     */
+    public String toString(boolean implicitMultiplication) {
+    	String expression = toString(Arrays.asList(tokens), implicitMultiplication);
+    	
+    	if(implicitMultiplication) {
+    		expression = expression.replaceAll("\\*(\\D)", "$1");
+    	}
+    	
+    	return expression;
+	}
+    
+    private String toString(List<Token> tokens, boolean impMult) {
     	if(tokens.size() == 0)
     		return "";
     	Token token = tokens.get(tokens.size()-1);
@@ -240,19 +263,24 @@ public class Expression {
 					}
 				}
 				else {
-					leftTokens = operands.get(0);
-					rightTokens = operands.get(1);
+					if(operator.getSymbol().equals("*") && operands.get(1).size() == 1 && operands.get(0).get(operands.get(0).size()-1).getType() != Token.TOKEN_NUMBER) {
+						leftTokens = operands.get(1);
+						rightTokens = operands.get(0);
+					} else {
+						leftTokens = operands.get(0);
+						rightTokens = operands.get(1);
+					}
 				}
 				
 				boolean	parentheses_left = leftTokens.size() > 1 && leftTokens.get(leftTokens.size()-1).getType() != Token.TOKEN_FUNCTION,
 						parentheses_right = rightTokens.size() > 1 && rightTokens.get(rightTokens.size()-1).getType() != Token.TOKEN_FUNCTION;
 				if(parentheses_left && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
 					Operator leftOperator = ((OperatorToken) leftTokens.get(leftTokens.size()-1)).getOperator();
-					if(leftOperator.getNumOperands() == 1 && leftOperator.getSymbol().matches("\\+|-")) {
+					if(leftOperator.getNumOperands() == 1 && leftOperator.getSymbol().matches("\\+|-") && !operator.getSymbol().matches("\\+|-")) {
 						parentheses_left = true;
 					}
 					else {
-						if(leftOperator.getSymbol().matches("\\+|\\*")) {
+						if(leftOperator.getSymbol().matches("\\+|-|\\*")) {
 							parentheses_left = operator.getPrecedence() > leftOperator.getPrecedence();
 						}
 						else {
@@ -260,7 +288,7 @@ public class Expression {
 						}
 					}
 				}
-				if(parentheses_right  && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
+				if(parentheses_right && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_OPERATOR) {
 					Operator rightOperator = ((OperatorToken) rightTokens.get(rightTokens.size()-1)).getOperator();
 					if(rightOperator.getNumOperands() == 1 && rightOperator.getSymbol().matches("\\+|-")) {
 						parentheses_right = true;
@@ -275,31 +303,53 @@ public class Expression {
 					}
 				}
 				
-				if(!parentheses_left && leftTokens.size() == 1 && leftTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+				if(!parentheses_left && leftTokens.size() > 0 && leftTokens.get(leftTokens.size()-1).getType() == Token.TOKEN_NUMBER) {
 					parentheses_left = ((NumberToken) leftTokens.get(0)).getValue() < 0;
 				}
-				if(!parentheses_right && rightTokens.size() == 1 && rightTokens.get(0).getType() == Token.TOKEN_NUMBER) {
+				if(!parentheses_right && rightTokens.size() > 0 && rightTokens.get(rightTokens.size()-1).getType() == Token.TOKEN_NUMBER) {
 					parentheses_right = ((NumberToken) rightTokens.get(0)).getValue() < 0;
 				}
+				
+				String leftOperand = toString(leftTokens, impMult),
+						rightOperand = toString(rightTokens, impMult),
+						symbol = operator.getSymbol();
 						
-				return (parentheses_left?"(":"")+toString(leftTokens)+(parentheses_left?")":"")+operator.getSymbol()+(parentheses_right?"(":"")+toString(rightTokens)+(parentheses_right?")":"");
+				if(parentheses_left) {
+					leftOperand = "("+leftOperand+")";
+				}
+				if(parentheses_right) {
+					rightOperand = "("+rightOperand+")";
+				}
+				
+				return leftOperand + symbol + rightOperand;
 			
 			case Token.TOKEN_FUNCTION:
 				Function function = ((FunctionToken) token).getFunction();
 				
+				if(function.getName().equals("pow")) {
+					tokens.set(tokens.size()-1, new OperatorToken(Operators.getBuiltinOperator('^', 2)));
+					return toString(tokens, impMult);
+				}
+				
 				String stringArgs = "";
 				List<List<Token>> args = getTokensArguments(tokens.subList(0, tokens.size()-1), function.getNumArguments());
 				for (List<Token> argument : args) {
-					stringArgs += ", "+toString(argument);
+					stringArgs += ", "+toString(argument, impMult);
 				}
 				stringArgs = stringArgs.substring(2);
+				
 				return function.getName()+"("+stringArgs+")";
 				
 			case Token.TOKEN_VARIABLE:
 				return ((VariableToken) token).getName();
 				
 			case Token.TOKEN_NUMBER:
-				return String.valueOf(((NumberToken) token).getValue());
+				double num = ((NumberToken) token).getValue();
+				if(num != (long) num) {
+					return String.valueOf(num);
+				} else {
+					return String.valueOf((long) num);
+				}
 				
 			default:
 				throw new UnsupportedOperationException("The token type '"+token.getClass().getName()+"' is not supported in this function yet");
