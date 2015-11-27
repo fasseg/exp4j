@@ -18,11 +18,19 @@ package net.objecthunter.exp4j;
 import org.junit.Test;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 
@@ -62,4 +70,40 @@ public class ConcurrencyTests {
             assertEquals(correct2[i], (Double) results2[i].get(), 0d);
         }
     }
+
+    @Test
+    public void evaluateFamily() throws Exception {
+        final Expression e = new ExpressionBuilder("sin(x)")
+                .variable("x")
+                .build();
+
+        final ExecutorService executor = Executors.newFixedThreadPool(100);
+
+        final List<Double[]> results = new CopyOnWriteArrayList<Double[]>();
+
+        for (int i = 0 ; i < 100000; i++) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final double x = Math.random();
+                    final double expected = Math.sin(x);
+                    e.setVariable("x", x);
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    results.add(new Double[] {x, e.evaluate()});
+                }
+            });
+        }
+        executor.shutdown();
+        while (!executor.isShutdown()) {
+            Thread.sleep(50);
+        }
+        for (Double[] result : results) {
+            assertEquals(result[0], result[1], 0d);
+        }
+    }
+
 }
