@@ -44,17 +44,21 @@ public class PerformanceTest {
         System.out.print(sb.toString());
         sb.setLength(0);
 
-         int db = benchDouble();
+        long usedMemoryBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        int db = benchDouble();
+        long usedMemoryAfter =  Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         double dbRate = (double) db / (double) BENCH_TIME;
         fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j", dbRate, dbRate * 100 / mathRate);
         System.out.print(sb.toString());
         sb.setLength(0);
 
-         int js = benchJavaScript();
+        int js = benchJavaScript();
         double jsRate = (double) js / (double) BENCH_TIME;
         fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "JSR-223 (Java Script)", jsRate, jsRate * 100 / mathRate);
         fmt.format("+------------------------+---------------------------+--------------------------+%n");
         System.out.print(sb.toString());
+        float memUsed = (float) Math.max(0,usedMemoryAfter - usedMemoryBefore);
+        System.out.print("Memory used by exp4j calculation: " +  memUsed / 1048576f + " MB\n\n");
     }
 
     private int benchDouble() {
