@@ -84,6 +84,14 @@
                 <role>developer</role>
             </roles>
         </contributor>
+        <contributor>
+            <name>Sergey Solovyev</name>
+            <email>se.solovyev@gmail.com</email>
+            <url>http://se.solovyev.org/</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
     </contributors>
 
     <dependencies>
