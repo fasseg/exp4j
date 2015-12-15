@@ -181,32 +181,32 @@ public class Expression {
                 }
                 output.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
-                OperatorToken op = (OperatorToken) t;
-                if (output.size() < op.getOperator().getNumOperands()) {
-                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getOperator().getSymbol() + "' operator");
+                Operator op = ((OperatorToken) t).getOperator();
+                if (output.size() < op.getNumOperands()) {
+                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getSymbol() + "' operator");
                 }
-                if (op.getOperator().getNumOperands() == 2) {
+                if (op.getNumOperands() == 2) {
                     /* pop the operands and push the result of the operation */
                     double rightArg = output.pop();
                     double leftArg = output.pop();
-                    output.push(op.getOperator().apply(leftArg, rightArg));
-                } else if (op.getOperator().getNumOperands() == 1) {
+                    output.push(op.apply(leftArg, rightArg));
+                } else if (op.getNumOperands() == 1) {
                     /* pop the operand and push the result of the operation */
                     double arg = output.pop();
-                    output.push(op.getOperator().apply(arg));
+                    output.push(op.apply(arg));
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
-                FunctionToken func = (FunctionToken) t;
-                final int numArguments = func.getFunction().getNumArguments();
+                Function func = ((FunctionToken) t).getFunction();
+                final int numArguments = func.getNumArguments();
                 if (output.size() < numArguments) {
-                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
+                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getName() + "' function");
                 }
                 /* collect the arguments from the stack */
                 double[] args = new double[numArguments];
                 for (int j = numArguments - 1; j >= 0; j--) {
                     args[j] = output.pop();
                 }
-                output.push(func.getFunction().apply(args));
+                output.push(func.apply(args));
             }
         }
         if (output.size() > 1) {
@@ -229,32 +229,32 @@ public class Expression {
                 }
                 output.push(value);
             } else if (t.getType() == Token.TOKEN_OPERATOR) {
-                OperatorToken op = (OperatorToken) t;
-                if (output.size() < op.getOperator().getNumOperands()) {
-                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getOperator().getSymbol() + "' operator");
+                Operator op = ((OperatorToken) t).getOperator();
+                if (output.size() < op.getNumOperands()) {
+                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getSymbol() + "' operator");
                 }
-                if (op.getOperator().getNumOperands() == 2) {
+                if (op.getNumOperands() == 2) {
                     /* pop the operands and push the result of the operation */
                     Number rightArg = output.pop();
                     Number leftArg = output.pop();
-                    output.push(op.getOperator().applyTypeSave(leftArg, rightArg));
-                } else if (op.getOperator().getNumOperands() == 1) {
+                    output.push(op.applyTypeSave(leftArg, rightArg));
+                } else if (op.getNumOperands() == 1) {
                     /* pop the operand and push the result of the operation */
                     Number arg = output.pop();
-                    output.push(op.getOperator().applyTypeSave(arg));
+                    output.push(op.applyTypeSave(arg));
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
-                FunctionToken func = (FunctionToken) t;
-                final int numArguments = func.getFunction().getNumArguments();
+                Function func = ((FunctionToken) t).getFunction();
+                final int numArguments = func.getNumArguments();
                 if (output.size() < numArguments) {
-                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
+                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getName() + "' function");
                 }
                 /* collect the arguments from the stack */
                 Number[] args = new Number[numArguments];
                 for (int j = numArguments - 1; j >= 0; j--) {
                     args[j] = output.pop();
                 }
-                output.push(func.getFunction().applyTypeSave(args));
+                output.push(func.applyTypeSave(args));
             }
         }
         if (output.size() > 1) {
