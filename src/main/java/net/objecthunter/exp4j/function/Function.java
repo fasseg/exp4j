@@ -16,6 +16,8 @@
 
 package net.objecthunter.exp4j.function;
 
+import net.objecthunter.exp4j.TypeUtil;
+
 /**
  * A class representing a Function which can be used in an expression
  */
@@ -78,6 +80,14 @@ public abstract class Function {
      * @return the result of the function evaluation
      */
     public abstract double apply(double... args);
+
+    public Number applyTypeSave(Number... args) {
+        double result = apply(TypeUtil.toDouble(args));
+        if (TypeUtil.isAllIntegral(args)) {
+            return (long)result;
+        }
+        return result;
+    }
 
     /**
      * Get the set of characters which are allowed for use in Function names.

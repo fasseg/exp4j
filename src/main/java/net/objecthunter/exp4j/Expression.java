@@ -216,14 +216,14 @@ public class Expression {
     }
 
     public Number evaluateTypeSave() {
-        final ArrayStack output = new ArrayStack();
+        final Deque<Number> output = new ArrayDeque<Number>();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
             if (t.getType() == Token.TOKEN_NUMBER) {
                 output.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
-                final Double value = (Double) this.variables.get(name);
+                final Number value = this.variables.get(name);
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
@@ -235,13 +235,13 @@ public class Expression {
                 }
                 if (op.getOperator().getNumOperands() == 2) {
                     /* pop the operands and push the result of the operation */
-                    double rightArg = output.pop();
-                    double leftArg = output.pop();
-                    output.push(op.getOperator().apply(leftArg, rightArg));
+                    Number rightArg = output.pop();
+                    Number leftArg = output.pop();
+                    output.push(op.getOperator().applyTypeSave(leftArg, rightArg));
                 } else if (op.getOperator().getNumOperands() == 1) {
                     /* pop the operand and push the result of the operation */
-                    double arg = output.pop();
-                    output.push(op.getOperator().apply(arg));
+                    Number arg = output.pop();
+                    output.push(op.getOperator().applyTypeSave(arg));
                 }
             } else if (t.getType() == Token.TOKEN_FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
@@ -250,11 +250,11 @@ public class Expression {
                     throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
                 }
                 /* collect the arguments from the stack */
-                double[] args = new double[numArguments];
+                Number[] args = new Number[numArguments];
                 for (int j = numArguments - 1; j >= 0; j--) {
                     args[j] = output.pop();
                 }
-                output.push(func.getFunction().apply(args));
+                output.push(func.getFunction().applyTypeSave(args));
             }
         }
         if (output.size() > 1) {

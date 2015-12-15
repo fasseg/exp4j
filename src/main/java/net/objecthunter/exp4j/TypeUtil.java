@@ -15,10 +15,29 @@
 */
 package net.objecthunter.exp4j;
 
+import java.math.BigInteger;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class TypeUtil {
+
+    public static boolean isAllIntegral(Number ... value) {
+        for (Number v : value) {
+            if (!(v instanceof Long || v instanceof Integer || v instanceof BigInteger)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static double[] toDouble(Number ... values) {
+        double[] result = new double[values.length];
+        int i = 0;
+        for (Number v : values) {
+            result[i++] = v.doubleValue();
+        }
+        return result;
+    }
 
     public static void toDouble(Map<?, Number> values) {
         for (Entry<?, Number> entry : values.entrySet()) {
