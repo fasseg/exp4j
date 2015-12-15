@@ -27,12 +27,12 @@ public class Expression {
 
     private final Token[] tokens;
 
-    private final Map<String, Double> variables;
+    private final Map<String, Number> variables;
 
     private final Set<String> userFunctionNames;
 
-    private static Map<String, Double> createDefaultVariables() {
-        final Map<String, Double> vars = new HashMap<String, Double>(4);
+    private static Map<String, Number> createDefaultVariables() {
+        final Map<String, Number> vars = new HashMap<String, Number>(4);
         vars.put("pi", Math.PI);
         vars.put("π", Math.PI);
         vars.put("φ", 1.61803398874d);
@@ -47,7 +47,7 @@ public class Expression {
      */
     public Expression(final Expression existing) {
     	this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
-    	this.variables = new HashMap<String,Double>();
+    	this.variables = new HashMap<String, Number>();
     	this.variables.putAll(existing.variables);
     	this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
     }
@@ -65,8 +65,12 @@ public class Expression {
     }
 
     public Expression setVariable(final String name, final double value) {
+        return setVariableTypeSave(name, Double.valueOf(value));
+    }
+
+    public Expression setVariableTypeSave(final String name, final Number value) {
         this.checkVariableName(name);
-        this.variables.put(name, Double.valueOf(value));
+        this.variables.put(name, value);
         return this;
     }
 
@@ -76,9 +80,9 @@ public class Expression {
         }
     }
 
-    public Expression setVariables(Map<String, Double> variables) {
-        for (Map.Entry<String, Double> v : variables.entrySet()) {
-            this.setVariable(v.getKey(), v.getValue());
+    public Expression setVariables(Map<String, ? extends Number> variables) {
+        for (Map.Entry<String, ? extends Number> v : variables.entrySet()) {
+            this.setVariableTypeSave(v.getKey(), v.getValue());
         }
         return this;
     }
@@ -152,7 +156,18 @@ public class Expression {
         });
     }
 
+    public Future<Number> evaluateTypeSaveAsync(ExecutorService executor) {
+        return executor.submit(new Callable<Number>() {
+            @Override
+            public Number call() throws Exception {
+                return evaluateTypeSave();
+            }
+        });
+    }
+
     public double evaluate() {
+        // revert to old behavior of pure double calculations for performance
+        TypeUtil.toDouble(variables);
         final ArrayStack output = new ArrayStack();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
@@ -160,7 +175,55 @@ public class Expression {
                 output.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
-                final Double value = this.variables.get(name);
+                final Double value = (Double)this.variables.get(name);
+                if (value == null) {
+                    throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
+                }
+                output.push(value);
+            } else if (t.getType() == Token.TOKEN_OPERATOR) {
+                OperatorToken op = (OperatorToken) t;
+                if (output.size() < op.getOperator().getNumOperands()) {
+                    throw new IllegalArgumentException("Invalid number of operands available for '" + op.getOperator().getSymbol() + "' operator");
+                }
+                if (op.getOperator().getNumOperands() == 2) {
+                    /* pop the operands and push the result of the operation */
+                    double rightArg = output.pop();
+                    double leftArg = output.pop();
+                    output.push(op.getOperator().apply(leftArg, rightArg));
+                } else if (op.getOperator().getNumOperands() == 1) {
+                    /* pop the operand and push the result of the operation */
+                    double arg = output.pop();
+                    output.push(op.getOperator().apply(arg));
+                }
+            } else if (t.getType() == Token.TOKEN_FUNCTION) {
+                FunctionToken func = (FunctionToken) t;
+                final int numArguments = func.getFunction().getNumArguments();
+                if (output.size() < numArguments) {
+                    throw new IllegalArgumentException("Invalid number of arguments available for '" + func.getFunction().getName() + "' function");
+                }
+                /* collect the arguments from the stack */
+                double[] args = new double[numArguments];
+                for (int j = numArguments - 1; j >= 0; j--) {
+                    args[j] = output.pop();
+                }
+                output.push(func.getFunction().apply(args));
+            }
+        }
+        if (output.size() > 1) {
+            throw new IllegalArgumentException("Invalid number of items on the output queue. Might be caused by an invalid number of arguments for a function.");
+        }
+        return output.pop();
+    }
+
+    public Number evaluateTypeSave() {
+        final ArrayStack output = new ArrayStack();
+        for (int i = 0; i < tokens.length; i++) {
+            Token t = tokens[i];
+            if (t.getType() == Token.TOKEN_NUMBER) {
+                output.push(((NumberToken) t).getValue());
+            } else if (t.getType() == Token.TOKEN_VARIABLE) {
+                final String name = ((VariableToken) t).getName();
+                final Double value = (Double) this.variables.get(name);
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
