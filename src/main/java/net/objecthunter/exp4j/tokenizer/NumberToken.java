@@ -41,4 +41,9 @@ public final class NumberToken extends Token {
     public double getValue() {
         return value;
     }
+
+    public String toString() {
+        return String.format("const %s", getValue());
+    }
+
 }

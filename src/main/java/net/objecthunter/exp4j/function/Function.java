@@ -131,4 +131,9 @@ public abstract class Function {
         }
         return true;
     }
+
+    public String toString() {
+        return String.format("%s-Function(%d)", getName(), getNumArguments());
+    }
+
 }

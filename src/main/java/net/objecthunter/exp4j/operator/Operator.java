@@ -145,4 +145,11 @@ public abstract class Operator {
     public int getNumOperands() {
         return numOperands;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s-Operator(l=%s, %d, %d)",
+                getSymbol(), isLeftAssociative() ? 'l' : 'r', getNumOperands(), getPrecedence());
+    }
+
 }

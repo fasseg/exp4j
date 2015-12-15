@@ -37,4 +37,10 @@ public class VariableToken extends Token {
         super(TOKEN_VARIABLE);
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s-Variable", getName());
+    }
+
 }
