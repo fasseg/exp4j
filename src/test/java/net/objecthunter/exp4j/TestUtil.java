@@ -53,7 +53,7 @@ public abstract class TestUtil {
 
     public static void assertNumberToken(Token tok, double v) {
         assertEquals(tok.getType(), Token.TOKEN_NUMBER);
-        Assert.assertEquals(v, ((NumberToken) tok).getValue(), 0d);
+        Assert.assertEquals(v, ((NumberToken) tok).getValue().doubleValue(), 0d);
     }
 
     public static void assertFunctionSeparatorToken(Token t) {

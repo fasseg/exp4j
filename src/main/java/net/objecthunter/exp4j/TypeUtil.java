@@ -30,6 +30,14 @@ public class TypeUtil {
         return true;
     }
 
+    public static Number parseConstant(String value) {
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException nfe) {
+            return Double.valueOf(value);
+        }
+    }
+
     public static double[] toDouble(Number ... values) {
         double[] result = new double[values.length];
         int i = 0;

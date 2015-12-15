@@ -225,7 +225,7 @@ public class Tokenizer {
         int len = 1;
         this.pos++;
         if (isEndOfExpression(offset + len)) {
-            lastToken = new NumberToken(Double.parseDouble(String.valueOf(firstChar)));
+            lastToken = new NumberToken(Character.digit(firstChar, 10));
             return lastToken;
         }
         while (!isEndOfExpression(offset + len) &&

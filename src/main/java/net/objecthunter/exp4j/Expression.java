@@ -172,7 +172,7 @@ public class Expression {
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
             if (t.getType() == Token.TOKEN_NUMBER) {
-                output.push(((NumberToken) t).getValue());
+                output.push(((NumberToken) t).getValue().doubleValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
                 final Double value = (Double)this.variables.get(name);
