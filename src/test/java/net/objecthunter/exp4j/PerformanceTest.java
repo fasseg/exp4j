@@ -44,13 +44,19 @@ public class PerformanceTest {
         System.out.print(sb.toString());
         sb.setLength(0);
 
-         int db = benchDouble();
+        int db = benchDouble();
         double dbRate = (double) db / (double) BENCH_TIME;
-        fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j", dbRate, dbRate * 100 / mathRate);
+        fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j (double only)", dbRate, dbRate * 100 / mathRate);
         System.out.print(sb.toString());
         sb.setLength(0);
 
-         int js = benchJavaScript();
+        int ts = benchTypeSave();
+        double tsRate = (double) ts / (double) BENCH_TIME;
+        fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "exp4j (int&double mix)", tsRate, tsRate * 100 / mathRate);
+        System.out.print(sb.toString());
+        sb.setLength(0);
+
+        int js = benchJavaScript();
         double jsRate = (double) js / (double) BENCH_TIME;
         fmt.format("| %-22s | %25.2f | %22.2f %% |%n", "JSR-223 (Java Script)", jsRate, jsRate * 100 / mathRate);
         fmt.format("+------------------------+---------------------------+--------------------------+%n");
@@ -70,6 +76,25 @@ public class PerformanceTest {
             expression.setVariable("x", rnd.nextDouble());
             expression.setVariable("y", rnd.nextDouble());
             val = expression.evaluate();
+            count++;
+        }
+        double rate = count / timeout;
+        return count;
+    }
+
+    private int benchTypeSave() {
+        final Expression expression = new ExpressionBuilder(EXPRESSION)
+                .variables("x", "y")
+                .build();
+        double val;
+        Random rnd = new Random();
+        long timeout = BENCH_TIME;
+        long time = System.currentTimeMillis() + (1000 * timeout);
+        int count = 0;
+        while (time > System.currentTimeMillis()) {
+            expression.setVariable("x", rnd.nextLong());
+            expression.setVariable("y", rnd.nextDouble());
+            val = expression.evaluateTypeSave().doubleValue();
             count++;
         }
         double rate = count / timeout;
