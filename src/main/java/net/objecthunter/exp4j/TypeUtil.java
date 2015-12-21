@@ -31,9 +31,18 @@ public class TypeUtil {
     }
 
     public static Number parseConstant(String value) {
+        final String v = value.toLowerCase();
+        final boolean hex = v.startsWith("0x");
         try {
+            if (hex) {
+                return Long.valueOf(value.substring(2), 16);
+            }
             return Long.valueOf(value);
         } catch (NumberFormatException nfe) {
+            if (hex && -1 == v.lastIndexOf('p')) {
+                // add binary exponent declaration if missing
+                return Double.valueOf(value + "p0");
+            }
             return Double.valueOf(value);
         }
     }

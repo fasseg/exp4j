@@ -221,22 +221,33 @@ public class Tokenizer {
     }
 
     private Token parseNumberToken(final char firstChar) {
-        final int offset = this.pos;
+        final int offset = pos;
         int len = 1;
-        this.pos++;
+        pos++;
         if (isEndOfExpression(offset + len)) {
             lastToken = new NumberToken(Character.digit(firstChar, 10));
             return lastToken;
         }
-        while (!isEndOfExpression(offset + len) &&
-                isNumeric(expression[offset + len], expression[offset + len - 1] == 'e' ||
-                        expression[offset + len - 1] == 'E')) {
+        boolean hex = '0' == firstChar && ('x' == expression[offset + len] || 'X' == expression[offset + len]);
+        if (hex) {
+            // consume the leading hexadecimal number marker 0x
             len++;
-            this.pos++;
+            pos++;
         }
-        // check if the e is at the end
-        if (expression[offset + len - 1] == 'e' || expression[offset + len - 1] == 'E') {
-            // since the e is at the end it's not part of the number and a rollback is necessary
+        boolean exponent = false;
+        while (!isEndOfExpression(offset + len) && isNumeric(expression[offset + len], hex, exponent)) {
+            char current = expression[offset + len];
+            exponent = !hex && ('e' == current || 'E' == current) || hex && ('p' == current || 'P' == current);
+            if (exponent) {
+                // Exponent is always decimal! see Double.valueOf(String)
+                hex = false;
+            }
+            len++;
+            pos++;
+        }
+        // check if the letter is at the end
+        if (exponent || hex && len == 2) {
+            // since the letter is at the end it's not part of the number and a rollback is necessary
             len--;
             pos--;
         }
@@ -244,9 +255,11 @@ public class Tokenizer {
         return lastToken;
     }
 
-    private static boolean isNumeric(char ch, boolean lastCharE) {
-        return Character.isDigit(ch) || ch == '.' || ch == 'e' || ch == 'E' ||
-                (lastCharE && (ch == '-' || ch == '+'));
+    private static boolean isNumeric(char ch, boolean hex, boolean exponent) {
+        return Character.isDigit(ch) || ch == '.'
+                || !hex && (ch == 'e' || ch == 'E')
+                || hex && ('a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F' || ch == 'p' || ch == 'P')
+                || exponent && (ch == '-' || ch == '+');
     }
 
     public static boolean isAlphabetic(int codePoint) {
