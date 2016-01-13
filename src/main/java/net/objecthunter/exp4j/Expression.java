@@ -77,12 +77,18 @@ public class Expression {
     }
 
     public Expression setVariables(Map<String, Double> variables) {
+    	this.variables.clear();
         for (Map.Entry<String, Double> v : variables.entrySet()) {
             this.setVariable(v.getKey(), v.getValue());
         }
         return this;
     }
 
+    public Expression clearVariables(){
+        this.variables.clear();
+        return this;
+    }
+    
     public ValidationResult validate(boolean checkVariablesSet) {
         final List<String> errors = new ArrayList<String>(0);
         if (checkVariablesSet) {
