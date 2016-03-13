@@ -22,6 +22,7 @@ import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
+import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 /**
  * Factory class for {@link Expression} instances. This class is the main API entrypoint. Users should create new
@@ -111,10 +112,15 @@ public class ExpressionBuilder {
         return this;
     }
 
+    private Tokenizer operatorChecker = null;
+    
     private void checkOperatorSymbol(Operator op) {
+    	if (operatorChecker == null) {
+    		operatorChecker = createTokenizer();
+    	}
         String name = op.getSymbol();
         for (char ch : name.toCharArray()) {
-            if (!Operator.isAllowedOperatorChar(ch)) {
+            if (! operatorChecker.isAllowedOperatorChar(ch)) {
                 throw new IllegalArgumentException("The operator symbol '" + name + "' is invalid");
             }
         }
@@ -163,8 +169,12 @@ public class ExpressionBuilder {
                 throw new IllegalArgumentException("A variable can not have the same name as a function [" + var + "]");
             }
         }
-        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames),
+        return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators, this.variableNames, createTokenizer()),
                 this.userFunctions.keySet());
+    }
+    
+    protected Tokenizer createTokenizer() {
+        return new Tokenizer(expression, userFunctions, userOperators, variableNames);
     }
 
 }
