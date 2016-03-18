@@ -19,6 +19,7 @@ package net.objecthunter.exp4j;
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;

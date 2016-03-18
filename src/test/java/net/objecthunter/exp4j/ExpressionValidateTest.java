@@ -20,6 +20,10 @@ import net.objecthunter.exp4j.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Date;
+
+import static org.junit.Assert.assertTrue;
+
 
 public class ExpressionValidateTest {
 
@@ -270,6 +274,37 @@ public class ExpressionValidateTest {
 			.build();
 		ValidationResult result = exp.validate(false);
 		Assert.assertFalse(result.isValid());
+	}
+
+	// Thanks go out to werwiesel for reporting the issue
+	// https://github.com/fasseg/exp4j/issues/59
+	@Test
+	public void testNoArgFunctionValidation() throws Exception {
+		Function now = new Function("now", 0) {
+			@Override
+			public double apply(double... args) {
+				return (double) new Date().getTime();
+			}
+		};
+		Expression e = new ExpressionBuilder("14*now()")
+				.function(now)
+				.build();
+		assertTrue(e.validate().isValid());
+
+		e = new ExpressionBuilder("now()")
+				.function(now)
+				.build();
+		assertTrue(e.validate().isValid());
+
+		e = new ExpressionBuilder("sin(now())")
+				.function(now)
+				.build();
+		assertTrue(e.validate().isValid());
+
+		e = new ExpressionBuilder("sin(now()) % 14")
+				.function(now)
+				.build();
+		assertTrue(e.validate().isValid());
 	}
 
 }

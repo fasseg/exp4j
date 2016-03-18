@@ -119,6 +119,10 @@ public class Expression {
                     if (argsNum > 1) {
                         count -= argsNum - 1;
                     }
+                    if (argsNum == 0) {
+                        // see https://github.com/fasseg/exp4j/issues/59
+                        count++;
+                    }
                     break;
                 case Token.TOKEN_OPERATOR:
                     Operator op = ((OperatorToken) tok).getOperator();
