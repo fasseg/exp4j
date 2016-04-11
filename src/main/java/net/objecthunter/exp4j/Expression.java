@@ -118,8 +118,7 @@ public class Expression {
                     }
                     if (argsNum > 1) {
                         count -= argsNum - 1;
-                    }
-                    if (argsNum == 0) {
+                    } else if (argsNum == 0) {
                         // see https://github.com/fasseg/exp4j/issues/59
                         count++;
                     }
