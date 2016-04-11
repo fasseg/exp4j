@@ -73,8 +73,6 @@
         <release version="0.4.6" description="Feature release">
             <action dev="alexeyegorov" type="add">Added signum function</action>
             <action dev="leogtzr" type="add">Added numerical constants</action>
-        </release>
-        <release version="0.4.7" description="Bugfix release">
             <action dev="fas" types="fix">fix for https://github.com/fasseg/exp4j/issues/59</action>
             <action dev="serso" types="fix">Avoiding Auto-Boxing/Unboxing for performance reasons</action>
             <action dev="serso" types="fix">Removed uneccessary argument array reversal</action>
