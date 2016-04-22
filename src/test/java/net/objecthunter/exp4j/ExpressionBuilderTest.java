@@ -2632,15 +2632,6 @@ public class ExpressionBuilderTest {
             }
         };
 
-        double result2 = new ExpressionBuilder("3*++-2")
-                .build()
-                .evaluate();
-
-        double expected2 = -6d;
-        assertEquals(expected2, result2, 0d);
-
-        System.out.println("\nChecking second expression\n");
-
         double result = new ExpressionBuilder("3!+2")
                 .operator(factorial)
                 .build()
