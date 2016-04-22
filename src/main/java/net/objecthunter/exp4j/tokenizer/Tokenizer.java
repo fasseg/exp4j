@@ -209,12 +209,21 @@ public class Tokenizer {
             op = this.userOperators.get(symbol);
         }
         if (op == null && symbol.length() == 1) {
-            final int argc =
-                    (lastToken == null ||
-                    lastToken.getType() == Token.TOKEN_OPERATOR ||
-                    lastToken.getType() == Token.TOKEN_PARENTHESES_OPEN ||
-                    lastToken.getType() == Token.TOKEN_SEPARATOR)
-                            ? 1 : 2;
+            int argc = 2;
+            if (lastToken == null) {
+                argc = 1;
+            } else {
+                int lastTokenType = lastToken.getType();
+                if (lastTokenType == Token.TOKEN_PARENTHESES_OPEN || lastTokenType == Token.TOKEN_SEPARATOR) {
+                    argc = 1;
+                } else if (lastTokenType == Token.TOKEN_OPERATOR) {
+                    final Operator lastOp = ((OperatorToken) lastToken).getOperator();
+                    if (lastOp.getNumOperands() == 2 || (lastOp.getNumOperands() == 1 && !lastOp.isLeftAssociative())) {
+                        argc = 1;
+                    }
+                }
+
+            }
             op = Operators.getBuiltinOperator(symbol.charAt(0), argc);
         }
         return op;
