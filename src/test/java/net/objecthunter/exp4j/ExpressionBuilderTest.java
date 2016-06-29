@@ -1257,7 +1257,7 @@ public class ExpressionBuilderTest {
         assertTrue(expected == e.evaluate());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testVarname1() throws Exception {
         String expr = "12.23 * foo.bar";
         Expression e = new ExpressionBuilder(expr)
@@ -2609,6 +2609,17 @@ public class ExpressionBuilderTest {
                 .build()
                 .evaluate();
         assertEquals(-2d, result, 0d);
+    }
+
+    // Test for https://github.com/fasseg/exp4j/issues/65
+    @Test
+    public void testVariableWithDot() throws Exception {
+        double result = new ExpressionBuilder("2*SALARY.Basic")
+                .variable("SALARY.Basic")
+                .build()
+                .setVariable("SALARY.Basic", 1.5d)
+                .evaluate();
+        assertEquals(3d, result, 0d);
     }
 
     @Test

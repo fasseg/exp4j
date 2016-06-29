@@ -135,16 +135,16 @@ public class Tokenizer {
 
     private Token parseFunctionOrVariable() {
         final int offset = this.pos;
+        int testPos;
         int lastValidLen = 1;
         Token lastValidToken = null;
         int len = 1;
         if (isEndOfExpression(offset)) {
             this.pos++;
         }
-        while (!isEndOfExpression(offset + len - 1) &&
-                (isAlphabetic(expression[offset + len - 1]) ||
-                        Character.isDigit(expression[offset + len - 1]) ||
-                        expression[offset + len - 1] == '_')) {
+        testPos = offset + len - 1;
+        while (!isEndOfExpression(testPos) &&
+                isVariableOrFunctionCharacter(expression[testPos])) {
             String name = new String(expression, offset, len);
             if (variableNames != null && variableNames.contains(name)) {
                 lastValidLen = len;
@@ -157,6 +157,7 @@ public class Tokenizer {
                 }
             }
             len++;
+            testPos = offset + len - 1;
         }
         if (lastValidToken == null) {
             throw new UnknownFunctionOrVariableException(new String(expression), pos, len);
@@ -260,6 +261,13 @@ public class Tokenizer {
 
     public static boolean isAlphabetic(int codePoint) {
         return Character.isLetter(codePoint);
+    }
+
+    public static boolean isVariableOrFunctionCharacter(int codePoint) {
+        return isAlphabetic(codePoint) ||
+                Character.isDigit(codePoint) ||
+                codePoint == '_' ||
+                codePoint == '.';
     }
 
     private boolean isEndOfExpression(int offset) {
