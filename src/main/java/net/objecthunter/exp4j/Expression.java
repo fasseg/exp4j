@@ -15,13 +15,27 @@
  */
 package net.objecthunter.exp4j;
 
-import java.util.*;
-import java.util.concurrent.*;
-
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
-import net.objecthunter.exp4j.tokenizer.*;
+import net.objecthunter.exp4j.tokenizer.FunctionToken;
+import net.objecthunter.exp4j.tokenizer.NumberToken;
+import net.objecthunter.exp4j.tokenizer.OperatorToken;
+import net.objecthunter.exp4j.tokenizer.Token;
+import net.objecthunter.exp4j.tokenizer.VariableToken;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class Expression {
 
@@ -81,6 +95,15 @@ public class Expression {
             this.setVariable(v.getKey(), v.getValue());
         }
         return this;
+    }
+
+    public Set<String> getVariableTokenNames() {
+        Set<String> variables = new TreeSet<String>();
+        for (Token t: tokens) {
+            if (t.getType() == Token.TOKEN_VARIABLE)
+                variables.add(((VariableToken)t).getName());
+        }
+        return variables;
     }
 
     public ValidationResult validate(boolean checkVariablesSet) {
