@@ -19,10 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operators;
-import net.objecthunter.exp4j.tokenizer.FunctionToken;
-import net.objecthunter.exp4j.tokenizer.NumberToken;
-import net.objecthunter.exp4j.tokenizer.OperatorToken;
-import net.objecthunter.exp4j.tokenizer.Token;
+import net.objecthunter.exp4j.tokenizer.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,6 +48,18 @@ public class ExpressionTest {
         };
         Expression exp = new Expression(tokens);
         assertEquals(0d, exp.evaluate(), 0d);
+    }
+
+    @Test
+    public void testGetVariableNames1() throws Exception{
+        Token[] tokens = new Token[] {
+                new VariableToken("a"),
+                new VariableToken("b"),
+                new OperatorToken(Operators.getBuiltinOperator('+', 2))
+        };
+        Expression exp = new Expression(tokens);
+
+        assertEquals(2, exp.getVariableNames().size());
     }
 
     @Test

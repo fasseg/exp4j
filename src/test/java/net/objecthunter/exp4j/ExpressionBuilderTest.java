@@ -19,9 +19,9 @@ package net.objecthunter.exp4j;
 import static java.lang.Math.*;
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -2650,6 +2650,28 @@ public class ExpressionBuilderTest {
 
         double expected = 8d;
         assertEquals(expected, result, 0d);
+    }
+
+    @Test
+    public void testGetVariableNames1() throws Exception{
+        Expression e = new ExpressionBuilder("b*a-9.24c")
+                .variables("b", "a", "c")
+                .build();
+        Set<String> variableNames = e.getVariableNames();
+        assertTrue(variableNames.contains("a"));
+        assertTrue(variableNames.contains("b"));
+        assertTrue(variableNames.contains("c"));
+    }
+
+    @Test
+    public void testGetVariableNames2() throws Exception{
+        Expression e = new ExpressionBuilder("log(bar)-FOO.s/9.24c")
+                .variables("bar", "FOO.s", "c")
+                .build();
+        Set<String> variableNames = e.getVariableNames();
+        assertTrue(variableNames.contains("bar"));
+        assertTrue(variableNames.contains("FOO.s"));
+        assertTrue(variableNames.contains("c"));
     }
 
     @Test(expected = IllegalArgumentException.class)

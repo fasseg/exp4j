@@ -97,9 +97,9 @@ public class Expression {
         return this;
     }
 
-    public Set<String> getVariableTokenNames() {
-        Set<String> variables = new TreeSet<String>();
-        for (Token t: tokens) {
+    public Set<String> getVariableNames() {
+        final Set<String> variables = new HashSet<String>();
+        for (final Token t: tokens) {
             if (t.getType() == Token.TOKEN_VARIABLE)
                 variables.add(((VariableToken)t).getName());
         }
