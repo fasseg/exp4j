@@ -19,6 +19,7 @@ import static net.objecthunter.exp4j.TestUtil.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -550,5 +551,52 @@ public class TokenizerTest {
         assertCloseParenthesesToken(tokenizer.nextToken());
 
         assertFalse(tokenizer.hasNext());
+    }
+    
+    @Test
+    public void testAllowUndefinedVariablesFalse() {
+    	final Tokenizer tokenizer = new Tokenizer("a * b", null, null, Collections.singleton("a"));
+    	tokenizer.allowUndefinedVariables(false);
+    	
+    	assertTrue(tokenizer.hasNext());
+    	Token tok1 = tokenizer.nextToken();
+    	assertTrue(tok1 instanceof VariableToken);
+    	assertEquals("a", ((VariableToken) tok1).getName());
+    	String[] undefinedVariables = tokenizer.getUndefinedVariables();
+		assertFalse(undefinedVariables != null && undefinedVariables.length > 0);
+
+    	assertTrue(tokenizer.hasNext());
+    	assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+    	
+    	assertTrue(tokenizer.hasNext());
+    	try {
+			tokenizer.nextToken();
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+    }
+
+    @Test
+    public void testAllowUndefinedVariablesTrue() {
+    	final Tokenizer tokenizer = new Tokenizer("a * b", null, null, Collections.singleton("a"));
+    	tokenizer.allowUndefinedVariables(true);
+
+        assertTrue(tokenizer.hasNext());
+        Token tok1 = tokenizer.nextToken();
+		assertTrue(tok1 instanceof VariableToken);
+        assertEquals("a", ((VariableToken) tok1).getName());
+		assertEquals(0, tokenizer.getUndefinedVariables().length);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+
+        assertTrue(tokenizer.hasNext());
+        Token tok3 = tokenizer.nextToken();
+        assertTrue(tok3 instanceof VariableToken);
+        assertEquals("b", ((VariableToken) tok3).getName());
+        String[] undefinedVariables = tokenizer.getUndefinedVariables();
+        assertEquals(1, undefinedVariables.length);
+        assertEquals("b", undefinedVariables[0]);
     }
 }

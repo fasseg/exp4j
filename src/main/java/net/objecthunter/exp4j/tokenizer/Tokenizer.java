@@ -15,6 +15,8 @@
  */
 package net.objecthunter.exp4j.tokenizer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,9 +88,9 @@ public class Tokenizer {
             return parseParentheses(true);
         } else if (isCloseParentheses(ch)) {
             return parseParentheses(false);
-        } else if (Operator.isAllowedOperatorChar(ch)) {
+        } else if (isAllowedOperatorChar(ch)) {
             return parseOperatorToken(ch);
-        } else if (isAlphabetic(ch) || ch == '_') {
+        } else if (isVariableOrFunctionStartChar(ch)) {
             // parse the name which can be a setVariable or a function
             if (lastToken != null &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
@@ -105,7 +107,20 @@ public class Tokenizer {
         throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
-    private Token parseArgumentSeparatorToken(char ch) {
+	protected boolean isVariableOrFunctionStartChar(char ch) {
+		return isAlphabetic(ch) || ch == '_';
+	}
+
+    /**
+     * The set of allowed operator chars
+     */
+    public static final String DEFAULT_ALLOWED_OPERATOR_CHARS = "+-*/%^!#§$&;:~<>|=";
+
+    public boolean isAllowedOperatorChar(char ch) {
+		return DEFAULT_ALLOWED_OPERATOR_CHARS.indexOf(ch) >= 0;
+	}
+
+	private Token parseArgumentSeparatorToken(char ch) {
         this.pos++;
         this.lastToken = new ArgumentSeparatorToken();
         return lastToken;
@@ -133,6 +148,16 @@ public class Tokenizer {
         return ch == ')' || ch == '}' || ch == ']';
     }
 
+    private Collection<String> undefinedVariables = null;
+    
+    public void allowUndefinedVariables(boolean allow) {
+    	this.undefinedVariables = (allow ? new ArrayList<String>() : null);
+    }
+    
+    public String[] getUndefinedVariables() {
+    	return (undefinedVariables != null ? undefinedVariables.toArray(new String[undefinedVariables.size()]) : null);
+    }
+    
     private Token parseFunctionOrVariable() {
         final int offset = this.pos;
         int testPos;
@@ -154,6 +179,12 @@ public class Tokenizer {
                 if (f != null) {
                     lastValidLen = len;
                     lastValidToken = new FunctionToken(f);
+                } else if (undefinedVariables != null) {
+                	if (! undefinedVariables.contains(name)) {
+                		undefinedVariables.add(name);
+                	}
+                    lastValidLen = len;
+                    lastValidToken = new VariableToken(name);
                 }
             }
             len++;
@@ -185,7 +216,7 @@ public class Tokenizer {
         Operator lastValid = null;
         symbol.append(firstChar);
 
-        while (!isEndOfExpression(offset + len)  && Operator.isAllowedOperatorChar(expression[offset + len])) {
+        while (!isEndOfExpression(offset + len)  && isAllowedOperatorChar(expression[offset + len])) {
             symbol.append(expression[offset + len++]);
         }
 

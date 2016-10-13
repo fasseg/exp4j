@@ -52,11 +52,6 @@ public abstract class Operator {
      */
     public static final int PRECEDENCE_UNARY_PLUS = PRECEDENCE_UNARY_MINUS;
 
-    /**
-     * The set of allowed operator chars
-     */
-    public static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/', '%', '^', '!', '#','§', '$', '&', ';', ':', '~', '<', '>', '|', '='};
-
     protected final int numOperands;
     protected final boolean leftAssociative;
     protected final String symbol;
@@ -76,20 +71,6 @@ public abstract class Operator {
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
         this.precedence = precedence;
-    }
-
-    /**
-     * Check if a character is an allowed operator char
-     * @param ch the char to check
-     * @return true if the char is allowed an an operator symbol, false otherwise
-     */
-    public static boolean isAllowedOperatorChar(char ch) {
-        for (char allowed: ALLOWED_OPERATOR_CHARS) {
-            if (ch == allowed) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
