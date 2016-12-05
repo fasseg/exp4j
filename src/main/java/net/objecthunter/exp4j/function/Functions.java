@@ -41,11 +41,9 @@ public class Functions {
     private static final int INDEX_LOG10 = 19;
     private static final int INDEX_LOG2 = 20;
     private static final int INDEX_SGN = 21;
-    private static final int INDEX_SIN_DEGREES = 22;
-    private static final int INDEX_COS_DEGREES = 23;
-    private static final int INDEX_TAN_DEGREES = 24;
+    private static final int INDEX_deg2rad = 22;
     
-    private static final Function[] builtinFunctions = new Function[25];
+    private static final Function[] builtinFunctions = new Function[23];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -186,22 +184,10 @@ public class Functions {
                 }
             }
         };
-        builtinFunctions[INDEX_SIN_DEGREES] = new Function("Sin") {
+        builtinFunctions[INDEX_deg2rad] = new Function("deg2rad") {
             @Override
             public double apply(double... args) {
-                return Math.sin(Math.toRadians(args[0]));
-            }
-        };
-        builtinFunctions[INDEX_COS_DEGREES] = new Function("Cos") {
-            @Override
-            public double apply(double... args) {
-                return Math.cos(Math.toRadians(args[0]));
-            }
-        };
-        builtinFunctions[INDEX_TAN_DEGREES] = new Function("Tan") {
-            @Override
-            public double apply(double... args) {
-                return Math.tan(Math.toRadians(args[0]));
+                return (Math.toRadians(args[0]));
             }
         };
     }
@@ -257,7 +243,9 @@ public class Functions {
             return builtinFunctions[INDEX_EXPM1];
         } else if (name.equals("signum")) {
             return builtinFunctions[INDEX_SGN];
-        } else {
+        }else if (name.equals("deg2rad")){
+            return builtinFunctions[INDEX_deg2rad];
+        }else {
             return null;
         }
     }
