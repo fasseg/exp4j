@@ -226,6 +226,12 @@ public class Tokenizer {
 
             }
             op = Operators.getBuiltinOperator(symbol.charAt(0), argc);
+            
+            //Insert an unused token to force the opearator to be on the right side
+            if (op != null && op.getSymbol().equals("!")) {
+                lastToken = new NumberToken(0);
+            }
+            return op;
         }
         return op;
     }
