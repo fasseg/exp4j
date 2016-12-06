@@ -2720,4 +2720,29 @@ public class ExpressionBuilderTest {
                 .build();
         assertEquals(-1, e.evaluate(), 0d);
     }
+
+	@Test
+	public void testOperatorFactorial() throws Exception {
+		Expression exp = new ExpressionBuilder("3!").build();
+        assertEquals(6, exp.evaluate(), 0);
+		exp = new ExpressionBuilder("3!!").build();
+        assertEquals(720, exp.evaluate(), 0);
+		exp = new ExpressionBuilder("4 + 3!").build();
+        assertEquals(10, exp.evaluate(), 0);
+		exp = new ExpressionBuilder("3! * 2").build();
+        assertEquals(12, exp.evaluate(), 0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testOperatorFactorial2() throws Exception {
+        //Issue 64
+		Expression exp = new ExpressionBuilder("!3").build();
+        System.out.println(exp.validate().isValid());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testOperatorFactorial3() throws Exception {
+		Expression exp = new ExpressionBuilder("!!3").build();
+        System.out.println(exp.validate().isValid());
+	}
  }
