@@ -2768,4 +2768,10 @@ public class ExpressionBuilderTest {
         Expression exp = new ExpressionBuilder("(-1)!").build();
         exp.evaluate();
     }
+
+    @Test
+    public void testFactorialIssue75() {
+        Expression exp = new ExpressionBuilder("3!-2!").build();
+        assertEquals(4, exp.evaluate(), 1e-12);
+    }
  }
