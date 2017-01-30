@@ -67,6 +67,10 @@ public class Functions {
         builtinFunctions[INDEX_COT] = new Function("cot") {
             @Override
             public double apply(double... args) {
+                double tan = Math.tan(args[0]);
+                if (tan == 0d) {
+                    throw new ArithmeticException("Division by zero in cotangent!");
+                }
                 return 1d/Math.tan(args[0]);
             }
         };

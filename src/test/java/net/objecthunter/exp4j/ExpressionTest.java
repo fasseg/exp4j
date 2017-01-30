@@ -159,6 +159,21 @@ public class ExpressionTest {
         assertEquals(22, e.evaluate(), 0);
     }
 
+    @Test
+    public void testCotangent1() {
+        Expression e = new ExpressionBuilder("cot(1)")
+                .build();
+        assertEquals(1/Math.tan(1), e.evaluate(), 0d);
+
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void testInvalidCotangent1() {
+        Expression e = new ExpressionBuilder("cot(0)")
+                .build();
+        e.evaluate();
+
+    }
     @Test(expected = IllegalArgumentException.class)
 	public void testOperatorFactorial2() throws Exception {
         Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
