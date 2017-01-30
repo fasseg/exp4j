@@ -2795,6 +2795,13 @@ public class ExpressionBuilderTest {
     }
 
     @Test
+    public void testCotangens1() {
+        Expression e = new ExpressionBuilder("cot(1)")
+                .build();
+        assertEquals(1/Math.tan(1), e.evaluate(), 0d);
+    }
+
+    @Test
     public void testCustomPercent() {
         Function percentage = new Function("percentage", 2) {
             @Override

@@ -22,27 +22,28 @@ public class Functions {
     private static final int INDEX_SIN = 0;
     private static final int INDEX_COS = 1;
     private static final int INDEX_TAN = 2;
-    private static final int INDEX_LOG = 3;
-    private static final int INDEX_LOG1P = 4;
-    private static final int INDEX_ABS = 5;
-    private static final int INDEX_ACOS = 6;
-    private static final int INDEX_ASIN = 7;
-    private static final int INDEX_ATAN = 8;
-    private static final int INDEX_CBRT = 9;
-    private static final int INDEX_CEIL = 10;
-    private static final int INDEX_FLOOR = 11;
-    private static final int INDEX_SINH = 12;
-    private static final int INDEX_SQRT = 13;
-    private static final int INDEX_TANH = 14;
-    private static final int INDEX_COSH = 15;
-    private static final int INDEX_POW = 16;
-    private static final int INDEX_EXP = 17;
-    private static final int INDEX_EXPM1 = 18;
-    private static final int INDEX_LOG10 = 19;
-    private static final int INDEX_LOG2 = 20;
-    private static final int INDEX_SGN = 21;
+    private static final int INDEX_COT = 3;
+    private static final int INDEX_LOG = 4;
+    private static final int INDEX_LOG1P = 5;
+    private static final int INDEX_ABS = 6;
+    private static final int INDEX_ACOS = 7;
+    private static final int INDEX_ASIN = 8;
+    private static final int INDEX_ATAN = 9;
+    private static final int INDEX_CBRT = 10;
+    private static final int INDEX_CEIL = 11;
+    private static final int INDEX_FLOOR = 12;
+    private static final int INDEX_SINH = 13;
+    private static final int INDEX_SQRT = 14;
+    private static final int INDEX_TANH = 15;
+    private static final int INDEX_COSH = 16;
+    private static final int INDEX_POW = 17;
+    private static final int INDEX_EXP = 18;
+    private static final int INDEX_EXPM1 = 19;
+    private static final int INDEX_LOG10 = 20;
+    private static final int INDEX_LOG2 = 21;
+    private static final int INDEX_SGN = 22;
 
-    private static final Function[] builtinFunctions = new Function[22];
+    private static final Function[] builtinFunctions = new Function[23];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -61,6 +62,12 @@ public class Functions {
             @Override
             public double apply(double... args) {
                 return Math.tan(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_COT] = new Function("cot") {
+            @Override
+            public double apply(double... args) {
+                return 1d/Math.tan(args[0]);
             }
         };
         builtinFunctions[INDEX_LOG] = new Function("log") {
@@ -198,6 +205,8 @@ public class Functions {
             return builtinFunctions[INDEX_COS];
         } else if (name.equals("tan")) {
             return builtinFunctions[INDEX_TAN];
+        } else if (name.equals("cot")) {
+            return builtinFunctions[INDEX_COT];
         } else if (name.equals("asin")) {
             return builtinFunctions[INDEX_ASIN];
         } else if (name.equals("acos")) {
