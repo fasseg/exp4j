@@ -2720,4 +2720,30 @@ public class ExpressionBuilderTest {
                 .build();
         assertEquals(-1, e.evaluate(), 0d);
     }
+
+    @Test
+    public void testCustomPercent() {
+        Function percentage = new Function("percentage", 2) {
+            @Override
+            public double apply(double... args) {
+                double val = args[0];
+                double percent = args[1];
+                if (percent < 0) {
+                    return val - val * Math.abs(percent)/100d;
+                } else {
+                    return val - val * percent/100d;
+                }
+            }
+        };
+
+        Expression e = new ExpressionBuilder("percentage(1000,-10)")
+                .function(percentage)
+                .build();
+        assertEquals(0d, 900, e.evaluate());
+
+        e = new ExpressionBuilder("percentage(1000,12)")
+                .function(percentage)
+                .build();
+        assertEquals(0d, 1000d*0.12d, e.evaluate());
+    }
  }
