@@ -89,12 +89,12 @@ public class ExpressionTest {
         Expression e = new ExpressionBuilder("2!+3!")
                 .operator(factorial)
                 .build();
-        assertEquals(0d, 8d, e.evaluate());
+        assertEquals(8d, e.evaluate(), 0d);
 
         e = new ExpressionBuilder("3!-2!")
                 .operator(factorial)
                 .build();
-        assertEquals(0d, 4d, e.evaluate());
+        assertEquals(4d, e.evaluate(), 0d);
 
         e = new ExpressionBuilder("3!")
                 .operator(factorial)
