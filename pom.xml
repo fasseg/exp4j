@@ -92,6 +92,14 @@
                 <role>developer</role>
             </roles>
         </contributor>
+        <contributor>
+            <name>Wilton Risenhoover</name>
+            <email></email>
+            <url>https://fintel.io/</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </contributor>
     </contributors>
 
     <dependencies>
