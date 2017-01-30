@@ -35,17 +35,31 @@ public class Tokenizer {
 
     private final Set<String> variableNames;
 
+    private final boolean implicitMultiplication;
+
     private int pos = 0;
 
     private Token lastToken;
 
+
     public Tokenizer(String expression, final Map<String, Function> userFunctions,
-            final Map<String, Operator> userOperators, final Set<String> variableNames) {
+            final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication) {
         this.expression = expression.trim().toCharArray();
         this.expressionLength = this.expression.length;
         this.userFunctions = userFunctions;
         this.userOperators = userOperators;
         this.variableNames = variableNames;
+        this.implicitMultiplication = implicitMultiplication;
+    }
+
+    public Tokenizer(String expression, final Map<String, Function> userFunctions,
+                     final Map<String, Operator> userOperators, final Set<String> variableNames) {
+        this.expression = expression.trim().toCharArray();
+        this.expressionLength = this.expression.length;
+        this.userFunctions = userFunctions;
+        this.userOperators = userOperators;
+        this.variableNames = variableNames;
+        this.implicitMultiplication = true;
     }
 
     public boolean hasNext() {
@@ -61,7 +75,7 @@ public class Tokenizer {
             if (lastToken != null) {
                 if (lastToken.getType() == Token.TOKEN_NUMBER) {
                     throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
-                } else if ((lastToken.getType() != Token.TOKEN_OPERATOR
+                } else if (implicitMultiplication && (lastToken.getType() != Token.TOKEN_OPERATOR
                         && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
                         && lastToken.getType() != Token.TOKEN_FUNCTION
                         && lastToken.getType() != Token.TOKEN_SEPARATOR)) {
@@ -74,7 +88,7 @@ public class Tokenizer {
         } else if (isArgumentSeparator(ch)) {
             return parseArgumentSeparatorToken(ch);
         } else if (isOpenParentheses(ch)) {
-            if (lastToken != null &&
+            if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
                             && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
                             && lastToken.getType() != Token.TOKEN_FUNCTION
@@ -90,7 +104,7 @@ public class Tokenizer {
             return parseOperatorToken(ch);
         } else if (isAlphabetic(ch) || ch == '_') {
             // parse the name which can be a setVariable or a function
-            if (lastToken != null &&
+            if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
                             && lastToken.getType() != Token.TOKEN_PARENTHESES_OPEN
                             && lastToken.getType() != Token.TOKEN_FUNCTION
