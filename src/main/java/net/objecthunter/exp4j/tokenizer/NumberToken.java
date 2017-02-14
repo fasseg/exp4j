@@ -15,30 +15,41 @@
 */
 package net.objecthunter.exp4j.tokenizer;
 
+import net.objecthunter.exp4j.TypeUtil;
+
 /**
  * Represents a number in the expression
  */
 public final class NumberToken extends Token {
-    private final double value;
+    private final Number value;
 
     /**
      * Create a new instance
      * @param value the value of the number
      */
-    public NumberToken(double value) {
+    public NumberToken(Number value) {
         super(TOKEN_NUMBER);
         this.value = value;
     }
 
+    NumberToken(String value) {
+        this(TypeUtil.parseConstant(value));
+    }
+
     NumberToken(final char[] expression, final int offset, final int len) {
-        this(Double.parseDouble(String.valueOf(expression, offset, len)));
+        this(String.valueOf(expression, offset, len));
     }
 
     /**
      * Get the value of the number
      * @return the value
      */
-    public double getValue() {
+    public Number getValue() {
         return value;
     }
+
+    public String toString() {
+        return String.format("const %s", getValue());
+    }
+
 }

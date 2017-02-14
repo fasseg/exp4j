@@ -15,6 +15,8 @@
 */
 package net.objecthunter.exp4j.operator;
 
+import net.objecthunter.exp4j.TypeUtil;
+
 /**
  * Class representing operators that can be used in an expression
  */
@@ -116,6 +118,19 @@ public abstract class Operator {
     public abstract double apply(double ... args);
 
     /**
+     * Apply the operation on the given operands
+     * @param args the operands for the operation
+     * @return the calculated result of the operation
+     */
+    public Number applyTypeSave(Number ... args) {
+        double result = apply(TypeUtil.toDouble(args));
+        if (TypeUtil.isAllIntegral(args)) {
+            return (long)result;
+        }
+        return result;
+    }
+    
+    /**
      * Get the operator symbol
      * @return the symbol
      */
@@ -130,4 +145,11 @@ public abstract class Operator {
     public int getNumOperands() {
         return numOperands;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s-Operator(l=%s, %d, %d)",
+                getSymbol(), isLeftAssociative() ? 'l' : 'r', getNumOperands(), getPrecedence());
+    }
+
 }

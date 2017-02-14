@@ -19,6 +19,7 @@ import static net.objecthunter.exp4j.TestUtil.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -551,4 +552,46 @@ public class TokenizerTest {
 
         assertFalse(tokenizer.hasNext());
     }
+
+    @Test
+    public void testTokenization23() throws Exception {
+        final Tokenizer tokenizer = new Tokenizer("0x123 + 0xABCD.1 - 0x00fe * 0x.2p2 - 0x", null, null,
+                Collections.singleton("x"));
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 0x123);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "+", 2, Operator.PRECEDENCE_ADDITION);
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), Double.parseDouble("0xABCD.1p0"));
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "-", 2, Operator.PRECEDENCE_SUBTRACTION);
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 0xFE);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), Double.parseDouble("0x.2p2"));
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "-", 2, Operator.PRECEDENCE_SUBTRACTION);
+
+        assertTrue(tokenizer.hasNext());
+        assertNumberToken(tokenizer.nextToken(), 0);
+
+        assertTrue(tokenizer.hasNext());
+        assertOperatorToken(tokenizer.nextToken(), "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
+
+        assertTrue(tokenizer.hasNext());
+        assertVariableToken(tokenizer.nextToken(), "x");
+
+        assertFalse(tokenizer.hasNext());
+    }
+
 }
