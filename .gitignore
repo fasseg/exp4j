@@ -4,3 +4,7 @@ target/
 *.log
 !.gitignore
 dependency-reduced-pom.xml
+/netbeans/exp4j-netbeans-project/build/
+/netbeans/exp4j-netbeans-project/dist/
+/netbeans/exp4j_taglibrary/nbproject/private/
+/netbeans/exp4j_taglibrary/build/
