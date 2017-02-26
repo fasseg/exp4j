@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,19 +37,22 @@ public class Tokenizer {
 
     private final boolean implicitMultiplication;
 
+    private final boolean exceptionOnMissingVariable;
+
     private int pos = 0;
 
     private Token lastToken;
 
 
     public Tokenizer(String expression, final Map<String, Function> userFunctions,
-            final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication) {
+            final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication, final boolean exceptionOnMissingVariable) {
         this.expression = expression.trim().toCharArray();
         this.expressionLength = this.expression.length;
         this.userFunctions = userFunctions;
         this.userOperators = userOperators;
         this.variableNames = variableNames;
         this.implicitMultiplication = implicitMultiplication;
+        this.exceptionOnMissingVariable = exceptionOnMissingVariable;
     }
 
     public Tokenizer(String expression, final Map<String, Function> userFunctions,
@@ -60,6 +63,7 @@ public class Tokenizer {
         this.userOperators = userOperators;
         this.variableNames = variableNames;
         this.implicitMultiplication = true;
+        this.exceptionOnMissingVariable = true;
     }
 
     public boolean hasNext() {
@@ -174,7 +178,23 @@ public class Tokenizer {
             testPos = offset + len - 1;
         }
         if (lastValidToken == null) {
-            throw new UnknownFunctionOrVariableException(new String(expression), pos, len);
+			if (isEndOfExpression(testPos)) {
+				testPos--;
+			}
+
+        	if (exceptionOnMissingVariable || isOpenParentheses(expression[testPos])) {
+				throw new UnknownFunctionOrVariableException(new String(expression), pos, len);
+			}
+			else {
+				if (isEndOfExpression(offset + len - 1)) {
+					len--;
+				}
+
+				String name = new String( expression, offset, len );
+
+				lastValidLen = len;
+				lastValidToken = new VariableToken( name );
+			}
         }
         pos += lastValidLen;
         lastToken = lastValidToken;

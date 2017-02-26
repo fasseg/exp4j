@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +38,8 @@ public class ExpressionBuilder {
     private final Set<String> variableNames;
 
     private boolean implicitMultiplication = true;
+
+	public boolean exceptionOnMissingVariables = true;
 
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
@@ -186,7 +188,7 @@ public class ExpressionBuilder {
             }
         }
         return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators,
-                this.variableNames, this.implicitMultiplication), this.userFunctions.keySet());
+                this.variableNames, this.implicitMultiplication, this.exceptionOnMissingVariables), this.userFunctions.keySet());
     }
 
 }
