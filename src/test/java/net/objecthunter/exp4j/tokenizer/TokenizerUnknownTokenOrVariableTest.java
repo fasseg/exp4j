@@ -95,12 +95,12 @@ public class TokenizerUnknownTokenOrVariableTest {
 	@Test
 	public void testTokenizationOfUnknownVariableWithoutException() throws Exception {
 
-		final Tokenizer tokenizer = new Tokenizer("x + 3", null, null, null, false, false);
+		final Tokenizer tokenizer = new Tokenizer("xiop+3", null, null, null, false, false);
 
 		try {
 			Token token = tokenizer.nextToken(); // x
 			Assert.assertEquals(Token.TOKEN_VARIABLE, token.getType());
-			Assert.assertEquals("x ", ((VariableToken)token).getName() );
+			Assert.assertEquals("xiop", ((VariableToken)token).getName() );
 		} catch (UnknownFunctionOrVariableException e) {
 			Assert.fail("No exception should be thrown!");
 		}
@@ -114,7 +114,7 @@ public class TokenizerUnknownTokenOrVariableTest {
 		try {
 			Token token = tokenizer.nextToken(); // x
 			Assert.assertEquals(Token.TOKEN_VARIABLE, token.getType());
-			Assert.assertEquals("x ", ((VariableToken)token).getName() );
+			Assert.assertEquals("x", ((VariableToken)token).getName() );
 
 			tokenizer.nextToken(); // +
 			tokenizer.nextToken(); // 3
@@ -137,7 +137,7 @@ public class TokenizerUnknownTokenOrVariableTest {
 		try {
 			Token token = tokenizer.nextToken(); // xyz
 			Assert.assertEquals(Token.TOKEN_VARIABLE, token.getType());
-			Assert.assertEquals("xyz ", ((VariableToken)token).getName() );
+			Assert.assertEquals("xyz", ((VariableToken)token).getName() );
 		} catch (UnknownFunctionOrVariableException e) {
 			Assert.fail("No exception should be thrown!");
 		}
