@@ -42,8 +42,11 @@ public class Functions {
     private static final int INDEX_LOG10 = 20;
     private static final int INDEX_LOG2 = 21;
     private static final int INDEX_SGN = 22;
+    private static final int INDEX_SEC = 23;
+    private static final int INDEX_COSEC = 24;
+    private static final int INDEX_ACOT = 25;
 
-    private static final Function[] builtinFunctions = new Function[23];
+    private static final Function[] builtinFunctions = new Function[26];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -194,6 +197,36 @@ public class Functions {
                 }
             }
         };
+        builtinFunctions[INDEX_SEC] = new Function("sec", 1) {
+          @Override
+          public double apply(double... args) {
+            double cos = Math.cos(args[0]);
+            if (cos == 0d) {
+                throw new ArithmeticException("Division by zero in secant!");
+            }
+            return 1d/cos;
+          }
+        };
+        builtinFunctions[INDEX_COSEC] = new Function("cosec", 1) {
+          @Override
+          public double apply(double... args) {
+            double sin = Math.sin(args[0]);
+            if (sin == 0d) {
+                throw new ArithmeticException("Division by zero in cosecant!");
+            }
+            return 1d/sin;
+          }
+        };
+        builtinFunctions[INDEX_ACOT] = new Function("acot", 1) {
+          @Override
+          public double apply(double... args) {
+            double atan = Math.atan(args[0]);
+            if (atan == 0d) {
+                throw new ArithmeticException("Division by zero in arc cotangent!");
+            }
+            return 1d/atan;
+          }
+        };
     }
 
     /**
@@ -249,6 +282,12 @@ public class Functions {
             return builtinFunctions[INDEX_EXPM1];
         } else if (name.equals("signum")) {
             return builtinFunctions[INDEX_SGN];
+        } else if (name.equals("sec")) {
+            return builtinFunctions[INDEX_SEC];
+        } else if (name.equals("cosec")) {
+            return builtinFunctions[INDEX_COSEC];
+        } else if (name.equals("acot")) {
+            return builtinFunctions[INDEX_ACOT];
         } else {
             return null;
         }

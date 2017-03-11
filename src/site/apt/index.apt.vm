@@ -330,7 +330,9 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<asin>>>: arc sine
  
  * <<<atan>>>: arc tangent
- 
+
+ * <<<acot>>>: arc cotangent
+
  * <<<cbrt>>>: cubic root
  
  * <<<ceil>>>: nearest upper integer
@@ -338,7 +340,11 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<cos>>>: cosine
  
  * <<<cosh>>>: hyperbolic cosine
- 
+
+ * <<<sec>>>: secant
+
+ * <<<cosec>>>: cosecant
+
  * <<<exp>>>: euler's number raised to the power (e^x)
  
  * <<<floor>>>: nearest lower integer
