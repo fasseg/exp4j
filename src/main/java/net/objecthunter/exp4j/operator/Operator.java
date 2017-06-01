@@ -39,7 +39,6 @@ public abstract class Operator {
      */
     public Operator(String symbol, int numberOfOperands, boolean leftAssociative,
                     int precedence) {
-        super();
         this.numOperands = numberOfOperands;
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
