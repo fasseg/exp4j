@@ -70,7 +70,7 @@ public class ShuntingYard {
                     } else if ((o1.getOperator().isLeftAssociative() && o1.getOperator().getPrecedence() <= o2.getOperator().getPrecedence())
                             || (o1.getOperator().getPrecedence() < o2.getOperator().getPrecedence())) {
                         output.add(stack.pop());
-                    }else {
+                    } else {
                         break;
                     }
                 }

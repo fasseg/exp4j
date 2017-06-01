@@ -20,7 +20,7 @@ import net.objecthunter.exp4j.operator.Operator;
 /**
  * Represents an operator used in expressions
  */
-public class OperatorToken extends Token{
+public class OperatorToken extends Token {
     private final Operator operator;
 
     /**

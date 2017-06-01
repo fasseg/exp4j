@@ -92,13 +92,13 @@ public class Operators {
             case '+':
                 if (numArguments != 1) {
                     return BUILTIN_OPERATORS[INDEX_ADDITION];
-                }else{
+                } else {
                     return BUILTIN_OPERATORS[INDEX_UNARYPLUS];
                 }
             case '-':
                 if (numArguments != 1) {
                     return BUILTIN_OPERATORS[INDEX_SUBTRACTION];
-                }else{
+                } else {
                     return BUILTIN_OPERATORS[INDEX_UNARYMINUS];
                 }
             case '*':

@@ -2727,7 +2727,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testGetVariableNames1() throws Exception{
+    public void testGetVariableNames1() throws Exception {
         Expression e = new ExpressionBuilder("b*a-9.24c")
                 .variables("b", "a", "c")
                 .build();
@@ -2738,7 +2738,7 @@ public class ExpressionBuilderTest {
     }
 
     @Test
-    public void testGetVariableNames2() throws Exception{
+    public void testGetVariableNames2() throws Exception {
         Expression e = new ExpressionBuilder("log(bar)-FOO.s/9.24c")
                 .variables("bar", "FOO.s", "c")
                 .build();

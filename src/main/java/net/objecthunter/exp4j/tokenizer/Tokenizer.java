@@ -207,7 +207,7 @@ public class Tokenizer {
             Operator op = this.getOperator(symbol.toString());
             if (op == null) {
                 symbol.setLength(symbol.length() - 1);
-            }else{
+            } else {
                 lastValid = op;
                 break;
             }
