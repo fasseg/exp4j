@@ -20,6 +20,8 @@ package net.objecthunter.exp4j.function;
  */
 public class Functions {
     
+    private Functions() {}
+    
     private static enum BuiltinFunctions {
         SIN(new Function("sin") {
             @Override public double apply(double... args) {
