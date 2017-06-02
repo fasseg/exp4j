@@ -20,7 +20,7 @@ import net.objecthunter.exp4j.function.Function;
 public class FunctionToken extends Token {
     private final Function function;
     public FunctionToken(final Function function) {
-        super(Token.TOKEN_FUNCTION);
+        super(TokenType.FUNCTION);
         this.function = function;
     }
 

@@ -22,6 +22,7 @@ import net.objecthunter.exp4j.tokenizer.FunctionToken;
 import net.objecthunter.exp4j.tokenizer.NumberToken;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.Token;
+import net.objecthunter.exp4j.tokenizer.TokenType;
 import net.objecthunter.exp4j.tokenizer.VariableToken;
 
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class Expression {
     public Set<String> getVariableNames() {
         final Set<String> variables = new HashSet<String>();
         for (final Token t: tokens) {
-            if (t.getType() == Token.TOKEN_VARIABLE)
+            if (t.getType() == TokenType.VARIABLE)
                 variables.add(((VariableToken)t).getName());
         }
         return variables;
@@ -110,7 +111,7 @@ public class Expression {
         if (checkVariablesSet) {
             /* check that all vars have a value set */
             for (final Token t : this.tokens) {
-                if (t.getType() == Token.TOKEN_VARIABLE) {
+                if (t.getType() == TokenType.VARIABLE) {
                     final String var = ((VariableToken) t).getName();
                     if (!variables.containsKey(var)) {
                         errors.add("The setVariable '" + var + "' has not been set");
@@ -128,11 +129,11 @@ public class Expression {
         int count = 0;
         for (Token tok : this.tokens) {
             switch (tok.getType()) {
-                case Token.TOKEN_NUMBER:
-                case Token.TOKEN_VARIABLE:
+                case TokenType.NUMBER:
+                case TokenType.VARIABLE:
                     count++;
                     break;
-                case Token.TOKEN_FUNCTION:
+                case TokenType.FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
                     final int argsNum = func.getNumArguments(); 
                     if (argsNum > count) {
@@ -145,7 +146,7 @@ public class Expression {
                         count++;
                     }
                     break;
-                case Token.TOKEN_OPERATOR:
+                case TokenType.OPERATOR:
                     Operator op = ((OperatorToken) tok).getOperator();
                     if (op.getNumOperands() == 2) {
                         count--;
@@ -181,16 +182,16 @@ public class Expression {
         final ArrayStack output = new ArrayStack();
         for (int i = 0; i < tokens.length; i++) {
             Token t = tokens[i];
-            if (t.getType() == Token.TOKEN_NUMBER) {
+            if (t.getType() == TokenType.NUMBER) {
                 output.push(((NumberToken) t).getValue());
-            } else if (t.getType() == Token.TOKEN_VARIABLE) {
+            } else if (t.getType() == TokenType.VARIABLE) {
                 final String name = ((VariableToken) t).getName();
                 final Double value = this.variables.get(name);
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
                 output.push(value);
-            } else if (t.getType() == Token.TOKEN_OPERATOR) {
+            } else if (t.getType() == TokenType.OPERATOR) {
                 OperatorToken op = (OperatorToken) t;
                 if (output.size() < op.getOperator().getNumOperands()) {
                     throw new IllegalArgumentException("Invalid number of operands available for '" + op.getOperator().getSymbol() + "' operator");
@@ -205,7 +206,7 @@ public class Expression {
                     double arg = output.pop();
                     output.push(op.getOperator().apply(arg));
                 }
-            } else if (t.getType() == Token.TOKEN_FUNCTION) {
+            } else if (t.getType() == TokenType.FUNCTION) {
                 FunctionToken func = (FunctionToken) t;
                 final int numArguments = func.getFunction().getNumArguments();
                 if (output.size() < numArguments) {

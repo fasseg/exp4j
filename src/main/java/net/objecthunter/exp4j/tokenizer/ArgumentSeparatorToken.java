@@ -23,6 +23,6 @@ class ArgumentSeparatorToken extends Token {
      * Create a new instance
      */
     ArgumentSeparatorToken() {
-        super(Token.TOKEN_SEPARATOR);
+        super(TokenType.SEPARATOR);
     }
 }
