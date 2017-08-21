@@ -51,8 +51,11 @@ public class ShuntingYard {
                 output.add(token);
                 break;
             case Token.TOKEN_FUNCTION:
-                stack.add(token);
-                break;
+				if(!stack.empty() && stack.peek().getType() == Token.TOKEN_FUNCTION) {
+					throw new IllegalArgumentException("Mismatched parentheses detected. Please check the expression");
+				}
+				stack.add(token);
+				break;
             case Token.TOKEN_SEPARATOR:
                 while (!stack.empty() && stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
                     output.add(stack.pop());
