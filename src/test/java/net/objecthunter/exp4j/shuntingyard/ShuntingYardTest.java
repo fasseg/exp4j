@@ -145,4 +145,9 @@ public class ShuntingYardTest {
         assertOperatorToken(tokens[1], "$", 1, Operator.PRECEDENCE_DIVISION);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testShuntingYardMultiFunctionConcat() throws Exception {
+        ShuntingYard.convertToRPN("sincos(x)", null, null, null, true);
+    }
+
 }
