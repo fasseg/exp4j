@@ -34,7 +34,7 @@ public class VariableToken extends Token {
      * @param name the name of the setVariable
      */
     public VariableToken(String name) {
-        super(TOKEN_VARIABLE);
+        super(TokenType.VARIABLE);
         this.name = name;
     }
 }

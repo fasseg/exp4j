@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
+import net.objecthunter.exp4j.operator.Precedence;
 import net.objecthunter.exp4j.tokenizer.*;
 
 import org.junit.Ignore;
@@ -33,7 +34,7 @@ import java.util.concurrent.Executors;
 
 public class ExpressionTest {
     @Test
-    public void testExpression1() throws Exception{
+    public void testExpression1() {
         Token[] tokens = new Token[] {
             new NumberToken(3d),
             new NumberToken(2d),
@@ -44,7 +45,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testExpression2() throws Exception{
+    public void testExpression2() {
         Token[] tokens = new Token[] {
                 new NumberToken(1d),
                 new FunctionToken(Functions.getBuiltinFunction("log")),
@@ -54,7 +55,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testGetVariableNames1() throws Exception{
+    public void testGetVariableNames1() {
         Token[] tokens = new Token[] {
                 new VariableToken("a"),
                 new VariableToken("b"),
@@ -66,8 +67,8 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testFactorial() throws Exception {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+    public void testFactorial() {
+        Operator factorial = new Operator("!", 1, true, Precedence.POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -176,7 +177,7 @@ public class ExpressionTest {
     }
     @Test(expected = IllegalArgumentException.class)
 	public void testOperatorFactorial2() throws Exception {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, Precedence.POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -201,7 +202,7 @@ public class ExpressionTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void testInvalidFactorial2() {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, Precedence.POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -227,7 +228,7 @@ public class ExpressionTest {
     @Test
     @Ignore
     // If Expression should be threads safe this test must pass
-    public void evaluateFamily() throws Exception {
+    public void evaluateFamily() {
         final Expression e = new ExpressionBuilder("sin(x)")
                 .variable("x")
                 .build();
