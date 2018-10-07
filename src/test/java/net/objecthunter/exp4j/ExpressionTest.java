@@ -67,93 +67,61 @@ public class ExpressionTest {
 
     @Test
     public void testFactorial() throws Exception {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
-
-            @Override
-            public double apply(double... args) {
-                final int arg = (int) args[0];
-                if ((double) arg != args[0]) {
-                    throw new IllegalArgumentException("Operand for factorial has to be an integer");
-                }
-                if (arg < 0) {
-                    throw new IllegalArgumentException("The operand of the factorial can not be less than zero");
-                }
-                double result = 1;
-                for (int i = 1; i <= arg; i++) {
-                    result *= i;
-                }
-                return result;
-            }
-        };
-
         Expression e = new ExpressionBuilder("2!+3!")
-                .operator(factorial)
                 .build();
         assertEquals(8d, e.evaluate(), 0d);
 
         e = new ExpressionBuilder("3!-2!")
-                .operator(factorial)
                 .build();
         assertEquals(4d, e.evaluate(), 0d);
 
         e = new ExpressionBuilder("3!")
-                .operator(factorial)
                 .build();
         assertEquals(6, e.evaluate(), 0);
 
         e = new ExpressionBuilder("3!!")
-                .operator(factorial)
                 .build();
         assertEquals(720, e.evaluate(), 0);
 
         e = new ExpressionBuilder("4 + 3!")
-                .operator(factorial)
                 .build();
         assertEquals(10, e.evaluate(), 0);
 
         e = new ExpressionBuilder("3! * 2")
-                .operator(factorial)
                 .build();
         assertEquals(12, e.evaluate(), 0);
         
         e = new ExpressionBuilder("3!")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(6, e.evaluate(), 0);
 
         e = new ExpressionBuilder("3!!")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(720, e.evaluate(), 0);
 
         e = new ExpressionBuilder("4 + 3!")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(10, e.evaluate(), 0);
 
         e = new ExpressionBuilder("3! * 2")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(12, e.evaluate(), 0);
 
         e = new ExpressionBuilder("2 * 3!")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(12, e.evaluate(), 0);
 
         e = new ExpressionBuilder("4 + (3!)")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(10, e.evaluate(), 0);
 
         e = new ExpressionBuilder("4 + 3! + 2 * 6")
-                .operator(factorial)
                 .build();
         assertTrue(e.validate().isValid());
         assertEquals(22, e.evaluate(), 0);
