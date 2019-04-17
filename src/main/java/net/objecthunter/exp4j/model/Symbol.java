@@ -8,7 +8,7 @@ public class Symbol {
 	public static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/', '%', '^', '!', '#','§', '$', '&', ';', ':', '~', '<', '>', '|', '='};
 	
 	public enum Type {
-		OPERATOR, FUNCTION, NUMBER
+		OPERATOR, FUNCTION, NUMBER, VARIABLE, OPEN_PARENTHESES, CLOSE_PARENTHESES, SEPARATOR
 	}
 	
 	private final Type type;
@@ -17,6 +17,12 @@ public class Symbol {
 	
 	private final String stringValue;
 	
+	public Symbol(final Type type) {
+		this.type = type;
+		this.stringValue = null;
+		this.doubleValue = 0f;
+	}
+
 	public Symbol(final double doubleValue) {
 		this.doubleValue = doubleValue;
 		this.type = Type.NUMBER;
@@ -28,7 +34,7 @@ public class Symbol {
 		this.stringValue = stringValue;
 		this.doubleValue = 0f;
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
