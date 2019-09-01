@@ -49,10 +49,12 @@ public class Functions {
     private static final int INDEX_LOG1P = 26;
     private static final int INDEX_LOGB = 27;
     private static final int INDEX_SGN = 28;
+    private static final int INDEX_TO_RADIAN = 29;
+    private static final int INDEX_TO_DEGREE = 30;
 
 
 
-    private static final Function[] builtinFunctions = new Function[29];
+    private static final Function[] builtinFunctions = new Function[31];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -252,6 +254,18 @@ public class Functions {
                 return Math.log(args[1]) / Math.log(args[0]);
             }
         };
+        builtinFunctions[INDEX_TO_RADIAN] = new Function("toradian") {
+            @Override
+            public double apply(double... args) {
+                return Math.toRadians(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_TO_DEGREE] = new Function("todegree") {
+            @Override
+            public double apply(double... args) {
+                return Math.toDegrees(args[0]);
+            }
+        };
 
     }
 
@@ -318,6 +332,10 @@ public class Functions {
             return builtinFunctions[INDEX_SECH];
         } else if(name.equals("coth")) {
             return builtinFunctions[INDEX_COTH];
+        } else if(name.equals("toradian")) {
+            return builtinFunctions[INDEX_TO_RADIAN];
+        } else if(name.equals("todegree")) {
+            return builtinFunctions[INDEX_TO_DEGREE];
         } else {
             return null;
         }

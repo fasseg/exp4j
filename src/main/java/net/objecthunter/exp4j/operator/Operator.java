@@ -54,7 +54,7 @@ public abstract class Operator {
     /**
      * The precendence value for the factorial operation
      */
-    public static final int PRECEDENCE_FACTORIAL = PRECEDENCE_UNARY_MINUS;
+    public static final int PRECEDENCE_FACTORIAL = PRECEDENCE_POWER + 1;
 
     /**
      * The set of allowed operator chars

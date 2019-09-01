@@ -338,6 +338,14 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<cos>>>: cosine
  
  * <<<cosh>>>: hyperbolic cosine
+
+ * <<cot>>: cotangent
+
+ * <<coth>>: hyperbolic cotangent
+
+ * <<csc>>: cosecant
+
+ * <<csch>>: hyperbolic cosecant
  
  * <<<exp>>>: euler's number raised to the power (e^x)
  
@@ -348,6 +356,12 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<log10>>>: logarithm (base 10)
 
  * <<<log2>>>: logarithm (base 2)
+
+ * <<logb>>: logarithm (base b)
+
+ * <<sec>>: secant
+
+ * <<sech>>: hyperbolic secant
 
  * <<<sin>>>: sine
  
@@ -360,6 +374,10 @@ e.evaluate(); // <- this call will throw an ArithmeticException
  * <<<tanh>>>: hyperbolic tangent
 
  * <<<signum>>>: signum function
+
+ * <<toradian>>: converts degrees to radians
+
+ * <<todegree>>: converts radians to degrees
 
 
 * Validation of expression
