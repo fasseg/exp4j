@@ -24,8 +24,9 @@ public abstract class Operators {
     private static final int INDEX_MODULO = 5;
     private static final int INDEX_UNARYMINUS = 6;
     private static final int INDEX_UNARYPLUS = 7;
+    private static final int INDEX_FACTORIAL = 8;
 
-    private static final Operator[] builtinOperators = new Operator[8];
+    private static final Operator[] builtinOperators = new Operator[9];
 
     static {
         builtinOperators[INDEX_ADDITION]= new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
@@ -82,6 +83,22 @@ public abstract class Operators {
                 return args[0] % args[1];
             }
         };
+        builtinOperators[INDEX_FACTORIAL] = new Operator("!", 1, true, Operator.PRECEDENCE_FACTORIAL) {
+            @Override
+            public double apply(double... args) {
+                double n = args[0];
+                if (n < 0 || n % 1d != 0) {
+                    throw new NumberFormatException("Must be positive integer!");
+                }
+
+                int total = 1;
+                for (int i = 2; i <= n; i++) {
+                    total *= i;
+                }
+
+                return total;
+            }
+        };
     }
 
     public static Operator getBuiltinOperator(final char symbol, final int numArguments) {
@@ -100,12 +117,15 @@ public abstract class Operators {
                 }
             case '*':
                 return builtinOperators[INDEX_MUTLIPLICATION];
+            case '÷':
             case '/':
                 return builtinOperators[INDEX_DIVISION];
             case '^':
                 return builtinOperators[INDEX_POWER];
             case '%':
                 return builtinOperators[INDEX_MODULO];
+            case '!':
+                return builtinOperators[INDEX_FACTORIAL];
             default:
                 return null;
         }

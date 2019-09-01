@@ -19,37 +19,40 @@ package net.objecthunter.exp4j.function;
  * Class representing the builtin functions available for use in expressions
  */
 public class Functions {
+
     private static final int INDEX_SIN = 0;
     private static final int INDEX_COS = 1;
     private static final int INDEX_TAN = 2;
-    private static final int INDEX_COT = 3;
-    private static final int INDEX_LOG = 4;
-    private static final int INDEX_LOG1P = 5;
-    private static final int INDEX_ABS = 6;
-    private static final int INDEX_ACOS = 7;
-    private static final int INDEX_ASIN = 8;
-    private static final int INDEX_ATAN = 9;
-    private static final int INDEX_CBRT = 10;
-    private static final int INDEX_CEIL = 11;
-    private static final int INDEX_FLOOR = 12;
-    private static final int INDEX_SINH = 13;
-    private static final int INDEX_SQRT = 14;
-    private static final int INDEX_TANH = 15;
-    private static final int INDEX_COSH = 16;
-    private static final int INDEX_POW = 17;
-    private static final int INDEX_EXP = 18;
-    private static final int INDEX_EXPM1 = 19;
-    private static final int INDEX_LOG10 = 20;
-    private static final int INDEX_LOG2 = 21;
-    private static final int INDEX_SGN = 22;
-    private static final int INDEX_CSC = 23;
-    private static final int INDEX_SEC = 24;
-    private static final int INDEX_CSCH = 25;
-    private static final int INDEX_SECH = 26;
-    private static final int INDEX_COTH = 27;
+    private static final int INDEX_CSC = 3;
+    private static final int INDEX_SEC = 4;
+    private static final int INDEX_COT = 5;
+    private static final int INDEX_SINH = 6;
+    private static final int INDEX_COSH = 7;
+    private static final int INDEX_TANH = 8;
+    private static final int INDEX_CSCH = 9;
+    private static final int INDEX_SECH = 10;
+    private static final int INDEX_COTH = 11;
+    private static final int INDEX_ASIN = 12;
+    private static final int INDEX_ACOS = 13;
+    private static final int INDEX_ATAN = 14;
+    private static final int INDEX_SQRT = 15;
+    private static final int INDEX_CBRT = 16;
+    private static final int INDEX_ABS = 17;
+    private static final int INDEX_CEIL = 18;
+    private static final int INDEX_FLOOR = 19;
+    private static final int INDEX_POW = 20;
+    private static final int INDEX_EXP = 21;
+    private static final int INDEX_EXPM1 = 22;
+    private static final int INDEX_LOG10 = 23;
+    private static final int INDEX_LOG2 = 24;
+    private static final int INDEX_LOG = 25;
+    private static final int INDEX_LOG1P = 26;
+    private static final int INDEX_LOGB = 27;
+    private static final int INDEX_SGN = 28;
 
 
-    private static final Function[] builtinFunctions = new Function[28];
+
+    private static final Function[] builtinFunctions = new Function[29];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -243,6 +246,13 @@ public class Functions {
                 return Math.cosh(args[0])/Math.sinh(args[0]);
             }
         };
+        builtinFunctions[INDEX_LOGB] = new Function("logb", 2) {
+            @Override
+            public double apply(double... args) {
+                return Math.log(args[1]) / Math.log(args[0]);
+            }
+        };
+
     }
 
     /**
