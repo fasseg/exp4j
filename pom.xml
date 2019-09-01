@@ -62,6 +62,15 @@
     </developers>
     <contributors>
         <contributor>
+            <name>Shuvam Chatterjee</name>
+            <email>shuvamc19@gmail.com</email>
+            <url>https://github.com/shuvamc019</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-7</timezone>
+        </contributor>
+        <contributor>
             <name>Federico Vera</name>
             <email>dktcoding@gmail.com</email>
             <url>https://plus.google.com/+FedericoVera</url>
@@ -94,7 +103,6 @@
         </contributor>
         <contributor>
             <name>Wilton Risenhoover</name>
-            <email></email>
             <url>https://fintel.io/</url>
             <roles>
                 <role>developer</role>

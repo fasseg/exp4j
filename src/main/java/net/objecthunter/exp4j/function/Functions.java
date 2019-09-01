@@ -1,18 +1,18 @@
-/* 
-* Copyright 2014 Frank Asseg
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. 
-*/
+/*
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.objecthunter.exp4j.function;
 
 /**
@@ -42,8 +42,14 @@ public class Functions {
     private static final int INDEX_LOG10 = 20;
     private static final int INDEX_LOG2 = 21;
     private static final int INDEX_SGN = 22;
+    private static final int INDEX_CSC = 23;
+    private static final int INDEX_SEC = 24;
+    private static final int INDEX_CSCH = 25;
+    private static final int INDEX_SECH = 26;
+    private static final int INDEX_COTH = 27;
 
-    private static final Function[] builtinFunctions = new Function[23];
+
+    private static final Function[] builtinFunctions = new Function[28];
 
     static {
         builtinFunctions[INDEX_SIN] = new Function("sin") {
@@ -71,7 +77,7 @@ public class Functions {
                 if (tan == 0d) {
                     throw new ArithmeticException("Division by zero in cotangent!");
                 }
-                return 1d/Math.tan(args[0]);
+                return 1d/tan;
             }
         };
         builtinFunctions[INDEX_LOG] = new Function("log") {
@@ -194,6 +200,49 @@ public class Functions {
                 }
             }
         };
+        builtinFunctions[INDEX_CSC] = new Function("csc") {
+            @Override
+            public double apply(double... args) {
+                double sin = Math.sin(args[0]);
+                if (sin == 0d) {
+                    throw new ArithmeticException("Division by zero in cosecant!");
+                }
+                return 1d/sin;
+            }
+        };
+        builtinFunctions[INDEX_SEC] = new Function("sec") {
+            @Override
+            public double apply(double... args) {
+                double cos = Math.cos(args[0]);
+                if(cos == 0d) {
+                    throw new ArithmeticException("Division by zero in secant!");
+                }
+                return 1d/cos;
+            }
+        };
+        builtinFunctions[INDEX_CSCH] = new Function("csch") {
+            @Override
+            public double apply(double... args) {
+                //this would throw an ArithmeticException later as sinh(0) = 0
+                if(args[0] == 0d) {
+                    return 0;
+                }
+
+                return 1d/Math.sinh(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_SECH] = new Function("sech") {
+            @Override
+            public double apply(double... args) {
+                return 1d/Math.cosh(args[0]);
+            }
+        };
+        builtinFunctions[INDEX_COTH] = new Function("coth") {
+            @Override
+            public double apply(double... args) {
+                return Math.cosh(args[0])/Math.sinh(args[0]);
+            }
+        };
     }
 
     /**
@@ -249,6 +298,16 @@ public class Functions {
             return builtinFunctions[INDEX_EXPM1];
         } else if (name.equals("signum")) {
             return builtinFunctions[INDEX_SGN];
+        } else if (name.equals("csc")) {
+            return builtinFunctions[INDEX_CSC];
+        } else if (name.equals("sec")) {
+            return builtinFunctions[INDEX_SEC];
+        } else if (name.equals("csch")) {
+            return builtinFunctions[INDEX_CSCH];
+        } else if (name.equals("sech")) {
+            return builtinFunctions[INDEX_SECH];
+        } else if(name.equals("coth")) {
+            return builtinFunctions[INDEX_COTH];
         } else {
             return null;
         }
