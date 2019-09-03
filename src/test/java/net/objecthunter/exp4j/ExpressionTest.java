@@ -233,18 +233,15 @@ public class ExpressionTest {
                 .build();
         Executor executor = Executors.newFixedThreadPool(100);
         for (int i = 0 ; i < 100000; i++) {
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    double x = Math.random();
-                    e.setVariable("x", x);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    assertEquals(Math.sin(x), e.evaluate(), 0f);
+            executor.execute(() -> {
+                double x = Math.random();
+                e.setVariable("x", x);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
                 }
+                assertEquals(Math.sin(x), e.evaluate(), 0f);
             });
         }
     }
