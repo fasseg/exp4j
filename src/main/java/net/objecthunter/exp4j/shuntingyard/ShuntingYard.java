@@ -21,6 +21,7 @@ import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.OperatorToken;
 import net.objecthunter.exp4j.tokenizer.Token;
+import net.objecthunter.exp4j.tokenizer.TokenConstants;
 import net.objecthunter.exp4j.tokenizer.Tokenizer;
 
 /**
@@ -39,30 +40,30 @@ public class ShuntingYard {
      */
     public static Token[] convertToRPN(final String expression, final Map<String, Function> userFunctions,
             final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication){
-        final Stack<Token> stack = new Stack<Token>();
-        final List<Token> output = new ArrayList<Token>();
+        final Stack<Token> stack = new Stack<>();
+        final List<Token> output = new ArrayList<>();
 
         final Tokenizer tokenizer = new Tokenizer(expression, userFunctions, userOperators, variableNames, implicitMultiplication);
         while (tokenizer.hasNext()) {
             Token token = tokenizer.nextToken();
             switch (token.getType()) {
-            case Token.TOKEN_NUMBER:
-            case Token.TOKEN_VARIABLE:
+            case TokenConstants.TOKEN_NUMBER:
+            case TokenConstants.TOKEN_VARIABLE:
                 output.add(token);
                 break;
-            case Token.TOKEN_FUNCTION:
+            case TokenConstants.TOKEN_FUNCTION:
                 stack.add(token);
                 break;
-            case Token.TOKEN_SEPARATOR:
-                while (!stack.empty() && stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
+            case TokenConstants.TOKEN_SEPARATOR:
+                while (!stack.empty() && stack.peek().getType() != TokenConstants.TOKEN_PARENTHESES_OPEN) {
                     output.add(stack.pop());
                 }
-                if (stack.empty() || stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
+                if (stack.empty() || stack.peek().getType() != TokenConstants.TOKEN_PARENTHESES_OPEN) {
                     throw new IllegalArgumentException("Misplaced function separator ',' or mismatched parentheses");
                 }
                 break;
-            case Token.TOKEN_OPERATOR:
-                while (!stack.empty() && stack.peek().getType() == Token.TOKEN_OPERATOR) {
+            case TokenConstants.TOKEN_OPERATOR:
+                while (!stack.empty() && stack.peek().getType() == TokenConstants.TOKEN_OPERATOR) {
                     OperatorToken o1 = (OperatorToken) token;
                     OperatorToken o2 = (OperatorToken) stack.peek();
                     if (o1.getOperator().getNumOperands() == 1 && o2.getOperator().getNumOperands() == 2) {
@@ -76,15 +77,15 @@ public class ShuntingYard {
                 }
                 stack.push(token);
                 break;
-            case Token.TOKEN_PARENTHESES_OPEN:
+            case TokenConstants.TOKEN_PARENTHESES_OPEN:
                 stack.push(token);
                 break;
-            case Token.TOKEN_PARENTHESES_CLOSE:
-                while (stack.peek().getType() != Token.TOKEN_PARENTHESES_OPEN) {
+            case TokenConstants.TOKEN_PARENTHESES_CLOSE:
+                while (stack.peek().getType() != TokenConstants.TOKEN_PARENTHESES_OPEN) {
                     output.add(stack.pop());
                 }
                 stack.pop();
-                if (!stack.isEmpty() && stack.peek().getType() == Token.TOKEN_FUNCTION) {
+                if (!stack.isEmpty() && stack.peek().getType() == TokenConstants.TOKEN_FUNCTION) {
                     output.add(stack.pop());
                 }
                 break;
@@ -94,12 +95,12 @@ public class ShuntingYard {
         }
         while (!stack.empty()) {
             Token t = stack.pop();
-            if (t.getType() == Token.TOKEN_PARENTHESES_CLOSE || t.getType() == Token.TOKEN_PARENTHESES_OPEN) {
+            if (t.getType() == TokenConstants.TOKEN_PARENTHESES_CLOSE || t.getType() == TokenConstants.TOKEN_PARENTHESES_OPEN) {
                 throw new IllegalArgumentException("Mismatched parentheses detected. Please check the expression");
             } else {
                 output.add(t);
             }
         }
-        return (Token[]) output.toArray(new Token[output.size()]);
+        return output.toArray(new Token[0]);
     }
 }

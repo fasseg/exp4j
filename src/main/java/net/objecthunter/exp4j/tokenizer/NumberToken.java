@@ -19,6 +19,7 @@ package net.objecthunter.exp4j.tokenizer;
  * Represents a number in the expression
  */
 public final class NumberToken extends Token {
+
     private final double value;
 
     /**
@@ -26,7 +27,7 @@ public final class NumberToken extends Token {
      * @param value the value of the number
      */
     public NumberToken(double value) {
-        super(TOKEN_NUMBER);
+        super(TokenConstants.TOKEN_NUMBER);
         this.value = value;
     }
 

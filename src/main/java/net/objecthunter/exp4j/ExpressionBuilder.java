@@ -174,7 +174,7 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        /* set the contants' varibale names */
+        /* set the constants' variable names */
         variableNames.add("pi");
         variableNames.add("π");
         variableNames.add("e");

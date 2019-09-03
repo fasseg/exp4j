@@ -19,48 +19,6 @@ package net.objecthunter.exp4j.operator;
  * Class representing operators that can be used in an expression
  */
 public abstract class Operator {
-    /**
-     * The precedence value for the addition operation
-     */
-    public static final int PRECEDENCE_ADDITION = 500;
-    /**
-     * The precedence value for the subtraction operation
-     */
-    public static final int PRECEDENCE_SUBTRACTION = PRECEDENCE_ADDITION;
-    /**
-     * The precedence value for the multiplication operation
-     */
-    public static final int PRECEDENCE_MULTIPLICATION = 1000;
-    /**
-     * The precedence value for the division operation
-     */
-    public static final int PRECEDENCE_DIVISION = PRECEDENCE_MULTIPLICATION;
-    /**
-     * The precedence value for the modulo operation
-     */
-    public static final int PRECEDENCE_MODULO = PRECEDENCE_DIVISION;
-    /**
-     * The precedence value for the power operation
-     */
-    public static final int PRECEDENCE_POWER = 10000;
-    /**
-     * The precedence value for the unary minus operation
-     */
-    public static final int PRECEDENCE_UNARY_MINUS = 5000;
-    /**
-     * The precedence value for the unary plus operation
-     */
-    public static final int PRECEDENCE_UNARY_PLUS = PRECEDENCE_UNARY_MINUS;
-    /**
-     * The precendence value for the factorial operation
-     */
-    public static final int PRECEDENCE_FACTORIAL = PRECEDENCE_POWER + 1;
-
-    /**
-     * The set of allowed operator chars
-     */
-    public static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/', '%', '^', '!', '#','§',
-            '$', '&', ';', ':', '~', '<', '>', '|', '=', '÷', '√', '∛', '⌈', '⌊'};
 
     protected final int numOperands;
     protected final boolean leftAssociative;
@@ -76,7 +34,6 @@ public abstract class Operator {
      */
     public Operator(String symbol, int numberOfOperands, boolean leftAssociative,
                     int precedence) {
-        super();
         this.numOperands = numberOfOperands;
         this.leftAssociative = leftAssociative;
         this.symbol = symbol;
@@ -89,7 +46,7 @@ public abstract class Operator {
      * @return true if the char is allowed an an operator symbol, false otherwise
      */
     public static boolean isAllowedOperatorChar(char ch) {
-        for (char allowed: ALLOWED_OPERATOR_CHARS) {
+        for (char allowed: OperatorConstants.ALLOWED_OPERATOR_CHARS) {
             if (ch == allowed) {
                 return true;
             }

@@ -35,8 +35,7 @@ class ArrayStack {
 
     ArrayStack(int initialCapacity) {
         if (initialCapacity <= 0) {
-            throw new IllegalArgumentException(
-                    "Stack's capacity must be positive");
+            throw new IllegalArgumentException("Stack's capacity must be positive");
         }
 
         data = new double[initialCapacity];

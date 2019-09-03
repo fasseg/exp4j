@@ -21,9 +21,9 @@ package net.objecthunter.exp4j.tokenizer;
 class CloseParenthesesToken extends Token {
 
     /**
-     * Creare a new instance
+     * Create a new instance
      */
     CloseParenthesesToken() {
-        super(Token.TOKEN_PARENTHESES_CLOSE);
+        super(TokenConstants.TOKEN_PARENTHESES_CLOSE);
     }
 }
