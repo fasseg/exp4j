@@ -14,7 +14,7 @@
                 .setVariable("y", 3.14);
         double result = e.evaluate();
     </pre>
-  <b>Using custom functions</b><br/>
+  <b>Using custom functions</b><br>
   <p>you can extend the abstract class Function in order to use custom functions in expressions. You only have to implement the
   apply(double ... args) method. The following example shows the implementation of a function that calculates the logarithm to an arbitrary base using the identity log<sub>b</sub>(x) = ln(x)/ln(b)</p>
   	<pre>
@@ -31,7 +31,7 @@
         double expected = 3;
         assertEquals(expected, result, 0d);
   	</pre>
-  <b>Using custom operators</b><br/>
+  <b>Using custom operators</b><br>
   <p>you can extend the abstract class Operator in order to use your own operators in expressions. You only have to implement the
   apply(double ... value) method. The Operator's constructor takes four arguments:</p>
   <ul>
@@ -65,7 +65,7 @@
 
     double expected = 6d;
     assertEquals(expected, result, 0d);
-  	</pre>
+    </pre>
   <b>Operators and functions</b><br/><br/>
   <p>the following operators are supported:</p>
   <ul>
