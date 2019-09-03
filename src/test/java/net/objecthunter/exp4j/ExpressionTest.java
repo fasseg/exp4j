@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
+import net.objecthunter.exp4j.operator.OperatorConstants;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.*;
 
@@ -68,7 +69,7 @@ public class ExpressionTest {
 
     @Test
     public void testFactorial() {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -177,7 +178,7 @@ public class ExpressionTest {
     }
     @Test(expected = IllegalArgumentException.class)
 	public void testOperatorFactorial2() {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -202,7 +203,7 @@ public class ExpressionTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void testInvalidFactorial2() {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {

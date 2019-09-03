@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.operator.Operator;
 
+import net.objecthunter.exp4j.operator.OperatorConstants;
 import org.junit.Test;
 
 public class ExpressionBuilderTest {
@@ -107,7 +108,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testExpressionBuilder6() {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -651,7 +652,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testOperators1()  {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -692,7 +693,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testOperators2()  {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -724,7 +725,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testOperators3()  {
-        Operator gteq = new Operator(">=", 2, true, Operator.PRECEDENCE_ADDITION - 1) {
+        Operator gteq = new Operator(">=", 2, true, OperatorConstants.PRECEDENCE_ADDITION - 1) {
 
             @Override
             public double apply(double[] values) {
@@ -1631,7 +1632,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testDocumentationExample8()  {
-        Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
@@ -1661,7 +1662,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testDocumentationExample9()  {
-        Operator gteq = new Operator(">=", 2, true, Operator.PRECEDENCE_ADDITION - 1) {
+        Operator gteq = new Operator(">=", 2, true, OperatorConstants.PRECEDENCE_ADDITION - 1) {
 
             @Override
             public double apply(double[] values) {
@@ -1683,7 +1684,7 @@ public class ExpressionBuilderTest {
 
     @Test(expected = ArithmeticException.class)
     public void testDocumentationExample10()  {
-        Operator reciprocal = new Operator("$", 1, true, Operator.PRECEDENCE_DIVISION) {
+        Operator reciprocal = new Operator("$", 1, true, OperatorConstants.PRECEDENCE_DIVISION) {
             @Override
             public double apply(final double... args) {
                 if (args[0] == 0d) {
@@ -2699,7 +2700,7 @@ public class ExpressionBuilderTest {
 
     @Test
     public void testTwoAdjacentOperators() {
-        final Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+        final Operator factorial = new Operator("!", 1, true, OperatorConstants.PRECEDENCE_POWER + 1) {
 
             @Override
             public double apply(double... args) {
