@@ -48,11 +48,11 @@
             if ((double) arg != args[0]) {
                 throw new IllegalArgumentException("Operand for factorial has to be an integer");
             }
-            if (arg < 0) {
+            if (arg &lt; 0) {
                 throw new IllegalArgumentException("The operand of the factorial can not be less than zero");
             }
             double result = 1;
-            for (int i = 1; i <= arg; i++) {
+            for (int i = 1; i &lt;= arg; i++) {
                 result *= i;
             }
             return result;
@@ -66,7 +66,7 @@
     double expected = 6d;
     assertEquals(expected, result, 0d);
     </pre>
-  <b>Operators and functions</b><br/><br/>
+  <b>Operators and functions</b><br><br>
   <p>the following operators are supported:</p>
   <ul>
       <li>Addition: '2 + 2'</li>
@@ -107,6 +107,6 @@
       <li>signum: signum of a value</li>
       <li>toradian: converts from degrees to radians</li>
       <li>todegree: converts from radians to degrees</li>
-  </ul><br/><br/>
+  </ul><br><br>
   </BODY>
 </HTML>
