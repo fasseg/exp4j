@@ -51,10 +51,6 @@ public abstract class Operator {
      * The precedence value for the unary plus operation
      */
     public static final int PRECEDENCE_UNARY_PLUS = PRECEDENCE_UNARY_MINUS;
-    /**
-     * The precendence value for the factorial operation
-     */
-    public static final int PRECEDENCE_FACTORIAL = PRECEDENCE_POWER + 1;
 
     /**
      * The set of allowed operator chars
@@ -62,10 +58,10 @@ public abstract class Operator {
     public static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/', '%', '^', '!', '#','§',
             '$', '&', ';', ':', '~', '<', '>', '|', '=', '÷', '√', '∛', '⌈', '⌊'};
 
-    protected final int numOperands;
-    protected final boolean leftAssociative;
-    protected final String symbol;
-    protected final int precedence;
+    private final int numOperands;
+    private final boolean leftAssociative;
+    private final String symbol;
+    private final int precedence;
 
     /**
      * Create a new operator for use in expressions

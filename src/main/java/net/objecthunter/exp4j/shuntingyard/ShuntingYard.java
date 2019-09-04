@@ -39,8 +39,8 @@ public class ShuntingYard {
      */
     public static Token[] convertToRPN(final String expression, final Map<String, Function> userFunctions,
             final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication){
-        final Stack<Token> stack = new Stack<Token>();
-        final List<Token> output = new ArrayList<Token>();
+        final Stack<Token> stack = new Stack<>();
+        final List<Token> output = new ArrayList<>();
 
         final Tokenizer tokenizer = new Tokenizer(expression, userFunctions, userOperators, variableNames, implicitMultiplication);
         while (tokenizer.hasNext()) {
@@ -100,6 +100,6 @@ public class ShuntingYard {
                 output.add(t);
             }
         }
-        return (Token[]) output.toArray(new Token[output.size()]);
+        return output.toArray(new Token[output.size()]);
     }
 }

@@ -32,8 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -80,7 +78,7 @@ public class Expression {
 
     public Expression setVariable(final String name, final double value) {
         this.checkVariableName(name);
-        this.variables.put(name, Double.valueOf(value));
+        this.variables.put(name, value);
         return this;
     }
 
@@ -170,18 +168,12 @@ public class Expression {
     }
 
     public Future<Double> evaluateAsync(ExecutorService executor) {
-        return executor.submit(new Callable<Double>() {
-            @Override
-            public Double call() throws Exception {
-                return evaluate();
-            }
-        });
+        return executor.submit(() -> evaluate());
     }
 
     public double evaluate() {
         final ArrayStack output = new ArrayStack();
-        for (int i = 0; i < tokens.length; i++) {
-            Token t = tokens[i];
+        for (Token t : tokens) {
             if (t.getType() == Token.TOKEN_NUMBER) {
                 output.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {

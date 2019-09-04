@@ -174,17 +174,20 @@ public class ExpressionBuilder {
         if (expression.length() == 0) {
             throw new IllegalArgumentException("The expression can not be empty");
         }
-        /* set the contants' varibale names */
+
+        /* set the constants' varibale names */
         variableNames.add("pi");
         variableNames.add("π");
         variableNames.add("e");
         variableNames.add("φ");
+
         /* Check if there are duplicate vars/functions */
         for (String var : variableNames) {
             if (Functions.getBuiltinFunction(var) != null || userFunctions.containsKey(var)) {
                 throw new IllegalArgumentException("A variable can not have the same name as a function [" + var + "]");
             }
         }
+
         return new Expression(ShuntingYard.convertToRPN(this.expression, this.userFunctions, this.userOperators,
                 this.variableNames, this.implicitMultiplication), this.userFunctions.keySet());
     }

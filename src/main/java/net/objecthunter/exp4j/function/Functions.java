@@ -52,8 +52,6 @@ public class Functions {
     private static final int INDEX_TO_RADIAN = 29;
     private static final int INDEX_TO_DEGREE = 30;
 
-
-
     private static final Function[] builtinFunctions = new Function[31];
 
     static {
@@ -219,7 +217,7 @@ public class Functions {
             @Override
             public double apply(double... args) {
                 double cos = Math.cos(args[0]);
-                if(cos == 0d) {
+                if (cos == 0d) {
                     throw new ArithmeticException("Division by zero in secant!");
                 }
                 return 1d/cos;
@@ -229,7 +227,7 @@ public class Functions {
             @Override
             public double apply(double... args) {
                 //this would throw an ArithmeticException later as sinh(0) = 0
-                if(args[0] == 0d) {
+                if (args[0] == 0d) {
                     return 0;
                 }
 
@@ -276,68 +274,69 @@ public class Functions {
      */
     public static Function getBuiltinFunction(final String name) {
 
-        if (name.equals("sin")) {
-            return builtinFunctions[INDEX_SIN];
-        } else if (name.equals("cos")) {
-            return builtinFunctions[INDEX_COS];
-        } else if (name.equals("tan")) {
-            return builtinFunctions[INDEX_TAN];
-        } else if (name.equals("cot")) {
-            return builtinFunctions[INDEX_COT];
-        } else if (name.equals("asin")) {
-            return builtinFunctions[INDEX_ASIN];
-        } else if (name.equals("acos")) {
-            return builtinFunctions[INDEX_ACOS];
-        } else if (name.equals("atan")) {
-            return builtinFunctions[INDEX_ATAN];
-        } else if (name.equals("sinh")) {
-            return builtinFunctions[INDEX_SINH];
-        } else if (name.equals("cosh")) {
-            return builtinFunctions[INDEX_COSH];
-        } else if (name.equals("tanh")) {
-            return builtinFunctions[INDEX_TANH];
-        } else if (name.equals("abs")) {
-            return builtinFunctions[INDEX_ABS];
-        } else if (name.equals("log")) {
-            return builtinFunctions[INDEX_LOG];
-        } else if (name.equals("log10")) {
-            return builtinFunctions[INDEX_LOG10];
-        } else if (name.equals("log2")) {
-            return builtinFunctions[INDEX_LOG2];
-        } else if (name.equals("log1p")) {
-            return builtinFunctions[INDEX_LOG1P];
-        } else if (name.equals("ceil")) {
-            return builtinFunctions[INDEX_CEIL];
-        } else if (name.equals("floor")) {
-            return builtinFunctions[INDEX_FLOOR];
-        } else if (name.equals("sqrt")) {
-            return builtinFunctions[INDEX_SQRT];
-        } else if (name.equals("cbrt")) {
-            return builtinFunctions[INDEX_CBRT];
-        } else if (name.equals("pow")) {
-            return builtinFunctions[INDEX_POW];
-        } else if (name.equals("exp")) {
-            return builtinFunctions[INDEX_EXP];
-        } else if (name.equals("expm1")) {
-            return builtinFunctions[INDEX_EXPM1];
-        } else if (name.equals("signum")) {
-            return builtinFunctions[INDEX_SGN];
-        } else if (name.equals("csc")) {
-            return builtinFunctions[INDEX_CSC];
-        } else if (name.equals("sec")) {
-            return builtinFunctions[INDEX_SEC];
-        } else if (name.equals("csch")) {
-            return builtinFunctions[INDEX_CSCH];
-        } else if (name.equals("sech")) {
-            return builtinFunctions[INDEX_SECH];
-        } else if(name.equals("coth")) {
-            return builtinFunctions[INDEX_COTH];
-        } else if(name.equals("toradian")) {
-            return builtinFunctions[INDEX_TO_RADIAN];
-        } else if(name.equals("todegree")) {
-            return builtinFunctions[INDEX_TO_DEGREE];
-        } else {
-            return null;
+        switch (name) {
+            case "sin":
+                return builtinFunctions[INDEX_SIN];
+            case "cos":
+                return builtinFunctions[INDEX_COS];
+            case "tan":
+                return builtinFunctions[INDEX_TAN];
+            case "cot":
+                return builtinFunctions[INDEX_COT];
+            case "asin":
+                return builtinFunctions[INDEX_ASIN];
+            case "acos":
+                return builtinFunctions[INDEX_ACOS];
+            case "atan":
+                return builtinFunctions[INDEX_ATAN];
+            case "sinh":
+                return builtinFunctions[INDEX_SINH];
+            case "cosh":
+                return builtinFunctions[INDEX_COSH];
+            case "tanh":
+                return builtinFunctions[INDEX_TANH];
+            case "abs":
+                return builtinFunctions[INDEX_ABS];
+            case "log":
+                return builtinFunctions[INDEX_LOG];
+            case "log10":
+                return builtinFunctions[INDEX_LOG10];
+            case "log2":
+                return builtinFunctions[INDEX_LOG2];
+            case "log1p":
+                return builtinFunctions[INDEX_LOG1P];
+            case "ceil":
+                return builtinFunctions[INDEX_CEIL];
+            case "floor":
+                return builtinFunctions[INDEX_FLOOR];
+            case "sqrt":
+                return builtinFunctions[INDEX_SQRT];
+            case "cbrt":
+                return builtinFunctions[INDEX_CBRT];
+            case "pow":
+                return builtinFunctions[INDEX_POW];
+            case "exp":
+                return builtinFunctions[INDEX_EXP];
+            case "expm1":
+                return builtinFunctions[INDEX_EXPM1];
+            case "signum":
+                return builtinFunctions[INDEX_SGN];
+            case "csc":
+                return builtinFunctions[INDEX_CSC];
+            case "sec":
+                return builtinFunctions[INDEX_SEC];
+            case "csch":
+                return builtinFunctions[INDEX_CSCH];
+            case "sech":
+                return builtinFunctions[INDEX_SECH];
+            case "coth":
+                return builtinFunctions[INDEX_COTH];
+            case "toradian":
+                return builtinFunctions[INDEX_TO_RADIAN];
+            case "todegree":
+                return builtinFunctions[INDEX_TO_DEGREE];
+            default:
+                return null;
         }
     }
 
