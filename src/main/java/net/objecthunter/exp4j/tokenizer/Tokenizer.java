@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,7 +86,7 @@ public class Tokenizer {
             }
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
-            return parseArgumentSeparatorToken(ch);
+            return parseArgumentSeparatorToken();
         } else if (isOpenParentheses(ch)) {
             if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
@@ -119,7 +119,7 @@ public class Tokenizer {
         throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
-    private Token parseArgumentSeparatorToken(char ch) {
+    private Token parseArgumentSeparatorToken() {
         this.pos++;
         this.lastToken = new ArgumentSeparatorToken();
         return lastToken;
@@ -207,7 +207,7 @@ public class Tokenizer {
             Operator op = this.getOperator(symbol.toString());
             if (op == null) {
                 symbol.setLength(symbol.length() - 1);
-            }else{
+            } else {
                 lastValid = op;
                 break;
             }

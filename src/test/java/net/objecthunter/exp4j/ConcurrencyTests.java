@@ -57,7 +57,7 @@ public class ConcurrencyTests {
                     .evaluateAsync(exec);
         }
 
-        for (int i = 0; i< numTests;i++) {
+        for (int i = 0; i < numTests; i++) {
             assertEquals(correct1[i], (Double) results1[i].get(), 0d);
             assertEquals(correct2[i], (Double) results2[i].get(), 0d);
         }

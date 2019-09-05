@@ -19,6 +19,7 @@ package net.objecthunter.exp4j.tokenizer;
  * represents a setVariable used in an expression
  */
 public class VariableToken extends Token {
+
     private final String name;
 
     /**

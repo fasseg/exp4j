@@ -34,7 +34,7 @@ public class ShuntingYard {
      * @param userFunctions the custom functions used
      * @param userOperators the custom operators used
      * @param variableNames the variable names used in the expression
-     * @param implicitMultiplication set to fasle to turn off implicit multiplication
+     * @param implicitMultiplication set to false to turn off implicit multiplication
      * @return a {@link net.objecthunter.exp4j.tokenizer.Token} array containing the result
      */
     public static Token[] convertToRPN(final String expression, final Map<String, Function> userFunctions,
