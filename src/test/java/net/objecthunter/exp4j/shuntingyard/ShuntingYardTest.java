@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ public class ShuntingYardTest {
         assertOperatorToken(tokens[2], "-", 1, Operator.PRECEDENCE_UNARY_MINUS);
         assertOperatorToken(tokens[3], "^", 2, Operator.PRECEDENCE_POWER);
     }
+
     @Test
     public void testShuntingYard6() throws Exception {
         String expression = "2^---+2";
@@ -86,6 +87,7 @@ public class ShuntingYardTest {
         assertOperatorToken(tokens[5], "-", 1, Operator.PRECEDENCE_UNARY_MINUS);
         assertOperatorToken(tokens[6], "^", 2, Operator.PRECEDENCE_POWER);
     }
+
     @Test
     public void testShuntingYard7() throws Exception {
         String expression = "2^-2!";

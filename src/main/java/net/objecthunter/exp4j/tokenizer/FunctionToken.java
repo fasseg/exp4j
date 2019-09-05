@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
