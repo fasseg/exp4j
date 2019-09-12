@@ -95,6 +95,11 @@ public class Expression {
         return this;
     }
 
+    public Expression clearVariables() {
+        this.variables.clear();
+        return this;
+    }
+
     public Set<String> getVariableNames() {
         final Set<String> variables = new HashSet<String>();
         for (final Token t: tokens) {

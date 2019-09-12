@@ -27,6 +27,7 @@ import net.objecthunter.exp4j.tokenizer.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -223,6 +224,44 @@ public class ExpressionTest {
         Expression e = new ExpressionBuilder("!!3").build();
         assertFalse(e.validate().isValid());
     }
+
+    @Test
+    public void testClearVariables() {
+        ExpressionBuilder builder = new ExpressionBuilder("x + y");
+        builder.variable("x");
+        builder.variable("y");
+
+        Expression expression = builder.build();
+        HashMap<String, Double> values = new HashMap<String, Double>();
+        values.put("x", 1.0);
+        values.put("y", 2.0);
+        expression.setVariables(values);
+
+
+        double result = expression.evaluate();
+        assertEquals(3.0, result, 3.0-result);
+
+        expression.clearVariables();
+
+        try {
+            result = expression.evaluate();
+            assertFalse("Should fail as there aren't values in the expression.", true);
+        } catch(Exception ignored){
+
+        }
+
+        HashMap<String, Double> emptyMap = new HashMap<String, Double>();
+        expression.setVariables(emptyMap);
+
+        try {
+            result = expression.evaluate();
+            assertFalse("Should fail as there aren't values in the expression.", true);
+        } catch(Exception ignored){
+
+        }
+
+    }
+
 
     @Test
     @Ignore
