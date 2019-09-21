@@ -18,7 +18,7 @@ package net.objecthunter.exp4j.tokenizer;
 /**
  * Represents an argument separator in functions i.e: ','
  */
-class ArgumentSeparatorToken extends Token{
+class ArgumentSeparatorToken extends Token {
     /**
      * Create a new instance
      */

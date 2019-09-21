@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,27 +11,16 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package net.objecthunter.exp4j;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
-import net.objecthunter.exp4j.tokenizer.FunctionToken;
-import net.objecthunter.exp4j.tokenizer.NumberToken;
-import net.objecthunter.exp4j.tokenizer.OperatorToken;
-import net.objecthunter.exp4j.tokenizer.Token;
-import net.objecthunter.exp4j.tokenizer.VariableToken;
+import net.objecthunter.exp4j.tokenizer.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -51,17 +40,17 @@ public class Expression {
         vars.put("e", Math.E);
         return vars;
     }
-    
+
     /**
      * Creates a new expression that is a copy of the existing one.
-     * 
+     *
      * @param existing the expression to copy
      */
     public Expression(final Expression existing) {
-    	this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
-    	this.variables = new HashMap<String,Double>();
-    	this.variables.putAll(existing.variables);
-    	this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
+        this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
+        this.variables = new HashMap<String, Double>();
+        this.variables.putAll(existing.variables);
+        this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
     }
 
     Expression(final Token[] tokens) {
@@ -102,9 +91,9 @@ public class Expression {
 
     public Set<String> getVariableNames() {
         final Set<String> variables = new HashSet<String>();
-        for (final Token t: tokens) {
+        for (final Token t : tokens) {
             if (t.getType() == Token.TOKEN_VARIABLE)
-                variables.add(((VariableToken)t).getName());
+                variables.add(((VariableToken) t).getName());
         }
         return variables;
     }
@@ -138,7 +127,7 @@ public class Expression {
                     break;
                 case Token.TOKEN_FUNCTION:
                     final Function func = ((FunctionToken) tok).getFunction();
-                    final int argsNum = func.getNumArguments(); 
+                    final int argsNum = func.getNumArguments();
                     if (argsNum > count) {
                         errors.add("Not enough arguments for '" + func.getName() + "'");
                     }

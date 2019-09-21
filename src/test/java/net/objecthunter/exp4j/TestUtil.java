@@ -16,11 +16,10 @@
 
 package net.objecthunter.exp4j;
 
-import static org.junit.Assert.assertEquals;
-
 import net.objecthunter.exp4j.tokenizer.*;
-
 import org.junit.Assert;
+
+import static org.junit.Assert.assertEquals;
 
 public abstract class TestUtil {
 

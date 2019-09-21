@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,17 +11,17 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package net.objecthunter.exp4j.tokenizer;
-
-import java.util.Map;
-import java.util.Set;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
+
+import java.util.Map;
+import java.util.Set;
 
 public class Tokenizer {
 
@@ -43,7 +43,7 @@ public class Tokenizer {
 
 
     public Tokenizer(String expression, final Map<String, Function> userFunctions,
-            final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication) {
+                     final Map<String, Operator> userOperators, final Set<String> variableNames, final boolean implicitMultiplication) {
         this.expression = expression.trim().toCharArray();
         this.expressionLength = this.expression.length;
         this.userFunctions = userFunctions;
@@ -66,7 +66,7 @@ public class Tokenizer {
         return this.expression.length > pos;
     }
 
-    public Token nextToken(){
+    public Token nextToken() {
         char ch = expression[pos];
         while (Character.isWhitespace(ch)) {
             ch = expression[++pos];
@@ -86,7 +86,7 @@ public class Tokenizer {
             }
             return parseNumberToken(ch);
         } else if (isArgumentSeparator(ch)) {
-            return parseArgumentSeparatorToken(ch);
+            return parseArgumentSeparatorToken();
         } else if (isOpenParentheses(ch)) {
             if (lastToken != null && implicitMultiplication &&
                     (lastToken.getType() != Token.TOKEN_OPERATOR
@@ -119,7 +119,7 @@ public class Tokenizer {
         throw new IllegalArgumentException("Unable to parse char '" + ch + "' (Code:" + (int) ch + ") at [" + pos + "]");
     }
 
-    private Token parseArgumentSeparatorToken(char ch) {
+    private Token parseArgumentSeparatorToken() {
         this.pos++;
         this.lastToken = new ArgumentSeparatorToken();
         return lastToken;
@@ -199,7 +199,7 @@ public class Tokenizer {
         Operator lastValid = null;
         symbol.append(firstChar);
 
-        while (!isEndOfExpression(offset + len)  && Operator.isAllowedOperatorChar(expression[offset + len])) {
+        while (!isEndOfExpression(offset + len) && Operator.isAllowedOperatorChar(expression[offset + len])) {
             symbol.append(expression[offset + len++]);
         }
 
@@ -207,7 +207,7 @@ public class Tokenizer {
             Operator op = this.getOperator(symbol.toString());
             if (op == null) {
                 symbol.setLength(symbol.length() - 1);
-            }else{
+            } else {
                 lastValid = op;
                 break;
             }

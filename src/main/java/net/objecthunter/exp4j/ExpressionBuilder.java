@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,17 +11,17 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 
 package net.objecthunter.exp4j;
-
-import java.util.*;
 
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.shuntingyard.ShuntingYard;
+
+import java.util.*;
 
 /**
  * Factory class for {@link Expression} instances. This class is the main API entrypoint. Users should create new
@@ -41,6 +41,7 @@ public class ExpressionBuilder {
 
     /**
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
+     *
      * @param expression the expression to be parsed
      */
     public ExpressionBuilder(String expression) {
@@ -55,6 +56,7 @@ public class ExpressionBuilder {
 
     /**
      * Add a {@link net.objecthunter.exp4j.function.Function} implementation available for use in the expression
+     *
      * @param function the custom {@link net.objecthunter.exp4j.function.Function} implementation that should be available for use in the expression.
      * @return the ExpressionBuilder instance
      */
@@ -65,6 +67,7 @@ public class ExpressionBuilder {
 
     /**
      * Add multiple {@link net.objecthunter.exp4j.function.Function} implementations available for use in the expression
+     *
      * @param functions the custom {@link net.objecthunter.exp4j.function.Function} implementations
      * @return the ExpressionBuilder instance
      */
@@ -77,6 +80,7 @@ public class ExpressionBuilder {
 
     /**
      * Add multiple {@link net.objecthunter.exp4j.function.Function} implementations available for use in the expression
+     *
      * @param functions A {@link java.util.List} of custom {@link net.objecthunter.exp4j.function.Function} implementations
      * @return the ExpressionBuilder instance
      */
@@ -89,6 +93,7 @@ public class ExpressionBuilder {
 
     /**
      * Declare variable names used in the expression
+     *
      * @param variableNames the variables used in the expression
      * @return the ExpressionBuilder instance
      */
@@ -99,16 +104,18 @@ public class ExpressionBuilder {
 
     /**
      * Declare variable names used in the expression
+     *
      * @param variableNames the variables used in the expression
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder variables(String ... variableNames) {
+    public ExpressionBuilder variables(String... variableNames) {
         Collections.addAll(this.variableNames, variableNames);
         return this;
     }
 
     /**
      * Declare a variable used in the expression
+     *
      * @param variableName the variable used in the expression
      * @return the ExpressionBuilder instance
      */
@@ -124,6 +131,7 @@ public class ExpressionBuilder {
 
     /**
      * Add an {@link net.objecthunter.exp4j.operator.Operator} which should be available for use in the expression
+     *
      * @param operator the custom {@link net.objecthunter.exp4j.operator.Operator} to add
      * @return the ExpressionBuilder instance
      */
@@ -144,6 +152,7 @@ public class ExpressionBuilder {
 
     /**
      * Add multiple {@link net.objecthunter.exp4j.operator.Operator} implementations which should be available for use in the expression
+     *
      * @param operators the set of custom {@link net.objecthunter.exp4j.operator.Operator} implementations to add
      * @return the ExpressionBuilder instance
      */
@@ -156,6 +165,7 @@ public class ExpressionBuilder {
 
     /**
      * Add multiple {@link net.objecthunter.exp4j.operator.Operator} implementations which should be available for use in the expression
+     *
      * @param operators the {@link java.util.List} of custom {@link net.objecthunter.exp4j.operator.Operator} implementations to add
      * @return the ExpressionBuilder instance
      */
@@ -168,6 +178,7 @@ public class ExpressionBuilder {
 
     /**
      * Build the {@link Expression} instance using the custom operators and functions set.
+     *
      * @return an {@link Expression} instance which can be used to evaluate the result of the expression
      */
     public Expression build() {

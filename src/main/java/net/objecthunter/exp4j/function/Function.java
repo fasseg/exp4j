@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2014 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 
 package net.objecthunter.exp4j.function;
@@ -27,8 +27,8 @@ public abstract class Function {
 
     /**
      * Create a new Function with a given name and number of arguments
-     * 
-     * @param name the name of the Function
+     *
+     * @param name         the name of the Function
      * @param numArguments the number of arguments the function takes
      */
     public Function(String name, int numArguments) {
@@ -46,7 +46,7 @@ public abstract class Function {
 
     /**
      * Create a new Function with a given name that takes a single argument
-     * 
+     *
      * @param name the name of the Function
      */
     public Function(String name) {
@@ -55,7 +55,7 @@ public abstract class Function {
 
     /**
      * Get the name of the Function
-     * 
+     *
      * @return the name
      */
     public String getName() {
@@ -64,7 +64,7 @@ public abstract class Function {
 
     /**
      * Get the number of arguments for this function
-     * 
+     *
      * @return the number of arguments
      */
     public int getNumArguments() {
@@ -73,7 +73,7 @@ public abstract class Function {
 
     /**
      * Method that does the actual calculation of the function value given the arguments
-     * 
+     *
      * @param args the set of arguments used for calculating the function
      * @return the result of the function evaluation
      */
@@ -81,10 +81,10 @@ public abstract class Function {
 
     /**
      * Get the set of characters which are allowed for use in Function names.
-     * 
+     *
      * @return the set of characters allowed
      * @deprecated since 0.4.5 All unicode letters are allowed to be used in function names since 0.4.3. This API
-     *             Function can be safely ignored. Checks for function name validity can be done using Character.isLetter() et al.
+     * Function can be safely ignored. Checks for function name validity can be done using Character.isLetter() et al.
      */
     public static char[] getAllowedFunctionCharacters() {
         char[] chars = new char[53];

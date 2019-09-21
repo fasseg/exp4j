@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-  <HEAD>
+<HEAD>
     <TITLE>exp4j</TITLE>
-  </HEAD>
-  <BODY>
-  <h2>Using the ExpressionBuilder and the Expression API</h2>
-  <b>Evaluate an expression</b>
-  	<pre>
+</HEAD>
+<BODY>
+<h2>Using the ExpressionBuilder and the Expression API</h2>
+<b>Evaluate an expression</b>
+<pre>
         Expression e = new ExpressionBuilder("3 * sin(y) - 2 / (x - 2)")
                 .variables("x", "y")
                 .build()
@@ -14,10 +14,12 @@
                 .setVariable("y", 3.14);
         double result = e.evaluate();
     </pre>
-  <b>Using custom functions</b><br>
-  <p>you can extend the abstract class Function in order to use custom functions in expressions. You only have to implement the
-  apply(double ... args) method. The following example shows the implementation of a function that calculates the logarithm to an arbitrary base using the identity log<sub>b</sub>(x) = ln(x)/ln(b)</p>
-  	<pre>
+<b>Using custom functions</b><br>
+<p>you can extend the abstract class Function in order to use custom functions in expressions. You only have to
+    implement the
+    apply(double ... args) method. The following example shows the implementation of a function that calculates the
+    logarithm to an arbitrary base using the identity log<sub>b</sub>(x) = ln(x)/ln(b)</p>
+<pre>
         Function logb = new Function("logb", 2) {
             &#64;Override
             public double apply(double... args) {
@@ -31,16 +33,17 @@
         double expected = 3;
         assertEquals(expected, result, 0d);
   	</pre>
-  <b>Using custom operators</b><br>
-  <p>you can extend the abstract class Operator in order to use your own operators in expressions. You only have to implement the
-  apply(double ... value) method. The Operator's constructor takes four arguments:</p>
-  <ul>
-      <li>the operator's symbols as a String</li>
-      <li>the number of operands for the operation</li>
-      <li>whether the operator is left associative as a boolean</li>
-      <li>the precedence of the operator as an int</li>
-  </ul>
-  	<pre>
+<b>Using custom operators</b><br>
+<p>you can extend the abstract class Operator in order to use your own operators in expressions. You only have to
+    implement the
+    apply(double ... value) method. The Operator's constructor takes four arguments:</p>
+<ul>
+    <li>the operator's symbols as a String</li>
+    <li>the number of operands for the operation</li>
+    <li>whether the operator is left associative as a boolean</li>
+    <li>the precedence of the operator as an int</li>
+</ul>
+<pre>
     Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
         &#64;Override
         public double apply(double... args) {
@@ -66,47 +69,48 @@
     double expected = 6d;
     assertEquals(expected, result, 0d);
     </pre>
-  <b>Operators and functions</b><br><br>
-  <p>the following operators are supported:</p>
-  <ul>
-      <li>Addition: '2 + 2'</li>
-      <li>Subtraction: '2 - 2'</li>
-      <li>Multiplication: '2 * 2'</li>
-      <li>Division: '2 / 2'</li>
-      <li>Exponential: '2 ^ 2'</li>
-      <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
-      <li>Modulo: '2 % 2'</li>
-  </ul>
-  <p>the following functions are supported:</p>
-  <ul>
-      <li>abs: absolute value</li>
-      <li>acos: arc cosine</li>
-      <li>asin: arc sine</li>
-      <li>atan: arc tangent</li>
-      <li>cbrt: cubic root</li>
-      <li>ceil: nearest upper integer</li>
-      <li>cos: cosine</li>
-      <li>cosh: hyperbolic cosine</li>
-      <li>cot: cotangent</li>
-      <li>coth: hyperbolic cotangent</li>
-      <li>csc: cosecant</li>
-      <li>csch: hyperbolic cosecant</li>
-      <li>exp: euler's number raised to the power (e^x)</li>
-      <li>floor: nearest lower integer</li>
-      <li>log: logarithmus naturalis (base e)</li>
-      <li>log2: logarithm to base 2</li>
-      <li>log10: logarithm to base 10</li>
-      <li>logb: logarithm to base b</li>
-      <li>sec: secant</li>
-      <li>sech: hyperbolic secant</li>
-      <li>sin: sine</li>
-      <li>sinh: hyperbolic sine</li>
-      <li>sqrt: square root</li>
-      <li>tan: tangent</li>
-      <li>tanh: hyperbolic tangent</li>
-      <li>signum: signum of a value</li>
-      <li>toradian: converts from degrees to radians</li>
-      <li>todegree: converts from radians to degrees</li>
-  </ul><br><br>
-  </BODY>
+<b>Operators and functions</b><br><br>
+<p>the following operators are supported:</p>
+<ul>
+    <li>Addition: '2 + 2'</li>
+    <li>Subtraction: '2 - 2'</li>
+    <li>Multiplication: '2 * 2'</li>
+    <li>Division: '2 / 2'</li>
+    <li>Exponential: '2 ^ 2'</li>
+    <li>Unary Minus,Plus (Sign Operators): '+2 - (-2)'</li>
+    <li>Modulo: '2 % 2'</li>
+</ul>
+<p>the following functions are supported:</p>
+<ul>
+    <li>abs: absolute value</li>
+    <li>acos: arc cosine</li>
+    <li>asin: arc sine</li>
+    <li>atan: arc tangent</li>
+    <li>cbrt: cubic root</li>
+    <li>ceil: nearest upper integer</li>
+    <li>cos: cosine</li>
+    <li>cosh: hyperbolic cosine</li>
+    <li>cot: cotangent</li>
+    <li>coth: hyperbolic cotangent</li>
+    <li>csc: cosecant</li>
+    <li>csch: hyperbolic cosecant</li>
+    <li>exp: euler's number raised to the power (e^x)</li>
+    <li>floor: nearest lower integer</li>
+    <li>log: logarithmus naturalis (base e)</li>
+    <li>log2: logarithm to base 2</li>
+    <li>log10: logarithm to base 10</li>
+    <li>logb: logarithm to base b</li>
+    <li>sec: secant</li>
+    <li>sech: hyperbolic secant</li>
+    <li>sin: sine</li>
+    <li>sinh: hyperbolic sine</li>
+    <li>sqrt: square root</li>
+    <li>tan: tangent</li>
+    <li>tanh: hyperbolic tangent</li>
+    <li>signum: signum of a value</li>
+    <li>toradian: converts from degrees to radians</li>
+    <li>todegree: converts from radians to degrees</li>
+</ul>
+<br><br>
+</BODY>
 </HTML>

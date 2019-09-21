@@ -23,6 +23,7 @@ public class VariableToken extends Token {
 
     /**
      * Get the name of the setVariable
+     *
      * @return the name
      */
     public String getName() {
@@ -31,6 +32,7 @@ public class VariableToken extends Token {
 
     /**
      * Create a new instance
+     *
      * @param name the name of the setVariable
      */
     public VariableToken(String name) {

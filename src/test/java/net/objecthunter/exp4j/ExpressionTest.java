@@ -1,29 +1,24 @@
-/* 
-* Copyright 2014 Frank Asseg
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. 
-*/
+/*
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.objecthunter.exp4j;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import net.objecthunter.exp4j.function.Functions;
 import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.operator.Operators;
 import net.objecthunter.exp4j.tokenizer.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -31,22 +26,24 @@ import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static org.junit.Assert.*;
+
 
 public class ExpressionTest {
     @Test
-    public void testExpression1() throws Exception{
-        Token[] tokens = new Token[] {
-            new NumberToken(3d),
-            new NumberToken(2d),
-            new OperatorToken(Operators.getBuiltinOperator('+', 2))
+    public void testExpression1() {
+        Token[] tokens = new Token[]{
+                new NumberToken(3d),
+                new NumberToken(2d),
+                new OperatorToken(Operators.getBuiltinOperator('+', 2))
         };
         Expression exp = new Expression(tokens);
         assertEquals(5d, exp.evaluate(), 0d);
     }
 
     @Test
-    public void testExpression2() throws Exception{
-        Token[] tokens = new Token[] {
+    public void testExpression2() {
+        Token[] tokens = new Token[]{
                 new NumberToken(1d),
                 new FunctionToken(Functions.getBuiltinFunction("log")),
         };
@@ -55,8 +52,8 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testGetVariableNames1() throws Exception{
-        Token[] tokens = new Token[] {
+    public void testGetVariableNames1() {
+        Token[] tokens = new Token[]{
                 new VariableToken("a"),
                 new VariableToken("b"),
                 new OperatorToken(Operators.getBuiltinOperator('+', 2))
@@ -67,7 +64,7 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testFactorial() throws Exception {
+    public void testFactorial() {
         Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
 
             @Override
@@ -116,7 +113,7 @@ public class ExpressionTest {
                 .operator(factorial)
                 .build();
         assertEquals(12, e.evaluate(), 0);
-        
+
         e = new ExpressionBuilder("3!")
                 .operator(factorial)
                 .build();
@@ -164,7 +161,7 @@ public class ExpressionTest {
     public void testCotangent1() {
         Expression e = new ExpressionBuilder("cot(1)")
                 .build();
-        assertEquals(1/Math.tan(1), e.evaluate(), 0d);
+        assertEquals(1 / Math.tan(1), e.evaluate(), 0d);
 
     }
 
@@ -175,8 +172,9 @@ public class ExpressionTest {
         e.evaluate();
 
     }
+
     @Test(expected = IllegalArgumentException.class)
-	public void testOperatorFactorial2() throws Exception {
+    public void testOperatorFactorial2() {
         Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
 
             @Override
@@ -200,7 +198,7 @@ public class ExpressionTest {
         assertFalse(e.validate().isValid());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInvalidFactorial2() {
         Operator factorial = new Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
 
@@ -239,14 +237,14 @@ public class ExpressionTest {
 
 
         double result = expression.evaluate();
-        assertEquals(3.0, result, 3.0-result);
+        assertEquals(3.0, result, 3.0 - result);
 
         expression.clearVariables();
 
         try {
             result = expression.evaluate();
             assertFalse("Should fail as there aren't values in the expression.", true);
-        } catch(Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
@@ -256,7 +254,7 @@ public class ExpressionTest {
         try {
             result = expression.evaluate();
             assertFalse("Should fail as there aren't values in the expression.", true);
-        } catch(Exception ignored){
+        } catch (Exception ignored) {
 
         }
 
@@ -266,12 +264,12 @@ public class ExpressionTest {
     @Test
     @Ignore
     // If Expression should be threads safe this test must pass
-    public void evaluateFamily() throws Exception {
+    public void evaluateFamily() {
         final Expression e = new ExpressionBuilder("sin(x)")
                 .variable("x")
                 .build();
         Executor executor = Executors.newFixedThreadPool(100);
-        for (int i = 0 ; i < 100000; i++) {
+        for (int i = 0; i < 100000; i++) {
             executor.execute(() -> {
                 double x = Math.random();
                 e.setVariable("x", x);

@@ -80,7 +80,7 @@ public class Functions {
                 if (tan == 0d) {
                     throw new ArithmeticException("Division by zero in cotangent!");
                 }
-                return 1d/tan;
+                return 1d / tan;
             }
         };
         builtinFunctions[INDEX_LOG] = new Function("log") {
@@ -210,7 +210,7 @@ public class Functions {
                 if (sin == 0d) {
                     throw new ArithmeticException("Division by zero in cosecant!");
                 }
-                return 1d/sin;
+                return 1d / sin;
             }
         };
         builtinFunctions[INDEX_SEC] = new Function("sec") {
@@ -220,7 +220,7 @@ public class Functions {
                 if (cos == 0d) {
                     throw new ArithmeticException("Division by zero in secant!");
                 }
-                return 1d/cos;
+                return 1d / cos;
             }
         };
         builtinFunctions[INDEX_CSCH] = new Function("csch") {
@@ -231,19 +231,19 @@ public class Functions {
                     return 0;
                 }
 
-                return 1d/Math.sinh(args[0]);
+                return 1d / Math.sinh(args[0]);
             }
         };
         builtinFunctions[INDEX_SECH] = new Function("sech") {
             @Override
             public double apply(double... args) {
-                return 1d/Math.cosh(args[0]);
+                return 1d / Math.cosh(args[0]);
             }
         };
         builtinFunctions[INDEX_COTH] = new Function("coth") {
             @Override
             public double apply(double... args) {
-                return Math.cosh(args[0])/Math.sinh(args[0]);
+                return Math.cosh(args[0]) / Math.sinh(args[0]);
             }
         };
         builtinFunctions[INDEX_LOGB] = new Function("logb", 2) {
@@ -269,6 +269,7 @@ public class Functions {
 
     /**
      * Get the builtin function for a given name
+     *
      * @param name te name of the function
      * @return a Function instance
      */

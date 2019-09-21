@@ -1,18 +1,18 @@
-/* 
-* Copyright 2014 Frank Asseg
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License. 
-*/
+/*
+ * Copyright 2014 Frank Asseg
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.objecthunter.exp4j.operator;
 
 /**
@@ -55,7 +55,7 @@ public abstract class Operator {
     /**
      * The set of allowed operator chars
      */
-    public static final char[] ALLOWED_OPERATOR_CHARS = { '+', '-', '*', '/', '%', '^', '!', '#','§',
+    public static final char[] ALLOWED_OPERATOR_CHARS = {'+', '-', '*', '/', '%', '^', '!', '#', '§',
             '$', '&', ';', ':', '~', '<', '>', '|', '=', '÷', '√', '∛', '⌈', '⌊'};
 
     private final int numOperands;
@@ -65,10 +65,11 @@ public abstract class Operator {
 
     /**
      * Create a new operator for use in expressions
-     * @param symbol the symbol of the operator
+     *
+     * @param symbol           the symbol of the operator
      * @param numberOfOperands the number of operands the operator takes (1 or 2)
-     * @param leftAssociative set to true if the operator is left associative, false if it is right associative
-     * @param precedence the precedence value of the operator
+     * @param leftAssociative  set to true if the operator is left associative, false if it is right associative
+     * @param precedence       the precedence value of the operator
      */
     public Operator(String symbol, int numberOfOperands, boolean leftAssociative,
                     int precedence) {
@@ -81,11 +82,12 @@ public abstract class Operator {
 
     /**
      * Check if a character is an allowed operator char
+     *
      * @param ch the char to check
      * @return true if the char is allowed an an operator symbol, false otherwise
      */
     public static boolean isAllowedOperatorChar(char ch) {
-        for (char allowed: ALLOWED_OPERATOR_CHARS) {
+        for (char allowed : ALLOWED_OPERATOR_CHARS) {
             if (ch == allowed) {
                 return true;
             }
@@ -95,6 +97,7 @@ public abstract class Operator {
 
     /**
      * Check if the operator is left associative
+     *
      * @return true os the operator is left associative, false otherwise
      */
     public boolean isLeftAssociative() {
@@ -103,6 +106,7 @@ public abstract class Operator {
 
     /**
      * Check the precedence value for the operator
+     *
      * @return the precedence value
      */
     public int getPrecedence() {
@@ -111,13 +115,15 @@ public abstract class Operator {
 
     /**
      * Apply the operation on the given operands
+     *
      * @param args the operands for the operation
      * @return the calculated result of the operation
      */
-    public abstract double apply(double ... args);
+    public abstract double apply(double... args);
 
     /**
      * Get the operator symbol
+     *
      * @return the symbol
      */
     public String getSymbol() {
@@ -126,6 +132,7 @@ public abstract class Operator {
 
     /**
      * Get the number of operands
+     *
      * @return the number of operands
      */
     public int getNumOperands() {
