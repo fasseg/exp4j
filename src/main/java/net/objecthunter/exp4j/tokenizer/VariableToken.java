@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package net.objecthunter.exp4j.tokenizer;
  * represents a setVariable used in an expression
  */
 public class VariableToken extends Token {
+
     private final String name;
 
     /**

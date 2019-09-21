@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@ package net.objecthunter.exp4j.tokenizer;
 
 import net.objecthunter.exp4j.function.Function;
 
-public class FunctionToken extends Token{
+public class FunctionToken extends Token {
+
     private final Function function;
+
     public FunctionToken(final Function function) {
         super(Token.TOKEN_FUNCTION);
         this.function = function;

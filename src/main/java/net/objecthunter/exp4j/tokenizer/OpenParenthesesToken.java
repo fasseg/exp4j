@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package net.objecthunter.exp4j.tokenizer;
 
-class OpenParenthesesToken extends Token{
+class OpenParenthesesToken extends Token {
 
     OpenParenthesesToken() {
         super(TOKEN_PARENTHESES_OPEN);

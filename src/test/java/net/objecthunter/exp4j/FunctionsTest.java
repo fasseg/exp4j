@@ -1,5 +1,5 @@
 /*
-* Copyright 2014 Frank Asseg
+* Copyright 2019 Frank Asseg
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ package net.objecthunter.exp4j;
 import net.objecthunter.exp4j.function.Function;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 public class FunctionsTest {
     @Test(expected = IllegalArgumentException.class)
-    public void testFunctionNameNull() throws Exception {
+    public void testFunctionNameNull() {
         Function f = new Function(null) {
             @Override
             public double apply(double... args) {
@@ -38,7 +36,7 @@ public class FunctionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFunctionNameEmpty() throws Exception {
+    public void testFunctionNameEmpty() {
         Function f = new Function("") {
             @Override
             public double apply(double... args) {
@@ -48,7 +46,7 @@ public class FunctionsTest {
     }
 
     @Test
-    public void testFunctionNameZeroArgs() throws Exception {
+    public void testFunctionNameZeroArgs() {
         Function f = new Function("foo", 0) {
             @Override
             public double apply(double... args) {
@@ -59,7 +57,7 @@ public class FunctionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testFunctionNameNegativeArgs() throws Exception {
+    public void testFunctionNameNegativeArgs() {
         Function f = new Function("foo", -1) {
             @Override
             public double apply(double... args) {
@@ -69,7 +67,7 @@ public class FunctionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testIllegalFunctionName1() throws Exception {
+    public void testIllegalFunctionName1() {
         Function f = new Function("1foo") {
             @Override
             public double apply(double... args) {
@@ -79,7 +77,7 @@ public class FunctionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testIllegalFunctionName2() throws Exception {
+    public void testIllegalFunctionName2() {
         Function f = new Function("_&oo") {
             @Override
             public double apply(double... args) {
@@ -89,7 +87,7 @@ public class FunctionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testIllegalFunctionName3() throws Exception {
+    public void testIllegalFunctionName3() {
         Function f = new Function("o+o") {
             @Override
             public double apply(double... args) {

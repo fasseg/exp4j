@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Frank Asseg
+ * Copyright 2019 Frank Asseg
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package net.objecthunter.exp4j.tokenizer;
 
 /**
- * represents closed parentheses
+ * Represents closed parentheses
  */
 class CloseParenthesesToken extends Token {
 
     /**
-     * Creare a new instance
+     * Create a new instance
      */
     CloseParenthesesToken() {
         super(Token.TOKEN_PARENTHESES_CLOSE);

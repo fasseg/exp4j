@@ -1,5 +1,5 @@
 /* 
-* Copyright 2014 Frank Asseg
+* Copyright 2019 Frank Asseg
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class ConcurrencyTests {
                     .evaluateAsync(exec);
         }
 
-        for (int i = 0; i< numTests;i++) {
+        for (int i = 0; i < numTests; i++) {
             assertEquals(correct1[i], (Double) results1[i].get(), 0d);
             assertEquals(correct2[i], (Double) results2[i].get(), 0d);
         }
