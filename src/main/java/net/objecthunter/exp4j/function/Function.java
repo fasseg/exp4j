@@ -21,7 +21,7 @@ package net.objecthunter.exp4j.function;
  */
 public abstract class Function {
 
-    protected final String name;
+    private final String name;
 
     protected final int numArguments;
 

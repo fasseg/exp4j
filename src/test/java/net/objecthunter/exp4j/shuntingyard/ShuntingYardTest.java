@@ -19,7 +19,7 @@ import net.objecthunter.exp4j.operator.Operator;
 import net.objecthunter.exp4j.tokenizer.Token;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class ShuntingYardTest {
     @Test
     public void testShuntingYard2() {
         String expression = "3*x";
-        Token[] tokens = ShuntingYard.convertToRPN(expression, null, null, new HashSet<String>(Arrays.asList("x")), true);
+        Token[] tokens = ShuntingYard.convertToRPN(expression, null, null, new HashSet<>(Collections.singletonList("x")), true);
         assertNumberToken(tokens[0], 3d);
         assertVariableToken(tokens[1], "x");
         assertOperatorToken(tokens[2], "*", 2, Operator.PRECEDENCE_MULTIPLICATION);
@@ -108,7 +108,7 @@ public class ShuntingYardTest {
                 return result;
             }
         };
-        Map<String, Operator> userOperators = new HashMap<String, Operator>();
+        Map<String, Operator> userOperators = new HashMap<>();
         userOperators.put("!", factorial);
         Token[] tokens = ShuntingYard.convertToRPN(expression, null, userOperators, null, true);
         assertNumberToken(tokens[0], 2d);
@@ -139,7 +139,7 @@ public class ShuntingYardTest {
                 return 1d / args[0];
             }
         };
-        Map<String, Operator> userOperators = new HashMap<String, Operator>();
+        Map<String, Operator> userOperators = new HashMap<>();
         userOperators.put("$", reciprocal);
         Token[] tokens = ShuntingYard.convertToRPN("1$", null, userOperators, null, true);
         assertNumberToken(tokens[0], 1d);

@@ -5,7 +5,7 @@ package net.objecthunter.exp4j.tokenizer;
  *
  * @author Bartosz Firyn (sarxos)
  */
-public class UnknownFunctionOrVariableException extends IllegalArgumentException {
+class UnknownFunctionOrVariableException extends IllegalArgumentException {
 
     /**
      * Serial version UID.

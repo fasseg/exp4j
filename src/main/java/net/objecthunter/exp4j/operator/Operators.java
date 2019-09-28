@@ -25,40 +25,40 @@ public abstract class Operators {
     private static final int INDEX_UNARY_MINUS = 6;
     private static final int INDEX_UNARY_PLUS = 7;
 
-    private static final Operator[] builtinOperators = new Operator[8];
+    private static final Operator[] BUILT_IN_OPERATORS = new Operator[8];
 
     static {
-        builtinOperators[INDEX_ADDITION] = new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
+        BUILT_IN_OPERATORS[INDEX_ADDITION] = new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
             @Override
             public double apply(final double... args) {
                 return args[0] + args[1];
             }
         };
-        builtinOperators[INDEX_SUBTRACTION] = new Operator("-", 2, true, Operator.PRECEDENCE_ADDITION) {
+        BUILT_IN_OPERATORS[INDEX_SUBTRACTION] = new Operator("-", 2, true, Operator.PRECEDENCE_ADDITION) {
             @Override
             public double apply(final double... args) {
                 return args[0] - args[1];
             }
         };
-        builtinOperators[INDEX_UNARY_MINUS] = new Operator("-", 1, false, Operator.PRECEDENCE_UNARY_MINUS) {
+        BUILT_IN_OPERATORS[INDEX_UNARY_MINUS] = new Operator("-", 1, false, Operator.PRECEDENCE_UNARY_MINUS) {
             @Override
             public double apply(final double... args) {
                 return -args[0];
             }
         };
-        builtinOperators[INDEX_UNARY_PLUS] = new Operator("+", 1, false, Operator.PRECEDENCE_UNARY_PLUS) {
+        BUILT_IN_OPERATORS[INDEX_UNARY_PLUS] = new Operator("+", 1, false, Operator.PRECEDENCE_UNARY_PLUS) {
             @Override
             public double apply(final double... args) {
                 return args[0];
             }
         };
-        builtinOperators[INDEX_MULTIPLICATION] = new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+        BUILT_IN_OPERATORS[INDEX_MULTIPLICATION] = new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
             @Override
             public double apply(final double... args) {
                 return args[0] * args[1];
             }
         };
-        builtinOperators[INDEX_DIVISION] = new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {
+        BUILT_IN_OPERATORS[INDEX_DIVISION] = new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {
             @Override
             public double apply(final double... args) {
                 if (args[1] == 0d) {
@@ -67,13 +67,13 @@ public abstract class Operators {
                 return args[0] / args[1];
             }
         };
-        builtinOperators[INDEX_POWER] = new Operator("^", 2, false, Operator.PRECEDENCE_POWER) {
+        BUILT_IN_OPERATORS[INDEX_POWER] = new Operator("^", 2, false, Operator.PRECEDENCE_POWER) {
             @Override
             public double apply(final double... args) {
                 return Math.pow(args[0], args[1]);
             }
         };
-        builtinOperators[INDEX_MODULO] = new Operator("%", 2, true, Operator.PRECEDENCE_MODULO) {
+        BUILT_IN_OPERATORS[INDEX_MODULO] = new Operator("%", 2, true, Operator.PRECEDENCE_MODULO) {
             @Override
             public double apply(final double... args) {
                 if (args[1] == 0d) {
@@ -88,25 +88,25 @@ public abstract class Operators {
         switch (symbol) {
             case '+':
                 if (numArguments != 1) {
-                    return builtinOperators[INDEX_ADDITION];
+                    return BUILT_IN_OPERATORS[INDEX_ADDITION];
                 }
 
-                return builtinOperators[INDEX_UNARY_PLUS];
+                return BUILT_IN_OPERATORS[INDEX_UNARY_PLUS];
             case '-':
                 if (numArguments != 1) {
-                    return builtinOperators[INDEX_SUBTRACTION];
+                    return BUILT_IN_OPERATORS[INDEX_SUBTRACTION];
                 }
 
-                return builtinOperators[INDEX_UNARY_MINUS];
+                return BUILT_IN_OPERATORS[INDEX_UNARY_MINUS];
             case '*':
-                return builtinOperators[INDEX_MULTIPLICATION];
+                return BUILT_IN_OPERATORS[INDEX_MULTIPLICATION];
             case '÷':
             case '/':
-                return builtinOperators[INDEX_DIVISION];
+                return BUILT_IN_OPERATORS[INDEX_DIVISION];
             case '^':
-                return builtinOperators[INDEX_POWER];
+                return BUILT_IN_OPERATORS[INDEX_POWER];
             case '%':
-                return builtinOperators[INDEX_MODULO];
+                return BUILT_IN_OPERATORS[INDEX_MODULO];
             default:
                 return null;
         }

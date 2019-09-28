@@ -230,7 +230,7 @@ public class ExpressionTest {
         builder.variable("y");
 
         Expression expression = builder.build();
-        HashMap<String, Double> values = new HashMap<String, Double>();
+        HashMap<String, Double> values = new HashMap<>();
         values.put("x", 1.0);
         values.put("y", 2.0);
         expression.setVariables(values);
@@ -243,17 +243,17 @@ public class ExpressionTest {
 
         try {
             result = expression.evaluate();
-            assertFalse("Should fail as there aren't values in the expression.", true);
+            fail("Should fail as there aren't values in the expression.");
         } catch (Exception ignored) {
 
         }
 
-        HashMap<String, Double> emptyMap = new HashMap<String, Double>();
+        HashMap<String, Double> emptyMap = new HashMap<>();
         expression.setVariables(emptyMap);
 
         try {
             result = expression.evaluate();
-            assertFalse("Should fail as there aren't values in the expression.", true);
+            fail("Should fail as there aren't values in the expression.");
         } catch (Exception ignored) {
 
         }

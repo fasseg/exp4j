@@ -33,7 +33,7 @@ public class Expression {
     private final Set<String> userFunctionNames;
 
     private static Map<String, Double> createDefaultVariables() {
-        final Map<String, Double> vars = new HashMap<String, Double>(4);
+        final Map<String, Double> vars = new HashMap<>(4);
         vars.put("pi", Math.PI);
         vars.put("π", Math.PI);
         vars.put("φ", 1.61803398874d);
@@ -48,15 +48,15 @@ public class Expression {
      */
     public Expression(final Expression existing) {
         this.tokens = Arrays.copyOf(existing.tokens, existing.tokens.length);
-        this.variables = new HashMap<String, Double>();
+        this.variables = new HashMap<>();
         this.variables.putAll(existing.variables);
-        this.userFunctionNames = new HashSet<String>(existing.userFunctionNames);
+        this.userFunctionNames = new HashSet<>(existing.userFunctionNames);
     }
 
     Expression(final Token[] tokens) {
         this.tokens = tokens;
         this.variables = createDefaultVariables();
-        this.userFunctionNames = Collections.<String>emptySet();
+        this.userFunctionNames = Collections.emptySet();
     }
 
     Expression(final Token[] tokens, Set<String> userFunctionNames) {
@@ -90,7 +90,7 @@ public class Expression {
     }
 
     public Set<String> getVariableNames() {
-        final Set<String> variables = new HashSet<String>();
+        final Set<String> variables = new HashSet<>();
         for (final Token t : tokens) {
             if (t.getType() == Token.TOKEN_VARIABLE)
                 variables.add(((VariableToken) t).getName());
@@ -99,7 +99,7 @@ public class Expression {
     }
 
     public ValidationResult validate(boolean checkVariablesSet) {
-        final List<String> errors = new ArrayList<String>(0);
+        final List<String> errors = new ArrayList<>(0);
         if (checkVariablesSet) {
             /* check that all vars have a value set */
             for (final Token t : this.tokens) {
@@ -162,7 +162,7 @@ public class Expression {
     }
 
     public Future<Double> evaluateAsync(ExecutorService executor) {
-        return executor.submit(() -> evaluate());
+        return executor.submit(this::evaluate);
     }
 
     public double evaluate() {

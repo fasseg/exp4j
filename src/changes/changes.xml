@@ -25,7 +25,7 @@
             <action dev="fas" type="fix">added check for custom function names</action>
             <action dev="fas" type="add">added InvalidCustomFunctionNameException</action>
             <action dev="fas" type="add">added references to site</action>
-            <action dev="fas" type="add">added multivariable custom function handling</action>
+            <action dev="fas" type="add">added multi-variable custom function handling</action>
         </release>
         <release version="0.3.0" description="added custom operators">
             <action dev="fas" type="add">added CustomOperator to exp4j. see http://jira.congrace.de/jira/browse/EXP-1
@@ -38,21 +38,21 @@
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-19</action>
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-20</action>
         </release>
-        <release version="0.3.6" description="Bugfix release">
-            <action dev="fas" type="fix">added check for Division by zero in divsion operations:
+        <release version="0.3.6" description="Bug fix release">
+            <action dev="fas" type="fix">added check for Division by zero in division operations:
                 https://www.objecthunter.net/jira/browse/EXP-22
             </action>
             <action dev="fas" type="fix">added exception when using empty expressions:
                 https://www.objecthunter.net/jira/browse/EXP-23
             </action>
         </release>
-        <release version="0.3.9" description="Bugfix release">
+        <release version="0.3.9" description="Bug fix release">
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-24</action>
         </release>
-        <release version="0.3.10" description="Bugfix release">
+        <release version="0.3.10" description="Bug fix release">
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-25</action>
         </release>
-        <release version="0.3.11" description="Bugfix release">
+        <release version="0.3.11" description="Bug fix release">
             <action dev="fas" type="fix">fix for https://www.objecthunter.net/jira/browse/EXP-32</action>
         </release>
         <release version="0.4.0-ALPHA-1" description="Rewrite">
@@ -75,7 +75,7 @@
             <action dev="leogtzr" type="add">Added numerical constants</action>
             <action dev="fas" types="fix">fix for https://github.com/fasseg/exp4j/issues/59</action>
             <action dev="serso" types="fix">Avoiding Auto-Boxing/Unboxing for performance reasons</action>
-            <action dev="serso" types="fix">Removed uneccessary argument array reversal</action>
+            <action dev="serso" types="fix">Removed unnecessary argument array reversal</action>
         </release>
     </body>
 </document>

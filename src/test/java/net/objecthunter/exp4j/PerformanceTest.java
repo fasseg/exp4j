@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class PerformanceTest {
 
-    private static final long BENCH_TIME = 2l;
+    private static final long BENCH_TIME = 2L;
     private static final String EXPRESSION = "log(x) - y * (sqrt(x^cos(y)))";
 
     @Test
@@ -76,8 +76,7 @@ public class PerformanceTest {
     }
 
     private int benchJavaMath() {
-        long timeout = BENCH_TIME;
-        long time = System.currentTimeMillis() + (1000 * timeout);
+        long time = System.currentTimeMillis() + (1000 * BENCH_TIME);
         double x, y, val, rate;
         int count = 0;
         Random rnd = new Random();
@@ -87,7 +86,6 @@ public class PerformanceTest {
             val = Math.log(x) - y * (Math.sqrt(Math.pow(x, Math.cos(y))));
             count++;
         }
-        rate = count / timeout;
         return count;
     }
 
@@ -95,7 +93,7 @@ public class PerformanceTest {
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
         long timeout = BENCH_TIME;
-        long time = System.currentTimeMillis() + (1000 * timeout);
+        long time;
         double x, y, val, rate;
         int count = 0;
         Random rnd = new Random();
@@ -104,7 +102,6 @@ public class PerformanceTest {
             return -1;
         } else {
             time = System.currentTimeMillis() + (1000 * timeout);
-            count = 0;
             while (time > System.currentTimeMillis()) {
                 x = rnd.nextDouble();
                 y = rnd.nextDouble();
