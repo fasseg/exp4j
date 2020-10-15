@@ -1,261 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>net.objecthunter</groupId>
     <artifactId>exp4j</artifactId>
-    <version>0.4.9-SNAPSHOT</version>
+    <version>0.5.0-SNAPSHOT</version>
     <name>exp4j</name>
     <description>A simple mathematical expression evaluator for java.</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
-    <scm>
-        <connection>scm:git:http://github.com/fasseg/exp4j.git</connection>
-        <developerConnection>scm:git:https://github.com/fasseg/exp4j.git</developerConnection>
-        <url>https://github.com/fasseg/exp4j</url>
-        <tag>HEAD</tag>
-    </scm>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>central-snapshots</id>
-            <uniqueVersion>false</uniqueVersion>
-            <name>snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <layout>default</layout>
-        </snapshotRepository>
-        <repository>
-            <id>central-releases</id>
-            <uniqueVersion>false</uniqueVersion>
-            <name>releases</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <layout>default</layout>
-        </repository>
-        <downloadUrl>http://www.objecthunter.net/exp4j</downloadUrl>
-        <site>
-            <id>objecthunter.net</id>
-            <name>objecthunter.net</name>
-            <url>scpexe://trillian.objecthunter.net/srv/http/exp4j</url>
-        </site>
-    </distributionManagement>
-    <url>http://www.objecthunter.net/exp4j</url>
-    <issueManagement>
-        <url>https://github.com/fasseg/exp4j/issues</url>
-        <system>Github</system>
-    </issueManagement>
-    <mailingLists>
-        <mailingList>
-            <name>exp4j Google Group</name>
-            <archive>https://groups.google.com/forum/#!forum/exp4j</archive>
-        </mailingList>
-    </mailingLists>
-    <developers>
-        <developer>
-            <id>fas</id>
-            <name>frank</name>
-            <email>frank.asseg@objecthunter.net</email>
-            <url>http://www.objecthunter.net/</url>
-            <organizationUrl>http://www.objecthunter.net</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>sch</id>
-            <name>shuvam chatterjee</name>
-            <email>shuvamc19@gmail.com</email>
-            <url>https://github.com/shuvamc019</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-7</timezone>
-        </developer>
-    </developers>
-    <contributors>
-        <contributor>
-            <name>Federico Vera</name>
-            <email>dktcoding@gmail.com</email>
-            <url>https://plus.google.com/+FedericoVera</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-        <contributor>
-            <name>Leo Gutiérrez Ramírez</name>
-            <url>https://github.com/leogtzr</url>
-            <email>leogutierrezramirez@gmail.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-        <contributor>
-            <name>Bartosz Firyn</name>
-            <url>https://github.com/sarxos</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-        <contributor>
-            <name>Sergey Solovyev</name>
-            <email>se.solovyev@gmail.com</email>
-            <url>http://se.solovyev.org/</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-        <contributor>
-            <name>Wilton Risenhoover</name>
-            <url>https://fintel.io/</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </contributor>
-    </contributors>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.1.1</version>
-            <scope>test</scope>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
         </dependency>
     </dependencies>
 
-    <licenses>
-        <license>
-            <name>Apache License 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <reporting>
-        <excludeDefaults>true</excludeDefaults>
-        <outputDirectory>${project.build.directory}/site</outputDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>summary</report>
-                            <report>project-team</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>scm</report>
-                            <report>mailing-list</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <version>2.10</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>2.7</version>
-            </extension>
-        </extensions>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.3</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+ </project>
