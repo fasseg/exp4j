@@ -25,7 +25,7 @@ public class Tokenizer {
         final int tokenStart = offset + spaces;
 
         // The end has been reached, so we return a null value
-        if (tokenStart == len) {
+        if (tokenStart >= len) {
             return null;
         }
 
@@ -33,10 +33,28 @@ public class Tokenizer {
             return this.parseNumericalToken(tokenStart);
         } else if (this.isOperatorStart(this.expression[tokenStart])) {
             return this.parseOperatorToken(tokenStart);
+        } else if (this.isParentheses(this.expression[tokenStart])) {
+            return this.parseParanthesesToken(tokenStart);
         } else {
             throw new TokenizerException("Unable to parse token starting with '" + this.expression[tokenStart] + "' at position " + tokenStart);
         }
 
+    }
+
+    private Token parseParanthesesToken(final int tokenStart) {
+        final char ch = this.expression[tokenStart];
+        final ParanthesesToken token;
+        if (ch == '(' || ch == '[' || ch == '{') {
+            token = new ParanthesesToken(true);
+        } else {
+            token = new ParanthesesToken(false);
+        }
+        this.offset++;
+        return token;
+    }
+
+    private boolean isParentheses(final char c) {
+        return c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}';
     }
 
     private OperatorToken parseOperatorToken(final int tokenStart) {
@@ -45,7 +63,7 @@ public class Tokenizer {
         do {
             data.append(this.expression[tokenStart + current++]);
         } while (offset + current < this.len && Operators.isOperatorChar(this.expression[tokenStart + current]));
-        this.offset += current;
+        this.offset = tokenStart + current;
         return new OperatorToken(Operators.getBuiltinOperator(data.toString()));
     }
 
@@ -59,16 +77,16 @@ public class Tokenizer {
         do {
             data.append(this.expression[tokenStart + current++]);
         } while (offset + current < this.len && this.isNumericalTokenChar(this.expression[tokenStart + current]));
-        this.offset += current;
+        this.offset = tokenStart + current;
         return new NumericalToken(Double.parseDouble(data.toString()));
     }
 
     private boolean isNumericalTokenChar(final char ch) {
-        return (ch >  47 && ch < 58) || ch == 46;
+        return (ch > 47 && ch < 58) || ch == 46;
     }
 
     private boolean isNumericalTokenStart(final char ch) {
-        return ch >  47 && ch < 58;
+        return ch > 47 && ch < 58;
     }
 
 }

@@ -5,7 +5,7 @@ public abstract class Token {
         this.type = type;
     }
 
-    public enum Type {NUMERICAL,OPERATOR}
+    public enum Type {NUMERICAL,OPERATOR, PARANTHESES}
 
     final Type type;
 }
