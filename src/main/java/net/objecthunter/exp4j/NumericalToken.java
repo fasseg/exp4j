@@ -1,6 +1,6 @@
 package net.objecthunter.exp4j;
 
-public class NumericalToken extends Token {
+class NumericalToken extends Token {
 
     final double value;
 
