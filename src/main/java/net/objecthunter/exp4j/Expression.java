@@ -30,6 +30,8 @@ public class Expression {
 
     private final Map<String, Double> variables;
 
+    private VariableProvider variableProvider;
+
     private final Set<String> userFunctionNames;
 
     private static Map<String, Double> createDefaultVariables() {
@@ -69,6 +71,10 @@ public class Expression {
         this.checkVariableName(name);
         this.variables.put(name, value);
         return this;
+    }
+
+    public void setVariableProvider(final VariableProvider variableProvider) {
+        this.variableProvider = variableProvider;
     }
 
     private void checkVariableName(String name) {
@@ -172,7 +178,10 @@ public class Expression {
                 output.push(((NumberToken) t).getValue());
             } else if (t.getType() == Token.TOKEN_VARIABLE) {
                 final String name = ((VariableToken) t).getName();
-                final Double value = this.variables.get(name);
+                Double value = this.variables.get(name);
+                if (value == null && variableProvider != null) {
+                    value = variableProvider.getVariable(name);
+                }
                 if (value == null) {
                     throw new IllegalArgumentException("No value has been set for the setVariable '" + name + "'.");
                 }
