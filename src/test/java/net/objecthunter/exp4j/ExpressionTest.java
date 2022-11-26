@@ -444,6 +444,25 @@ public class ExpressionTest {
         assertThat(e.evaluate()).isEqualTo(Math.toRadians(1D));
     }
 
+    @Test
+    public void shouldEvaluatePi() {
+        assertThat(new Expression("pi").evaluate()).isEqualTo(Math.PI);
+        assertThat(new Expression("π").evaluate()).isEqualTo(Math.PI);
+        assertThat(new Expression("-pi").evaluate()).isEqualTo(-Math.PI);
+        assertThat(new Expression("-π").evaluate()).isEqualTo(-Math.PI);
+    }
 
+    @Test
+    public void shouldEvaluatePhi() {
+        assertThat(new Expression("phi").evaluate()).isEqualTo(1.61803398874D);
+        assertThat(new Expression("φ").evaluate()).isEqualTo(1.61803398874D);
+        assertThat(new Expression("-phi").evaluate()).isEqualTo(-1.61803398874D);
+        assertThat(new Expression("-φ").evaluate()).isEqualTo(-1.61803398874D);
+    }
 
+    @Test
+    public void shouldEvaluateE() {
+        assertThat(new Expression("e").evaluate()).isEqualTo(Math.E);
+        assertThat(new Expression("-e").evaluate()).isEqualTo(-Math.E);
+    }
 }

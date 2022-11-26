@@ -10,7 +10,8 @@ term:
     term multiplication term |
     term addition term |
     decimal |
-    function
+    function |
+    constant
     ;
 
 function:
@@ -35,6 +36,10 @@ addition:
 
 multiplication:
     ('*' | '/' | '^' | '%')
+    ;
+
+constant:
+    ('pi' | 'π' | 'phi' | 'φ' | 'e')
     ;
 
 FUNCTION_NAME:

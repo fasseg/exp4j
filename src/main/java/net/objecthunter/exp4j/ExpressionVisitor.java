@@ -17,8 +17,25 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
             return this.evaluateUnarySuffix(term);
         } else if (term.function() != null) {
             return this.evaluateFunction(term);
+        } else if (term.constant() != null) {
+            return this.evaluateConstant(term);
         } else {
             return this.evaluateOperation(term);
+        }
+    }
+
+    private Double evaluateConstant(Exp4jGrammarParser.TermContext term) {
+        switch(term.getText()) {
+            case "pi":
+            case "π":
+                return Math.PI;
+            case "e":
+                return Math.E;
+            case "phi":
+            case "φ":
+                return 1.61803398874d;
+            default:
+                throw new ExpressionSyntaxError(String.format("Invalid constant at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
         }
     }
 
