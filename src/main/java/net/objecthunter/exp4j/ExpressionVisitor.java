@@ -1,0 +1,81 @@
+package net.objecthunter.exp4j;
+
+import net.objecthunter.exp4j.antlr.Exp4jGrammarBaseVisitor;
+import net.objecthunter.exp4j.antlr.Exp4jGrammarParser;
+import net.objecthunter.exp4j.function.Factorial;
+import net.objecthunter.exp4j.function.Function;
+import net.objecthunter.exp4j.function.Functions;
+
+public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
+    @Override
+    public Double visitTerm(final Exp4jGrammarParser.TermContext term) {
+        if (term.decimal() != null) {
+            return this.parseNumber(term.decimal());
+        } else if (term.unary_prefix() != null) {
+            return this.evaluateUnaryPrefix(term);
+        } else if (term.unary_suffix() != null) {
+            return this.evaluateUnarySuffix(term);
+        } else if (term.function() != null) {
+            return this.evaluateFunction(term);
+        } else {
+            return this.evaluateOperation(term);
+        }
+    }
+
+    private Double evaluateFunction(final Exp4jGrammarParser.TermContext term) {
+        final Function func = Functions.getFunction(term.function().FUNCTION_NAME().getText());
+        if (func == null) {
+            throw new ExpressionSyntaxError(String.format("Invalid function at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
+        }
+        int len = term.function().term().size();
+        final double[] args = new double[len];
+        for (int i = 0;i < len; i++) {
+            args[i] = this.visitTerm(term.function().term(i));
+        }
+        return func.apply(args);
+    }
+
+    private Double evaluateUnaryPrefix(final Exp4jGrammarParser.TermContext term) {
+        final String operator = term.unary_prefix().getText();
+        if (operator.equals("-")) {
+            return - this.visitTerm(term.term(0));
+        } else {
+            return this.visitTerm(term.term(0));
+        }
+    }
+
+    private Double evaluateUnarySuffix(final Exp4jGrammarParser.TermContext term) {
+        final String operator = term.unary_suffix().getText();
+        if (operator == "!") {
+            return Factorial.factorial(this.visitTerm(term.term(0)));
+        } else {
+            throw new ExpressionSyntaxError(String.format("Invalid suffix operator in term: %s", term.getText()));
+        }
+    }
+
+    private Double evaluateOperation(final Exp4jGrammarParser.TermContext term) {
+        final String operator = term.multiplication() != null ? term.multiplication().getText() : term.addition().getText();
+        final double left = this.visitTerm(term.term(0));
+        final double right = this.visitTerm(term.term(1));
+        switch (operator) {
+            case "+":
+                return left + right;
+            case "-":
+                return left - right;
+            case "*":
+                return left * right;
+            case "/":
+                return left / right;
+            case "^":
+                return Math.pow(left, right);
+            case "%":
+                return left % right;
+            default:
+                throw new ExpressionSyntaxError(String.format("Invalid operator when parsing term '%s'", term));
+        }
+    }
+
+    private double parseNumber(final Exp4jGrammarParser.DecimalContext decimal) {
+        return Double.parseDouble(decimal.getText());
+    }
+}

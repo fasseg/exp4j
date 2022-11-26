@@ -1,23 +1,5 @@
-/*
- * Copyright 2014 Frank Asseg
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package net.objecthunter.exp4j.function;
 
-/**
- * Class representing the builtin functions available for use in expressions
- */
 public class Functions {
 
     private static final int INDEX_SIN = 0;
@@ -52,146 +34,170 @@ public class Functions {
     private static final int INDEX_TO_RADIAN = 29;
     private static final int INDEX_TO_DEGREE = 30;
 
-    private static final Function[] BUILT_IN_FUNCTIONS = new Function[31];
+    private static final Function[] functions = new Function[31];
 
     static {
-        BUILT_IN_FUNCTIONS[INDEX_SIN] = new Function("sin") {
+        functions[INDEX_SIN] = new Function("sin") {
             @Override
             public double apply(double... args) {
                 return Math.sin(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_COS] = new Function("cos") {
+        functions[INDEX_COS] = new Function("cos") {
             @Override
             public double apply(double... args) {
                 return Math.cos(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_TAN] = new Function("tan") {
+        functions[INDEX_TAN] = new Function("tan") {
             @Override
             public double apply(double... args) {
                 return Math.tan(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_COT] = new Function("cot") {
+        functions[INDEX_COT] = new Function("cot") {
             @Override
             public double apply(double... args) {
                 double tan = Math.tan(args[0]);
-                if (tan == 0d) {
-                    throw new ArithmeticException("Division by zero in cotangent!");
+                if (tan == 0D) {
+                    throw new ArithmeticException("Argument for cotangent must not be zero");
                 }
                 return 1d / tan;
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_LOG] = new Function("log") {
+        functions[INDEX_LOG] = new Function("log") {
             @Override
             public double apply(double... args) {
+                if (args[0] <= 0D) {
+                    throw new IllegalArgumentException("Argument for logarithm must be greater than zero");
+                }
                 return Math.log(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_LOG2] = new Function("log2") {
+        functions[INDEX_LOG2] = new Function("log2") {
             @Override
             public double apply(double... args) {
+                if (args[0] <= 0D) {
+                    throw new IllegalArgumentException("Argument for logarithm must be greater than zero");
+                }
                 return Math.log(args[0]) / Math.log(2d);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_LOG10] = new Function("log10") {
+        functions[INDEX_LOG10] = new Function("log10") {
             @Override
             public double apply(double... args) {
+                if (args[0] <= 0D) {
+                    throw new IllegalArgumentException("Argument for logarithm must be greater than zero");
+                }
                 return Math.log10(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_LOG1P] = new Function("log1p") {
+        functions[INDEX_LOG1P] = new Function("log1p") {
             @Override
             public double apply(double... args) {
+                if (args[0] <= -1D) {
+                    throw new IllegalArgumentException("Argument for logarithm must be greater than zero");
+                }
                 return Math.log1p(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_ABS] = new Function("abs") {
+        functions[INDEX_ABS] = new Function("abs") {
             @Override
             public double apply(double... args) {
                 return Math.abs(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_ACOS] = new Function("acos") {
+        functions[INDEX_ACOS] = new Function("acos") {
             @Override
             public double apply(double... args) {
+                if (args[0] > 1D || args[0] < -1D) {
+                    throw new IllegalArgumentException("Argument for arc cosine must be in the interval [-1, 1]");
+                }
                 return Math.acos(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_ASIN] = new Function("asin") {
+        functions[INDEX_ASIN] = new Function("asin") {
             @Override
             public double apply(double... args) {
+                if (args[0] > 1D || args[0] < -1D) {
+                    throw new IllegalArgumentException("Argument for arc cosine must be in the interval [-1, 1]");
+                }
                 return Math.asin(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_ATAN] = new Function("atan") {
+        functions[INDEX_ATAN] = new Function("atan") {
             @Override
             public double apply(double... args) {
                 return Math.atan(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_CBRT] = new Function("cbrt") {
+        functions[INDEX_CBRT] = new Function("cbrt") {
             @Override
             public double apply(double... args) {
                 return Math.cbrt(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_FLOOR] = new Function("floor") {
+        functions[INDEX_FLOOR] = new Function("floor") {
             @Override
             public double apply(double... args) {
                 return Math.floor(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_SINH] = new Function("sinh") {
+        functions[INDEX_SINH] = new Function("sinh") {
             @Override
             public double apply(double... args) {
                 return Math.sinh(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_SQRT] = new Function("sqrt") {
+        functions[INDEX_SQRT] = new Function("sqrt") {
             @Override
             public double apply(double... args) {
+                if (args[0] < 0D) {
+                    throw new IllegalArgumentException("Argument for square root must not be negative");
+                }
                 return Math.sqrt(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_TANH] = new Function("tanh") {
+        functions[INDEX_TANH] = new Function("tanh") {
             @Override
             public double apply(double... args) {
                 return Math.tanh(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_COSH] = new Function("cosh") {
+        functions[INDEX_COSH] = new Function("cosh") {
             @Override
             public double apply(double... args) {
                 return Math.cosh(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_CEIL] = new Function("ceil") {
+        functions[INDEX_CEIL] = new Function("ceil") {
             @Override
             public double apply(double... args) {
                 return Math.ceil(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_POW] = new Function("pow", 2) {
+        functions[INDEX_POW] = new Function("pow", 2) {
             @Override
             public double apply(double... args) {
+                if (args[0] == 0D && args[1] == 0D) {
+                    throw new IllegalArgumentException("Zero to the power of zero is undefined");
+                }
                 return Math.pow(args[0], args[1]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_EXP] = new Function("exp", 1) {
+        functions[INDEX_EXP] = new Function("exp", 1) {
             @Override
             public double apply(double... args) {
                 return Math.exp(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_EXPM1] = new Function("expm1", 1) {
+        functions[INDEX_EXPM1] = new Function("expm1", 1) {
             @Override
             public double apply(double... args) {
                 return Math.expm1(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_SGN] = new Function("signum", 1) {
+        functions[INDEX_SGN] = new Function("signum", 1) {
             @Override
             public double apply(double... args) {
                 if (args[0] > 0) {
@@ -203,7 +209,7 @@ public class Functions {
                 }
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_CSC] = new Function("csc") {
+        functions[INDEX_CSC] = new Function("csc") {
             @Override
             public double apply(double... args) {
                 double sin = Math.sin(args[0]);
@@ -213,7 +219,7 @@ public class Functions {
                 return 1d / sin;
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_SEC] = new Function("sec") {
+        functions[INDEX_SEC] = new Function("sec") {
             @Override
             public double apply(double... args) {
                 double cos = Math.cos(args[0]);
@@ -223,42 +229,51 @@ public class Functions {
                 return 1d / cos;
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_CSCH] = new Function("csch") {
+        functions[INDEX_CSCH] = new Function("csch") {
             @Override
             public double apply(double... args) {
-                //this would throw an ArithmeticException later as sinh(0) = 0
-                if (args[0] == 0d) {
-                    return 0;
+                final double sinh = Math.sinh(args[0]);
+                if (sinh == 0d) {
+                    throw new ArithmeticException("Division by zero in hyperbolic cosecant!");
                 }
-
                 return 1d / Math.sinh(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_SECH] = new Function("sech") {
+        functions[INDEX_SECH] = new Function("sech") {
             @Override
             public double apply(double... args) {
                 return 1d / Math.cosh(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_COTH] = new Function("coth") {
+        functions[INDEX_COTH] = new Function("coth") {
             @Override
             public double apply(double... args) {
-                return Math.cosh(args[0]) / Math.sinh(args[0]);
+                final double sinh = Math.sinh(args[0]);
+                if (sinh == 0d) {
+                    throw new ArithmeticException("Division by zero in hyperbolic cotangent!");
+                }
+                return Math.cosh(args[0]) / sinh;
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_LOGB] = new Function("logb", 2) {
+        functions[INDEX_LOGB] = new Function("logb", 2) {
             @Override
             public double apply(double... args) {
+                if (args[0] <= 0) {
+                    throw new IllegalArgumentException("Base of logarithm must be greater than zero");
+                }
+                if (args[1] <= 0) {
+                    throw new IllegalArgumentException("Logarithm of number equal to or less than zero is undefined");
+                }
                 return Math.log(args[1]) / Math.log(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_TO_RADIAN] = new Function("toradian") {
+        functions[INDEX_TO_RADIAN] = new Function("toradian") {
             @Override
             public double apply(double... args) {
                 return Math.toRadians(args[0]);
             }
         };
-        BUILT_IN_FUNCTIONS[INDEX_TO_DEGREE] = new Function("todegree") {
+        functions[INDEX_TO_DEGREE] = new Function("todegree") {
             @Override
             public double apply(double... args) {
                 return Math.toDegrees(args[0]);
@@ -273,72 +288,73 @@ public class Functions {
      * @param name te name of the function
      * @return a Function instance
      */
-    public static Function getBuiltinFunction(final String name) {
+    public static Function getFunction(final String name) {
 
         switch (name) {
             case "sin":
-                return BUILT_IN_FUNCTIONS[INDEX_SIN];
+                return functions[INDEX_SIN];
             case "cos":
-                return BUILT_IN_FUNCTIONS[INDEX_COS];
+                return functions[INDEX_COS];
             case "tan":
-                return BUILT_IN_FUNCTIONS[INDEX_TAN];
+                return functions[INDEX_TAN];
             case "cot":
-                return BUILT_IN_FUNCTIONS[INDEX_COT];
+                return functions[INDEX_COT];
             case "asin":
-                return BUILT_IN_FUNCTIONS[INDEX_ASIN];
+                return functions[INDEX_ASIN];
             case "acos":
-                return BUILT_IN_FUNCTIONS[INDEX_ACOS];
+                return functions[INDEX_ACOS];
             case "atan":
-                return BUILT_IN_FUNCTIONS[INDEX_ATAN];
+                return functions[INDEX_ATAN];
             case "sinh":
-                return BUILT_IN_FUNCTIONS[INDEX_SINH];
+                return functions[INDEX_SINH];
             case "cosh":
-                return BUILT_IN_FUNCTIONS[INDEX_COSH];
+                return functions[INDEX_COSH];
             case "tanh":
-                return BUILT_IN_FUNCTIONS[INDEX_TANH];
+                return functions[INDEX_TANH];
             case "abs":
-                return BUILT_IN_FUNCTIONS[INDEX_ABS];
+                return functions[INDEX_ABS];
             case "log":
-                return BUILT_IN_FUNCTIONS[INDEX_LOG];
+                return functions[INDEX_LOG];
             case "log10":
-                return BUILT_IN_FUNCTIONS[INDEX_LOG10];
+                return functions[INDEX_LOG10];
             case "log2":
-                return BUILT_IN_FUNCTIONS[INDEX_LOG2];
+                return functions[INDEX_LOG2];
             case "log1p":
-                return BUILT_IN_FUNCTIONS[INDEX_LOG1P];
+                return functions[INDEX_LOG1P];
+            case "logb":
+                return functions[INDEX_LOGB];
             case "ceil":
-                return BUILT_IN_FUNCTIONS[INDEX_CEIL];
+                return functions[INDEX_CEIL];
             case "floor":
-                return BUILT_IN_FUNCTIONS[INDEX_FLOOR];
+                return functions[INDEX_FLOOR];
             case "sqrt":
-                return BUILT_IN_FUNCTIONS[INDEX_SQRT];
+                return functions[INDEX_SQRT];
             case "cbrt":
-                return BUILT_IN_FUNCTIONS[INDEX_CBRT];
+                return functions[INDEX_CBRT];
             case "pow":
-                return BUILT_IN_FUNCTIONS[INDEX_POW];
+                return functions[INDEX_POW];
             case "exp":
-                return BUILT_IN_FUNCTIONS[INDEX_EXP];
+                return functions[INDEX_EXP];
             case "expm1":
-                return BUILT_IN_FUNCTIONS[INDEX_EXPM1];
+                return functions[INDEX_EXPM1];
             case "signum":
-                return BUILT_IN_FUNCTIONS[INDEX_SGN];
+                return functions[INDEX_SGN];
             case "csc":
-                return BUILT_IN_FUNCTIONS[INDEX_CSC];
+                return functions[INDEX_CSC];
             case "sec":
-                return BUILT_IN_FUNCTIONS[INDEX_SEC];
+                return functions[INDEX_SEC];
             case "csch":
-                return BUILT_IN_FUNCTIONS[INDEX_CSCH];
+                return functions[INDEX_CSCH];
             case "sech":
-                return BUILT_IN_FUNCTIONS[INDEX_SECH];
+                return functions[INDEX_SECH];
             case "coth":
-                return BUILT_IN_FUNCTIONS[INDEX_COTH];
+                return functions[INDEX_COTH];
             case "toradian":
-                return BUILT_IN_FUNCTIONS[INDEX_TO_RADIAN];
+                return functions[INDEX_TO_RADIAN];
             case "todegree":
-                return BUILT_IN_FUNCTIONS[INDEX_TO_DEGREE];
+                return functions[INDEX_TO_DEGREE];
             default:
                 return null;
         }
     }
-
 }
