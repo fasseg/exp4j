@@ -12,8 +12,11 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
 
     private final Map<String, Double> variables;
 
-    public ExpressionVisitor(final Map<String, Double> variables) {
+    private final Map<String, Function> userFunctions;
+
+    public ExpressionVisitor(final Map<String, Double> variables, final Map<String, Function> userFunctions) {
         this.variables = variables;
+        this.userFunctions = userFunctions;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
     }
 
     private Double evaluateVariable(Exp4jGrammarParser.TermContext term) {
-        final Double val = variables.get(term.getText());
+        final Double val = variables.get(term.variable().NAME().getText());
         if (val == null) {
             throw new ExpressionSyntaxError(String.format("Unknown variable at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
         }
@@ -44,7 +47,7 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
     }
 
     private Double evaluateConstant(Exp4jGrammarParser.TermContext term) {
-        switch(term.getText()) {
+        switch(term.constant().getText()) {
             case "pi":
             case "π":
                 return Math.PI;
@@ -59,9 +62,13 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
     }
 
     private Double evaluateFunction(final Exp4jGrammarParser.TermContext term) {
-        final Function func = Functions.getFunction(term.function().NAME().getText());
+        final String name = term.function().NAME().getText();
+        Function func = this.userFunctions.get(name);
         if (func == null) {
-            throw new ExpressionSyntaxError(String.format("Invalid function at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
+            func = Functions.getFunction(term.function().NAME().getText());
+        }
+        if (func == null) {
+            throw new ExpressionSyntaxError(String.format("Unknown function at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
         }
         int len = term.function().term().size();
         final double[] args = new double[len];

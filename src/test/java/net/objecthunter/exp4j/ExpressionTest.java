@@ -1,5 +1,6 @@
 package net.objecthunter.exp4j;
 
+import net.objecthunter.exp4j.function.Function;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -503,4 +504,80 @@ public class ExpressionTest {
         final Expression e = new Expression("1x");
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> e.setVariable("1x", 1D));
     }
+
+    @Test
+    public void shouldEvaluateCustomFunction() {
+        final Expression e = new Expression("myfunc(1)");
+        e.addFunction(new Function("myfunc") {
+            @Override
+            public double apply(final double... args) {
+                return args[0] - 2D;
+            }
+        });
+        assertThat(e.evaluate()).isEqualTo(-1D);
+    }
+
+    @Test
+    public void shouldEvaluateCustomFunctionWithMultipleArgs() {
+        final Expression e = new Expression("myfunc(1, 2, 3)");
+        e.addFunction(new Function("myfunc", 3) {
+            @Override
+            public double apply(final double... args) {
+                return args[0] + args[1] + args[2];
+            }
+        });
+        assertThat(e.evaluate()).isEqualTo(6D);
+    }
+
+    @Test
+    public void shouldNotEvaluateCustomFunctionWithInvalidName() {
+        final Expression e = new Expression("1myfunc(1, 2, 3)");
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> {
+            e.addFunction(new Function("1myfunc", 3) {
+                @Override
+                public double apply(final double... args) {
+                    return args[0] + args[1] + args[2];
+                }
+            });
+        });
+    }
+
+    @Test
+    public void shouldEvaluateCompoundExpression() {
+        final Expression e = new Expression("sin(x) * log(y*e) / powerof2(log(x*y))");
+        e.setVariable("x", 2.1142D);
+        e.setVariable("y", Math.PI);
+        e.addFunction(new Function("powerof2") {
+            @Override
+            public double apply(final double... args) {
+                return Math.pow(2, args[0]);
+            }
+        });
+        assertThat(e.evaluate()).isEqualTo(Math.sin(2.1142D) * Math.log(Math.PI * Math.E) / Math.pow(2, Math.log(2.1142D * Math.PI)));
+    }
+
+    @Test
+    public void validateExpression() {
+        final Expression e = new Expression("foo(1)");
+        assertThat(e.validate()).hasSize(1);
+    }
+
+    @Test
+    public void validateVariableSet() {
+        final Expression e = new Expression("x");
+        assertThat(e.validate()).hasSize(1);
+    }
+
+    @Test
+    public void validateDanglingPlus() {
+        final Expression e = new Expression("1+");
+        assertThat(e.validate()).hasSize(1);
+    }
+
+    @Test
+    public void validateDanglingParentheses() {
+        final Expression e = new Expression("1(");
+        assertThat(e.validate()).hasSize(1);
+    }
+
 }
