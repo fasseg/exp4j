@@ -18,7 +18,7 @@ public class Exp4jGrammarLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, FUNCTION_NAME=17, 
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, NAME=17, 
 		NUMBER=18, WHITESPACE=19;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -31,7 +31,7 @@ public class Exp4jGrammarLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
-			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "FUNCTION_NAME", 
+			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "NAME", 
 			"NUMBER", "WHITESPACE"
 		};
 	}
@@ -47,7 +47,7 @@ public class Exp4jGrammarLexer extends Lexer {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, "FUNCTION_NAME", "NUMBER", "WHITESPACE"
+			null, null, null, null, null, "NAME", "NUMBER", "WHITESPACE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();

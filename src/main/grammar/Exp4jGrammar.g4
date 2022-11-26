@@ -11,11 +11,12 @@ term:
     term addition term |
     decimal |
     function |
-    constant
+    constant |
+    variable
     ;
 
 function:
-    FUNCTION_NAME '(' term (',' term)* ')'
+    NAME '(' term (',' term)* ')'
     ;
 
 decimal:
@@ -42,7 +43,11 @@ constant:
     ('pi' | 'π' | 'phi' | 'φ' | 'e')
     ;
 
-FUNCTION_NAME:
+variable:
+    NAME
+    ;
+
+NAME:
     [_a-zA-Z] [_a-zA-Z0-9]*
     ;
 

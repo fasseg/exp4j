@@ -6,7 +6,16 @@ import net.objecthunter.exp4j.function.Factorial;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.function.Functions;
 
+import java.util.Map;
+
 public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
+
+    private final Map<String, Double> variables;
+
+    public ExpressionVisitor(final Map<String, Double> variables) {
+        this.variables = variables;
+    }
+
     @Override
     public Double visitTerm(final Exp4jGrammarParser.TermContext term) {
         if (term.decimal() != null) {
@@ -19,9 +28,19 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
             return this.evaluateFunction(term);
         } else if (term.constant() != null) {
             return this.evaluateConstant(term);
+        } else if (term.variable() != null) {
+            return this.evaluateVariable(term);
         } else {
             return this.evaluateOperation(term);
         }
+    }
+
+    private Double evaluateVariable(Exp4jGrammarParser.TermContext term) {
+        final Double val = variables.get(term.getText());
+        if (val == null) {
+            throw new ExpressionSyntaxError(String.format("Unknown variable at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
+        }
+        return val;
     }
 
     private Double evaluateConstant(Exp4jGrammarParser.TermContext term) {
@@ -40,7 +59,7 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
     }
 
     private Double evaluateFunction(final Exp4jGrammarParser.TermContext term) {
-        final Function func = Functions.getFunction(term.function().FUNCTION_NAME().getText());
+        final Function func = Functions.getFunction(term.function().NAME().getText());
         if (func == null) {
             throw new ExpressionSyntaxError(String.format("Invalid function at pos %d: %s", term.getStart().getStartIndex(), term.getText()));
         }

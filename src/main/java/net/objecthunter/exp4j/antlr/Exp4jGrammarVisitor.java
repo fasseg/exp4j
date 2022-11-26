@@ -64,4 +64,10 @@ public interface Exp4jGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitConstant(Exp4jGrammarParser.ConstantContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Exp4jGrammarParser#variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(Exp4jGrammarParser.VariableContext ctx);
 }

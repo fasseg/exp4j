@@ -2,6 +2,9 @@ package net.objecthunter.exp4j;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -464,5 +467,40 @@ public class ExpressionTest {
     public void shouldEvaluateE() {
         assertThat(new Expression("e").evaluate()).isEqualTo(Math.E);
         assertThat(new Expression("-e").evaluate()).isEqualTo(-Math.E);
+    }
+
+    @Test
+    public void shouldEvaluateVariable() {
+        final Expression e = new Expression("x");
+        e.setVariable("x", 1D);
+        assertThat(e.evaluate()).isEqualTo(1D);
+    }
+
+    @Test
+    public void shouldEvaluateVariableWithLongName() {
+        final Expression e = new Expression("myvariable");
+        e.setVariable("myvariable", 1D);
+        assertThat(e.evaluate()).isEqualTo(1D);
+    }
+
+    @Test
+    public void shouldEvaluateVariablStartingWithUnderscore() {
+        final Expression e = new Expression("_x");
+        e.setVariable("_x", 1D);
+        assertThat(e.evaluate()).isEqualTo(1D);
+    }
+
+    @Test
+    public void shouldNotEvaluateVariableStartingWithNumber() {
+        final Expression e = new Expression("1x");
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> e.setVariable("1x", 1D));
+    }
+
+    @Test
+    public void shouldNotEvaluateVariableStartingWithNumberInMap() {
+        final Map<String, Double> variables = new HashMap<>();
+        variables.put("1x", 1D);
+        final Expression e = new Expression("1x");
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> e.setVariable("1x", 1D));
     }
 }
