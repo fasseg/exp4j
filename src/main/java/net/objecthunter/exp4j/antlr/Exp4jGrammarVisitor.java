@@ -29,12 +29,6 @@ public interface Exp4jGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunction(Exp4jGrammarParser.FunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Exp4jGrammarParser#decimal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDecimal(Exp4jGrammarParser.DecimalContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Exp4jGrammarParser#unary_prefix}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -16,7 +16,7 @@ public class Expression {
 
     private final String expression;
 
-    private final Map<String, Double> variables;
+    private final Map<String, Double> variables = new HashMap<String, Double>();
 
     private final Map<String, Function> userFunctions;
 
@@ -24,20 +24,11 @@ public class Expression {
 
     public Expression(final String expression) {
         this.expression = expression;
-        this.variables = new HashMap<>();
         this.userFunctions = new HashMap<>();
     }
 
-    public Expression(final String expression, final Map<String, Double> variables) {
+    public Expression(final String expression, final Map<String, Function> userFunctions) {
         this.expression = expression;
-        this.variables = variables;
-        this.userFunctions = new HashMap<>();
-        variables.keySet().forEach(v -> this.checkName(v));
-    }
-
-    public Expression(final String expression, final Map<String, Double> variables, final Map<String, Function> userFunctions) {
-        this.expression = expression;
-        this.variables = variables;
         this.userFunctions = userFunctions;
         variables.keySet().forEach(v -> this.checkName(v));
     }
@@ -53,6 +44,12 @@ public class Expression {
     public void setVariable(final String name, final double value) {
         this.checkName(name);
         this.variables.put(name, value);
+    }
+
+    public void setVariables(final Map<String, Double> variables) {
+        variables.forEach((k, v) -> {
+            this.setVariable(k, v);
+        });
     }
 
     public void addFunction(final Function func) {

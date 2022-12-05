@@ -5,11 +5,10 @@ expression:
     ;
 
 term:
-    term unary_suffix |
     unary_prefix term |
     term multiplication term |
     term addition term |
-    decimal |
+    NUMBER |
     function |
     constant |
     variable
@@ -19,16 +18,8 @@ function:
     NAME '(' term (',' term)* ')'
     ;
 
-decimal:
-    NUMBER ('.' NUMBER)?
-    ;
-
 unary_prefix:
     ('+' | '-')
-    ;
-
-unary_suffix:
-    ('!')
     ;
 
 addition:
@@ -52,7 +43,7 @@ NAME:
     ;
 
 NUMBER:
-    [0-9]+
+    [0-9]+ (('.' [0-9]+)? (('e' | 'E') ('-')? [0-9]+ ('.' [0-9]+)?)?)?
     ;
 
 WHITESPACE:
