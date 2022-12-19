@@ -35,12 +35,6 @@ public interface Exp4jGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnary_prefix(Exp4jGrammarParser.Unary_prefixContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Exp4jGrammarParser#unary_suffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnary_suffix(Exp4jGrammarParser.Unary_suffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Exp4jGrammarParser#addition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

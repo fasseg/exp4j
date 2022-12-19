@@ -18,31 +18,29 @@ public class Exp4jGrammarParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, NAME=16, NUMBER=17, 
-		WHITESPACE=18;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, NAME=15, NUMBER=16, WHITESPACE=17;
 	public static final int
 		RULE_expression = 0, RULE_term = 1, RULE_function = 2, RULE_unary_prefix = 3, 
-		RULE_unary_suffix = 4, RULE_addition = 5, RULE_multiplication = 6, RULE_constant = 7, 
-		RULE_variable = 8;
+		RULE_addition = 4, RULE_multiplication = 5, RULE_constant = 6, RULE_variable = 7;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"expression", "term", "function", "unary_prefix", "unary_suffix", "addition", 
-			"multiplication", "constant", "variable"
+			"expression", "term", "function", "unary_prefix", "addition", "multiplication", 
+			"constant", "variable"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "','", "')'", "'+'", "'-'", "'!'", "'*'", "'/'", "'^'", 
-			"'%'", "'pi'", "'\\u03C0'", "'phi'", "'\\u03C6'", "'e'"
+			null, "'('", "')'", "','", "'+'", "'-'", "'*'", "'/'", "'^'", "'%'", 
+			"'pi'", "'\\u03C0'", "'phi'", "'\\u03C6'", "'e'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, "NAME", "NUMBER", "WHITESPACE"
+			null, null, null, "NAME", "NUMBER", "WHITESPACE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -118,7 +116,7 @@ public class Exp4jGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(18);
+			setState(16);
 			term(0);
 			}
 		}
@@ -160,9 +158,6 @@ public class Exp4jGrammarParser extends Parser {
 		public AdditionContext addition() {
 			return getRuleContext(AdditionContext.class,0);
 		}
-		public Unary_suffixContext unary_suffix() {
-			return getRuleContext(Unary_suffixContext.class,0);
-		}
 		public TermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -189,38 +184,48 @@ public class Exp4jGrammarParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(28);
+			setState(30);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				{
-				setState(21);
+				setState(19);
 				unary_prefix();
-				setState(22);
-				term(7);
+				setState(20);
+				term(8);
 				}
 				break;
 			case 2:
 				{
+				setState(22);
+				match(T__0);
+				setState(23);
+				term(0);
 				setState(24);
-				match(NUMBER);
+				match(T__1);
 				}
 				break;
 			case 3:
 				{
-				setState(25);
-				function();
+				setState(26);
+				match(NUMBER);
 				}
 				break;
 			case 4:
 				{
-				setState(26);
-				constant();
+				setState(27);
+				function();
 				}
 				break;
 			case 5:
 				{
-				setState(27);
+				setState(28);
+				constant();
+				}
+				break;
+			case 6:
+				{
+				setState(29);
 				variable();
 				}
 				break;
@@ -241,11 +246,11 @@ public class Exp4jGrammarParser extends Parser {
 						{
 						_localctx = new TermContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_term);
-						setState(30);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(31);
-						multiplication();
 						setState(32);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						setState(33);
+						multiplication();
+						setState(34);
 						term(7);
 						}
 						break;
@@ -253,22 +258,12 @@ public class Exp4jGrammarParser extends Parser {
 						{
 						_localctx = new TermContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_term);
-						setState(34);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(35);
-						addition();
 						setState(36);
-						term(6);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new TermContext(_parentctx, _parentState);
-						pushNewRecursionContext(_localctx, _startState, RULE_term);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						setState(37);
+						addition();
 						setState(38);
-						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(39);
-						unary_suffix();
+						term(6);
 						}
 						break;
 					}
@@ -327,11 +322,11 @@ public class Exp4jGrammarParser extends Parser {
 			setState(52);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__1) {
+			while (_la==T__2) {
 				{
 				{
 				setState(48);
-				match(T__1);
+				match(T__2);
 				setState(49);
 				term(0);
 				}
@@ -341,7 +336,7 @@ public class Exp4jGrammarParser extends Parser {
 				_la = _input.LA(1);
 			}
 			setState(55);
-			match(T__2);
+			match(T__1);
 			}
 		}
 		catch (RecognitionException re) {
@@ -399,42 +394,6 @@ public class Exp4jGrammarParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class Unary_suffixContext extends ParserRuleContext {
-		public Unary_suffixContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_unary_suffix; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Exp4jGrammarVisitor ) return ((Exp4jGrammarVisitor<? extends T>)visitor).visitUnary_suffix(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Unary_suffixContext unary_suffix() throws RecognitionException {
-		Unary_suffixContext _localctx = new Unary_suffixContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_unary_suffix);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			{
-			setState(59);
-			match(T__5);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
 	public static class AdditionContext extends ParserRuleContext {
 		public AdditionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -449,12 +408,12 @@ public class Exp4jGrammarParser extends Parser {
 
 	public final AdditionContext addition() throws RecognitionException {
 		AdditionContext _localctx = new AdditionContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_addition);
+		enterRule(_localctx, 8, RULE_addition);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61);
+			setState(59);
 			_la = _input.LA(1);
 			if ( !(_la==T__3 || _la==T__4) ) {
 			_errHandler.recoverInline(this);
@@ -492,14 +451,14 @@ public class Exp4jGrammarParser extends Parser {
 
 	public final MultiplicationContext multiplication() throws RecognitionException {
 		MultiplicationContext _localctx = new MultiplicationContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_multiplication);
+		enterRule(_localctx, 10, RULE_multiplication);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(63);
+			setState(61);
 			_la = _input.LA(1);
-			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 1920L) != 0) ) {
+			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 960L) != 0) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -535,14 +494,14 @@ public class Exp4jGrammarParser extends Parser {
 
 	public final ConstantContext constant() throws RecognitionException {
 		ConstantContext _localctx = new ConstantContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_constant);
+		enterRule(_localctx, 12, RULE_constant);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(65);
+			setState(63);
 			_la = _input.LA(1);
-			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 63488L) != 0) ) {
+			if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 31744L) != 0) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -579,11 +538,11 @@ public class Exp4jGrammarParser extends Parser {
 
 	public final VariableContext variable() throws RecognitionException {
 		VariableContext _localctx = new VariableContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_variable);
+		enterRule(_localctx, 14, RULE_variable);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67);
+			setState(65);
 			match(NAME);
 			}
 		}
@@ -611,55 +570,53 @@ public class Exp4jGrammarParser extends Parser {
 			return precpred(_ctx, 6);
 		case 1:
 			return precpred(_ctx, 5);
-		case 2:
-			return precpred(_ctx, 8);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0012F\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u0011D\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
-		"\b\u0007\b\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001"+
-		"\u001d\b\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0005\u0001"+
-		")\b\u0001\n\u0001\f\u0001,\t\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
-		"\u0001\u0002\u0001\u0002\u0005\u00023\b\u0002\n\u0002\f\u00026\t\u0002"+
-		"\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004"+
-		"\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0007\u0001\u0007"+
-		"\u0001\b\u0001\b\u0001\b\u0000\u0001\u0002\t\u0000\u0002\u0004\u0006\b"+
-		"\n\f\u000e\u0010\u0000\u0003\u0001\u0000\u0004\u0005\u0001\u0000\u0007"+
-		"\n\u0001\u0000\u000b\u000fD\u0000\u0012\u0001\u0000\u0000\u0000\u0002"+
-		"\u001c\u0001\u0000\u0000\u0000\u0004-\u0001\u0000\u0000\u0000\u00069\u0001"+
-		"\u0000\u0000\u0000\b;\u0001\u0000\u0000\u0000\n=\u0001\u0000\u0000\u0000"+
-		"\f?\u0001\u0000\u0000\u0000\u000eA\u0001\u0000\u0000\u0000\u0010C\u0001"+
-		"\u0000\u0000\u0000\u0012\u0013\u0003\u0002\u0001\u0000\u0013\u0001\u0001"+
-		"\u0000\u0000\u0000\u0014\u0015\u0006\u0001\uffff\uffff\u0000\u0015\u0016"+
-		"\u0003\u0006\u0003\u0000\u0016\u0017\u0003\u0002\u0001\u0007\u0017\u001d"+
-		"\u0001\u0000\u0000\u0000\u0018\u001d\u0005\u0011\u0000\u0000\u0019\u001d"+
-		"\u0003\u0004\u0002\u0000\u001a\u001d\u0003\u000e\u0007\u0000\u001b\u001d"+
-		"\u0003\u0010\b\u0000\u001c\u0014\u0001\u0000\u0000\u0000\u001c\u0018\u0001"+
-		"\u0000\u0000\u0000\u001c\u0019\u0001\u0000\u0000\u0000\u001c\u001a\u0001"+
-		"\u0000\u0000\u0000\u001c\u001b\u0001\u0000\u0000\u0000\u001d*\u0001\u0000"+
-		"\u0000\u0000\u001e\u001f\n\u0006\u0000\u0000\u001f \u0003\f\u0006\u0000"+
-		" !\u0003\u0002\u0001\u0007!)\u0001\u0000\u0000\u0000\"#\n\u0005\u0000"+
-		"\u0000#$\u0003\n\u0005\u0000$%\u0003\u0002\u0001\u0006%)\u0001\u0000\u0000"+
-		"\u0000&\'\n\b\u0000\u0000\')\u0003\b\u0004\u0000(\u001e\u0001\u0000\u0000"+
-		"\u0000(\"\u0001\u0000\u0000\u0000(&\u0001\u0000\u0000\u0000),\u0001\u0000"+
-		"\u0000\u0000*(\u0001\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+\u0003"+
-		"\u0001\u0000\u0000\u0000,*\u0001\u0000\u0000\u0000-.\u0005\u0010\u0000"+
-		"\u0000./\u0005\u0001\u0000\u0000/4\u0003\u0002\u0001\u000001\u0005\u0002"+
-		"\u0000\u000013\u0003\u0002\u0001\u000020\u0001\u0000\u0000\u000036\u0001"+
-		"\u0000\u0000\u000042\u0001\u0000\u0000\u000045\u0001\u0000\u0000\u0000"+
-		"57\u0001\u0000\u0000\u000064\u0001\u0000\u0000\u000078\u0005\u0003\u0000"+
-		"\u00008\u0005\u0001\u0000\u0000\u00009:\u0007\u0000\u0000\u0000:\u0007"+
-		"\u0001\u0000\u0000\u0000;<\u0005\u0006\u0000\u0000<\t\u0001\u0000\u0000"+
-		"\u0000=>\u0007\u0000\u0000\u0000>\u000b\u0001\u0000\u0000\u0000?@\u0007"+
-		"\u0001\u0000\u0000@\r\u0001\u0000\u0000\u0000AB\u0007\u0002\u0000\u0000"+
-		"B\u000f\u0001\u0000\u0000\u0000CD\u0005\u0010\u0000\u0000D\u0011\u0001"+
-		"\u0000\u0000\u0000\u0004\u001c(*4";
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0001"+
+		"\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0003\u0001\u001f\b\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0005"+
+		"\u0001)\b\u0001\n\u0001\f\u0001,\t\u0001\u0001\u0002\u0001\u0002\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0005\u00023\b\u0002\n\u0002\f\u00026\t"+
+		"\u0002\u0001\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0004\u0001"+
+		"\u0004\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0007\u0001"+
+		"\u0007\u0001\u0007\u0000\u0001\u0002\b\u0000\u0002\u0004\u0006\b\n\f\u000e"+
+		"\u0000\u0003\u0001\u0000\u0004\u0005\u0001\u0000\u0006\t\u0001\u0000\n"+
+		"\u000eC\u0000\u0010\u0001\u0000\u0000\u0000\u0002\u001e\u0001\u0000\u0000"+
+		"\u0000\u0004-\u0001\u0000\u0000\u0000\u00069\u0001\u0000\u0000\u0000\b"+
+		";\u0001\u0000\u0000\u0000\n=\u0001\u0000\u0000\u0000\f?\u0001\u0000\u0000"+
+		"\u0000\u000eA\u0001\u0000\u0000\u0000\u0010\u0011\u0003\u0002\u0001\u0000"+
+		"\u0011\u0001\u0001\u0000\u0000\u0000\u0012\u0013\u0006\u0001\uffff\uffff"+
+		"\u0000\u0013\u0014\u0003\u0006\u0003\u0000\u0014\u0015\u0003\u0002\u0001"+
+		"\b\u0015\u001f\u0001\u0000\u0000\u0000\u0016\u0017\u0005\u0001\u0000\u0000"+
+		"\u0017\u0018\u0003\u0002\u0001\u0000\u0018\u0019\u0005\u0002\u0000\u0000"+
+		"\u0019\u001f\u0001\u0000\u0000\u0000\u001a\u001f\u0005\u0010\u0000\u0000"+
+		"\u001b\u001f\u0003\u0004\u0002\u0000\u001c\u001f\u0003\f\u0006\u0000\u001d"+
+		"\u001f\u0003\u000e\u0007\u0000\u001e\u0012\u0001\u0000\u0000\u0000\u001e"+
+		"\u0016\u0001\u0000\u0000\u0000\u001e\u001a\u0001\u0000\u0000\u0000\u001e"+
+		"\u001b\u0001\u0000\u0000\u0000\u001e\u001c\u0001\u0000\u0000\u0000\u001e"+
+		"\u001d\u0001\u0000\u0000\u0000\u001f*\u0001\u0000\u0000\u0000 !\n\u0006"+
+		"\u0000\u0000!\"\u0003\n\u0005\u0000\"#\u0003\u0002\u0001\u0007#)\u0001"+
+		"\u0000\u0000\u0000$%\n\u0005\u0000\u0000%&\u0003\b\u0004\u0000&\'\u0003"+
+		"\u0002\u0001\u0006\')\u0001\u0000\u0000\u0000( \u0001\u0000\u0000\u0000"+
+		"($\u0001\u0000\u0000\u0000),\u0001\u0000\u0000\u0000*(\u0001\u0000\u0000"+
+		"\u0000*+\u0001\u0000\u0000\u0000+\u0003\u0001\u0000\u0000\u0000,*\u0001"+
+		"\u0000\u0000\u0000-.\u0005\u000f\u0000\u0000./\u0005\u0001\u0000\u0000"+
+		"/4\u0003\u0002\u0001\u000001\u0005\u0003\u0000\u000013\u0003\u0002\u0001"+
+		"\u000020\u0001\u0000\u0000\u000036\u0001\u0000\u0000\u000042\u0001\u0000"+
+		"\u0000\u000045\u0001\u0000\u0000\u000057\u0001\u0000\u0000\u000064\u0001"+
+		"\u0000\u0000\u000078\u0005\u0002\u0000\u00008\u0005\u0001\u0000\u0000"+
+		"\u00009:\u0007\u0000\u0000\u0000:\u0007\u0001\u0000\u0000\u0000;<\u0007"+
+		"\u0000\u0000\u0000<\t\u0001\u0000\u0000\u0000=>\u0007\u0001\u0000\u0000"+
+		">\u000b\u0001\u0000\u0000\u0000?@\u0007\u0002\u0000\u0000@\r\u0001\u0000"+
+		"\u0000\u0000AB\u0005\u000f\u0000\u0000B\u000f\u0001\u0000\u0000\u0000"+
+		"\u0004\u001e(*4";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

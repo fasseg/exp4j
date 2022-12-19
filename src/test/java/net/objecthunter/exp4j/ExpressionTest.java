@@ -26,7 +26,7 @@ public class ExpressionTest {
     @Test
     public void shouldEvaluateAddition() {
         final Expression e = new Expression("1+2");
-        assertThat(e.evaluate()).isEqualTo(1D+2D);
+        assertThat(e.evaluate()).isEqualTo(1D + 2D);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ExpressionTest {
     @Test
     public void shouldEvaluateMultiplication() {
         final Expression e = new Expression("1*2");
-        assertThat(e.evaluate()).isEqualTo(1D*2D);
+        assertThat(e.evaluate()).isEqualTo(1D * 2D);
     }
 
     @Test
@@ -94,10 +94,11 @@ public class ExpressionTest {
         final Expression e = new Expression("-1.1*-2.4");
         assertThat(e.evaluate()).isEqualTo(-1.1D * -2.4D);
     }
+
     @Test
     public void shouldEvaluateDivision() {
         final Expression e = new Expression("1/2");
-        assertThat(e.evaluate()).isEqualTo(1D/2D);
+        assertThat(e.evaluate()).isEqualTo(1D / 2D);
     }
 
     @Test
@@ -121,31 +122,31 @@ public class ExpressionTest {
     @Test
     public void shouldEvaluateTwoAdditions() {
         final Expression e = new Expression("1+2+3");
-        assertThat(e.evaluate()).isEqualTo(1D+2D+3D);
+        assertThat(e.evaluate()).isEqualTo(1D + 2D + 3D);
     }
 
     @Test
     public void shouldEvaluateTwoSubtractions() {
         final Expression e = new Expression("1-2-3");
-        assertThat(e.evaluate()).isEqualTo(1D-2D-3D);
+        assertThat(e.evaluate()).isEqualTo(1D - 2D - 3D);
     }
 
     @Test
     public void shouldEvaluateTwoMultiplications() {
         final Expression e = new Expression("2*3*4");
-        assertThat(e.evaluate()).isEqualTo(2D*3D*4D);
+        assertThat(e.evaluate()).isEqualTo(2D * 3D * 4D);
     }
 
     @Test
     public void shouldEvaluateTwoDivisions() {
         final Expression e = new Expression("2/3/4");
-        assertThat(e.evaluate()).isEqualTo(2D/3D/4D);
+        assertThat(e.evaluate()).isEqualTo(2D / 3D / 4D);
     }
 
     @Test
     public void shouldEvaluateAdditionAndMultiplication() {
         final Expression e = new Expression("2+3*4");
-        assertThat(e.evaluate()).isEqualTo(2D+3D*4D);
+        assertThat(e.evaluate()).isEqualTo(2D + 3D * 4D);
     }
 
     @Test
@@ -158,12 +159,6 @@ public class ExpressionTest {
     public void shouldEvaluateModulo() {
         final Expression e = new Expression("3.3%2");
         assertThat(e.evaluate()).isEqualTo(3.3D % 2D);
-    }
-
-    @Test
-    public void shouldEvaluateFactorial() {
-        final Expression e = new Expression("3!");
-        assertThat(e.evaluate()).isEqualTo(6D);
     }
 
     @Test
@@ -193,7 +188,7 @@ public class ExpressionTest {
     @Test
     public void shouldEvaluateSineOfAddition() {
         final Expression e = new Expression("sin(1+2)");
-        assertThat(e.evaluate()).isEqualTo(Math.sin(1D+2D));
+        assertThat(e.evaluate()).isEqualTo(Math.sin(1D + 2D));
     }
 
     @Test
@@ -557,25 +552,40 @@ public class ExpressionTest {
     }
 
     @Test
-    public void validateExpression() {
+    public void shouldEvaluateParentheses() {
+        Expression e = new Expression("2 + 4 * 5");
+        assertThat(e.evaluate()).isEqualTo(22D);
+
+        e = new Expression("( 2 + 4 ) * 5");
+        assertThat(e.evaluate()).isEqualTo(30D);
+
+        e = new Expression(" 2 + (4 * 5)");
+        assertThat(e.evaluate()).isEqualTo(22D);
+
+        e = new Expression(" 2 + -(4 * 5)");
+        assertThat(e.evaluate()).isEqualTo(-18D);
+    }
+
+    @Test
+    public void shouldValidateExpression() {
         final Expression e = new Expression("foo(1)");
         assertThat(e.validate()).hasSize(1);
     }
 
     @Test
-    public void validateVariableSet() {
+    public void shouldNotValidateVariableSet() {
         final Expression e = new Expression("x");
         assertThat(e.validate()).hasSize(1);
     }
 
     @Test
-    public void validateDanglingPlus() {
+    public void shouldNotValidateDanglingPlus() {
         final Expression e = new Expression("1+");
         assertThat(e.validate()).hasSize(1);
     }
 
     @Test
-    public void validateDanglingParentheses() {
+    public void shouldNotValidateDanglingParentheses() {
         final Expression e = new Expression("1(");
         assertThat(e.validate()).hasSize(1);
     }

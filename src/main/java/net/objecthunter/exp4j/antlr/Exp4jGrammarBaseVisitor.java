@@ -46,13 +46,6 @@ public class Exp4jGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUnary_suffix(Exp4jGrammarParser.Unary_suffixContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitAddition(Exp4jGrammarParser.AdditionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

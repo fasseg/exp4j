@@ -6,6 +6,7 @@ expression:
 
 term:
     unary_prefix term |
+    '(' term ')' |
     term multiplication term |
     term addition term |
     NUMBER |

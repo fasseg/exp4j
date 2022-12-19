@@ -1,8 +1,10 @@
 package net.objecthunter.exp4j;
 
+import net.objecthunter.exp4j.antlr.Exp4jExpressionValidator;
 import net.objecthunter.exp4j.antlr.Exp4jGrammarLexer;
 import net.objecthunter.exp4j.antlr.Exp4jGrammarParser;
 import net.objecthunter.exp4j.function.Function;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -33,12 +35,17 @@ public class Expression {
         variables.keySet().forEach(v -> this.checkName(v));
     }
 
-    public List<String> validate() {
+    public List<ExpressionError> validate() {
         return this.validate(true);
     }
 
-    public List<String> validate(boolean checkIfVariablesAreSet) {
-        return null;
+    public List<ExpressionError> validate(boolean checkIfVariablesAreSet) {
+        final ValidationErrorListener errorListener = new ValidationErrorListener();
+        final Exp4jExpressionValidator validator = new Exp4jExpressionValidator();
+        if (checkIfVariablesAreSet) {
+            errorListener.getErrors().addAll(validator.visit(this.parseExpression(errorListener)));
+        }
+        return errorListener.getErrors();
     }
 
     public void setVariable(final String name, final double value) {
@@ -63,8 +70,7 @@ public class Expression {
         }
     }
 
-    public ParseTree parseExpression() {
-        final ExpressionErrorListener errorListener = new ExpressionErrorListener();
+    public ParseTree parseExpression(final BaseErrorListener errorListener) {
         final Exp4jGrammarLexer lexer = new Exp4jGrammarLexer(CharStreams.fromString(expression));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
@@ -77,6 +83,6 @@ public class Expression {
 
     public double evaluate() {
         final ExpressionVisitor visitor = new ExpressionVisitor(this.variables, this.userFunctions);
-        return visitor.visit(this.parseExpression());
+        return visitor.visit(this.parseExpression(new ExpressionErrorListener()));
     }
 }

@@ -31,6 +31,8 @@ public class ExpressionVisitor extends Exp4jGrammarBaseVisitor<Double> {
             return this.evaluateConstant(term);
         } else if (term.variable() != null) {
             return this.evaluateVariable(term);
+        } else if (term.term().size() == 1) {
+            return this.visitTerm(term.term(0));
         } else {
             return this.evaluateOperation(term);
         }
