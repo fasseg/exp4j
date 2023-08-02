@@ -69,7 +69,10 @@ public class Tokenizer {
     public Token nextToken() {
         char ch = expression[pos];
         while (Character.isWhitespace(ch)) {
-            ch = expression[++pos];
+            if (expression.length <= ++pos) {
+                throw new IllegalArgumentException("Unable to find next token. Only whitespace characters left.");
+            }
+            ch = expression[pos];
         }
         if (Character.isDigit(ch) || ch == '.') {
             if (lastToken != null) {
