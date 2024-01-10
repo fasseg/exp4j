@@ -1,4 +1,4 @@
-exp4j is currently not in active development. I do not have time to maintain the project at the moment.
+*exp4j is currently not in active development. I do not have time to maintain the project at the moment.*
 
 exp4j
 -----
